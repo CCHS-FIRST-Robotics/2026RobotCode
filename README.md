@@ -1,12 +1,17 @@
 # 2026RobotCode
 
 ## To do: 
- - pid tunable constants
+ <!-- 
+ ! maybe consider like, having a constants file for each subsystem? I can't really provide a reason to do otherwise
+ ! basically what I want to do is convert the code that was generated for the drivebase into a slightly different file format, just so that command based and I/O classes work, but also keeping all of the amazing stuff that came pre-generated 
+ -->
+ - look into pid tunable constants through phoenixtuner
      - https://discord.com/channels/176186766946992128/368993897495527424/1438631090578259968
  - figure out sysid
  - global and local positioning
  - imgcal apriltag calibration
  - rotating around a swerve module
+ - maybe test copilot when implementing new features
 
 ## Reference: 
  - Radios: 

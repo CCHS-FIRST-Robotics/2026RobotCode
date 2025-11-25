@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
+// ! yeahhhh we replace this with advscope, I think?
+// ! but absolutely try to keep all of the same features, since it's actually like, good I think
+// ! idk, if you want, try controlling with the simulator
 public class Telemetry {
     private final double MaxSpeed;
 
