@@ -23,7 +23,7 @@ import frc.robot.subsystems.drive.Telemetry;
 public class RobotContainer {
     // ! like, these should not be here
     private double MaxSpeed = 1;
-    private double MaxAngularRate = RotationsPerSecond.of(0.01).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // ! I kind of hate how the deadbands are set here, but it's kind of cool ig...
     /* Setting up bindings for necessary control of the swerve drive platform */
