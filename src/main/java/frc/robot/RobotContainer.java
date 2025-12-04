@@ -22,25 +22,23 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.commands.*;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.vision.*;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+
 import org.littletonrobotics.junction.Logger;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
- * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
- * Instead, the structure of the robot (including subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final Vision vision;
 
-    private SwerveDriveSimulation driveSimulation = null;
+    private SwerveDriveSimulation driveSimulation = null; // ! hmm
 
     // Controller
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -102,7 +100,6 @@ public class RobotContainer {
                 break;
         }
 
-        // Configure the button bindings
         configureButtonBindings();
     }
 
@@ -139,14 +136,14 @@ public class RobotContainer {
         return new InstantCommand();
     }
 
-    public void resetSimulationField() {
+    public void resetSimulationField() { // ! uhhh, not sure if this should do this
         if (Constants.currentMode != Constants.Mode.SIM) return;
 
         driveSimulation.setSimulationWorldPose(new Pose2d(3, 3, new Rotation2d()));
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 
-    public void updateSimulation() {
+    public void updateSimulation() { // ! interesting
         if (Constants.currentMode != Constants.Mode.SIM) return;
 
         SimulatedArena.getInstance().simulationPeriodic();
