@@ -3,12 +3,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
+import choreo.auto.AutoChooser;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.vision.*;
+import frc.robot.utils.*;
 
 public class RobotContainer {
     // controllers
@@ -16,9 +20,11 @@ public class RobotContainer {
 
     // subsystems
     private final Drive drive;
-    private final Vision vision;
+    private final Vision vision; // ! make this poseEstimator
 
     // utils
+    private AutoRoutineGenerator autoGenerator;
+    private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
 
     public RobotContainer() {
@@ -81,7 +87,7 @@ public class RobotContainer {
         }
 
         configureButtonBindings();
-        // ! configureAutos();
+        configureAutos();
     }
 
     private void configureButtonBindings() {
@@ -120,6 +126,18 @@ public class RobotContainer {
     }
 
     // ————— autos ————— //
+
+    private void configureAutos() {
+        autoGenerator = new AutoRoutineGenerator(drive);
+        autoChooser = new AutoChooser();
+
+        autoChooser.addRoutine("Test", () -> autoGenerator.test());
+        autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
+
+        autoChooser.select("Back Up"); // pick a default auto
+
+        SmartDashboard.putData("AutoChooser", autoChooser);
+    }
 
     public Command getAutonomousCommand() { // called by Robot.java on autonomousInit
         return new InstantCommand();

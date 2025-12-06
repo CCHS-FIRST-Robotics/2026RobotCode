@@ -10,6 +10,7 @@ import frc.robot.subsystems.drive.*;
 public class DriveWithPosition extends Command { // ! for some reason, rotation direction is unoptimized
     private final Drive drive;
     private final Pose2d targetPose;
+    private final Twist2d twistSetpoint;
 
     // local constants // ! tune
     private final PIDController xPID = new PIDController(5, 0, 0);
@@ -23,9 +24,29 @@ public class DriveWithPosition extends Command { // ! for some reason, rotation 
         addRequirements(drive);
         this.drive = drive;
         this.targetPose = targetPose;
+        this.twistSetpoint = new Twist2d();
     }
 
-    // ! add based off of a translation (for choreo)
+    public DriveWithPosition(
+        Drive drive,
+        Pose2d targetPose, 
+        Twist2d twistSetpoint
+    ) {
+        addRequirements(drive);
+        this.drive = drive;
+        this.targetPose = targetPose;
+        this.twistSetpoint = twistSetpoint;
+    }
+
+    public DriveWithPosition(
+        Drive drive,
+        Transform2d targetTransform
+    ) {
+        addRequirements(drive);
+        this.drive = drive;
+        this.targetPose = drive.getPose().plus(targetTransform);
+        this.twistSetpoint = new Twist2d();
+    }
 
     // ! add driving to a specific apriltag
 
@@ -38,9 +59,9 @@ public class DriveWithPosition extends Command { // ! for some reason, rotation 
 
         // create chassisspeeds object with FOC
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds( // ! uhhh add twistsetpoints for choreo
-            xOutput,
-            yOutput,
-            oOutput,
+            twistSetpoint.dx + xOutput,
+            twistSetpoint.dy + yOutput,
+            twistSetpoint.dtheta + oOutput,
             drive.getPose().getRotation()
         );
 

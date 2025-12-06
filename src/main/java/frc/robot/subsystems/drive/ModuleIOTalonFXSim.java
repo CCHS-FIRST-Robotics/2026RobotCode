@@ -16,7 +16,9 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import frc.robot.util.PhoenixUtil;
+
+import frc.robot.utils.PhoenixUtil;
+
 import java.util.Arrays;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 

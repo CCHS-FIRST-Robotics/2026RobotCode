@@ -16,6 +16,8 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
+
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -36,9 +38,11 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.commands.DriveWithPosition;
 import frc.robot.subsystems.vision.Vision;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -203,6 +207,14 @@ public class Drive extends SubsystemBase implements Vision.VisionConsumer {
 
         // Log optimized setpoints (runSetpoint mutates each state)
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+    }
+
+    public void runAutoPosition(SwerveSample sample){
+        Commands.run(() -> new DriveWithPosition(
+            this, 
+            sample.getPose(), 
+            sample.getChassisSpeeds().toTwist2d(0.02)
+        ));
     }
 
     /** Runs the drive in a straight line with the specified drive output. */
