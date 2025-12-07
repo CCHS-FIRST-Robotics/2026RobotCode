@@ -3,12 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 import choreo.auto.AutoChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.vision.*;
@@ -35,8 +34,7 @@ public class RobotContainer {
                     new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
                     new ModuleIOTalonFXReal(DriveConstants.FrontRight),
                     new ModuleIOTalonFXReal(DriveConstants.BackLeft),
-                    new ModuleIOTalonFXReal(DriveConstants.BackRight),
-                    (pose) -> {} // ! hmm
+                    new ModuleIOTalonFXReal(DriveConstants.BackRight)
                 );
                 this.vision = new Vision(
                     drive,
@@ -52,8 +50,7 @@ public class RobotContainer {
                     new ModuleIOTalonFXSim(DriveConstants.FrontLeft, driveSimulation.getModules()[0]),
                     new ModuleIOTalonFXSim(DriveConstants.FrontRight, driveSimulation.getModules()[1]),
                     new ModuleIOTalonFXSim(DriveConstants.BackLeft, driveSimulation.getModules()[2]),
-                    new ModuleIOTalonFXSim(DriveConstants.BackRight, driveSimulation.getModules()[3]),
-                    driveSimulation::setSimulationWorldPose
+                    new ModuleIOTalonFXSim(DriveConstants.BackRight, driveSimulation.getModules()[3])
                 );
                 vision = new Vision(
                     drive,
@@ -75,8 +72,7 @@ public class RobotContainer {
                     new ModuleIO() {},
                     new ModuleIO() {},
                     new ModuleIO() {},
-                    new ModuleIO() {},
-                    (pose) -> {}
+                    new ModuleIO() {}
                 );
                 vision = new Vision(
                     drive, 
@@ -95,7 +91,7 @@ public class RobotContainer {
         
         // regular joystick drive
         drive.setDefaultCommand(
-            new DriveWithVelocity(
+            new DriveWithJoysticks(
                 drive, 
                 () -> -controller.getLeftY(), // xbox controller is flipped
                 () -> -controller.getLeftX(), // ! not sure why
@@ -146,14 +142,16 @@ public class RobotContainer {
     // ————— simulation ————— //
 
     private void configureSimulation() {
-        driveSimulation = new SwerveDriveSimulation(Drive.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
+        driveSimulation = new SwerveDriveSimulation(DriveConstants.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+        // SimulatedArena.getInstance().addGamePiece(new ReefscapeCoralOnField(new Pose2d(Math.random() * 10, Math.random() * 10, new Rotation2d())));
     }
 
     public void updateSimulation() { // called by Robot.java on simulationPeriodic
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // ! not sure if this has to be here if it's only called in simulationPeriodic
             return;
         }
+
 
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());

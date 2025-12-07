@@ -58,5 +58,6 @@
     "edu.wpi.first.math.**.struct.*",
   ],
   "editor.inlayHints.enabled": "on", 
-  "editor.tabSize": 4
+  "editor.tabSize": 4, 
+  "editor.detectIndentation": false
 }

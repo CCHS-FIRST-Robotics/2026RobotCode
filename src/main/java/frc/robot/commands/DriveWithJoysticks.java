@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.drive.*;
 
-public class DriveWithVelocity extends Command {
+public class DriveWithJoysticks extends Command {
     private final Drive drive;
     private final DoubleSupplier xSupplier;
     private final DoubleSupplier ySupplier;
@@ -19,7 +19,7 @@ public class DriveWithVelocity extends Command {
     private static final double DEADBAND = 0.1;
     private static final double EXPONENT = 2;
 
-    public DriveWithVelocity(
+    public DriveWithJoysticks(
         Drive drive, 
         DoubleSupplier xSupplier, 
         DoubleSupplier ySupplier, 

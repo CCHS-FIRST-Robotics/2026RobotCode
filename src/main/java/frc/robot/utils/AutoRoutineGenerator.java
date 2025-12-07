@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 
@@ -19,7 +20,13 @@ public class AutoRoutineGenerator {
         autoFactory = new AutoFactory(
             drive::getPose,
             drive::setPose,
-            drive::runAutoPosition, // ! hm, I think this needs a setposition function to exist
+            (sample) -> Commands.run(
+                () -> new DriveWithPosition(
+                    drive, 
+                    sample.getPose(), 
+                    sample.getChassisSpeeds().toTwist2d(0.02)
+                )
+            ), 
             DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
             drive
         );
