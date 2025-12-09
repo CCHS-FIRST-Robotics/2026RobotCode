@@ -252,7 +252,7 @@ public class Drive extends SubsystemBase implements Vision.VisionConsumer {
 
     /** Returns the measured chassis speeds of the robot. */
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured") // ! don't use this annotation
-    private ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(getModuleStates());
     }
 
@@ -294,16 +294,5 @@ public class Drive extends SubsystemBase implements Vision.VisionConsumer {
     @Override
     public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
         poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-    }
-
-    // ! these should probably be constants, and they should also be limited to the maxspeed
-    /** Returns the maximum linear speed in meters per sec. */
-    public double getMaxLinearSpeedMetersPerSec() {
-        return DriveConstants.MAX_THEORETICAL_LINEAR_SPEED.in(MetersPerSecond);
-    }
-
-    /** Returns the maximum angular speed in radians per sec. */
-    public double getMaxAngularSpeedRadPerSec() {
-        return getMaxLinearSpeedMetersPerSec() / DriveConstants.TRACK_RADIUS;
     }
 }

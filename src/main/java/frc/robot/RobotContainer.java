@@ -170,7 +170,7 @@ public class RobotContainer {
             return;
         }
 
-        driveSimulation.setSimulationWorldPose(startPose);
+        // driveSimulation.setSimulationWorldPose(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 }

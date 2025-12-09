@@ -112,8 +112,9 @@ public class DriveConstants {
     );
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
     
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(1);
     public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41); // ! erm, no
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(1);
+    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
     private static final Current SLIP_CURRENT = Amps.of(120.0);
 
     // these are only used for simulation // ! https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template/

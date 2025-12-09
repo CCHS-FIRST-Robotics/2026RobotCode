@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+import static edu.wpi.first.units.Units.*;
+
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
@@ -15,8 +18,8 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier oSupplier;
     
     // local constants
-    private static final double DEADBAND = 0.1;
-    private static final double EXPONENT = 2;
+    private final double DEADBAND = 0.1;
+    private final double EXPONENT = 2;
 
     public DriveWithJoysticks(
         Drive drive, 
@@ -42,13 +45,11 @@ public class DriveWithJoysticks extends Command {
 
         // convert to chassisSpeeds
         ChassisSpeeds speeds = new ChassisSpeeds(
-            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-            angularVelocity * drive.getMaxAngularSpeedRadPerSec()
+            linearVelocity.getX() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
+            linearVelocity.getY() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
+            angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond)
         );
         
-        // ! not sure if we need flipping (we don't if we zero the gyro at the start of every match)
-
         // run velocity
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(

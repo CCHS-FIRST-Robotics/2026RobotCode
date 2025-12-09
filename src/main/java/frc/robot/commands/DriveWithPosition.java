@@ -5,7 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.subsystems.drive.*;
 
-public class DriveWithPosition extends Command { // ! for some reason, rotation direction is unoptimized
+public class DriveWithPosition extends Command {
     private final Drive drive;
     private Pose2d targetPose;
     private Transform2d targetTransform;
@@ -49,11 +49,11 @@ public class DriveWithPosition extends Command { // ! for some reason, rotation 
             && Math.abs(
                 MathUtil.inputModulus(drive.getPose().getRotation().getRotations(), 0, 1)
                 - MathUtil.inputModulus(targetPose.getRotation().getRotations(), 0, 1)
-            ) < 0.005;
+            ) < 0.005
             // ! the below would probably be good to add, more testing is necessary
-            // && drive.getSpeeds().vxMetersPerSecond < 0.1
-            // && drive.getSpeeds().vyMetersPerSecond < 0.1
-            // && drive.getSpeeds().omegaRadiansPerSecond < 0.1;
+            && drive.getChassisSpeeds().vxMetersPerSecond < 0.1
+            && drive.getChassisSpeeds().vyMetersPerSecond < 0.1
+            && drive.getChassisSpeeds().omegaRadiansPerSecond < 0.1;
     }
 
     @Override
