@@ -8,20 +8,23 @@ import edu.wpi.first.math.geometry.*;
 import frc.robot.Constants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
 public class AutoGenerator {
     private final AutoFactory autoFactory;
 
     private final Drive drive;
+    private final PoseEstimator poseEstimator;
 
     public AutoGenerator(
         Drive drive, 
+        PoseEstimator poseEstimator,
         SwerveDriveSimulation driveSimulation
     ) {
         autoFactory = new AutoFactory(
-            drive::getPose,
+            poseEstimator::getPose,
             (pose) -> {
-                drive.setPose(pose);
+                poseEstimator.resetPosition(pose);
                 driveSimulation.setSimulationWorldPose(pose);
             },
             drive::runAutoPosition,
@@ -30,6 +33,7 @@ public class AutoGenerator {
         );
 
         this.drive = drive;
+        this.poseEstimator = poseEstimator;
     }
 
     // ————— testing routines ————— //
@@ -54,6 +58,6 @@ public class AutoGenerator {
     // ————— competition routines ————— //
 
     public Command backUp() {
-        return new DriveWithPosition(drive, new Transform2d(-2, 0, new Rotation2d()));
+        return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
     }
 }

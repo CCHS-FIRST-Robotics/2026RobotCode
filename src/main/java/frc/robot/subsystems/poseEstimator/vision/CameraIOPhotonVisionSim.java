@@ -11,20 +11,21 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.vision;
-
-import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
+package frc.robot.subsystems.poseEstimator.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+
+import static frc.robot.subsystems.poseEstimator.vision.VisionConstants.aprilTagLayout;
+
 import java.util.function.Supplier;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 
 /** IO implementation for physics sim using PhotonVision simulator. */
-public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
+public class CameraIOPhotonVisionSim extends CameraIOPhotonVision {
     private static VisionSystemSim visionSim;
 
     private final Supplier<Pose2d> poseSupplier;
@@ -36,7 +37,7 @@ public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
      * @param name The name of the camera.
      * @param poseSupplier Supplier for the robot pose to use in simulation.
      */
-    public VisionIOPhotonVisionSim(String name, Transform3d robotToCamera, Supplier<Pose2d> poseSupplier) {
+    public CameraIOPhotonVisionSim(String name, Transform3d robotToCamera, Supplier<Pose2d> poseSupplier) {
         super(name, robotToCamera);
         this.poseSupplier = poseSupplier;
 

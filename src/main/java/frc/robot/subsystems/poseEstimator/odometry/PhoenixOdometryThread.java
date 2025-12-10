@@ -11,13 +11,14 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.poseEstimator.odometry;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.subsystems.drive.DriveConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class PhoenixOdometryThread extends Thread {
     public Queue<Double> registerSignal(StatusSignal<Angle> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
-        Drive.odometryLock.lock();
+        Odometry.odometryLock.lock();
         try {
             BaseStatusSignal[] newSignals = new BaseStatusSignal[phoenixSignals.length + 1];
             System.arraycopy(phoenixSignals, 0, newSignals, 0, phoenixSignals.length);
@@ -76,7 +77,7 @@ public class PhoenixOdometryThread extends Thread {
             phoenixQueues.add(queue);
         } finally {
             signalsLock.unlock();
-            Drive.odometryLock.unlock();
+            Odometry.odometryLock.unlock();
         }
         return queue;
     }
@@ -85,13 +86,13 @@ public class PhoenixOdometryThread extends Thread {
     public Queue<Double> registerSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
-        Drive.odometryLock.lock();
+        Odometry.odometryLock.lock();
         try {
             genericSignals.add(signal);
             genericQueues.add(queue);
         } finally {
             signalsLock.unlock();
-            Drive.odometryLock.unlock();
+            Odometry.odometryLock.unlock();
         }
         return queue;
     }
@@ -99,11 +100,11 @@ public class PhoenixOdometryThread extends Thread {
     /** Returns a new queue that returns timestamp values for each sample. */
     public Queue<Double> makeTimestampQueue() {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
-        Drive.odometryLock.lock();
+        Odometry.odometryLock.lock();
         try {
             timestampQueues.add(queue);
         } finally {
-            Drive.odometryLock.unlock();
+            Odometry.odometryLock.unlock();
         }
         return queue;
     }
@@ -130,7 +131,7 @@ public class PhoenixOdometryThread extends Thread {
             }
 
             // Save new data to queues
-            Drive.odometryLock.lock();
+            Odometry.odometryLock.lock();
             try {
                 // Sample timestamp is current FPGA time minus average CAN latency
                 //     Default timestamps from Phoenix are NOT compatible with
@@ -155,7 +156,7 @@ public class PhoenixOdometryThread extends Thread {
                     timestampQueues.get(i).offer(timestamp);
                 }
             } finally {
-                Drive.odometryLock.unlock();
+                Odometry.odometryLock.unlock();
             }
         }
     }

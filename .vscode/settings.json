@@ -59,5 +59,6 @@
   ],
   "editor.inlayHints.enabled": "on", 
   "editor.tabSize": 4, 
-  "editor.detectIndentation": false
+"editor.detectIndentation": false,
+"java.debug.settings.onBuildFailureProceed": true
 }

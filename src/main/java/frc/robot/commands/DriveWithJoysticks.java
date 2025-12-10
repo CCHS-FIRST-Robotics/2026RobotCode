@@ -10,9 +10,13 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.poseEstimator.*;
 
 public class DriveWithJoysticks extends Command {
+    // subsystems
     private final Drive drive;
+    private final PoseEstimator poseEstimator;
+
     private final DoubleSupplier xSupplier;
     private final DoubleSupplier ySupplier;
     private final DoubleSupplier oSupplier;
@@ -23,19 +27,24 @@ public class DriveWithJoysticks extends Command {
 
     public DriveWithJoysticks(
         Drive drive, 
+        PoseEstimator poseEstimator,
         DoubleSupplier xSupplier, 
         DoubleSupplier ySupplier, 
         DoubleSupplier oSupplier
     ) {
         addRequirements(drive);
+        addRequirements(poseEstimator);
+
         this.drive = drive;
+        this.poseEstimator = poseEstimator;
+
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
         this.oSupplier = oSupplier;
     }
 
     @Override
-    public void execute() { // ! for some reason, the discretize stuff that's supposed to keep it in a straight line doesn't seem to work in Sim
+    public void execute() {
         // get linear velocity vector
         Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
@@ -54,7 +63,7 @@ public class DriveWithJoysticks extends Command {
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,
-                Constants.USE_ALLIANCE_FLIPPING ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()
+                Constants.USE_ALLIANCE_FLIPPING ? poseEstimator.getPose().getRotation().plus(new Rotation2d(Math.PI)) : poseEstimator.getPose().getRotation()
             )
         );
     }

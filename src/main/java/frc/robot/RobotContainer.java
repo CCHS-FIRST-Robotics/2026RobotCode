@@ -10,7 +10,11 @@ import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.vision.*;
+import frc.robot.subsystems.poseEstimator.PoseEstimator;
+import frc.robot.subsystems.poseEstimator.odometry.GyroIO;
+import frc.robot.subsystems.poseEstimator.odometry.GyroIOPigeon2;
+import frc.robot.subsystems.poseEstimator.odometry.GyroIOSim;
+import frc.robot.subsystems.poseEstimator.vision.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
@@ -21,7 +25,7 @@ public class RobotContainer {
 
     // subsystems
     private final Drive drive;
-    private final Vision vision; // ! make this poseEstimator
+    private final PoseEstimator poseEstimator;
 
     // utils
     private AutoGenerator autoGenerator;
@@ -32,54 +36,60 @@ public class RobotContainer {
         switch (Constants.CURRENT_MODE) {
             case REAL: // real robot, instantiate hardware IO implementations
                 drive = new Drive(
-                    new GyroIOPigeon2(),
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[0]),
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[1]),
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[2]),
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[3])
                 );
-                this.vision = new Vision(
-                    drive,
-                    new VisionIOPhotonVision(VisionConstants.camera0Name, new Transform3d()),
-                    new VisionIOPhotonVision(VisionConstants.camera1Name, new Transform3d())
+                poseEstimator = new PoseEstimator(
+                    new GyroIOPigeon2(),
+                    new CameraIOPhotonVision[] {
+                        new CameraIOPhotonVision(VisionConstants.camera0Name, new Transform3d()),
+                        new CameraIOPhotonVision(VisionConstants.camera1Name, new Transform3d())
+                    }, 
+                    drive
                 );
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
 
                 drive = new Drive(
-                    new GyroIOSim(driveSimulation.getGyroSimulation()),
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[0], driveSimulation.getModules()[0]),
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[1], driveSimulation.getModules()[1]),
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[2], driveSimulation.getModules()[2]),
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[3], driveSimulation.getModules()[3])
                 );
-                vision = new Vision(
-                    drive,
-                    new VisionIOPhotonVisionSim(
-                        VisionConstants.camera0Name, 
-                        VisionConstants.robotToCamera0, 
-                        driveSimulation::getSimulatedDriveTrainPose
-                    ),
-                    new VisionIOPhotonVisionSim(
-                        VisionConstants.camera1Name, 
-                        VisionConstants.robotToCamera1, 
-                        driveSimulation::getSimulatedDriveTrainPose
-                    )
+                poseEstimator = new PoseEstimator(
+                    new GyroIOSim(driveSimulation.getGyroSimulation()),
+                    new CameraIOPhotonVision[] {
+                        new CameraIOPhotonVisionSim(
+                            VisionConstants.camera0Name, 
+                            VisionConstants.robotToCamera0, 
+                            driveSimulation::getSimulatedDriveTrainPose
+                        ),
+                        new CameraIOPhotonVisionSim(
+                            VisionConstants.camera1Name, 
+                            VisionConstants.robotToCamera1, 
+                            driveSimulation::getSimulatedDriveTrainPose
+                        )
+                    },
+                    drive
                 );
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
-                    new GyroIO() {},
                     new ModuleIO() {},
                     new ModuleIO() {},
                     new ModuleIO() {},
                     new ModuleIO() {}
                 );
-                vision = new Vision(
-                    drive, 
-                    new VisionIO() {}, 
-                    new VisionIO() {}
+                poseEstimator = new PoseEstimator(
+                    new GyroIO() {}, 
+                    new CameraIO[] {
+                        new CameraIO() {}, 
+                        new CameraIO() {}
+                    }, 
+                    drive
                 );
                 break;
         }
@@ -95,6 +105,7 @@ public class RobotContainer {
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive, 
+                poseEstimator,
                 () -> -controller.getLeftY(), // xbox controller is flipped
                 () -> -controller.getLeftX(), // ! not sure why
                 () -> controller.getRightX()
@@ -102,29 +113,13 @@ public class RobotContainer {
         );
 
         // testing
-        controller.b().whileTrue(new DriveWithPosition(drive, new Pose2d(1, 5, new Rotation2d(Math.PI/2))));
-
-        // ————— uhhhhhh ————— //
-
-        // ! ermmmmmmmmm idk: test this
-        final Runnable resetGyro = 
-        Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
-        () -> drive.setPose(
-            driveSimulation.getSimulatedDriveTrainPose()
-        ) //
-        //  reset odometry to actual robot pose during simulation // ! not sure what this means
-        : () -> drive.setPose(
-            new Pose2d(drive.getPose().getTranslation(), new Rotation2d()) // zero gyro
-        );
-        
-        // ! idk why it has to be run by the controller (wait, does xbox controller have a literal start button)
-        controller.start().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
+        controller.b().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(1, 5, new Rotation2d(Math.PI/2))));
     }
 
     // ————— autos ————— //
 
     private void configureAutos() {
-        autoGenerator = new AutoGenerator(drive, driveSimulation);
+        autoGenerator = new AutoGenerator(drive, poseEstimator, driveSimulation);
         autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
