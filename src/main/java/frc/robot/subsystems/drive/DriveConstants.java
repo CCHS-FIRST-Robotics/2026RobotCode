@@ -156,7 +156,6 @@ public class DriveConstants {
     @SuppressWarnings("unchecked")
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>[]
     SWERVE_MODULE_CONSTANTS = new SwerveModuleConstants[4];
-
     static{
         for(int i = 0; i < 4; i++){
             SWERVE_MODULE_CONSTANTS[i] = DRIVE_CONSTANT_CREATOR.createModuleConstants(

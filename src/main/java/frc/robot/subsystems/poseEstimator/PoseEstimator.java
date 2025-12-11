@@ -124,7 +124,7 @@ public class PoseEstimator extends SubsystemBase implements Vision.VisionConsume
     }
 
     public Pose2d getPose() {
-        return getOdometryPose();
+        return getCombinedPose();
     }
 
     @SuppressWarnings("unused")
@@ -137,7 +137,7 @@ public class PoseEstimator extends SubsystemBase implements Vision.VisionConsume
         return visionEstimator.getEstimatedPosition();
     }
 
-    @SuppressWarnings("unused")
+    // @SuppressWarnings("unused")
     private Pose2d getCombinedPose() {
         return combinedEstimator.getEstimatedPosition();
     }
