@@ -13,16 +13,17 @@
 
 package frc.robot.subsystems.poseEstimator.vision;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.poseEstimator.vision.CameraIO.PoseObservationType;
 
 import static frc.robot.subsystems.poseEstimator.vision.VisionConstants.*;
@@ -32,15 +33,14 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
+    private final VisionConsumer consumer;
     private final CameraIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    private SwerveDrivePoseEstimator visionEstimator;
-    private double latestTimestamp = 0;
-
-    public Vision(CameraIO[] io) {
+    public Vision(VisionConsumer consumer, CameraIO[] io, Drive drive) {
         this.io = io;
+        this.consumer = consumer;
 
         // Initialize inputs
         this.inputs = new VisionIOInputsAutoLogged[io.length];
@@ -54,13 +54,6 @@ public class Vision extends SubsystemBase {
             disconnectedAlerts[i] =
                     new Alert("Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
         }
-
-        visionEstimator = new SwerveDrivePoseEstimator(
-            DriveConstants.KINEMATICS, 
-            new Rotation2d(), 
-            new SwerveModulePosition[] {new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition()}, 
-            new Pose2d()
-        );
     }
 
     /**
@@ -72,15 +65,11 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
-    public Pose2d getVisionEstimate(){
-        return visionEstimator.getEstimatedPosition();
-    }
-
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
-            Logger.processInputs("outputs/poseEstimator/vision/camera" + Integer.toString(i), inputs[i]);
+            Logger.processInputs("poseEstimator/vision/camera" + Integer.toString(i), inputs[i]);
         }
 
         // Initialize logging values
@@ -149,11 +138,10 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Send vision observation
-                visionEstimator.addVisionMeasurement( // ! yeah, do the same thing you did with odometry to this class as well (make these save to an array and do the for looping in PoseEstimator)
+                consumer.accept( // ! yeah, do the same thing you did with odometry to this class as well (make these save to an array and do the for looping in PoseEstimator)
                         observation.pose().toPose2d(),
                         observation.timestamp(),
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-                latestTimestamp = Math.max(latestTimestamp, observation.timestamp());
             }
 
             // Log camera datadata
@@ -186,7 +174,8 @@ public class Vision extends SubsystemBase {
                 allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
     }
 
-    public double getLatestTimeStamp() {
-        return latestTimestamp;
+    @FunctionalInterface
+    public interface VisionConsumer {
+        void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs);
     }
 }

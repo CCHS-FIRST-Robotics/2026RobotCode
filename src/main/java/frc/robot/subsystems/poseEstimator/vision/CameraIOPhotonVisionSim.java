@@ -48,14 +48,16 @@ public class CameraIOPhotonVisionSim extends CameraIOPhotonVision {
         }
 
         // Add sim camera
+        // ! should set odometryposeEstimate to the correct pose at the start of the match
+        // ! maybe check how it clears old apriltagposes
         var cameraProperties = new SimCameraProperties(); 
         // ! make this not be the defaults for more realistic sim
         // // A 640 x 480 camera with a 100 degree diagonal FOV.
         cameraProperties.setCalibration(1920, 1400, Rotation2d.fromDegrees(92));
         // // Approximate detection noise with average and standard deviation error in pixels.
-        // cameraProperties.setCalibError(0.25, 0.08); // ! maybe remove this for best case scenario
+        cameraProperties.setCalibError(0.25, 0.08); // ! maybe remove this for best case scenario
         // // Set the camera image capture framerate (Note: this is limited by robot loop rate).
-        cameraProperties.setFPS(20); // ! makes shit blinky and bad
+        cameraProperties.setFPS(20); // ! makes shit blinky and bad // 20
         // // The average and standard deviation in milliseconds of image data latency.
         // cameraProperties.setAvgLatencyMs(35);
         // cameraProperties.setLatencyStdDevMs(5);

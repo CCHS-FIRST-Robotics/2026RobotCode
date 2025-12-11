@@ -49,7 +49,7 @@ public class Odometry {
     public void periodic() {
         odometryLock.lock(); // prevents odometry updates while reading data
         gyroIO.updateInputs(inputs);
-        Logger.processInputs("outputs/poseEstimator/gyro", inputs);
+        Logger.processInputs("poseEstimator/gyro", inputs);
         drive.modulePeriodic(); // run module.periodic for each swerve module
         odometryLock.unlock();
 

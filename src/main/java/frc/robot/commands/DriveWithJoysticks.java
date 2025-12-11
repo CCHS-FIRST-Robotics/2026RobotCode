@@ -55,8 +55,8 @@ public class DriveWithJoysticks extends Command {
         // convert to chassisSpeeds
         ChassisSpeeds speeds = new ChassisSpeeds(
             linearVelocity.getX() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
-            linearVelocity.getY() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
-            angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond)
+            -linearVelocity.getY() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
+            -angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );
         
         // run velocity
@@ -79,7 +79,7 @@ public class DriveWithJoysticks extends Command {
         Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
         // apply exponent
-        linearMagnitude *= linearMagnitude;
+        linearMagnitude = Math.pow(linearMagnitude, EXPONENT);
 
         return new Pose2d(new Translation2d(), linearDirection)
             .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))

@@ -141,7 +141,7 @@ public class Drive extends SubsystemBase {
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
                 SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.MAX_THEORETICAL_LINEAR_SPEED); // renormalize wheel speeds
+                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
 
                 // run modules
                 for (int i = 0; i < 4; i++) {
@@ -179,6 +179,7 @@ public class Drive extends SubsystemBase {
     public void runVelocity(ChassisSpeeds speedsInput) {
         controlMode = DRIVE_MODE.VELOCITY;
         speeds = speedsInput;
+        System.out.println(speedsInput);
     }
 
     // ————— functions for sysid ————— // 

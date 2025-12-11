@@ -107,7 +107,7 @@ public class RobotContainer {
                 drive, 
                 poseEstimator,
                 () -> -controller.getLeftY(), // xbox controller is flipped
-                () -> -controller.getLeftX(), // ! not sure why
+                () -> controller.getLeftX(), 
                 () -> controller.getRightX()
             )
         );
