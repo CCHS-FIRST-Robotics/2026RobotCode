@@ -28,7 +28,7 @@ public class Drive extends SubsystemBase {
     
     // ————— odometry ————— //
 
-    PoseEstimator poseEstimator;
+    private PoseEstimator poseEstimator;
 
     private double[] sampleTimestamps = new double[0];
     private int sampleCount = 0;
@@ -57,9 +57,7 @@ public class Drive extends SubsystemBase {
 
     // ————— characterization ————— //
 
-    private Voltage[] characterizationVolts = {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)};
-    private Angle[] characterizationPositions = {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)};
-    private final SysIdRoutine sysIdRoutine = new SysIdRoutine(
+    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
             Volts.of(1.75), // step voltage
@@ -75,14 +73,28 @@ public class Drive extends SubsystemBase {
             this
         )
     );
+    
+    private Voltage[] characterizationVolts = {
+        Volts.of(0), 
+        Volts.of(0), 
+        Volts.of(0), 
+        Volts.of(0)
+    };
+    private Angle[] characterizationPositions = {
+        Rotations.of(0), 
+        Rotations.of(0), 
+        Rotations.of(0), 
+        Rotations.of(0)
+    };
 
     // ————— position ————— //
 
-    private Pose2d positionSetpoint = new Pose2d();
-    private Twist2d twistSetpoint = new Twist2d();
     private final PIDController xPID = new PIDController(5, 0, 0);
     private final PIDController yPID = new PIDController(5, 0, 0);
     private final PIDController oPID = new PIDController(5, 0, 0);
+    
+    private Pose2d positionSetpoint = new Pose2d();
+    private Twist2d twistSetpoint = new Twist2d();
 
     // ————— velocity ————— //
 
@@ -152,7 +164,7 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    // ————— functions for running modules ————— //
+    // ————— running control mode ————— //
 
     public void stop() {
         controlMode = DRIVE_MODE.DISABLED;
@@ -181,20 +193,30 @@ public class Drive extends SubsystemBase {
         speeds = speedsInput;
     }
 
-    // ————— functions for sysid ————— // 
+    // ————— sysid ————— // 
 
     public Command sysIdFull() {
-        return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
-            .andThen(sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
-            .andThen(sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
-            .andThen(sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+        return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 
-    // ————— functions for odometry ————— //
+    // ————— poseEstimator ————— //
 
     public void setPoseEstimator(PoseEstimator poseEstimator) {
         this.poseEstimator = poseEstimator;
     }
+
+    public SwerveModulePosition[] getModulePositions() {
+        SwerveModulePosition[] states = new SwerveModulePosition[4];
+        for (int i = 0; i < 4; i++) {
+            states[i] = modules[i].getPosition();
+        }
+        return states;
+    }
+
+    // ————— odometry ————— //
 
     public void modulePeriodic() {
         for (var module : modules) {
@@ -241,17 +263,8 @@ public class Drive extends SubsystemBase {
         return sampleModuleDeltas;
     }
     
-    public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] states = new SwerveModulePosition[4];
-        for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getPosition();
-        }
-        return states;
-    }
+    // ————— utils ————— //
     
-    // ! ————— ! utils ————— //
-    
-    /** Returns the position of each module in radians. */
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
         for (int i = 0; i < 4; i++) {
@@ -260,7 +273,6 @@ public class Drive extends SubsystemBase {
         return values;
     }
 
-    /** Returns the average velocity of the modules in rotations/sec (Phoenix native units). */
     public double getFFCharacterizationVelocity() {
         double output = 0.0;
         for (int i = 0; i < 4; i++) {

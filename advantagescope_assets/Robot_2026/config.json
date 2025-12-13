@@ -12,14 +12,25 @@
     ],
     "cameras": [
         {
-            "name": "camera0",
+            "name": "FrontLeft",
             "fov": "92",
             "resolution": [1920, 1400],
-            "position": [0, 0, 1],
+            "position": [0.2921, -0.3429, 0.127],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": 0}, 
-                {"axis": "z", "degrees": 0}
+                {"axis": "z", "degrees": -15}
+            ]
+        }, 
+        {
+            "name": "FrontRight",
+            "fov": "92",
+            "resolution": [1920, 1400],
+            "position": [0.2921, 0.3429, 0.127],
+            "rotations": [
+                {"axis": "x", "degrees": 0}, 
+                {"axis": "y", "degrees": 0}, 
+                {"axis": "z", "degrees": 15}
             ]
         }
     ]

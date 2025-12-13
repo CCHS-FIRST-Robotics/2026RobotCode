@@ -13,7 +13,6 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 
 public class DriveWithJoysticks extends Command {
-    // subsystems
     private final Drive drive;
     private final PoseEstimator poseEstimator;
 
@@ -21,7 +20,6 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier ySupplier;
     private final DoubleSupplier oSupplier;
     
-    // local constants
     private final double DEADBAND = 0.1;
     private final double EXPONENT = 2;
 

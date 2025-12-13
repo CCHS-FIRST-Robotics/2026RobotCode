@@ -14,15 +14,16 @@ public class Odometry {
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged inputs = new GyroIOInputsAutoLogged();
     
-    public static final Lock odometryLock = new ReentrantLock();
+    private final OdometryConsumer consumer;
     
     private final Drive drive;
     
-    int sampleCount;
-    double[] sampleTimestamps = new double[0];
-    Rotation2d[] sampleGyroYaws = new Rotation2d[0];
-    Rotation2d gyroYaw = new Rotation2d();
-    SwerveModulePosition[][] sampleModulePositions = new SwerveModulePosition[][] {
+    public static final Lock odometryLock = new ReentrantLock();
+    
+    private int sampleCount;
+    private double[] sampleTimestamps = new double[0];
+    private Rotation2d[] sampleGyroYaws = new Rotation2d[0];
+    private SwerveModulePosition[][] sampleModulePositions = new SwerveModulePosition[][] {
         new SwerveModulePosition[] {
             new SwerveModulePosition(),
             new SwerveModulePosition(), 
@@ -30,7 +31,7 @@ public class Odometry {
             new SwerveModulePosition()
         }
     };
-    SwerveModulePosition[][] sampleModuleDeltas = new SwerveModulePosition[][] {
+    private SwerveModulePosition[][] sampleModuleDeltas = new SwerveModulePosition[][] {
         new SwerveModulePosition[] {
             new SwerveModulePosition(), 
             new SwerveModulePosition(), 
@@ -39,8 +40,11 @@ public class Odometry {
         }
     };
 
-    public Odometry(GyroIO gyroIO, Drive drive){
+    private Rotation2d gyroYaw = new Rotation2d();
+
+    public Odometry(GyroIO gyroIO, OdometryConsumer consumer, Drive drive){
         this.gyroIO = gyroIO;
+        this.consumer = consumer;
         this.drive = drive;
 
         PhoenixOdometryThread.getInstance().start(); // start odometry thread
@@ -60,7 +64,7 @@ public class Odometry {
         sampleTimestamps = drive.getSampleTimestamps();
         
         sampleGyroYaws = new Rotation2d[sampleCount];
-        for(int i = 0; i < sampleCount; i++){
+        for (int i = 0; i < sampleCount; i++) {
             if (inputs.connected) { // use real gyro angle
                 gyroYaw = inputs.odometryYawPositions[i];
             } else { // use inverse kinematics to estimate angle
@@ -73,25 +77,21 @@ public class Odometry {
         sampleModulePositions = drive.getSampleModulePositions();
         
         sampleModuleDeltas = drive.getSampleModuleDeltas();
-    }
 
-    public int getSampleCount() {
-        return sampleCount;
-    }
-
-    public double[] getSampleTimestamps() {
-        return sampleTimestamps;
-    }
-
-    public Rotation2d[] getSampleGyroYaws() {
-        return sampleGyroYaws;
-    }
-
-    public SwerveModulePosition[][] getSampleModulePositions() {
-        return sampleModulePositions;
+        consumer.acceptOdometry(sampleCount, sampleTimestamps, sampleGyroYaws, sampleModulePositions);
     }
 
     public Rotation2d getYaw() {
         return gyroYaw;
+    }
+
+    @FunctionalInterface
+    public interface OdometryConsumer {
+        void acceptOdometry(
+            int sampleCount, 
+            double[] sampleTimestamps, 
+            Rotation2d[] sampleGyroYaws, 
+            SwerveModulePosition[][] sampleModulePositions
+        );
     }
 }

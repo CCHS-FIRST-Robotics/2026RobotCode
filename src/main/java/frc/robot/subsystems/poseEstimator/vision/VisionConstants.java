@@ -13,6 +13,8 @@
 
 package frc.robot.subsystems.poseEstimator.vision;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -23,22 +25,22 @@ public class VisionConstants {
     public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String camera0Name = "camera_0";
-    public static String camera1Name = "camera_1";
+    public static String camera0Name = "FrontLeft";
+    public static String camera1Name = "FrontRight";
 
     // Robot to camera transforms
     // (Not used by Limelight, configure in web UI instead)
     public static Transform3d robotToCamera0 = new Transform3d(
-        0, 
-        0, 
-        0, 
-        new Rotation3d(0, 0, 0)
+        Inches.of(11.5), 
+        Inches.of(-13.5), 
+        Inches.of(5.5), 
+        new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(15))
     );
     public static Transform3d robotToCamera1 = new Transform3d(
-        0, 
-        0, 
-        0, 
-        new Rotation3d(0, 0, 0)
+        Inches.of(11.5), 
+        Inches.of(13.5), 
+        Inches.of(5.5), 
+        new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(15))
     );
 
     // Basic filtering thresholds

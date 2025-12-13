@@ -2,6 +2,10 @@
 
 ## To do:
  <!--
+ ! rename the cancoders and pigeon
+ ! test driving forwards
+ ! test the template vs current code for odom only how accurate it is
+ 
  ! for arms and elevators, tune pid without motionmagic
  -->
  - look into pid tunable constants through phoenixtuner

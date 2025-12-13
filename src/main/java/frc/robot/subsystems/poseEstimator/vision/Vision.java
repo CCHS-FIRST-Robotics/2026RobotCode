@@ -38,10 +38,11 @@ public class Vision extends SubsystemBase {
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    public Vision(VisionConsumer consumer, CameraIO[] io, Drive drive) {
+    public Vision(CameraIO[] io, VisionConsumer consumer, Drive drive) {
         this.io = io;
-        this.consumer = consumer;
-
+        
+        this.consumer = consumer
+        ;
         // Initialize inputs
         this.inputs = new VisionIOInputsAutoLogged[io.length];
         for (int i = 0; i < inputs.length; i++) {
@@ -137,8 +138,8 @@ public class Vision extends SubsystemBase {
                     angularStdDev *= cameraStdDevFactors[cameraIndex];
                 }
 
+                consumer.acceptVision( // ! yeah, do the same thing you did with odometry to this class as well (make these save to an array and do the for looping in PoseEstimator)
                 // Send vision observation
-                consumer.accept( // ! yeah, do the same thing you did with odometry to this class as well (make these save to an array and do the for looping in PoseEstimator)
                         observation.pose().toPose2d(),
                         observation.timestamp(),
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
@@ -176,6 +177,10 @@ public class Vision extends SubsystemBase {
 
     @FunctionalInterface
     public interface VisionConsumer {
-        void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs);
+        void acceptVision(
+            Pose2d visionRobotPoseMeters, 
+            double timestampSeconds, 
+            Matrix<N3, N1> visionMeasurementStdDevs
+        );
     }
 }

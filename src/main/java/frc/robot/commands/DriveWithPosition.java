@@ -7,7 +7,6 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
 public class DriveWithPosition extends Command {
-    // subsystems
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     
@@ -46,7 +45,7 @@ public class DriveWithPosition extends Command {
 
     @Override
     public void initialize() {
-        if(targetTransform != null){
+        if (targetTransform != null) {
             targetPose = poseEstimator.getPose().plus(targetTransform);
         }
     }

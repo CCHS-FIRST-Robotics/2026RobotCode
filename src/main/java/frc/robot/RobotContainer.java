@@ -20,8 +20,6 @@ import frc.robot.subsystems.poseEstimator.vision.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
-    final Pose2d startPose = new Pose2d(3, 3, new Rotation2d());
-
     // controllers
     private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -33,6 +31,8 @@ public class RobotContainer {
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
+    
+    private final Pose2d startPose = new Pose2d(3, 3, new Rotation2d());
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -49,7 +49,8 @@ public class RobotContainer {
                         new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
                         new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
                     }, 
-                    drive
+                    drive, 
+                    startPose
                 );
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
@@ -67,7 +68,7 @@ public class RobotContainer {
                         new CameraIOPhotonVisionSim(
                             VisionConstants.camera0Name, 
                             VisionConstants.robotToCamera0, 
-                            driveSimulation::getSimulatedDriveTrainPose
+                            driveSimulation::getSimulatedDriveTrainPose // this is why vision and combined estimators also have collision
                         ),
                         new CameraIOPhotonVisionSim(
                             VisionConstants.camera1Name, 
@@ -75,7 +76,8 @@ public class RobotContainer {
                             driveSimulation::getSimulatedDriveTrainPose
                         )
                     },
-                    drive
+                    drive, 
+                    startPose
                 );
                 break;
             default: // replayed robot, disable IO implementations
@@ -91,7 +93,8 @@ public class RobotContainer {
                         new CameraIO() {}, 
                         new CameraIO() {}
                     }, 
-                    drive
+                    drive, 
+                    new Pose2d()
                 );
                 break;
         }
@@ -118,13 +121,15 @@ public class RobotContainer {
 
         // testing
         controller.b().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(1, 5, new Rotation2d(Math.PI/2))));
+        // ! test driving forwards
         controller.a().whileTrue(Commands.run(() -> drive.runVelocity(
             new ChassisSpeeds(
-                0.5, 
-                0,  // ! test driving forwards
+                0.5,
+                0,
                 0
             )
         )));
+        controller.x().whileTrue(drive.sysIdFull());
     }
 
     // ————— autos ————— //
@@ -158,7 +163,6 @@ public class RobotContainer {
             return;
         }
 
-
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
         Logger.recordOutput(
@@ -176,7 +180,7 @@ public class RobotContainer {
             return;
         }
 
-        // driveSimulation.setSimulationWorldPose(startPose);
+        driveSimulation.setSimulationWorldPose(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 }

@@ -17,7 +17,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
 
-public class PoseEstimator extends SubsystemBase implements Vision.VisionConsumer {
+public class PoseEstimator extends SubsystemBase implements Odometry.OdometryConsumer, Vision.VisionConsumer {
     private final Odometry odometry;
     private final Vision vision;
 
@@ -30,45 +30,31 @@ public class PoseEstimator extends SubsystemBase implements Vision.VisionConsume
     public PoseEstimator(
         GyroIO gyroIO, 
         CameraIO[] cameraIOs, 
-        Drive drive
+        Drive drive, 
+        Pose2d startPose
     ) {
-        odometry = new Odometry(gyroIO, drive);
-        vision = new Vision(this, cameraIOs, drive);
+        odometry = new Odometry(gyroIO, this, drive);
+        vision = new Vision(cameraIOs, this, drive);
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.KINEMATICS, 
-            new Rotation2d(), 
-            new SwerveModulePosition[] {
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition()
-            },
-            new Pose2d()
+            odometry.getYaw(), 
+            drive.getModulePositions(),
+            startPose
         );
         visionEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.KINEMATICS, 
-            new Rotation2d(), 
-            new SwerveModulePosition[] {
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition()
-            },
-            new Pose2d(), 
+            odometry.getYaw(), 
+            drive.getModulePositions(),
+            startPose,
             VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE), // makes it not trust odometry info at all
             VecBuilder.fill(0.4, 0.4, 0.2) // is overridden anyways
         );
         combinedEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.KINEMATICS, 
-            new Rotation2d(), 
-            new SwerveModulePosition[] {
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition()
-            },
-            new Pose2d()
+            odometry.getYaw(), 
+            drive.getModulePositions(),
+            startPose
         );
 
         this.drive = drive;
@@ -81,38 +67,8 @@ public class PoseEstimator extends SubsystemBase implements Vision.VisionConsume
         odometry.periodic();
         vision.periodic();
         
-        // odometry
-        int odometrySampleCount = odometry.getSampleCount();
-        for(int i = 0; i < odometrySampleCount; i++){
-            odometryEstimator.updateWithTime(
-                odometry.getSampleTimestamps()[i],
-                odometry.getSampleGyroYaws()[i],
-                odometry.getSampleModulePositions()[i]
-            );
-        }
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
-
-        // vision
-        visionEstimator.updateWithTime(
-            Timer.getFPGATimestamp(),
-            new Rotation2d(),
-            new SwerveModulePosition[] {
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition(),
-                new SwerveModulePosition()
-            }
-        );
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/visionPoseEstimate", visionEstimator.getEstimatedPosition());
-
-        // combined
-        for(int i = 0; i < odometrySampleCount; i++){
-            combinedEstimator.updateWithTime(
-                odometry.getSampleTimestamps()[i],
-                odometry.getSampleGyroYaws()[i],
-                odometry.getSampleModulePositions()[i]
-            );
-        }
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
@@ -142,8 +98,47 @@ public class PoseEstimator extends SubsystemBase implements Vision.VisionConsume
         return combinedEstimator.getEstimatedPosition();
     }
 
+    @Override 
+    public void acceptOdometry(
+        int sampleCount, 
+        double[] sampleTimestamps, 
+        Rotation2d[] sampleGyroYaws, 
+        SwerveModulePosition[][] sampleModulePositions
+    ) {
+        for (int i = 0; i < sampleCount; i++) {
+            // odometry
+            odometryEstimator.updateWithTime(
+                sampleTimestamps[i],
+                sampleGyroYaws[i],
+                sampleModulePositions[i]
+            );
+            // combined
+            combinedEstimator.updateWithTime(
+                sampleTimestamps[i],
+                sampleGyroYaws[i],
+                sampleModulePositions[i]
+            );
+        }
+
+        // vision (blank because odom is ignored)
+        visionEstimator.updateWithTime(
+            Timer.getFPGATimestamp(),
+            new Rotation2d(),
+            new SwerveModulePosition[] {
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition()
+            }
+        );
+    }
+
     @Override
-    public void accept(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
+    public void acceptVision(
+        Pose2d visionRobotPoseMeters, 
+        double timestampSeconds, 
+        Matrix<N3, N1> visionMeasurementStdDevs
+    ) {
         visionEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
         combinedEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }

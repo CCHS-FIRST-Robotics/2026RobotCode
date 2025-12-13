@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.*;
 
-public class DriveConstants {
+public class DriveConstants { // * indicates a physical measurement
     public static final CANBus CAN_BUS = new CANBus("", "./logs/example.hoot");
     public static final double ODOMETRY_FREQUENCY = CAN_BUS.isNetworkFD() ? 250.0 : 100.0;
 
@@ -34,8 +34,8 @@ public class DriveConstants {
 
     private static final int[] DRIVE_MOTOR_IDS = {11, 21, 31, 41};
     private static final int[] TURN_MOTOR_IDS = {12, 22, 32, 42};
-    private static final boolean[] MOTOR_INVERSIONS = {true, true, true, true};
-    private static final boolean[] SIDE_INVERSIONS = {false, false, true, true};
+    private static final boolean[] DRIVE_INVERSIONS = {false, true, false, true};
+    private static final boolean[] TURN_INVERSIONS = {true, true, true, true};
     
     // ————— encoders ————— //
     
@@ -81,19 +81,18 @@ public class DriveConstants {
 
     // ————— modules ————— //
 
-    private static final Distance WHEEL_RADIUS = Inches.of(2);
+    private static final Distance WHEEL_RADIUS = Inches.of(2); // * 
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.2;
-    private static final double MODULE_COUPLE_RATIO = 3.125; // ! check this
-    private static final double MODULE_DRIVE_GEAR_RATIO = 5.902777777777778;
+    private static final double MODULE_COUPLE_RATIO = 3.125; // ! * tune this
+    private static final double MODULE_DRIVE_GEAR_RATIO = 6.75;
     private static final double MODULE_TURN_GEAR_RATIO = 18.75;
     
     // ————— drivetrain ————— //
 
-    // ! these are probably wrong
-    public static final Mass ROBOT_WEIGHT = Pounds.of(74.088);
-    public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883);
-    public static final Distance TRACK_WIDTH_X = Inches.of(26.5);
-    public static final Distance TRACK_WIDTH_Y = Inches.of(26.5); 
+    public static final Mass ROBOT_WEIGHT = Pounds.of(74.088); // ! *
+    public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! *
+    public static final Distance TRACK_WIDTH_X = Inches.of(26.5); // *
+    public static final Distance TRACK_WIDTH_Y = Inches.of(26.5); // *
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR
@@ -112,16 +111,16 @@ public class DriveConstants {
     );
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
     
-    public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41); // ! erm, no
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(5);
+    public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
     private static final Current SLIP_CURRENT = Amps.of(120.0);
 
     // these are only used for simulation // ! https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template/
     private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01);
     private static final MomentOfInertia TURN_INERTIA = KilogramSquareMeters.of(0.01);
-    private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2);
-    private static final Voltage TURN_FRICTION_VOLTAGE = Volts.of(0.2); // simulated voltage necessary to overcome friction
+    private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2); // simulated voltage necessary to overcome friction
+    private static final Voltage TURN_FRICTION_VOLTAGE = Volts.of(0.2); 
 
     // ————— compilation ————— //
 
@@ -157,7 +156,7 @@ public class DriveConstants {
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>[]
     SWERVE_MODULE_CONSTANTS = new SwerveModuleConstants[4];
     static{
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             SWERVE_MODULE_CONSTANTS[i] = DRIVE_CONSTANT_CREATOR.createModuleConstants(
                 TURN_MOTOR_IDS[i],
                 DRIVE_MOTOR_IDS[i],
@@ -165,8 +164,8 @@ public class DriveConstants {
                 ENCODER_OFFSETS[i],
                 Meters.of(MODULE_TRANSLATIONS[i].getX()), 
                 Meters.of(MODULE_TRANSLATIONS[i].getY()),
-                SIDE_INVERSIONS[i],
-                MOTOR_INVERSIONS[i],
+                DRIVE_INVERSIONS[i],
+                TURN_INVERSIONS[i],
                 ENCODER_INVERSIONS[i]
             );
         }
@@ -178,7 +177,7 @@ public class DriveConstants {
     .withGyro(COTS.ofPigeon2())
     .withSwerveModule(new SwerveModuleSimulationConfig(
         DCMotor.getKrakenX60(1),
-        DCMotor.getFalcon500(1),
+        DCMotor.getKrakenX60(1),
         SWERVE_MODULE_CONSTANTS[0].DriveMotorGearRatio,
         SWERVE_MODULE_CONSTANTS[0].SteerMotorGearRatio,
         Volts.of(SWERVE_MODULE_CONSTANTS[0].DriveFrictionVoltage),
