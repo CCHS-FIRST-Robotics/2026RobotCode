@@ -63,6 +63,7 @@ public class Drive extends SubsystemBase {
             Volts.of(1.75), // step voltage
             Seconds.of(4), // timeout
             (state) -> Logger.recordOutput("outputs/drive/sysIdState", state.toString()) // send the data to advantagekit
+            // (state) -> SignalLogger.writeString("driveSysId", state.toString()) // send the data to SignalLogger
         ),
         new SysIdRoutine.Mechanism(
             (volts) -> this.runCharacterization(
@@ -120,6 +121,13 @@ public class Drive extends SubsystemBase {
             controlMode = DRIVE_MODE.DISABLED;
         }
 
+        // module states
+        SwerveModuleState[] moduleStatesOutput = getModuleStates();
+        Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
+        // chassisspeeds
+        ChassisSpeeds speedsOutput = DriveConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
+        Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
+
         // run control mode
         switch (controlMode) {
             case DISABLED:
@@ -152,6 +160,8 @@ public class Drive extends SubsystemBase {
             case VELOCITY: 
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
+                Logger.recordOutput("outputs/drive/speedsInput", speeds);
+
                 SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
 
@@ -214,6 +224,14 @@ public class Drive extends SubsystemBase {
             states[i] = modules[i].getPosition();
         }
         return states;
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            moduleStates[i] = modules[i].getState();
+        }
+        return moduleStates;
     }
 
     // ————— odometry ————— //

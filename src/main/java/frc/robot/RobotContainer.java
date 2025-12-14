@@ -8,6 +8,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -129,7 +132,11 @@ public class RobotContainer {
                 0
             )
         )));
-        controller.x().whileTrue(drive.sysIdFull());
+        
+        // controller.x().whileTrue(drive.sysIdFull());
+
+        controller.x().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
+        controller.x().onFalse(Commands.runOnce(SignalLogger::stop));
     }
 
     // ————— autos ————— //
