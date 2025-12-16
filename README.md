@@ -7,6 +7,7 @@
  ! test the template vs current code for odom only how accurate it is
  
  ! for arms and elevators, tune pid without motionmagic
+ ! clean imports
  -->
  - look into pid tunable constants through phoenixtuner
      - https://discord.com/channels/176186766946992128/368993897495527424/1438631090578259968

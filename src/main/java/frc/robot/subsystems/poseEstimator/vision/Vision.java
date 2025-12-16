@@ -32,7 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
-public class Vision extends SubsystemBase {
+public class Vision {
     private final VisionConsumer consumer;
     private final CameraIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
@@ -66,7 +66,6 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
-    @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
