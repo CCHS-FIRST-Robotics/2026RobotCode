@@ -3,14 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.SignalLogger;
-
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -35,7 +30,9 @@ public class RobotContainer {
     private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
     
-    private final Pose2d startPose = new Pose2d(3, 3, new Rotation2d());
+    private final Pose2d startPose = Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM
+        ? new Pose2d(3, 3, new Rotation2d())
+        : new Pose2d(0, 0, new Rotation2d());
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -123,20 +120,24 @@ public class RobotContainer {
         );
 
         // testing
-        controller.b().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(1, 5, new Rotation2d(Math.PI/2))));
-        // ! test driving forwards
-        controller.a().whileTrue(Commands.run(() -> drive.runVelocity(
-            new ChassisSpeeds(
-                0.5,
-                0,
-                0
+        controller.b().whileTrue(
+            new DriveWithPosition(
+                drive, 
+                poseEstimator, 
+                new Pose2d(1, 3.5, new Rotation2d(0))
             )
-        )));
-        
+        );
+        controller.x().whileTrue(
+            new DriveWithPosition(
+                drive, 
+                poseEstimator, 
+                new Pose2d(2, 3.5, new Rotation2d(0))
+            )
+        );
         // controller.x().whileTrue(drive.sysIdFull());
 
-        controller.x().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
-        controller.x().onFalse(Commands.runOnce(SignalLogger::stop));
+        // controller.x().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
+        // controller.x().onFalse(Commands.runOnce(SignalLogger::stop));
     }
 
     // ————— autos ————— //

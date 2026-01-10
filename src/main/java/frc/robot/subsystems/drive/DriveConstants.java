@@ -84,7 +84,7 @@ public class DriveConstants { // * indicates a physical measurement
     private static final Distance WHEEL_RADIUS = Inches.of(2); // * 
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.2;
     private static final double MODULE_COUPLE_RATIO = 3.125; // ! * tune this
-    private static final double MODULE_DRIVE_GEAR_RATIO = 6.75;
+    private static final double MODULE_DRIVE_GEAR_RATIO = 5.902777777777778;
     private static final double MODULE_TURN_GEAR_RATIO = 18.75;
     
     // ————— drivetrain ————— //
@@ -112,7 +112,7 @@ public class DriveConstants { // * indicates a physical measurement
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
     
     public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(0.5);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
     private static final Current SLIP_CURRENT = Amps.of(120.0);
 
@@ -140,7 +140,7 @@ public class DriveConstants { // * indicates a physical measurement
     .withSteerMotorClosedLoopOutput(TURN_PID_TYPE)
     .withDriveMotorClosedLoopOutput(DRIVE_PID_TYPE)
     .withSlipCurrent(SLIP_CURRENT)
-    .withSpeedAt12Volts(MAX_ALLOWED_LINEAR_SPEED)
+    .withSpeedAt12Volts(MAX_THEORETICAL_LINEAR_SPEED)
     .withDriveMotorType(DRIVE_MOTOR_TYPE)
     .withSteerMotorType(TURN_MOTOR_TYPE)
     .withFeedbackSource(TURN_PID_FEEDBACK_TYPE)

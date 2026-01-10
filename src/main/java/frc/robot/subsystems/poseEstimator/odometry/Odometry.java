@@ -64,6 +64,7 @@ public class Odometry {
         sampleTimestamps = drive.getSampleTimestamps();
         
         sampleGyroYaws = new Rotation2d[sampleCount];
+        sampleModuleDeltas = drive.getSampleModuleDeltas();
         for (int i = 0; i < sampleCount; i++) {
             if (inputs.connected) { // use real gyro angle
                 gyroYaw = inputs.odometryYawPositions[i];
@@ -75,8 +76,6 @@ public class Odometry {
         }
         
         sampleModulePositions = drive.getSampleModulePositions();
-        
-        sampleModuleDeltas = drive.getSampleModuleDeltas();
 
         consumer.acceptOdometry(sampleCount, sampleTimestamps, sampleGyroYaws, sampleModulePositions);
     }

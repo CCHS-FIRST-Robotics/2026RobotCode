@@ -25,7 +25,9 @@ public class AutoGenerator {
             poseEstimator::getPose,
             (pose) -> {
                 poseEstimator.resetPosition(pose);
-                driveSimulation.setSimulationWorldPose(pose);
+                if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM){
+                    driveSimulation.setSimulationWorldPose(pose);
+                }
             },
             drive::runAutoPosition,
             Constants.USE_ALLIANCE_FLIPPING, 
@@ -47,7 +49,8 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get()) // ! add the catch later
+            .andThen(trajectory0.resetOdometry())
             .andThen(trajectory0.cmd())
             .andThen(trajectory1.cmd())
         );
