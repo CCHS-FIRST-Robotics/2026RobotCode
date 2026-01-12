@@ -1,21 +1,35 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.math.geometry.*;
+import static edu.wpi.first.units.Units.*;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.seasonspecific.crescendo2024.NoteOnFly;
 import org.littletonrobotics.junction.Logger;
 import choreo.auto.AutoChooser;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
-import frc.robot.subsystems.drive.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOTalonFXReal;
+import frc.robot.subsystems.drive.ModuleIOTalonFXSim;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
 import frc.robot.subsystems.poseEstimator.odometry.GyroIO;
 import frc.robot.subsystems.poseEstimator.odometry.GyroIOPigeon2;
 import frc.robot.subsystems.poseEstimator.odometry.GyroIOSim;
-import frc.robot.subsystems.poseEstimator.vision.*;
-import frc.robot.utils.*;
+import frc.robot.subsystems.poseEstimator.vision.CameraIO;
+import frc.robot.subsystems.poseEstimator.vision.CameraIOPhotonVision;
+import frc.robot.subsystems.poseEstimator.vision.CameraIOPhotonVisionSim;
+import frc.robot.subsystems.poseEstimator.vision.VisionConstants;
+import frc.robot.utils.AutoGenerator;
 
 public class RobotContainer {
     // controllers
@@ -119,25 +133,49 @@ public class RobotContainer {
             )
         );
 
-        // testing
-        controller.b().whileTrue(
-            new DriveWithPosition(
-                drive, 
-                poseEstimator, 
-                new Pose2d(1, 3.5, new Rotation2d(0))
-            )
-        );
-        controller.x().whileTrue(
-            new DriveWithPosition(
-                drive, 
-                poseEstimator, 
-                new Pose2d(2, 3.5, new Rotation2d(0))
-            )
-        );
-        // controller.x().whileTrue(drive.sysIdFull());
+        // controller.b().whileTrue(
+        //     new DriveWithPosition(
+        //         drive, 
+        //         poseEstimator, 
+        //         new Pose2d(1, 3.5, new Rotation2d(0))
+        //     )
+        // );
+        // controller.x().whileTrue(
+        //     new DriveWithPosition(
+        //         drive, 
+        //         poseEstimator, 
+        //         new Pose2d(2, 3.5, new Rotation2d(0))
+        //     )
+        // );
 
-        // controller.x().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
-        // controller.x().onFalse(Commands.runOnce(SignalLogger::stop));
+        // controller.x().whileTrue(drive.sysIdFull());
+        // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
+        // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
+
+        controller.x().onTrue(
+            new InstantCommand(
+                () -> {
+                    NoteOnFly noteOnFly = new NoteOnFly(
+                        // Specify the position of the chassis when the note is launched
+                        driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
+                        // Specify the translation of the shooter from the robot center (in the shooter’s reference frame)
+                        new Translation2d(),
+                        // Specify the field-relative speed of the chassis, adding it to the initial velocity of the projectile
+                        // drive.getPrevSpeeds(),
+                        new ChassisSpeeds(),
+                        // The shooter facing direction is the same as the robot’s facing direction
+                        driveSimulation.getSimulatedDriveTrainPose().getRotation(),
+                        // Initial height of the flying note
+                        Meters.of(0.45),
+                        // The launch speed is proportional to the RPM; assumed to be 16 meters/second at 6000 RPM
+                        MetersPerSecond.of(5),
+                        // The angle at which the note is launched (45 degrees for a visible arc)
+                        Radians.of(Math.PI / 4)
+                    );
+                    SimulatedArena.getInstance().addGamePieceProjectile(noteOnFly);
+                }
+            )
+        );
     }
 
     // ————— autos ————— //
@@ -180,6 +218,10 @@ public class RobotContainer {
         Logger.recordOutput(
             "FieldSimulation/Algae", 
             SimulatedArena.getInstance().getGamePiecesArrayByType("Algae")
+        );
+        Logger.recordOutput(
+            "FieldSimulation/Note", 
+            SimulatedArena.getInstance().getGamePiecesArrayByType("Note")
         );
     }
 

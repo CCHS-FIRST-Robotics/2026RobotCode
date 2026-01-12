@@ -178,11 +178,9 @@ public class Drive extends SubsystemBase {
                     )
                 );
             
-            
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
                 Logger.recordOutput("outputs/drive/speedsInput", speeds);
-
                 prevSpeeds = speeds;
 
                 SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
@@ -302,6 +300,10 @@ public class Drive extends SubsystemBase {
 
     public SwerveModulePosition[][] getSampleModuleDeltas() {
         return sampleModuleDeltas;
+    }
+
+    public ChassisSpeeds getPrevSpeeds() {
+        return prevSpeeds;
     }
     
     // ————— utils ————— //
