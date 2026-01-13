@@ -2,34 +2,21 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.math.geometry.*;
+import choreo.auto.AutoChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.crescendo2024.NoteOnFly;
 import org.littletonrobotics.junction.Logger;
-import choreo.auto.AutoChooser;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveConstants;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOTalonFXReal;
-import frc.robot.subsystems.drive.ModuleIOTalonFXSim;
+import frc.robot.commands.*;
+import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
-import frc.robot.subsystems.poseEstimator.odometry.GyroIO;
-import frc.robot.subsystems.poseEstimator.odometry.GyroIOPigeon2;
-import frc.robot.subsystems.poseEstimator.odometry.GyroIOSim;
-import frc.robot.subsystems.poseEstimator.vision.CameraIO;
-import frc.robot.subsystems.poseEstimator.vision.CameraIOPhotonVision;
-import frc.robot.subsystems.poseEstimator.vision.CameraIOPhotonVisionSim;
-import frc.robot.subsystems.poseEstimator.vision.VisionConstants;
-import frc.robot.utils.AutoGenerator;
+import frc.robot.subsystems.poseEstimator.odometry.*;
+import frc.robot.subsystems.poseEstimator.vision.*;
+import frc.robot.utils.*;
 
 public class RobotContainer {
     // controllers
@@ -161,8 +148,7 @@ public class RobotContainer {
                         // Specify the translation of the shooter from the robot center (in the shooter’s reference frame)
                         new Translation2d(),
                         // Specify the field-relative speed of the chassis, adding it to the initial velocity of the projectile
-                        // drive.getPrevSpeeds(),
-                        new ChassisSpeeds(),
+                        drive.getPrevSpeeds(),
                         // The shooter facing direction is the same as the robot’s facing direction
                         driveSimulation.getSimulatedDriveTrainPose().getRotation(),
                         // Initial height of the flying note

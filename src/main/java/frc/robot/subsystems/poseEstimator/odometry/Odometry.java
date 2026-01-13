@@ -1,12 +1,9 @@
 package frc.robot.subsystems.poseEstimator.odometry;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import java.util.concurrent.locks.*;
+import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 

@@ -1,19 +1,14 @@
 package frc.robot.subsystems.poseEstimator;
 
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
-
+import edu.wpi.first.math.numbers.*;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
 
@@ -122,7 +117,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
 
         // vision (blank because odom is ignored)
         visionEstimator.updateWithTime(
-            Timer.getFPGATimestamp(),
+            0,
             new Rotation2d(),
             new SwerveModulePosition[] {
                 new SwerveModulePosition(),
