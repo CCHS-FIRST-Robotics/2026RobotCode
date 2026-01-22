@@ -45,7 +45,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        // robotContainer.resetSimulationField();
+        robotContainer.resetSimulationField();
     }
 
     @Override
@@ -53,12 +53,12 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        // autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
-        // // schedules the autonomous command
-        // if (autonomousCommand != null) {
-        //     autonomousCommand.schedule();
-        // }
+        // schedules the autonomous command
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
     }
 
     @Override
@@ -87,6 +87,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        // robotContainer.updateSimulation();
+        robotContainer.updateSimulation();
     }
 }
