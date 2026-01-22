@@ -1,6 +1,6 @@
 {
  "name":"paths",
- "version":1,
+ "version":2,
  "type":"Swerve",
  "variables":{
   "expressions":{},
@@ -74,5 +74,11 @@
    "val":0.5588
   }
  },
- "generationFeatures":[]
+ "generationFeatures":[],
+ "codegen":{
+  "root":"..\\C:\\Users\\Alex\\Github\\Robotics\\2026RobotCode-new",
+  "genVars":true,
+  "genTrajData":true,
+  "useChoreoLib":true
+ }
 }

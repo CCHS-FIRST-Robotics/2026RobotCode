@@ -1,7 +1,6 @@
 package frc.robot.subsystems.fuelIO.shooter;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.subsystems.fuleIO.shooter.ShooterIOInputsAutoLogged;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
