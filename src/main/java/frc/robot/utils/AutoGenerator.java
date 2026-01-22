@@ -49,8 +49,9 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get()) // ! add the catch later
-            .andThen(trajectory0.resetOdometry())
+            // new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get()) // ! add the catch later
+            // .andThen(trajectory0.resetOdometry())
+            trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
             .andThen(trajectory1.cmd())
         );
@@ -61,6 +62,6 @@ public class AutoGenerator {
     // ————— competition routines ————— //
 
     public Command backUp() {
-        return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
+        return new DriveWithPosition(drive, poseEstimator, new Transform2d(0, 3, new Rotation2d()));
     }
 }

@@ -21,8 +21,9 @@
 ## Reference:
  - Radios:
      - When first flashed, IP address is 10.0.1.1
-     - After being flashed, IP address should be 10.32.5
+     - After being flashed, IP address should be 10.32.5.1
      - For configuration, don't use their quick start guide, just power with 12V 2A through a VRM and go to the IP address
+     - https://www.youtube.com/watch?v=eQYytkdBkt4
  - OrangePis:
      - Front dashboard IP address is 10.32.05.16:5800
      - Back dashboard IP address is 10.32.05.17:5800

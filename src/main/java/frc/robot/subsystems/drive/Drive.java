@@ -23,6 +23,7 @@ public class Drive extends SubsystemBase {
         CHARACTERIZING
     };
     private DRIVE_MODE controlMode = DRIVE_MODE.DISABLED;
+    private boolean followIntake = false;
     
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     
@@ -159,6 +160,24 @@ public class Drive extends SubsystemBase {
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
+                if (followIntake
+                && Math.abs(speeds.vxMetersPerSecond) > 0.005
+                && Math.abs(speeds.vyMetersPerSecond) > 0.005
+                && controlMode == DRIVE_MODE.VELOCITY
+                ) { // robot turns in whatever direction it's moving
+                    ChassisSpeeds FOCspeeds = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, poseEstimator.getPose().getRotation());
+                    double desiredAngle = Math.atan2(FOCspeeds.vyMetersPerSecond, FOCspeeds.vxMetersPerSecond);
+                    double pidOutput = oPID.calculate(poseEstimator.getPose().getRotation().getRadians(), desiredAngle);
+                    speeds = new ChassisSpeeds(
+                        speeds.vxMetersPerSecond,
+                        speeds.vyMetersPerSecond,
+                        pidOutput
+                    );
+                }
+            
+            
+            
+            
                 speeds = new ChassisSpeeds(
                     clampVelocity(
                         speeds.vxMetersPerSecond, 
@@ -192,6 +211,10 @@ public class Drive extends SubsystemBase {
                 Logger.recordOutput("outputs/drive/moduleStatesInput", moduleStates);
                 break;
         }
+    }
+
+    public void toggleFollowIntake(){
+        followIntake = !followIntake;
     }
 
     // ————— running control mode ————— //
