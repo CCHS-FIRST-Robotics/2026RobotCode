@@ -18,7 +18,5 @@ public class FuelConstants {
     .withKV(0.1)
     .withKA(0);
 
-
-
     // the interpolated map should probably exist here
 }
