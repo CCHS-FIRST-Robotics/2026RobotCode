@@ -5,7 +5,7 @@
  ! general: 
  !  - reformat maplesim default files
  !  - tune pid without motionmagic first
- !  - tune pid through phoenixtuner https://discord.com/channels/176186766946992128/368993897495527424/1438631090578259968
+ !  - tune pid through phoenixtuner https://discord.com/channels/176186766946992128/3689938974955274241438631090578259968
  ! driving: 
  !  - sysid
  !  - add back the wheel characterization functionality
@@ -44,3 +44,9 @@
      - Drivebase CANCoders are 1, 2, 3, 4
      - Pigeon is 5
      - Subsystems are 50, 51, ...
+ - Phoenix Tuner X: 
+     - Must be running robot code to show any devices
+ - RevLib: 
+    - Make sure version is fully updated before trying to flash firmware
+    - To set up a Sparkmax, turn off all power, hold down reset button, and plug it into computer through usb-c
+    - Should show up as Unknown Device in Rev Hardware Client and then you can format it from there

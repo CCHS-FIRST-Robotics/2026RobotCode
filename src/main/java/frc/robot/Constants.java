@@ -13,5 +13,5 @@ public final class Constants {
 
     public static final boolean USE_ALLIANCE_FLIPPING = false; // !
 
-    public static final int CONTROLLER_PORT = 2;
+    public static final int CONTROLLER_PORT = 0; // 0 for gamesir, 1 for xbox
 }

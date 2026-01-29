@@ -2,9 +2,6 @@ package frc.robot.subsystems.fuelIO.intake;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
-
-import static edu.wpi.first.units.Units.Volts;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -37,17 +34,9 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> io.setPivotVoltage(volts));
     }
 
+    public Command getSetPivotPositionCommand(Angle angle) {
+        return runOnce(() -> io.setPivotPosition(angle));
+    }
+
     // ————— processed command factories ————— //
-
-    public Command getSetPivotUpCommand(Voltage volts) {
-        return getSetPivotVoltageCommand(volts)
-            .andThen(Commands.waitUntil(() -> io.getPivotUp()))
-            .andThen(getSetPivotVoltageCommand(Volts.of(0)));
-    }
-
-    public Command getSetPivotDownCommand(Voltage volts) {
-        return getSetPivotVoltageCommand(volts)
-            .andThen(Commands.waitUntil(() -> io.getPivotDown()))
-            .andThen(getSetPivotVoltageCommand(Volts.of(0)));
-    }
 }

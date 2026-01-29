@@ -14,10 +14,19 @@ public class FuelConstants {
     public static final int ANGLER_MOTOR_ID = 54;
     public static final int SHOOTER_MOTOR_ID = 55;
 
+    // ————— physical constants ————— //
+    public static final double INTAKE_GEAR_RATIO = 5;
+    public static final double PIVOT_GEAR_RATIO = 25 * 84 / 50; // rotations of motor to get one rotation of the pivot
+
     // ————— PIDF ————— //
 
     public static final ClosedLoopConfig INTAKE_PID = new ClosedLoopConfig().pid(0.3, 0, 0);
-    public static final SimpleMotorFeedforward INTAKE_FF = new SimpleMotorFeedforward(0, 0.1, 0);
+    public static final double INTAKE_KS = 0;
+    public static final double INTAKE_KV = 0.1;
+    public static final double INTAKE_KA = 0;
+
+    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(0.05, 0, 0);
+    public static final double PIVOT_KG = 1;
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs()
     .withKP(0.3)

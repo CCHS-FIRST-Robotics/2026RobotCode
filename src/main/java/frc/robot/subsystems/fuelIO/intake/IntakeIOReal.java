@@ -7,11 +7,9 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class IntakeIOReal implements IntakeIO {
@@ -20,17 +18,13 @@ public class IntakeIOReal implements IntakeIO {
 
     private final SparkMaxConfig intakeConfig = new SparkMaxConfig();
     private final SparkMaxConfig pivotConfig = new SparkMaxConfig();
-    private final SimpleMotorFeedforward intakeFeedforward;
 
     private final RelativeEncoder intakeEncoder;
     private final RelativeEncoder pivotEncoder;
 
-    private AngularVelocity prevIntakeVelocity = RadiansPerSecond.of(0.0);
+    // private final Trigger upSwitch;
+    // private final Trigger downSwitch;
 
-    private final Trigger upSwitch;
-    private final Trigger downSwitch;
-
-    @SuppressWarnings("resource")
     public IntakeIOReal(
         int intakeId, 
         int pivotId, 
@@ -47,13 +41,18 @@ public class IntakeIOReal implements IntakeIO {
         // encoders
         intakeEncoder = intakeMotor.getEncoder();
         intakeEncoder.setPosition(0.0);
+        
         pivotEncoder = pivotMotor.getEncoder();
-        pivotEncoder.setPosition(0.0);
+        pivotEncoder.setPosition(0.603171);
 
         // pid 
         intakeConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.INTAKE_PID);
-        intakeFeedforward = FuelConstants.INTAKE_FF;
-        
+        // intakeConfig.closedLoop.feedForward.kV(FuelConstants.INTAKE_KV);
+        pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
+        pivotConfig.closedLoop.feedForward.kCos(FuelConstants.PIVOT_KG);
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(1);
+        // pivotConfig.closedLoop.maxMotion.maxAcceleration();
+
         // miscellaneous settings
         intakeConfig.signals.primaryEncoderVelocityPeriodMs(10);
         intakeConfig.encoder.quadratureMeasurementPeriod(10);
@@ -64,11 +63,17 @@ public class IntakeIOReal implements IntakeIO {
         pivotConfig.smartCurrentLimit(30);
         pivotConfig.voltageCompensation(12);
 
-        // ! intakeConfig.inverted(true);
-        // ! pivotConfig.inverted(true);
+        pivotConfig.inverted(true); // ! 
 
-        intakeConfig.idleMode(IdleMode.kBrake);
-        pivotConfig.idleMode(IdleMode.kBrake);
+        intakeConfig.idleMode(IdleMode.kCoast);
+        pivotConfig.idleMode(IdleMode.kCoast);
+
+        intakeConfig.encoder
+            .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
+            .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);
+        pivotConfig.encoder
+            .positionConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO)
+            .velocityConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO);
 
         // stop config
         intakeMotor.setCANTimeout(0);
@@ -76,8 +81,8 @@ public class IntakeIOReal implements IntakeIO {
         pivotMotor.setCANTimeout(0);
         pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        upSwitch = new Trigger(new DigitalInput(upSwitchPort)::get);
-        downSwitch = new Trigger(new DigitalInput(downSwitchPort)::get);
+        // upSwitch = new Trigger(new DigitalInput(upSwitchPort)::get);
+        // downSwitch = new Trigger(new DigitalInput(downSwitchPort)::get);
     }
 
     @Override
@@ -105,14 +110,8 @@ public class IntakeIOReal implements IntakeIO {
         intakeMotor.getClosedLoopController().setSetpoint(
             velocity.in(Rotations.per(Minute)), 
             SparkMax.ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0, 
-            intakeFeedforward.calculateWithVelocities(
-                prevIntakeVelocity.in(RadiansPerSecond),
-                velocity.in(RadiansPerSecond)
-            )
+            ClosedLoopSlot.kSlot0
         );
-
-        prevIntakeVelocity = velocity;
     }
 
     @Override
@@ -121,12 +120,11 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
-    public boolean getPivotUp() {
-        return upSwitch.getAsBoolean();
-    }
-
-    @Override
-    public boolean getPivotDown() {
-        return downSwitch.getAsBoolean();
+    public void setPivotPosition(Angle angle) {
+        pivotMotor.getClosedLoopController().setSetpoint(
+            angle.in(Rotations), 
+            SparkMax.ControlType.kPosition, 
+            ClosedLoopSlot.kSlot0
+        );
     }
 }

@@ -27,11 +27,5 @@ public interface IntakeIO {
 
     public default void setPivotVoltage(Voltage volts) {}
 
-    public default boolean getPivotUp() {
-        return false;
-    }
-    
-    public default boolean getPivotDown() {
-        return false;
-    }
+    public default void setPivotPosition(Angle angle) {}
 }

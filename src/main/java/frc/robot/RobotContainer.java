@@ -134,10 +134,13 @@ public class RobotContainer {
 
         // ————— fuel ————— //
 
-        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(2)));
-        controller.a().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
         
-        controller.y().onTrue(intake.getSetPivotVoltageCommand(Volts.of(2)));
+        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-8.25))); // up
+        // controller.a().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-23.1))); // down
+        controller.y().onTrue(intake.getSetPivotVoltageCommand(Volts.of(-0.5)));
+        controller.a().onTrue(intake.getSetPivotVoltageCommand(Volts.of(0)));
         
         // button for intake
         // button for hold it down and shoot
