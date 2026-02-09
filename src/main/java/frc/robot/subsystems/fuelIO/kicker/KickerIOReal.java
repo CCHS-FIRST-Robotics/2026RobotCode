@@ -11,7 +11,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.measure.Voltage;
-
 public class KickerIOReal implements KickerIO {
     private final SparkMax kickerMotor;
     private final SparkMaxConfig kickerConfig = new SparkMaxConfig();
