@@ -1,19 +1,19 @@
-package frc.robot.subsystems.fuelIO.intake;
+package frc.robot.subsystems.fuelIO.hopper;
 
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface IntakeIO {
+public interface HopperIO {
     @AutoLog
-    class IntakeIOInputs {
-        public double intakeVoltage;
-        public double intakeCurrent;
-        public double intakePosition;
-        public double intakeVelocity;
-        public double intakeTemperature;
+    class HopperIOInputs {
+        public double hopperVoltage;
+        public double hopperCurrent;
+        public double hopperPosition;
+        public double hopperVelocity;
+        public double hopperTemperature;
     }
     
-    public default void updateInputs(IntakeIOInputs inputs) {}
+    public default void updateInputs(HopperIOInputs inputs) {}
     
     public default void setIntakeVoltage(Voltage volts) {}
 
