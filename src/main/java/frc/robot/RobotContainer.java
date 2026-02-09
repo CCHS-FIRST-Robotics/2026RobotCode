@@ -15,6 +15,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
 import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
+import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
@@ -28,6 +29,7 @@ public class RobotContainer {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Intake intake;
+    private final Hopper hopper;
     private final Shooter shooter;
 
     // utils
@@ -58,6 +60,7 @@ public class RobotContainer {
                     startPose
                 );
                 intake = new Intake(new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID, FuelConstants.PIVOT_MOTOR_ID, 0, 0));
+                hopper = new Hopper(new HopperIOReal(FuelConstants.HOPPER_MOTOR_ID));
                 shooter = new Shooter(new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID));
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
@@ -87,6 +90,7 @@ public class RobotContainer {
                     startPose
                 );
                 intake = new Intake(new IntakeIOSim());
+                hopper = new Hopper(new HopperIOSim());
                 shooter = new Shooter(new ShooterIOSim());
                 break;
             default: // replayed robot, disable IO implementations
@@ -106,6 +110,7 @@ public class RobotContainer {
                     new Pose2d()
                 );
                 intake = new Intake(new IntakeIO() {});
+                hopper = new Hopper(new HopperIO() {});
                 shooter = new Shooter(new ShooterIO() {});
                 break;
         }
