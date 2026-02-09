@@ -142,14 +142,16 @@ public class RobotContainer {
         // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
         
-        controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
-        controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
-        controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
-        
-        controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
-        controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
+        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
 
+        controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
+        controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
+        
+        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
+        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
         // button for intake
         // button for hold it down and shoot

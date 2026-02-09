@@ -1,7 +1,6 @@
 package frc.robot.subsystems.fuelIO.hopper;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 

@@ -2,21 +2,12 @@ package frc.robot.subsystems.poseEstimator.vision;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-
-import org.dyn4j.geometry.Rotation;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.Constants;
-import frc.robot.subsystems.poseEstimator.vision.CameraIO.PoseObservation;
-import frc.robot.subsystems.poseEstimator.vision.CameraIO.VisionIOInputs;
 
 
 public class CameraIOObjectDetection implements DetectionIO  {
