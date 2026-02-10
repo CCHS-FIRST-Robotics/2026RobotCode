@@ -174,10 +174,7 @@ public class Drive extends SubsystemBase {
                         pidOutput
                     );
                 }
-            
-            
-            
-            
+                
                 speeds = new ChassisSpeeds(
                     clampVelocity(
                         speeds.vxMetersPerSecond, 

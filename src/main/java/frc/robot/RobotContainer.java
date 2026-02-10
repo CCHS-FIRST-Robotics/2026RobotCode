@@ -36,7 +36,8 @@ public class RobotContainer {
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
-    
+    private FuelSim fuelSimulation;
+
     private final Pose2d startPose = Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM
         ? new Pose2d(3, 3, new Rotation2d())
         : new Pose2d(0, 0, new Rotation2d());
@@ -90,7 +91,7 @@ public class RobotContainer {
                     startPose
                 );
                 intake = new Intake(new IntakeIOSim());
-                hopper = new Hopper(new HopperIOSim());
+                hopper = new Hopper(new HopperIO() {});
                 shooter = new Shooter(new ShooterIOSim());
                 break;
             default: // replayed robot, disable IO implementations
@@ -146,12 +147,12 @@ public class RobotContainer {
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
 
-        controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
-        controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
+        // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
-        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
-        // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
+        controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
+        controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
         // button for intake
         // button for hold it down and shoot
@@ -217,7 +218,27 @@ public class RobotContainer {
     private void configureSimulation() {
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, startPose);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
-        // SimulatedArena.getInstance().addGamePiece(new ReefscapeCoralOnField(new Pose2d(Math.random() * 10, Math.random() * 10, new Rotation2d())));
+
+        // fuelSimulation = new FuelSim("FuelSimulation"); // ! 
+        // fuelSimulation.registerRobot(
+        //     DriveConstants.WIDTH_X.in(Meters),
+        //     DriveConstants.WIDTH_Y.in(Meters),
+        //     Inches.of(6).in(Meters),
+        //     () -> poseEstimator.getPose(),
+        //     () -> drive.getPrevSpeeds() // ! might be robot relative and probably is
+        // );
+        // fuelSimulation.registerIntake(
+        //     -DriveConstants.WIDTH_X.div(2).in(Meters), // robot-centric coordinates for bounding box in meters
+        //     DriveConstants.WIDTH_X.div(2).in(Meters),
+        //     -DriveConstants.WIDTH_Y.div(2).in(Meters),
+        //     DriveConstants.WIDTH_Y.div(2).in(Meters),
+        //     () -> intake.getIntakeOn() // (optional) BooleanSupplier for whether the intake should be active at a given moment
+        //     // callback // ! (optional) Runnable called whenever a fuel is intaked
+        // );
+
+        // fuelSimulation.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
+        
+        // fuelSimulation.start(); // enables the simulation to run (updateSim must still be called periodically)
     }
 
     public void updateSimulation() { // called by Robot.java on simulationPeriodic

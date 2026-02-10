@@ -23,8 +23,6 @@ public interface IntakeIO {
     
     public default void setIntakeVoltage(Voltage volts) {}
 
-    public default void setIntakeVelocity(AngularVelocity velocity) {}
-
     public default void setPivotVoltage(Voltage volts) {}
 
     public default void setPivotPosition(Angle angle) {}

@@ -41,8 +41,6 @@ public class IntakeIOReal implements IntakeIO {
         pivotEncoder.setPosition(FuelConstants.INTAKE_START_ANGLE.in(Rotations));
 
         // pid 
-        intakeConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.INTAKE_PID);
-        // intakeConfig.closedLoop.feedForward.kV(FuelConstants.INTAKE_KV);
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
         pivotConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)));
         pivotConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
@@ -52,6 +50,9 @@ public class IntakeIOReal implements IntakeIO {
         intakeConfig.signals.primaryEncoderVelocityPeriodMs(10);
         intakeConfig.encoder.quadratureMeasurementPeriod(10);
         intakeConfig.encoder.quadratureAverageDepth(2);
+        pivotConfig.signals.primaryEncoderVelocityPeriodMs(10);
+        pivotConfig.encoder.quadratureMeasurementPeriod(10);
+        pivotConfig.encoder.quadratureAverageDepth(2);
 
         intakeConfig.smartCurrentLimit(30);
         intakeConfig.voltageCompensation(12);
@@ -95,15 +96,6 @@ public class IntakeIOReal implements IntakeIO {
     @Override
     public void setIntakeVoltage(Voltage volts) {
         intakeMotor.setVoltage(volts);
-    }
-
-    @Override
-    public void setIntakeVelocity(AngularVelocity velocity) {
-        intakeMotor.getClosedLoopController().setSetpoint(
-            velocity.in(Rotations.per(Minute)), 
-            SparkMax.ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0
-        );
     }
 
     @Override

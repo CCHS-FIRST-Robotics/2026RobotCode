@@ -31,16 +31,16 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> io.setIntakeVoltage(volts));
     }
 
-    public Command getSetIntakeVelocityCommand(AngularVelocity velocity) { // ! idk if this is necessary
-        return runOnce(() -> io.setIntakeVelocity(velocity));
-    }
-
     public Command getSetPivotVoltageCommand(Voltage volts) {
         return runOnce(() -> io.setPivotVoltage(volts));
     }
 
     public Command getSetPivotPositionCommand(Angle angle) {
         return runOnce(() -> pivotAngle = angle);
+    }
+
+    public boolean getIntakeOn() {
+        return inputs.intakeVoltage > 0; // ! idk if it's actually 0
     }
 
     // ————— processed command factories ————— //

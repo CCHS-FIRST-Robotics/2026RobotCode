@@ -90,6 +90,8 @@ public class DriveConstants { // * indicates a physical measurement
 
     public static final Mass ROBOT_WEIGHT = Pounds.of(74.088); // ! *
     public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! *
+    public static final Distance WIDTH_X = Inches.of(27.5); // *
+    public static final Distance WIDTH_Y = Inches.of(27.5); // *
     public static final Distance TRACK_WIDTH_X = Inches.of(22.5); // *
     public static final Distance TRACK_WIDTH_Y = Inches.of(22.5); // *
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
