@@ -11,19 +11,9 @@ public interface IntakeIO {
         public double intakePosition;
         public double intakeVelocity;
         public double intakeTemperature;
-
-        public double pivotVoltage;
-        public double pivotCurrent;
-        public double pivotPosition;
-        public double pivotVelocity;
-        public double pivotTemperature;
     }
     
     public default void updateInputs(IntakeIOInputs inputs) {}
     
     public default void setIntakeVoltage(Voltage volts) {}
-
-    public default void setPivotVoltage(Voltage volts) {}
-
-    public default void setPivotPosition(Angle angle) {}
 }

@@ -15,10 +15,8 @@ public class HopperIOReal implements HopperIO {
     private final SparkMaxConfig hopperConfig = new SparkMaxConfig();
     private final RelativeEncoder hopperEncoder;
 
-    public HopperIOReal(
-        int intakeId
-    ) {
-        hopperMotor = new SparkMax(intakeId, MotorType.kBrushless);
+    public HopperIOReal(int id) {
+        hopperMotor = new SparkMax(id, MotorType.kBrushless);
 
         // start config
         hopperMotor.setCANTimeout(500);
@@ -26,10 +24,6 @@ public class HopperIOReal implements HopperIO {
         // encoders
         hopperEncoder = hopperMotor.getEncoder();
         hopperEncoder.setPosition(0.0);
-
-        // pid 
-        hopperConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.INTAKE_PID);
-        // intakeConfig.closedLoop.feedForward.kV(FuelConstants.INTAKE_KV);
 
         // miscellaneous settings
         hopperConfig.signals.primaryEncoderVelocityPeriodMs(10);
@@ -42,8 +36,8 @@ public class HopperIOReal implements HopperIO {
         hopperConfig.idleMode(IdleMode.kCoast);
 
         hopperConfig.encoder
-            .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
-            .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);
+            .positionConversionFactor(1 / FuelConstants.HOPPER_GEAR_RATIO)
+            .velocityConversionFactor(1 / FuelConstants.HOPPER_GEAR_RATIO);
 
         // stop config
         hopperMotor.setCANTimeout(0);
@@ -60,16 +54,7 @@ public class HopperIOReal implements HopperIO {
     }
 
     @Override
-    public void setIntakeVoltage(Voltage volts) {
+    public void setHopperVoltage(Voltage volts) {
         hopperMotor.setVoltage(volts);
-    }
-
-    @Override
-    public void setIntakeVelocity(AngularVelocity velocity) {
-        hopperMotor.getClosedLoopController().setSetpoint(
-            velocity.in(Rotations.per(Minute)), 
-            SparkMax.ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0
-        );
     }
 }

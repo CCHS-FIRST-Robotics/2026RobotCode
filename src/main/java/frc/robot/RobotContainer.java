@@ -60,9 +60,16 @@ public class RobotContainer {
                     drive, 
                     startPose
                 );
-                intake = new Intake(new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID, FuelConstants.PIVOT_MOTOR_ID, 0, 0));
+                intake = new Intake(
+                    new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID), 
+                    new PivotIOReal(FuelConstants.PIVOT_MOTOR_ID)
+                );
                 hopper = new Hopper(new HopperIOReal(FuelConstants.HOPPER_MOTOR_ID));
-                shooter = new Shooter(new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID));
+                shooter = new Shooter(
+                    new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID), 
+                    new AnglerIOReal(FuelConstants.ANGLER_MOTOR_ID), 
+                    new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
+                );
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
@@ -90,9 +97,16 @@ public class RobotContainer {
                     drive, 
                     startPose
                 );
-                intake = new Intake(new IntakeIOSim());
+                intake = new Intake(
+                    new IntakeIOSim(), 
+                    new PivotIOSim()
+                );
                 hopper = new Hopper(new HopperIO() {});
-                shooter = new Shooter(new ShooterIOSim());
+                shooter = new Shooter(
+                    new ShooterIOSim(),
+                    new AnglerIOSim(),
+                    new KickerIOSim()
+                );
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
@@ -110,9 +124,16 @@ public class RobotContainer {
                     drive, 
                     new Pose2d()
                 );
-                intake = new Intake(new IntakeIO() {});
+                intake = new Intake(
+                    new IntakeIO() {}, 
+                    new PivotIO() {}
+                );
                 hopper = new Hopper(new HopperIO() {});
-                shooter = new Shooter(new ShooterIO() {});
+                shooter = new Shooter(
+                    new ShooterIO() {}, 
+                    new AnglerIO() {},
+                    new KickerIO() {}
+                );
                 break;
         }
 
@@ -138,11 +159,11 @@ public class RobotContainer {
 
         // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! test
 
-        // ————— fuel ————— // // !hi
+        // ————— fuel ————— //
 
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
-        
+        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+
         // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
@@ -150,14 +171,14 @@ public class RobotContainer {
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
-        controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
-        controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
-        controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
+        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
         // button for intake
         // button for hold it down and shoot
             // spin up the hopper
-            // spin the kickers 
+            // spin the kickers
             // constant velocity PID on the shooter
         // first make turret rotate but then make its periodic function auto aim it always (or maybe have a boolean toggle for it
         // first make shooter spin up but then make its periodic function auto aim it always
@@ -216,29 +237,29 @@ public class RobotContainer {
     // ————— simulation ————— //
 
     private void configureSimulation() {
+        // drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, startPose);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
-        // fuelSimulation = new FuelSim("FuelSimulation"); // ! 
-        // fuelSimulation.registerRobot(
-        //     DriveConstants.WIDTH_X.in(Meters),
-        //     DriveConstants.WIDTH_Y.in(Meters),
-        //     Inches.of(6).in(Meters),
-        //     () -> poseEstimator.getPose(),
-        //     () -> drive.getPrevSpeeds() // ! might be robot relative and probably is
-        // );
-        // fuelSimulation.registerIntake(
-        //     -DriveConstants.WIDTH_X.div(2).in(Meters), // robot-centric coordinates for bounding box in meters
-        //     DriveConstants.WIDTH_X.div(2).in(Meters),
-        //     -DriveConstants.WIDTH_Y.div(2).in(Meters),
-        //     DriveConstants.WIDTH_Y.div(2).in(Meters),
-        //     () -> intake.getIntakeOn() // (optional) BooleanSupplier for whether the intake should be active at a given moment
-        //     // callback // ! (optional) Runnable called whenever a fuel is intaked
-        // );
-
-        // fuelSimulation.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
-        
-        // fuelSimulation.start(); // enables the simulation to run (updateSim must still be called periodically)
+        // drive
+        fuelSimulation = new FuelSim("FuelSimulation");
+        fuelSimulation.registerRobot(
+            DriveConstants.WIDTH_X.in(Meters),
+            DriveConstants.WIDTH_Y.in(Meters),
+            Inches.of(6).in(Meters),
+            () -> poseEstimator.getPose(),
+            () -> drive.getPrevSpeeds() // ! might be robot relative and probably is
+        );
+        fuelSimulation.registerIntake(
+            -DriveConstants.WIDTH_X.div(2).in(Meters) - Inches.of(11.5).in(Meters),
+            -DriveConstants.WIDTH_X.div(2).in(Meters),
+            -DriveConstants.WIDTH_Y.div(2).in(Meters),
+            DriveConstants.WIDTH_Y.div(2).in(Meters),
+            () -> intake.getIntakeOn() // ! 
+            // callback // ! (optional) Runnable called whenever a fuel is intaked
+        );
+        fuelSimulation.spawnStartingFuel();
+        fuelSimulation.start(); // enables the simulation to run (updateSim must still be called periodically)
     }
 
     public void updateSimulation() { // called by Robot.java on simulationPeriodic
@@ -246,6 +267,7 @@ public class RobotContainer {
             return;
         }
 
+        // drive
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
         Logger.recordOutput(
@@ -260,6 +282,9 @@ public class RobotContainer {
             "FieldSimulation/Note", 
             SimulatedArena.getInstance().getGamePiecesArrayByType("Note")
         );
+
+        // fuel
+        fuelSimulation.stepSim();
     }
 
     public void resetSimulationField() { // called by Robot.java on disabledInit (only runs if in SIM mode)

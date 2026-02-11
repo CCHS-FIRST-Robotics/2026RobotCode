@@ -1,23 +1,22 @@
-package frc.robot.subsystems.fuelIO.kicker;
+package frc.robot.subsystems.fuelIO.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.revrobotics.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.PersistMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.units.measure.*;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 
-import edu.wpi.first.units.measure.Voltage;
 public class KickerIOReal implements KickerIO {
     private final SparkMax kickerMotor;
     private final SparkMaxConfig kickerConfig = new SparkMaxConfig();
     private final RelativeEncoder kickerEncoder;
 
-    public KickerIOReal(int id) {
-        kickerMotor = new SparkMax(id, MotorType.kBrushless);
+    public KickerIOReal(int kickerId) {
+        kickerMotor = new SparkMax(kickerId, MotorType.kBrushless);
 
         // start config
         kickerMotor.setCANTimeout(500);
@@ -34,7 +33,13 @@ public class KickerIOReal implements KickerIO {
         kickerConfig.smartCurrentLimit(30);
         kickerConfig.voltageCompensation(12);
 
+        // ! inverted
+
         kickerConfig.idleMode(IdleMode.kCoast);
+
+        kickerConfig.encoder
+            .positionConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO)
+            .velocityConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO);
 
         // stop config
         kickerMotor.setCANTimeout(0);
@@ -51,7 +56,7 @@ public class KickerIOReal implements KickerIO {
     }
 
     @Override
-    public void setVoltage(Voltage volts) {
+    public void setKickerVoltage(Voltage volts) {
         kickerMotor.setVoltage(volts);
     }
 }

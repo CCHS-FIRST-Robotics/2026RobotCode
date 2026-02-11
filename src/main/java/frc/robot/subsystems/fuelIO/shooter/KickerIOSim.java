@@ -1,5 +1,5 @@
 package frc.robot.subsystems.fuelIO.shooter;
 
-public class ShooterIOSim implements ShooterIO {
+public class KickerIOSim implements KickerIO {
     
 }

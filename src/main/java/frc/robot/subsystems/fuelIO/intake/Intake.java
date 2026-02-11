@@ -6,33 +6,40 @@ import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    private final IntakeIO io;
-    private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    private final IntakeIO intakeIO;
+    private final IntakeIOInputsAutoLogged intakeIOInputs = new IntakeIOInputsAutoLogged();
+
+    private final PivotIO pivotIO;
+    private final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
     Angle pivotAngle = FuelConstants.INTAKE_START_ANGLE;
 
-    boolean autoVelocity;
-
-    public Intake(IntakeIO io) {
-        this.io = io;
+    public Intake(
+        IntakeIO intakeIO, 
+        PivotIO pivotIO
+    ) {
+        this.intakeIO = intakeIO;
+        this.pivotIO = pivotIO;
     }
     
     @Override
     public void periodic() {
-        io.updateInputs(inputs);
-        Logger.processInputs("intake", inputs);
+        intakeIO.updateInputs(intakeIOInputs);
+        Logger.processInputs("intake", intakeIOInputs);
+        pivotIO.updateInputs(pivotIOInputs);
+        Logger.processInputs("pivot", pivotIOInputs);
 
-        io.setPivotPosition(pivotAngle);
+        pivotIO.setPivotPosition(pivotAngle);
     }
 
     // ————— raw command factories ————— //
 
     public Command getSetIntakeVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setIntakeVoltage(volts));
+        return runOnce(() -> intakeIO.setIntakeVoltage(volts));
     }
 
     public Command getSetPivotVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setPivotVoltage(volts));
+        return runOnce(() -> pivotIO.setPivotVoltage(volts));
     }
 
     public Command getSetPivotPositionCommand(Angle angle) {
@@ -40,7 +47,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean getIntakeOn() {
-        return inputs.intakeVoltage > 0; // ! idk if it's actually 0
+        return Math.abs(intakeIOInputs.intakeVoltage) > 0; // ! idk if it's actually 0
     }
 
     // ————— processed command factories ————— //

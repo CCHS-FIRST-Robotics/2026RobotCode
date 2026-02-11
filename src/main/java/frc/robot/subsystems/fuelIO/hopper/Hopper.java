@@ -21,11 +21,7 @@ public class Hopper extends SubsystemBase {
     // ————— raw command factories ————— //
 
     public Command getSetHopperVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setIntakeVoltage(volts));
-    }
-
-    public Command getSetHopperVelocityCommand(AngularVelocity velocity) { // ! idk if this is necessary
-        return runOnce(() -> io.setIntakeVelocity(velocity));
+        return runOnce(() -> io.setHopperVoltage(volts));
     }
 
     // ————— processed command factories ————— //

@@ -13,26 +13,29 @@ public class FuelConstants {
     public static final int INTAKE_MOTOR_ID = 50;
     public static final int PIVOT_MOTOR_ID = 51;
     public static final int HOPPER_MOTOR_ID = 52;
-    public static final int TURRET_MOTOR_ID = 53;
+    public static final int SHOOTER_MOTOR_ID = 53;
     public static final int ANGLER_MOTOR_ID = 54;
-    public static final int SHOOTER_MOTOR_ID = 55;
+    public static final int KICKER_MOTOR_ID = 55;
 
     // ————— kinematics ————— //
     
-    public static final double INTAKE_GEAR_RATIO = 5;
-    public static final double PIVOT_GEAR_RATIO = 25 * 84 / 50; // rotations of motor to get one rotation of the pivot
+    // gear ratios are all # rotations of motor to get one rotation of the mechanism
+    public static final double INTAKE_GEAR_RATIO = 5; // ! 
+    public static final double PIVOT_GEAR_RATIO = 25 * 84 / 50;
+    public static final double HOPPER_GEAR_RATIO = 1; // ! 
+    public static final double SHOOTER_GEAR_RATIO = 1; // ! 
+    public static final double ANGLER_GEAR_RATIO = 1; // ! 
+    public static final double KICKER_GEAR_RATIO = 1; // ! 
 
     // ————— PIDF ————— //
-
-    public static final ClosedLoopConfig INTAKE_PID = new ClosedLoopConfig().pid(0.3, 0, 0);
-    public static final double INTAKE_KS = 0;
-    public static final double INTAKE_KV = 0.1;
-    public static final double INTAKE_KA = 0;
 
     public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! tuned with motionmagic, because otherwise I'd literally break the intake
     public static final double PIVOT_KCOS = 0.22;
 
-    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs()
+    public static final ClosedLoopConfig ANGLER_PID = new ClosedLoopConfig().pid(15, 0, 0); // !
+    public static final double ANGLER_KCOS = 0.22; // ! 
+
+    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! 
     .withKP(0.3)
     .withKI(0)
     .withKD(0)

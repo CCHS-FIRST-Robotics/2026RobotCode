@@ -5,40 +5,57 @@ import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
-    // ! add turret code or whatever
+    private final ShooterIO shooterIO;
+    private final ShooterIOInputsAutoLogged shooterIOInputs = new ShooterIOInputsAutoLogged();
 
+    private final AnglerIO anglerIO;
+    private final AnglerIOInputsAutoLogged anglerIOInputs = new AnglerIOInputsAutoLogged();
 
-    private final ShooterIO io;
-    private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+    private final KickerIO kickerIO;
+    private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
-    private boolean autoVelocity;
-
-    public Shooter(ShooterIO io) {
-        this.io = io;
+    public Shooter(
+        ShooterIO shooterIO, 
+        AnglerIO anglerIO, 
+        KickerIO kickerIO
+    ) {
+        this.shooterIO = shooterIO;
+        this.anglerIO = anglerIO;
+        this.kickerIO = kickerIO;
     }
     
     @Override
     public void periodic() {
-        io.updateInputs(inputs);
-        Logger.processInputs("shooter", inputs);
-
-        if (autoVelocity) {
-            // ! smth smth interpolated map
-        }
+        shooterIO.updateInputs(shooterIOInputs);
+        Logger.processInputs("shooter", shooterIOInputs);
+        anglerIO.updateInputs(anglerIOInputs);
+        Logger.processInputs("angler", anglerIOInputs);
+        kickerIO.updateInputs(kickerIOInputs);
+        Logger.processInputs("kicker", kickerIOInputs);
     }
 
     // ————— raw command factories ————— //
 
     public Command getSetShooterVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setVoltage(volts));
+        return runOnce(() -> shooterIO.setShooterVoltage(volts));
     }
 
     public Command getSetShooterVelocityCommand(AngularVelocity velocity) {
-        // maybe stop autovelocity if it's running (idk when this command factory will actually be used though)
-        return runOnce(() -> io.setVelocity(velocity));
+        return runOnce(() -> shooterIO.setShooterVelocity(velocity));
+    }
+
+    public Command getSetAnglerVoltageCommand(Voltage volts) {
+        return runOnce(() -> anglerIO.setAnglerVoltage(volts));
+    }
+
+    public Command getSetAnglerPositionCommand(Angle angle) {
+        return runOnce(() -> anglerIO.setAnglerPosition(angle));
+        // ! erm pivot code
+    }
+
+    public Command getSetKickerVoltageCommand(Voltage volts) {
+        return runOnce(() -> kickerIO.setKickerVoltage(volts));
     }
 
     // ————— sysid command factories ————— //
-
-
 }

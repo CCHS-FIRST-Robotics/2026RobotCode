@@ -15,11 +15,5 @@ public interface HopperIO {
     
     public default void updateInputs(HopperIOInputs inputs) {}
     
-    public default void setIntakeVoltage(Voltage volts) {}
-
-    public default void setIntakeVelocity(AngularVelocity velocity) {}
-
-    public default void setPivotVoltage(Voltage volts) {}
-
-    public default void setPivotPosition(Angle angle) {}
+    public default void setHopperVoltage(Voltage volts) {}
 }
