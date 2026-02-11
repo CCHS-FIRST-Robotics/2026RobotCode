@@ -11,68 +11,68 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class AnglerIOReal implements AnglerIO {
-    private final SparkMax anglerMotor;
-    private final SparkMaxConfig anglerConfig = new SparkMaxConfig();
-    private final RelativeEncoder anglerEncoder;
+    private final SparkMax motor;
+    private final SparkMaxConfig motorConfig = new SparkMaxConfig();
+    private final RelativeEncoder encoder;
 
     public AnglerIOReal(int anglerId) {
-        anglerMotor = new SparkMax(anglerId, MotorType.kBrushless);
+        motor = new SparkMax(anglerId, MotorType.kBrushless);
 
         // start config
-        anglerMotor.setCANTimeout(500);
+        motor.setCANTimeout(500);
 
         // encoders
-        anglerEncoder = anglerMotor.getEncoder();
-        anglerEncoder.setPosition(0.0); // ! 
+        encoder = motor.getEncoder();
+        encoder.setPosition(0.0); // ! 
 
         // pid 
-        anglerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.ANGLER_PID);
-        anglerConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // ! 
-        anglerConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
-        anglerConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
+        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.ANGLER_PID);
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // ! 
+        motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
+        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
 
         // miscellaneous settings
-        anglerConfig.signals.primaryEncoderVelocityPeriodMs(10);
-        anglerConfig.encoder.quadratureMeasurementPeriod(10);
-        anglerConfig.encoder.quadratureAverageDepth(2);
+        motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
+        motorConfig.encoder.quadratureMeasurementPeriod(10);
+        motorConfig.encoder.quadratureAverageDepth(2);
 
-        anglerConfig.smartCurrentLimit(30);
-        anglerConfig.voltageCompensation(12);
+        motorConfig.smartCurrentLimit(30);
+        motorConfig.voltageCompensation(12);
 
         // ! inverted
 
-        anglerConfig.idleMode(IdleMode.kCoast);
+        motorConfig.idleMode(IdleMode.kCoast);
 
-        anglerConfig.encoder
-            .positionConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO)
-            .velocityConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO);
+        motorConfig.encoder
+        .positionConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO)
+        .velocityConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO);
 
         // stop config
-        anglerMotor.setCANTimeout(0);
-        anglerMotor.configure(anglerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        motor.setCANTimeout(0);
+        motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
     public void updateInputs(AnglerIOInputs inputs) {
-        inputs.anglerVoltage = anglerMotor.getAppliedOutput() * anglerMotor.getBusVoltage();
-        inputs.anglerCurrent = anglerMotor.getOutputCurrent();
-        inputs.anglerPosition = anglerEncoder.getPosition();
-        inputs.anglerVelocity = Rotations.per(Minute).of(anglerEncoder.getVelocity()).in(RotationsPerSecond);
-        inputs.anglerTemperature = anglerMotor.getMotorTemperature();
+        inputs.anglerVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.anglerCurrent = motor.getOutputCurrent();
+        inputs.anglerPosition = encoder.getPosition();
+        inputs.anglerVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.anglerTemperature = motor.getMotorTemperature();
     }
 
     @Override
-    public void setAnglerVoltage(Voltage volts) {
-        anglerMotor.setVoltage(volts);
+    public void setVoltage(Voltage volts) {
+        motor.setVoltage(volts);
     }
 
     @Override
-    public void setAnglerPosition(Angle angle) {
-        anglerMotor.getClosedLoopController().setSetpoint(
+    public void setPosition(Angle angle) {
+        motor.getClosedLoopController().setSetpoint(
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 
-            ClosedLoopSlot.kSlot0,
-            FuelConstants.ANGLER_KCOS * Math.cos(Rotations.of(anglerEncoder.getPosition()).in(Radians))
+            ClosedLoopSlot.kSlot0, 
+            FuelConstants.ANGLER_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
         );
     }
 }

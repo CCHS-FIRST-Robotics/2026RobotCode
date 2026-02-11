@@ -54,7 +54,7 @@ public class HopperIOReal implements HopperIO {
     }
 
     @Override
-    public void setHopperVoltage(Voltage volts) {
+    public void setVoltage(Voltage volts) {
         motor.setVoltage(volts);
     }
 }

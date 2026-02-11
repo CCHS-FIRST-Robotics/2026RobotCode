@@ -12,7 +12,7 @@ public class Intake extends SubsystemBase {
     private final PivotIO pivotIO;
     private final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
-    Angle pivotAngle = FuelConstants.INTAKE_START_ANGLE;
+    Angle pivotAngle = FuelConstants.PIVOT_START_ANGLE;
 
     public Intake(
         IntakeIO intakeIO, 
@@ -29,17 +29,18 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("pivot", pivotIOInputs);
 
-        pivotIO.setPivotPosition(pivotAngle);
+        // pivotIO.setPosition(pivotAngle);
     }
 
     // ————— raw command factories ————— //
 
     public Command getSetIntakeVoltageCommand(Voltage volts) {
-        return runOnce(() -> intakeIO.setIntakeVoltage(volts));
+        return runOnce(() -> intakeIO.setVoltage(volts));
     }
 
+    // ! do not call if pivotIO.setPosition() is active
     public Command getSetPivotVoltageCommand(Voltage volts) {
-        return runOnce(() -> pivotIO.setPivotVoltage(volts));
+        return runOnce(() -> pivotIO.setVoltage(volts));
     }
 
     public Command getSetPivotPositionCommand(Angle angle) {

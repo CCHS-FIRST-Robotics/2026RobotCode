@@ -9,7 +9,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class IntakeIOSim implements IntakeIO {
-    // ! gearing and JKgMetersSquared
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
@@ -19,7 +18,7 @@ public class IntakeIOSim implements IntakeIO {
         DCMotor.getNEO(1)
     );
 
-    private Voltage appliedIntakeVoltage = Volts.of(0);
+    private Voltage appliedVoltage = Volts.of(0);
 
     public IntakeIOSim() {
 
@@ -29,7 +28,7 @@ public class IntakeIOSim implements IntakeIO {
     public void updateInputs(IntakeIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
-        inputs.intakeVoltage = appliedIntakeVoltage.in(Volts);
+        inputs.intakeVoltage = appliedVoltage.in(Volts);
         inputs.intakeCurrent = motor.getCurrentDrawAmps();
         inputs.intakePosition = motor.getAngularPositionRotations() / FuelConstants.INTAKE_GEAR_RATIO;
         inputs.intakeVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.INTAKE_GEAR_RATIO;
@@ -37,9 +36,9 @@ public class IntakeIOSim implements IntakeIO {
     }
 
     @Override
-    public void setIntakeVoltage(Voltage volts) {
+    public void setVoltage(Voltage volts) {
         motor.setInputVoltage(volts.in(Volts));
         
-        appliedIntakeVoltage = volts;
+        appliedVoltage = volts;
     }
 }

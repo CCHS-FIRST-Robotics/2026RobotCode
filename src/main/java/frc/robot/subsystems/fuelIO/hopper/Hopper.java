@@ -18,12 +18,14 @@ public class Hopper extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("hopper", inputs);
+
+        Logger.recordOutput("outputs/hopper/numFuel", numFuel);
     }
 
     // ————— raw command factories ————— //
 
     public Command getSetHopperVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setHopperVoltage(volts));
+        return runOnce(() -> io.setVoltage(volts));
     }
 
     public void intakeFuel() {

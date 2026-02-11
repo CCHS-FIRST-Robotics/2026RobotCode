@@ -15,5 +15,5 @@ public interface KickerIO {
 
     public default void updateInputs(KickerIOInputs inputs) {}
 
-    public default void setKickerVoltage(Voltage volts) {}
+    public default void setVoltage(Voltage volts) {}
 }

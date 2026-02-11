@@ -15,5 +15,5 @@ public interface HopperIO {
     
     public default void updateInputs(HopperIOInputs inputs) {}
     
-    public default void setHopperVoltage(Voltage volts) {}
+    public default void setVoltage(Voltage volts) {}
 }

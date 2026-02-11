@@ -10,68 +10,68 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class ShooterIOReal implements ShooterIO {
-    private final TalonFX shooterMotor;
-    private final TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
+    private final TalonFX motor;
+    private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
-    private final VoltageOut shooterVoltageRequest = new VoltageOut(0);
-    private final VelocityVoltage shooterVelocityVoltageRequest = new VelocityVoltage(0.0);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
+    private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
 
-    private final StatusSignal<Voltage> shooterVoltageSignal;
-    private final StatusSignal<Current> shooterCurrentSignal;
-    private final StatusSignal<Angle> shooterPositionSignal;
-    private final StatusSignal<AngularVelocity> shooterVelocitySignal;
-    private final StatusSignal<Temperature> shooterTemperatureSignal;
+    private final StatusSignal<Voltage> voltageSignal;
+    private final StatusSignal<Current> currentSignal;
+    private final StatusSignal<Angle> positionSignal;
+    private final StatusSignal<AngularVelocity> velocitySignal;
+    private final StatusSignal<Temperature> temperatureSignal;
 
     public ShooterIOReal(int shooterId) {
-        shooterMotor = new TalonFX(shooterId);
+        motor = new TalonFX(shooterId);
 
         // motor config
-        shooterConfig.Slot0 = FuelConstants.SHOOTER_PIDF;
-        shooterConfig.CurrentLimits.StatorCurrentLimit = 40;
-        shooterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        shooterMotor.getConfigurator().apply(shooterConfig);
+        motorConfig.Slot0 = FuelConstants.SHOOTER_PIDF;
+        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        motor.getConfigurator().apply(motorConfig);
 
         // status signals
-        shooterVoltageSignal = shooterMotor.getMotorVoltage();
-        shooterCurrentSignal = shooterMotor.getStatorCurrent();
-        shooterPositionSignal = shooterMotor.getPosition();
-        shooterVelocitySignal = shooterMotor.getVelocity();
-        shooterTemperatureSignal = shooterMotor.getDeviceTemp();
+        voltageSignal = motor.getMotorVoltage();
+        currentSignal = motor.getStatorCurrent();
+        positionSignal = motor.getPosition();
+        velocitySignal = motor.getVelocity();
+        temperatureSignal = motor.getDeviceTemp();
         BaseStatusSignal.setUpdateFrequencyForAll(
             50.0, 
-            shooterVoltageSignal, 
-            shooterCurrentSignal, 
-            shooterPositionSignal, 
-            shooterVelocitySignal, 
-            shooterTemperatureSignal
+            voltageSignal, 
+            currentSignal, 
+            positionSignal, 
+            velocitySignal, 
+            temperatureSignal
         );
-        ParentDevice.optimizeBusUtilizationForAll(shooterMotor);
+        ParentDevice.optimizeBusUtilizationForAll(motor);
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
         BaseStatusSignal.refreshAll(
-            shooterVoltageSignal, 
-            shooterCurrentSignal, 
-            shooterPositionSignal, 
-            shooterVelocitySignal, 
-            shooterTemperatureSignal
+            voltageSignal, 
+            currentSignal, 
+            positionSignal, 
+            velocitySignal, 
+            temperatureSignal
         );
         
-        inputs.shooterVoltage = shooterVoltageSignal.getValue().in(Volts);
-        inputs.shooterCurrent = shooterCurrentSignal.getValue().in(Amps);
-        inputs.shooterPosition = shooterPositionSignal.getValue().in(Rotations);
-        inputs.shooterVelocity = shooterVelocitySignal.getValue().in(RotationsPerSecond);
-        inputs.shooterTemperature = shooterTemperatureSignal.getValue().in(Celsius);
+        inputs.shooterVoltage = voltageSignal.getValue().in(Volts);
+        inputs.shooterCurrent = currentSignal.getValue().in(Amps);
+        inputs.shooterPosition = positionSignal.getValue().in(Rotations);
+        inputs.shooterVelocity = velocitySignal.getValue().in(RotationsPerSecond);
+        inputs.shooterTemperature = temperatureSignal.getValue().in(Celsius);
     }
 
     @Override
-    public void setShooterVoltage(Voltage volts) {
-        shooterMotor.setControl(shooterVoltageRequest.withOutput(volts));
+    public void setVoltage(Voltage volts) {
+        motor.setControl(voltageRequest.withOutput(volts));
     }
 
     @Override
-    public void setShooterVelocity(AngularVelocity velocity) {
-        shooterMotor.setControl(shooterVelocityVoltageRequest.withVelocity(velocity));
+    public void setVelocity(AngularVelocity velocity) {
+        motor.setControl(velocityVoltageRequest.withVelocity(velocity));
     }
 }

@@ -15,7 +15,7 @@ public interface PivotIO {
     
     public default void updateInputs(PivotIOInputs inputs) {}
     
-    public default void setPivotVoltage(Voltage volts) {}
+    public default void setVoltage(Voltage volts) {}
 
-    public default void setPivotPosition(Angle angle) {}
+    public default void setPosition(Angle angle) {}
 }

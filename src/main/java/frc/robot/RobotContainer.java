@@ -161,59 +161,43 @@ public class RobotContainer {
 
         // ————— fuel ————— //
 
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12))); // ! test getIntakeOn
+        // // intake
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
-        controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
-        controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
-        controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
+        // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
+        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
+        // // hopper
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
-        // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
+        // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
+        // // shooter
         // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
-        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
         // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
-        // button for intake
-        // button for hold it down and shoot
-            // spin up the hopper
-            // spin the kickers
-            // constant velocity PID on the shooter
-        // first make turret rotate but then make its periodic function auto aim it always (or maybe have a boolean toggle for it
-        // first make shooter spin up but then make its periodic function auto aim it always
+        controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.25)));
+        controller.a().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0)));
+
+        // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
+        // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // ————— misc. testing ————— //
+
+        // fuelSim
+        controller.x().onTrue(new InstantCommand(() -> fuelSimulation.launchFuel(
+            () -> shooter.getShooterLinearVelocity(), 
+            () -> shooter.getAnglerAngle(),
+            Rotations.of(0),
+            new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
+        )));
 
         // sysid
         // controller.x().whileTrue(drive.sysIdFull());
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
-
-        // maplesim projectile
-        // controller.x().onTrue(
-        //     new InstantCommand(
-        //         () -> {
-        //             NoteOnFly noteOnFly = new NoteOnFly(
-        //                 // Specify the position of the chassis when the note is launched
-        //                 driveSimulation.getSimulatedDriveTrainPose().getTranslation(),
-        //                 // Specify the translation of the shooter from the robot center (in the shooter’s reference frame)
-        //                 new Translation2d(),
-        //                 // Specify the field-relative speed of the chassis, adding it to the initial velocity of the projectile
-        //                 drive.getPrevSpeeds(),
-        //                 // The shooter facing direction is the same as the robot’s facing direction
-        //                 driveSimulation.getSimulatedDriveTrainPose().getRotation(),
-        //                 // Initial height of the flying note
-        //                 Meters.of(0.45),
-        //                 // The launch speed is proportional to the RPM; assumed to be 16 meters/second at 6000 RPM
-        //                 MetersPerSecond.of(5),
-        //                 // The angle at which the note is launched (45 degrees for a visible arc)
-        //                 Radians.of(Math.PI / 4)
-        //             );
-        //             SimulatedArena.getInstance().addGamePieceProjectile(noteOnFly);
-        //         }
-        //     )
-        // );
     }
 
     // ————— autos ————— //
@@ -255,11 +239,12 @@ public class RobotContainer {
             -DriveConstants.WIDTH_X.div(2).in(Meters),
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),
-            () -> intake.getIntakeOn() // ! 
-            // callback // ! (optional) Runnable called whenever a fuel is intaked
+            () -> intake.getIntakeOn(), 
+            () -> hopper.intakeFuel()
         );
         fuelSimulation.spawnStartingFuel();
-        fuelSimulation.start(); // enables the simulation to run (updateSim must still be called periodically)
+        fuelSimulation.setSubticks(1);
+        fuelSimulation.start();
     }
 
     public void updateSimulation() { // called by Robot.java on simulationPeriodic

@@ -23,7 +23,7 @@ public class PivotIOReal implements PivotIO {
 
         // encoders
         encoder = motor.getEncoder();
-        encoder.setPosition(FuelConstants.INTAKE_START_ANGLE.in(Rotations));
+        encoder.setPosition(FuelConstants.PIVOT_START_ANGLE.in(Rotations));
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
@@ -62,12 +62,12 @@ public class PivotIOReal implements PivotIO {
     }
 
     @Override
-    public void setPivotVoltage(Voltage volts) {
+    public void setVoltage(Voltage volts) {
         motor.setVoltage(volts);
     }
 
     @Override
-    public void setPivotPosition(Angle angle) {
+    public void setPosition(Angle angle) {
         motor.getClosedLoopController().setSetpoint(
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 

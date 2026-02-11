@@ -54,7 +54,7 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
-    public void setIntakeVoltage(Voltage volts) {
+    public void setVoltage(Voltage volts) {
         motor.setVoltage(volts);
     }
 }

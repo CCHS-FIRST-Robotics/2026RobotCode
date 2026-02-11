@@ -10,8 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class PivotIOSim implements PivotIO {
-    // ! gearing and JKgMetersSquared
-    private final DCMotorSim pivotMotor = new DCMotorSim(
+    private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
             0.00001, 
@@ -20,9 +19,9 @@ public class PivotIOSim implements PivotIO {
         DCMotor.getNEO(1)
     );
 
-    private final PIDController pivotPID = new PIDController(15, 0, 0);
+    private final PIDController PID = new PIDController(15, 0, 0);
 
-    private Voltage appliedPivotVoltage = Volts.of(0);
+    private Voltage appliedVoltage = Volts.of(0);
 
     public PivotIOSim() {
 
@@ -30,30 +29,30 @@ public class PivotIOSim implements PivotIO {
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
-        pivotMotor.update(Constants.PERIOD);
+        motor.update(Constants.PERIOD);
 
-        inputs.pivotVoltage = appliedPivotVoltage.in(Volts);
-        inputs.pivotCurrent = pivotMotor.getCurrentDrawAmps();
-        inputs.pivotPosition = pivotMotor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
-        inputs.pivotVelocity = Rotations.per(Minute).of(pivotMotor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
+        inputs.pivotVoltage = appliedVoltage.in(Volts);
+        inputs.pivotCurrent = motor.getCurrentDrawAmps();
+        inputs.pivotPosition = motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
+        inputs.pivotVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
         inputs.pivotTemperature = Celsius.of(20).in(Celsius);
     }
 
     @Override
-    public void setPivotVoltage(Voltage volts) {
-        pivotMotor.setInputVoltage(volts.in(Volts));
+    public void setVoltage(Voltage volts) {
+        motor.setInputVoltage(volts.in(Volts));
         
-        appliedPivotVoltage = volts;
+        appliedVoltage = volts;
     }
 
     @Override
-    public void setPivotPosition(Angle angle) {
-        double volts = pivotPID.calculate(
-            pivotMotor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO, 
+    public void setPosition(Angle angle) {
+        double volts = PID.calculate(
+            motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO, 
             angle.in(Rotations)
         );
-        pivotMotor.setInputVoltage(volts);
+        motor.setInputVoltage(volts);
         
-        appliedPivotVoltage = Volts.of(volts);
+        appliedVoltage = Volts.of(volts);
     }
 }

@@ -15,7 +15,7 @@ public interface AnglerIO {
 
     public default void updateInputs(AnglerIOInputs inputs) {}
 
-    public default void setAnglerVoltage(Voltage volts) {}
+    public default void setVoltage(Voltage volts) {}
 
-    public default void setAnglerPosition(Angle angle) {}
+    public default void setPosition(Angle angle) {}
 }

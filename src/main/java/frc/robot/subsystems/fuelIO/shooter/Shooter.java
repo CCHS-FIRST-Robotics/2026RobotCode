@@ -1,6 +1,9 @@
 package frc.robot.subsystems.fuelIO.shooter;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
@@ -13,6 +16,8 @@ public class Shooter extends SubsystemBase {
 
     private final KickerIO kickerIO;
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
+
+    Angle anglerAngle = FuelConstants.ANGLER_START_ANGLE;
 
     public Shooter(
         ShooterIO shooterIO, 
@@ -32,29 +37,44 @@ public class Shooter extends SubsystemBase {
         Logger.processInputs("angler", anglerIOInputs);
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("kicker", kickerIOInputs);
+
+        // anglerIO.setPosition(anglerAngle);
     }
 
     // ————— raw command factories ————— //
 
     public Command getSetShooterVoltageCommand(Voltage volts) {
-        return runOnce(() -> shooterIO.setShooterVoltage(volts));
+        return runOnce(() -> shooterIO.setVoltage(volts));
     }
 
     public Command getSetShooterVelocityCommand(AngularVelocity velocity) {
-        return runOnce(() -> shooterIO.setShooterVelocity(velocity));
+        return runOnce(() -> shooterIO.setVelocity(velocity));
     }
 
+    // ! do not call if anglerIO.setPosition() is active
     public Command getSetAnglerVoltageCommand(Voltage volts) {
-        return runOnce(() -> anglerIO.setAnglerVoltage(volts));
+        return runOnce(() -> anglerIO.setVoltage(volts));
     }
 
     public Command getSetAnglerPositionCommand(Angle angle) {
-        return runOnce(() -> anglerIO.setAnglerPosition(angle));
-        // ! erm pivot code
+        return runOnce(() -> anglerAngle = angle);
     }
 
     public Command getSetKickerVoltageCommand(Voltage volts) {
-        return runOnce(() -> kickerIO.setKickerVoltage(volts));
+        return runOnce(() -> kickerIO.setVoltage(volts));
+    }
+
+    public double getShooterAngularVelocity() {
+        return shooterIOInputs.shooterVelocity;
+    }
+
+    public LinearVelocity getShooterLinearVelocity() {
+        double angularVelocity = RotationsPerSecond.of(shooterIOInputs.shooterVelocity).in(RadiansPerSecond);
+        return InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
+    }
+
+    public Angle getAnglerAngle() {
+        return Rotations.of(anglerIOInputs.anglerPosition);
     }
 
     // ————— sysid command factories ————— //
