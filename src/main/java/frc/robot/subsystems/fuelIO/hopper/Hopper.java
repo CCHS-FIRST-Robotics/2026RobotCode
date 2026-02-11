@@ -8,6 +8,8 @@ public class Hopper extends SubsystemBase {
     private final HopperIO io;
     private final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
+    private int numFuel;
+
     public Hopper(HopperIO io) {
         this.io = io;
     }
@@ -22,6 +24,18 @@ public class Hopper extends SubsystemBase {
 
     public Command getSetHopperVoltageCommand(Voltage volts) {
         return runOnce(() -> io.setHopperVoltage(volts));
+    }
+
+    public void intakeFuel() {
+        numFuel++;
+    }
+
+    public void shootFuel() {
+        numFuel--;
+    }
+
+    public int getNumFuel() {
+        return numFuel;
     }
 
     // ————— processed command factories ————— //

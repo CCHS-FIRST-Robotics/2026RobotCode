@@ -47,7 +47,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean getIntakeOn() {
-        return Math.abs(intakeIOInputs.intakeVoltage) > 0; // ! idk if it's actually 0
+        return Math.abs(intakeIOInputs.intakeVoltage) > 0;
     }
 
     // ————— processed command factories ————— //

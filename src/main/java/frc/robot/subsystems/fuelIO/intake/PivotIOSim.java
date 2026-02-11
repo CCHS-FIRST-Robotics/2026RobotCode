@@ -7,11 +7,16 @@ import edu.wpi.first.math.system.plant.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class PivotIOSim implements PivotIO {
     // ! gearing and JKgMetersSquared
     private final DCMotorSim pivotMotor = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 1, 1), 
+        LinearSystemId.createDCMotorSystem(
+            DCMotor.getNEO(1), 
+            0.00001, 
+            1
+        ), 
         DCMotor.getNEO(1)
     );
 
@@ -29,21 +34,26 @@ public class PivotIOSim implements PivotIO {
 
         inputs.pivotVoltage = appliedPivotVoltage.in(Volts);
         inputs.pivotCurrent = pivotMotor.getCurrentDrawAmps();
-        inputs.pivotPosition = pivotMotor.getAngularPositionRotations();
-        inputs.pivotVelocity = Rotations.per(Minute).of(pivotMotor.getAngularVelocityRPM()).in(RotationsPerSecond);
+        inputs.pivotPosition = pivotMotor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
+        inputs.pivotVelocity = Rotations.per(Minute).of(pivotMotor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
         inputs.pivotTemperature = Celsius.of(20).in(Celsius);
     }
 
     @Override
     public void setPivotVoltage(Voltage volts) {
         pivotMotor.setInputVoltage(volts.in(Volts));
+        
         appliedPivotVoltage = volts;
     }
 
     @Override
     public void setPivotPosition(Angle angle) {
-        double volts = pivotPID.calculate(angle.in(Rotations));
+        double volts = pivotPID.calculate(
+            pivotMotor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO, 
+            angle.in(Rotations)
+        );
         pivotMotor.setInputVoltage(volts);
+        
         appliedPivotVoltage = Volts.of(volts);
     }
 }

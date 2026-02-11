@@ -6,11 +6,16 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.math.system.plant.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class IntakeIOSim implements IntakeIO {
     // ! gearing and JKgMetersSquared
-    private final DCMotorSim intakeMotor = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 1, 1), 
+    private final DCMotorSim motor = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(
+            DCMotor.getNEO(1), 
+            0.00001, 
+            1
+        ), 
         DCMotor.getNEO(1)
     );
 
@@ -22,18 +27,19 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        intakeMotor.update(Constants.PERIOD);
+        motor.update(Constants.PERIOD);
 
         inputs.intakeVoltage = appliedIntakeVoltage.in(Volts);
-        inputs.intakeCurrent = intakeMotor.getCurrentDrawAmps();
-        inputs.intakePosition = intakeMotor.getAngularPositionRotations();
-        inputs.intakeVelocity = Rotations.per(Minute).of(intakeMotor.getAngularVelocityRPM()).in(RotationsPerSecond);
+        inputs.intakeCurrent = motor.getCurrentDrawAmps();
+        inputs.intakePosition = motor.getAngularPositionRotations() / FuelConstants.INTAKE_GEAR_RATIO;
+        inputs.intakeVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.INTAKE_GEAR_RATIO;
         inputs.intakeTemperature = Celsius.of(20).in(Celsius);
     }
 
     @Override
     public void setIntakeVoltage(Voltage volts) {
-        intakeMotor.setInputVoltage(volts.in(Volts));
+        motor.setInputVoltage(volts.in(Volts));
+        
         appliedIntakeVoltage = volts;
     }
 }

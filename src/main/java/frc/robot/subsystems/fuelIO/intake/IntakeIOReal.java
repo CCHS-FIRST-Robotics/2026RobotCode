@@ -11,50 +11,50 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class IntakeIOReal implements IntakeIO {
-    private final SparkMax intakeMotor;
-    private final SparkMaxConfig intakeConfig = new SparkMaxConfig();
-    private final RelativeEncoder intakeEncoder;
+    private final SparkMax motor;
+    private final SparkMaxConfig motorConfig = new SparkMaxConfig();
+    private final RelativeEncoder encoder;
 
     public IntakeIOReal(int id) {
-        intakeMotor = new SparkMax(id, MotorType.kBrushless);
+        motor = new SparkMax(id, MotorType.kBrushless);
 
         // start config
-        intakeMotor.setCANTimeout(500);
+        motor.setCANTimeout(500);
 
         // encoders
-        intakeEncoder = intakeMotor.getEncoder();
-        intakeEncoder.setPosition(0.0);
+        encoder = motor.getEncoder();
+        encoder.setPosition(0.0);
 
         // miscellaneous settings
-        intakeConfig.signals.primaryEncoderVelocityPeriodMs(10);
-        intakeConfig.encoder.quadratureMeasurementPeriod(10);
-        intakeConfig.encoder.quadratureAverageDepth(2);
+        motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
+        motorConfig.encoder.quadratureMeasurementPeriod(10);
+        motorConfig.encoder.quadratureAverageDepth(2);
 
-        intakeConfig.smartCurrentLimit(30);
-        intakeConfig.voltageCompensation(12);
+        motorConfig.smartCurrentLimit(30);
+        motorConfig.voltageCompensation(12);
 
-        intakeConfig.idleMode(IdleMode.kCoast);
+        motorConfig.idleMode(IdleMode.kCoast);
 
-        intakeConfig.encoder
-            .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
-            .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);
+        motorConfig.encoder
+        .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
+        .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);
 
         // stop config
-        intakeMotor.setCANTimeout(0);
-        intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        motor.setCANTimeout(0);
+        motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        inputs.intakeVoltage = intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage();
-        inputs.intakeCurrent = intakeMotor.getOutputCurrent();
-        inputs.intakePosition = intakeEncoder.getPosition();
-        inputs.intakeVelocity = Rotations.per(Minute).of(intakeEncoder.getVelocity()).in(RotationsPerSecond);
-        inputs.intakeTemperature = intakeMotor.getMotorTemperature();
+        inputs.intakeVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.intakeCurrent = motor.getOutputCurrent();
+        inputs.intakePosition = encoder.getPosition();
+        inputs.intakeVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.intakeTemperature = motor.getMotorTemperature();
     }
 
     @Override
     public void setIntakeVoltage(Voltage volts) {
-        intakeMotor.setVoltage(volts);
+        motor.setVoltage(volts);
     }
 }

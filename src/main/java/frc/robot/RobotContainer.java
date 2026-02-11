@@ -161,12 +161,12 @@ public class RobotContainer {
 
         // ————— fuel ————— //
 
-        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12))); // ! test getIntakeOn
+        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
-        // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
-        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
-        // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
+        controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_UP_ANGLE));
+        controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.INTAKE_DOWN_ANGLE));
 
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
