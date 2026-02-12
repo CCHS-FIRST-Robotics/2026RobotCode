@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
