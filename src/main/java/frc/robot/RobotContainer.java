@@ -169,7 +169,7 @@ public class RobotContainer {
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
-        // hopper //
+        // hopper
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
