@@ -157,13 +157,13 @@ public class RobotContainer {
             )
         );
 
-        // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! test
+        // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! test ! maybe for choreo purposes just ignore the choreo angle?
 
         // ————— fuel ————— //
 
         // intake
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
