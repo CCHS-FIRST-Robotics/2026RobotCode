@@ -161,7 +161,7 @@ public class RobotContainer {
 
         // ————— fuel ————— //
 
-        // // intake
+        // intake
         // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
@@ -169,30 +169,35 @@ public class RobotContainer {
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
-        // // hopper
+        // hopper
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
-        // // shooter
-        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
-        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // shooter
+        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
+        // controller.leftTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
+        // controller.rightTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
         // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
-        controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.25)));
-        controller.a().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0)));
+        // controller.x().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_UP_ANGLE));
+        // controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.12)));
+        // controller.b().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_DOWN_ANGLE));
+        controller.x().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0)));
+        controller.b().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.05)));
 
-        // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
-        // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
+
+        // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
+        // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // ————— misc. testing ————— //
 
-        // fuelSim
-        controller.x().onTrue(new InstantCommand(() -> fuelSimulation.launchFuel(
-            () -> shooter.getShooterLinearVelocity(), 
-            () -> shooter.getAnglerAngle(),
-            Rotations.of(0),
-            new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
-        )));
+        // fuelSimulation
+        // controller.x().onTrue(new InstantCommand(() -> fuelSimulation.launchFuel(
+        //     () -> shooter.getShooterLinearVelocity(), 
+        //     () -> shooter.getAnglerAngle(),
+        //     Rotations.of(0),
+        //     new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
+        // ))); 
 
         // sysid
         // controller.x().whileTrue(drive.sysIdFull());

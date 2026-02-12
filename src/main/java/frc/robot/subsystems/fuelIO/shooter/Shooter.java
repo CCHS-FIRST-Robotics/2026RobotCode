@@ -3,6 +3,7 @@ package frc.robot.subsystems.fuelIO.shooter;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
@@ -17,7 +18,8 @@ public class Shooter extends SubsystemBase {
     private final KickerIO kickerIO;
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
-    Angle anglerAngle = FuelConstants.ANGLER_START_ANGLE;
+    Angle anglerAngle = Rotations.of(0);
+    // Angle anglerAngle = FuelConstants.ANGLER_START_ANGLE;
 
     public Shooter(
         ShooterIO shooterIO, 
@@ -38,7 +40,9 @@ public class Shooter extends SubsystemBase {
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("kicker", kickerIOInputs);
 
-        // anglerIO.setPosition(anglerAngle);
+        if(Constants.ENABLE_ANGLER_SET_POSITION){
+            anglerIO.setPosition(anglerAngle);
+        }
     }
 
     // ————— raw command factories ————— //

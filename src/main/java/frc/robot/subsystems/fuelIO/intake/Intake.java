@@ -1,6 +1,7 @@
 package frc.robot.subsystems.fuelIO.intake;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
@@ -29,7 +30,9 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("pivot", pivotIOInputs);
 
-        // pivotIO.setPosition(pivotAngle);
+        if(Constants.ENABLE_PIVOT_SET_POSITION){
+            pivotIO.setPosition(pivotAngle);
+        }
     }
 
     // ————— raw command factories ————— //

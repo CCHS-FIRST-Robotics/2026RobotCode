@@ -23,7 +23,7 @@ public class AnglerIOReal implements AnglerIO {
 
         // encoders
         encoder = motor.getEncoder();
-        encoder.setPosition(0.0); // ! 
+        encoder.setPosition(FuelConstants.ANGLER_START_ANGLE.in(Rotations)); // ! 
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.ANGLER_PID);
@@ -40,6 +40,7 @@ public class AnglerIOReal implements AnglerIO {
         motorConfig.voltageCompensation(12);
 
         // ! inverted
+        motorConfig.inverted(true);
 
         motorConfig.idleMode(IdleMode.kCoast);
 
