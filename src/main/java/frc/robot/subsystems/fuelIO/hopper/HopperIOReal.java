@@ -35,6 +35,8 @@ public class HopperIOReal implements HopperIO {
 
         motorConfig.idleMode(IdleMode.kCoast);
 
+        motorConfig.inverted(true);
+
         motorConfig.encoder
         .positionConversionFactor(1 / FuelConstants.HOPPER_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.HOPPER_GEAR_RATIO);

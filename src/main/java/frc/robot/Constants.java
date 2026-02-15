@@ -15,6 +15,6 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0; // 0 for gamesir, 1 for xbox
 
-    public static final boolean ENABLE_PIVOT_SET_POSITION = false;
+    public static final boolean ENABLE_PIVOT_SET_POSITION = true;
     public static final boolean ENABLE_ANGLER_SET_POSITION = true;
 }

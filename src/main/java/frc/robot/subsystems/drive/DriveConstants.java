@@ -34,7 +34,7 @@ public class DriveConstants { // * indicates a physical measurement
 
     private static final int[] DRIVE_MOTOR_IDS = {11, 21, 31, 41};
     private static final int[] TURN_MOTOR_IDS = {12, 22, 32, 42};
-    private static final boolean[] DRIVE_INVERSIONS = {false, true, false, true}; // !
+    private static final boolean[] DRIVE_INVERSIONS = {false, true, false, true};
     private static final boolean[] TURN_INVERSIONS = {true, true, true, true};
     
     // ————— encoders ————— //
@@ -44,10 +44,10 @@ public class DriveConstants { // * indicates a physical measurement
     private static final int[] ENCODER_IDS = {13, 23, 33, 43};
     private static final boolean[] ENCODER_INVERSIONS = {false, false, false, false};
     private static final Angle[] ENCODER_OFFSETS = {
-        Rotations.of(0.03271484375),
-        Rotations.of(-0.38720703125),
-        Rotations.of(-0.483154296875),
-        Rotations.of(-0.283203125)
+        Rotations.of(0.36865234375),
+        Rotations.of(-0.02783203125),
+        Rotations.of(0.287109375),
+        Rotations.of(0.273193359375)
     };
 
     // ————— gyro ————— //
@@ -93,8 +93,8 @@ public class DriveConstants { // * indicates a physical measurement
     public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! *
     public static final Distance WIDTH_X = Inches.of(27.5); // *
     public static final Distance WIDTH_Y = Inches.of(27.5); // *
-    public static final Distance TRACK_WIDTH_X = Inches.of(22.5); // *
-    public static final Distance TRACK_WIDTH_Y = Inches.of(22.5); // *
+    public static final Distance TRACK_WIDTH_X = Inches.of(22.25); // *
+    public static final Distance TRACK_WIDTH_Y = Inches.of(22.25); // *
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR
