@@ -17,6 +17,7 @@ public class Shooter extends SubsystemBase {
     private final KickerIO kickerIO;
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
+    AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
     Angle anglerAngle = Constants.ANGLER_START_ANGLE;
 
     public Shooter(
@@ -38,7 +39,11 @@ public class Shooter extends SubsystemBase {
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("subsystems/fuelIO/shooter/kicker", kickerIOInputs);
 
-        if(Constants.ENABLE_ANGLER_SET_POSITION){
+        if(Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
+            shooterIO.setVelocity(shooterVelocity);
+        }
+
+        if(Constants.ENABLE_ANGLER_SET_POSITION) {
             anglerIO.setPosition(anglerAngle);
         }
     }
@@ -50,7 +55,9 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command getSetShooterVelocityCommand(AngularVelocity velocity) {
-        return runOnce(() -> shooterIO.setVelocity(velocity));
+        return Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? 
+            runOnce(() -> shooterIO.setVelocity(velocity)) : 
+            runOnce(() -> shooterVelocity = velocity);
     }
 
     // ! do not call if anglerIO.setPosition() is active

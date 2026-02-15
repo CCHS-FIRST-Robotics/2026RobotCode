@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        if(Constants.ENABLE_PIVOT_SET_POSITION){
+        if(Constants.ENABLE_PIVOT_SET_POSITION) {
             pivotIO.setPosition(pivotAngle);
         }
     }

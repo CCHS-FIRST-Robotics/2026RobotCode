@@ -36,11 +36,11 @@ public class FuelConstants {
     public static final double ANGLER_KCOS = 0; // ! 
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! 
-    .withKP(0.3)
+    .withKP(2)
     .withKI(0)
     .withKD(0)
     .withKS(0)
-    .withKV(0.1)
+    .withKV(0.13259)
     .withKA(0);
 
     // ————— physical constants ————— //

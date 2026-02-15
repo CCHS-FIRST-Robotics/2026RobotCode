@@ -177,16 +177,14 @@ public class RobotContainer {
         controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
         controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
         controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        controller.a().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
+        controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
         // controller.x().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_UP_ANGLE));
         // controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.12)));
         // controller.b().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_DOWN_ANGLE));
-        // controller.x().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0)));
-        // controller.b().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.05)));
 
-        // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
-        // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
+        // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // ————— misc. testing ————— //
 

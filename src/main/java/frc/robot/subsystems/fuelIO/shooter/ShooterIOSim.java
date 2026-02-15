@@ -14,14 +14,14 @@ public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getKrakenX60(1), 
-            0.00001, 
+            0.01, 
             1
         ), 
         DCMotor.getKrakenX60(1)
     );
 
-    private final PIDController PID = new PIDController(0.3, 0, 0);
-    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.1, 0);
+    private final PIDController PID = new PIDController(2, 0, 0);
+    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.13259, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
     private AngularVelocity prevVelocity = RotationsPerSecond.of(0);
@@ -54,7 +54,7 @@ public class ShooterIOSim implements ShooterIO {
             Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO, 
             velocity.in(RotationsPerSecond)
         ) + FF.calculateWithVelocities(
-            prevVelocity.in(RotationsPerSecond), 
+            prevVelocity.in(RotationsPerSecond),
             velocity.in(RotationsPerSecond)
         );
         motor.setInputVoltage(volts);
