@@ -4,13 +4,9 @@
  <!-- 
  ! general: 
  !  - reformat maplesim default files
- !  - tune pid without motionmagic first
- !  - tune pid through phoenixtuner https://discord.com/channels/176186766946992128/3689938974955274241438631090578259968
  ! driving: 
  !  - sysid
- !  - add back the wheel characterization functionality
- !  - review colin's aiming pid and https://github.com/FRC-4481-Team-Rembrandts/4481-robot-2024-public/blob/main/src/main/java/frc/team4481/robot/autoaim/TurnToPose.java 
- !  - global vs. local positioning
+ !  - add back the wheel radius characterization functionality
  !  - rotating around a swerve module
  ! vision: 
  !  - apriltag 1 foot away from robot for camera on robot position

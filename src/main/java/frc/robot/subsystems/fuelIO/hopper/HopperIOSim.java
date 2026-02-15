@@ -1,4 +1,4 @@
-package frc.robot.subsystems.fuelIO.intake;
+package frc.robot.subsystems.fuelIO.hopper;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -8,7 +8,7 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
-public class IntakeIOSim implements IntakeIO {
+public class HopperIOSim implements HopperIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
@@ -20,18 +20,18 @@ public class IntakeIOSim implements IntakeIO {
 
     private Voltage appliedVoltage = Volts.of(0);
 
-    public IntakeIOSim() {
+    public HopperIOSim() {
 
     }
 
     @Override
-    public void updateInputs(IntakeIOInputs inputs) {
+    public void updateInputs(HopperIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
         inputs.voltage = appliedVoltage.in(Volts);
         inputs.current = motor.getCurrentDrawAmps();
-        inputs.position = motor.getAngularPositionRotations() / FuelConstants.INTAKE_GEAR_RATIO;
-        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.INTAKE_GEAR_RATIO;
+        inputs.position = motor.getAngularPositionRotations() / FuelConstants.HOPPER_GEAR_RATIO;
+        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.HOPPER_GEAR_RATIO;
         inputs.temperature = Celsius.of(20).in(Celsius);
     }
 

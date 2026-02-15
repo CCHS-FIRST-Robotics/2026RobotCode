@@ -38,10 +38,10 @@
       "axisCount": 5,
       "buttonCount": 4,
       "buttonKeys": [
-        90,
-        88,
+        86,
         67,
-        86
+        90,
+        88
       ],
       "povConfig": [
         {

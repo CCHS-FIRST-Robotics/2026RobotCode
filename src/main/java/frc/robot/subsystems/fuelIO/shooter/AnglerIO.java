@@ -6,11 +6,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface AnglerIO {
     @AutoLog
     class AnglerIOInputs {
-        public double anglerVoltage;
-        public double anglerCurrent;
-        public double anglerPosition;
-        public double anglerVelocity;
-        public double anglerTemperature;
+        public double voltage;
+        public double current;
+        public double position;
+        public double velocity;
+        public double temperature;
     }
 
     public default void updateInputs(AnglerIOInputs inputs) {}

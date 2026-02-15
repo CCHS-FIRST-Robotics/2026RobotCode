@@ -6,11 +6,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IntakeIO {
     @AutoLog
     class IntakeIOInputs {
-        public double intakeVoltage;
-        public double intakeCurrent;
-        public double intakePosition;
-        public double intakeVelocity;
-        public double intakeTemperature;
+        public double voltage;
+        public double current;
+        public double position;
+        public double velocity;
+        public double temperature;
     }
     
     public default void updateInputs(IntakeIOInputs inputs) {}

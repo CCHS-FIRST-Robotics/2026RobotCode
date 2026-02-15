@@ -68,7 +68,7 @@ public class Vision {
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
-            Logger.processInputs("poseEstimator/vision/camera" + Integer.toString(i), inputs[i]);
+            Logger.processInputs("subsystems/poseEstimator/vision/camera" + Integer.toString(i), inputs[i]);
         }
 
         // Initialize logging values

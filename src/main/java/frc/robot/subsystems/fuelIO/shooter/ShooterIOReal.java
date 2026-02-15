@@ -58,11 +58,11 @@ public class ShooterIOReal implements ShooterIO {
             temperatureSignal
         );
         
-        inputs.shooterVoltage = voltageSignal.getValue().in(Volts);
-        inputs.shooterCurrent = currentSignal.getValue().in(Amps);
-        inputs.shooterPosition = positionSignal.getValue().in(Rotations);
-        inputs.shooterVelocity = velocitySignal.getValue().in(RotationsPerSecond);
-        inputs.shooterTemperature = temperatureSignal.getValue().in(Celsius);
+        inputs.voltage = voltageSignal.getValue().in(Volts);
+        inputs.current = currentSignal.getValue().in(Amps);
+        inputs.position = positionSignal.getValue().in(Rotations);
+        inputs.velocity = velocitySignal.getValue().in(RotationsPerSecond);
+        inputs.temperature = temperatureSignal.getValue().in(Celsius);
     }
 
     @Override

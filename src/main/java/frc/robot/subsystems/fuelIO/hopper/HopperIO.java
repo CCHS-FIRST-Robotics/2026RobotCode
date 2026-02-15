@@ -6,11 +6,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface HopperIO {
     @AutoLog
     class HopperIOInputs {
-        public double hopperVoltage;
-        public double hopperCurrent;
-        public double hopperPosition;
-        public double hopperVelocity;
-        public double hopperTemperature;
+        public double voltage;
+        public double current;
+        public double position;
+        public double velocity;
+        public double temperature;
     }
     
     public default void updateInputs(HopperIOInputs inputs) {}

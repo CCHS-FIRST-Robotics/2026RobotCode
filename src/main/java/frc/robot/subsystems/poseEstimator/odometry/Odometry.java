@@ -50,7 +50,7 @@ public class Odometry {
     public void periodic() { // https://v6.docs.ctr-electronics.com/en/latest/docs/application-notes/update-frequency-impact.html
         odometryLock.lock(); // prevents odometry updates while reading data
         gyroIO.updateInputs(inputs);
-        Logger.processInputs("poseEstimator/gyro", inputs);
+        Logger.processInputs("subsystems/poseEstimator/gyro", inputs);
         drive.modulePeriodic(); // run module.periodic for each swerve module
         odometryLock.unlock();
         

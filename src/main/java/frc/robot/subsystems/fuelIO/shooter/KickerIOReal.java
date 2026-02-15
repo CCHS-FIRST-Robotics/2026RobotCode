@@ -48,11 +48,11 @@ public class KickerIOReal implements KickerIO {
 
     @Override
     public void updateInputs(KickerIOInputs inputs) {
-        inputs.kickerVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.kickerCurrent = motor.getOutputCurrent();
-        inputs.kickerPosition = encoder.getPosition();
-        inputs.kickerVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
-        inputs.kickerTemperature = motor.getMotorTemperature();
+        inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.current = motor.getOutputCurrent();
+        inputs.position = encoder.getPosition();
+        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.temperature = motor.getMotorTemperature();
     }
 
     @Override

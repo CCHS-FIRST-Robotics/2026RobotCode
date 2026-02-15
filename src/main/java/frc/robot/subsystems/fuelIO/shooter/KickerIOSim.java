@@ -28,11 +28,11 @@ public class KickerIOSim implements KickerIO {
     public void updateInputs(KickerIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
-        inputs.kickerVoltage = appliedVoltage.in(Volts);
-        inputs.kickerCurrent = motor.getCurrentDrawAmps();
-        inputs.kickerPosition = motor.getAngularPositionRotations() / FuelConstants.INTAKE_GEAR_RATIO;
-        inputs.kickerVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.INTAKE_GEAR_RATIO;
-        inputs.kickerTemperature = Celsius.of(20).in(Celsius);
+        inputs.voltage = appliedVoltage.in(Volts);
+        inputs.current = motor.getCurrentDrawAmps();
+        inputs.position = motor.getAngularPositionRotations() / FuelConstants.INTAKE_GEAR_RATIO;
+        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.INTAKE_GEAR_RATIO;
+        inputs.temperature = Celsius.of(20).in(Celsius);
     }
 
     @Override

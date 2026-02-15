@@ -48,11 +48,11 @@ public class HopperIOReal implements HopperIO {
 
     @Override
     public void updateInputs(HopperIOInputs inputs) {
-        inputs.hopperVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.hopperCurrent = motor.getOutputCurrent();
-        inputs.hopperPosition = encoder.getPosition();
-        inputs.hopperVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
-        inputs.hopperTemperature = motor.getMotorTemperature();
+        inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.current = motor.getOutputCurrent();
+        inputs.position = encoder.getPosition();
+        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.temperature = motor.getMotorTemperature();
     }
 
     @Override

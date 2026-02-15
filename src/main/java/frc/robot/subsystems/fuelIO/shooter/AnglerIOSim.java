@@ -24,18 +24,18 @@ public class AnglerIOSim implements AnglerIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public AnglerIOSim() {
-
+        motor.setState(Constants.ANGLER_START_ANGLE.in(Radians), 0);
     }
 
     @Override
     public void updateInputs(AnglerIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
-        inputs.anglerVoltage = appliedVoltage.in(Volts);
-        inputs.anglerCurrent = motor.getCurrentDrawAmps();
-        inputs.anglerPosition = motor.getAngularPositionRotations() / FuelConstants.ANGLER_GEAR_RATIO;
-        inputs.anglerVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.ANGLER_GEAR_RATIO;
-        inputs.anglerTemperature = Celsius.of(20).in(Celsius);
+        inputs.voltage = appliedVoltage.in(Volts);
+        inputs.current = motor.getCurrentDrawAmps();
+        inputs.position = motor.getAngularPositionRotations() / FuelConstants.ANGLER_GEAR_RATIO;
+        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.ANGLER_GEAR_RATIO;
+        inputs.temperature = Celsius.of(20).in(Celsius);
     }
 
     @Override

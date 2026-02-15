@@ -34,11 +34,11 @@ public class ShooterIOSim implements ShooterIO {
     public void updateInputs(ShooterIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
-        inputs.shooterVoltage = appliedVoltage.in(Volts);
-        inputs.shooterCurrent = motor.getCurrentDrawAmps();
-        inputs.shooterPosition = motor.getAngularPositionRotations() / FuelConstants.SHOOTER_GEAR_RATIO;
-        inputs.shooterVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO;
-        inputs.shooterTemperature = Celsius.of(20).in(Celsius); 
+        inputs.voltage = appliedVoltage.in(Volts);
+        inputs.current = motor.getCurrentDrawAmps();
+        inputs.position = motor.getAngularPositionRotations() / FuelConstants.SHOOTER_GEAR_RATIO;
+        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO;
+        inputs.temperature = Celsius.of(20).in(Celsius); 
     }
 
     @Override

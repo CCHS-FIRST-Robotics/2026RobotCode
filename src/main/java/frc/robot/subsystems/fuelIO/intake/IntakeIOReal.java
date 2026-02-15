@@ -46,11 +46,11 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        inputs.intakeVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.intakeCurrent = motor.getOutputCurrent();
-        inputs.intakePosition = encoder.getPosition();
-        inputs.intakeVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
-        inputs.intakeTemperature = motor.getMotorTemperature();
+        inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.current = motor.getOutputCurrent();
+        inputs.position = encoder.getPosition();
+        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.temperature = motor.getMotorTemperature();
     }
 
     @Override

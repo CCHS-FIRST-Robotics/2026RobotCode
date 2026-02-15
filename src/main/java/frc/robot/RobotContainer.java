@@ -101,7 +101,7 @@ public class RobotContainer {
                     new IntakeIOSim(), 
                     new PivotIOSim()
                 );
-                hopper = new Hopper(new HopperIO() {});
+                hopper = new Hopper(new HopperIOSim());
                 shooter = new Shooter(
                     new ShooterIOSim(),
                     new AnglerIOSim(),
@@ -162,29 +162,28 @@ public class RobotContainer {
         // ————— fuel ————— //
 
         // intake
-        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
         // hopper
-        controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
-        controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
+        // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
         
         // shooter
-        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
-        // controller.leftTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
-        // controller.rightTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        // controller.b().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
+        controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
+        controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
+        controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
+        controller.a().onTrue(shooter.getSetShooterVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_UP_ANGLE));
         // controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.12)));
         // controller.b().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_DOWN_ANGLE));
         // controller.x().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0)));
         // controller.b().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.05)));
-
 
         // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
         // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));

@@ -1,10 +1,9 @@
 package frc.robot.subsystems.fuelIO.intake;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     private final IntakeIO intakeIO;
@@ -13,7 +12,7 @@ public class Intake extends SubsystemBase {
     private final PivotIO pivotIO;
     private final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
-    Angle pivotAngle = FuelConstants.PIVOT_START_ANGLE;
+    Angle pivotAngle = Constants.PIVOT_START_ANGLE;
 
     public Intake(
         IntakeIO intakeIO, 
@@ -26,9 +25,9 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         intakeIO.updateInputs(intakeIOInputs);
-        Logger.processInputs("intake", intakeIOInputs);
+        Logger.processInputs("subsystems/fuelIO/intake/intake", intakeIOInputs);
         pivotIO.updateInputs(pivotIOInputs);
-        Logger.processInputs("pivot", pivotIOInputs);
+        Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
         if(Constants.ENABLE_PIVOT_SET_POSITION){
             pivotIO.setPosition(pivotAngle);
@@ -51,7 +50,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean getIntakeOn() {
-        return Math.abs(intakeIOInputs.intakeVoltage) > 0;
+        return Math.abs(intakeIOInputs.voltage) > 0;
     }
 
     // ————— processed command factories ————— //

@@ -17,7 +17,7 @@ public class Hopper extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("hopper", inputs);
+        Logger.processInputs("subsystems/fuelIO/hopper", inputs);
 
         Logger.recordOutput("outputs/hopper/numFuel", numFuel);
     }

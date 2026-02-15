@@ -17,8 +17,7 @@ public class Shooter extends SubsystemBase {
     private final KickerIO kickerIO;
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
-    Angle anglerAngle = Rotations.of(0);
-    // Angle anglerAngle = FuelConstants.ANGLER_START_ANGLE;
+    Angle anglerAngle = Constants.ANGLER_START_ANGLE;
 
     public Shooter(
         ShooterIO shooterIO, 
@@ -33,11 +32,11 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         shooterIO.updateInputs(shooterIOInputs);
-        Logger.processInputs("shooter", shooterIOInputs);
+        Logger.processInputs("subsystems/fuelIO/shooter/shooter", shooterIOInputs);
         anglerIO.updateInputs(anglerIOInputs);
-        Logger.processInputs("angler", anglerIOInputs);
+        Logger.processInputs("subsystems/fuelIO/shooter/angler", anglerIOInputs);
         kickerIO.updateInputs(kickerIOInputs);
-        Logger.processInputs("kicker", kickerIOInputs);
+        Logger.processInputs("subsystems/fuelIO/shooter/kicker", kickerIOInputs);
 
         if(Constants.ENABLE_ANGLER_SET_POSITION){
             anglerIO.setPosition(anglerAngle);
@@ -68,16 +67,16 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getShooterAngularVelocity() {
-        return shooterIOInputs.shooterVelocity;
+        return shooterIOInputs.velocity;
     }
 
     public LinearVelocity getShooterLinearVelocity() {
-        double angularVelocity = RotationsPerSecond.of(shooterIOInputs.shooterVelocity).in(RadiansPerSecond);
+        double angularVelocity = RotationsPerSecond.of(shooterIOInputs.velocity).in(RadiansPerSecond);
         return InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
     }
 
     public Angle getAnglerAngle() {
-        return Rotations.of(anglerIOInputs.anglerPosition);
+        return Rotations.of(anglerIOInputs.position);
     }
 
     // ————— sysid command factories ————— //

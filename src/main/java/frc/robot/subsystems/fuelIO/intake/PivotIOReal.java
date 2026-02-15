@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.*;
+import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class PivotIOReal implements PivotIO {
@@ -23,7 +24,7 @@ public class PivotIOReal implements PivotIO {
 
         // encoders
         encoder = motor.getEncoder();
-        encoder.setPosition(FuelConstants.PIVOT_START_ANGLE.in(Rotations));
+        encoder.setPosition(Constants.PIVOT_START_ANGLE.in(Rotations));
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
@@ -54,11 +55,11 @@ public class PivotIOReal implements PivotIO {
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
-        inputs.pivotVoltage = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.pivotCurrent = motor.getOutputCurrent();
-        inputs.pivotPosition = encoder.getPosition();
-        inputs.pivotVelocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
-        inputs.pivotTemperature = motor.getMotorTemperature();
+        inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.current = motor.getOutputCurrent();
+        inputs.position = encoder.getPosition();
+        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.temperature = motor.getMotorTemperature();
     }
 
     @Override

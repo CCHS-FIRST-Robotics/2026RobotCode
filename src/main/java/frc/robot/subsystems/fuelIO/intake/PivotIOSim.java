@@ -24,18 +24,18 @@ public class PivotIOSim implements PivotIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public PivotIOSim() {
-
+        motor.setState(Constants.PIVOT_START_ANGLE.in(Radians), 0);
     }
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
         motor.update(Constants.PERIOD);
 
-        inputs.pivotVoltage = appliedVoltage.in(Volts);
-        inputs.pivotCurrent = motor.getCurrentDrawAmps();
-        inputs.pivotPosition = motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
-        inputs.pivotVelocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
-        inputs.pivotTemperature = Celsius.of(20).in(Celsius);
+        inputs.voltage = appliedVoltage.in(Volts);
+        inputs.current = motor.getCurrentDrawAmps();
+        inputs.position = motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
+        inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
+        inputs.temperature = Celsius.of(20).in(Celsius);
     }
 
     @Override

@@ -6,11 +6,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface KickerIO {
     @AutoLog
     class KickerIOInputs {
-        public double kickerVoltage;
-        public double kickerCurrent;
-        public double kickerPosition;
-        public double kickerVelocity;
-        public double kickerTemperature;
+        public double voltage;
+        public double current;
+        public double position;
+        public double velocity;
+        public double temperature;
     }
 
     public default void updateInputs(KickerIOInputs inputs) {}
