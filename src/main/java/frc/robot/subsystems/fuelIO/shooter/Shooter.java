@@ -12,22 +12,22 @@ public class Shooter extends SubsystemBase {
     private final ShooterIO shooterIO;
     private final ShooterIOInputsAutoLogged shooterIOInputs = new ShooterIOInputsAutoLogged();
 
-    private final AnglerIO anglerIO;
-    private final AnglerIOInputsAutoLogged anglerIOInputs = new AnglerIOInputsAutoLogged();
+    private final HoodIO hoodIO;
+    private final HoodIOInputsAutoLogged hoodIOInputs = new HoodIOInputsAutoLogged();
 
     private final KickerIO kickerIO;
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
     private AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
-    private Angle anglerAngle = Constants.ANGLER_START_ANGLE;
+    private Angle hoodAngle = Constants.HOOD_START_ANGLE;
 
     public Shooter(
         ShooterIO shooterIO, 
-        AnglerIO anglerIO, 
+        HoodIO hoodIO, 
         KickerIO kickerIO
     ) {
         this.shooterIO = shooterIO;
-        this.anglerIO = anglerIO;
+        this.hoodIO = hoodIO;
         this.kickerIO = kickerIO;
     }
     
@@ -35,8 +35,8 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         shooterIO.updateInputs(shooterIOInputs);
         Logger.processInputs("subsystems/fuelIO/shooter/shooter", shooterIOInputs);
-        anglerIO.updateInputs(anglerIOInputs);
-        Logger.processInputs("subsystems/fuelIO/shooter/angler", anglerIOInputs);
+        hoodIO.updateInputs(hoodIOInputs);
+        Logger.processInputs("subsystems/fuelIO/shooter/hood", hoodIOInputs);
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("subsystems/fuelIO/shooter/kicker", kickerIOInputs);
 
@@ -44,8 +44,8 @@ public class Shooter extends SubsystemBase {
             shooterIO.setVelocity(shooterVelocity);
         }
 
-        if(Constants.ENABLE_ANGLER_SET_POSITION) {
-            anglerIO.setPosition(anglerAngle);
+        if(Constants.ENABLE_HOOD_SET_POSITION) {
+            hoodIO.setPosition(hoodAngle);
         }
     }
 
@@ -71,20 +71,20 @@ public class Shooter extends SubsystemBase {
         return runOnce(() -> setShooterVelocity(velocity));
     }
 
-    public void setAnglerVoltage(Voltage volts) {
-        anglerIO.setVoltage(volts);
+    public void setHoodVoltage(Voltage volts) {
+        hoodIO.setVoltage(volts);
     }
 
-    public Command getSetAnglerVoltageCommand(Voltage volts) {
-        return runOnce(() -> setAnglerVoltage(volts));
+    public Command getSetHoodVoltageCommand(Voltage volts) {
+        return runOnce(() -> setHoodVoltage(volts));
     }
 
-    public void setAnglerPosition(Angle angle) {
-        anglerAngle = angle;
+    public void setHoodPosition(Angle angle) {
+        hoodAngle = angle;
     }
 
-    public Command getSetAnglerPositionCommand(Angle angle) {
-        return runOnce(() -> setAnglerPosition(angle));
+    public Command getSetHoodPositionCommand(Angle angle) {
+        return runOnce(() -> setHoodPosition(angle));
     }
 
     public void setKickerVoltage(Voltage volts) {
@@ -104,8 +104,8 @@ public class Shooter extends SubsystemBase {
         return InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
     }
 
-    public Angle getAnglerAngle() {
-        return Rotations.of(anglerIOInputs.position);
+    public Angle getHoodAngle() {
+        return Rotations.of(hoodIOInputs.position);
     }
 
     // ————— processed command factories ————— //
@@ -117,6 +117,6 @@ public class Shooter extends SubsystemBase {
             shooterVelocity = state.velocity();
         }
 
-        anglerIO.setPosition(state.angle());
+        hoodIO.setPosition(state.angle());
     }
 }

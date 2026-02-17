@@ -11,23 +11,23 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
-public class AnglerIOReal implements AnglerIO {
+public class HoodIOReal implements HoodIO {
     private final SparkMax motor;
     private final SparkMaxConfig motorConfig = new SparkMaxConfig();
     private final RelativeEncoder encoder;
 
-    public AnglerIOReal(int anglerId) {
-        motor = new SparkMax(anglerId, MotorType.kBrushless);
+    public HoodIOReal(int hoodId) {
+        motor = new SparkMax(hoodId, MotorType.kBrushless);
 
         // start config
         motor.setCANTimeout(500);
 
         // encoders
         encoder = motor.getEncoder();
-        encoder.setPosition(Constants.ANGLER_START_ANGLE.in(Rotations)); // ! 
+        encoder.setPosition(Constants.HOOD_START_ANGLE.in(Rotations)); // ! 
 
         // pid 
-        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.ANGLER_PID);
+        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.HOOD_PID);
         motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // ! 
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
@@ -46,8 +46,8 @@ public class AnglerIOReal implements AnglerIO {
         motorConfig.idleMode(IdleMode.kCoast);
 
         motorConfig.encoder
-        .positionConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO)
-        .velocityConversionFactor(1 / FuelConstants.ANGLER_GEAR_RATIO);
+        .positionConversionFactor(1 / FuelConstants.HOOD_GEAR_RATIO)
+        .velocityConversionFactor(1 / FuelConstants.HOOD_GEAR_RATIO);
 
         // stop config
         motor.setCANTimeout(0);
@@ -55,7 +55,7 @@ public class AnglerIOReal implements AnglerIO {
     }
 
     @Override
-    public void updateInputs(AnglerIOInputs inputs) {
+    public void updateInputs(HoodIOInputs inputs) {
         inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
         inputs.current = motor.getOutputCurrent();
         inputs.position = encoder.getPosition();
@@ -74,7 +74,7 @@ public class AnglerIOReal implements AnglerIO {
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 
             ClosedLoopSlot.kSlot0, 
-            FuelConstants.ANGLER_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
+            FuelConstants.HOOD_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
         );
     }
 }

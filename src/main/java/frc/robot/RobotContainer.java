@@ -67,7 +67,7 @@ public class RobotContainer {
                 hopper = new Hopper(new HopperIOReal(FuelConstants.HOPPER_MOTOR_ID));
                 shooter = new Shooter(
                     new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID), 
-                    new AnglerIOReal(FuelConstants.ANGLER_MOTOR_ID), 
+                    new HoodIOReal(FuelConstants.HOOD_MOTOR_ID), 
                     new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
                 );
                 break;
@@ -104,7 +104,7 @@ public class RobotContainer {
                 hopper = new Hopper(new HopperIOSim());
                 shooter = new Shooter(
                     new ShooterIOSim(),
-                    new AnglerIOSim(),
+                    new HoodIOSim(),
                     new KickerIOSim()
                 );
                 break;
@@ -131,7 +131,7 @@ public class RobotContainer {
                 hopper = new Hopper(new HopperIO() {});
                 shooter = new Shooter(
                     new ShooterIO() {}, 
-                    new AnglerIO() {},
+                    new HoodIO() {},
                     new KickerIO() {}
                 );
                 break;
@@ -205,9 +205,9 @@ public class RobotContainer {
         // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
         // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
-        // controller.x().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_UP_ANGLE));
-        // controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.12)));
-        // controller.b().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_DOWN_ANGLE));
+        // controller.x().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
+        // controller.y().onTrue(shooter.getSetHoodPositionCommand(Rotations.of(0.12)));
+        // controller.b().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
 
         // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
         // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
@@ -217,7 +217,7 @@ public class RobotContainer {
         // fuelSimulation
         // controller.x().onTrue(new InstantCommand(() -> fuelSimulation.launchFuel(
         //     () -> shooter.getShooterLinearVelocity(), 
-        //     () -> shooter.getAnglerAngle(),
+        //     () -> shooter.getHoodAngle(),
         //     Rotations.of(0),
         //     new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
         // ))); 

@@ -48,7 +48,6 @@ public class Intake extends SubsystemBase {
         pivotIO.setVoltage(volts);
     }
 
-    // ! do not call if pivotIO.setPosition() is active
     public Command getSetPivotVoltageCommand(Voltage volts) {
         return runOnce(() -> setPivotVoltage(volts));
     }
