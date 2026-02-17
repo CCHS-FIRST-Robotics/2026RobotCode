@@ -8,6 +8,7 @@
  !  - sysid
  !  - add back the wheel radius characterization functionality
  !  - rotating around a swerve module
+ !  - mini-autos https://www.chiefdelphi.com/t/frc-5000-hammerheads-2026-build-thread-open-alliance/507502/310?u=0713_ahsc
  ! vision: 
  !  - apriltag 1 foot away from robot for camera on robot position
  !  - object detection

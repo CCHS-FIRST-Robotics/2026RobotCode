@@ -158,8 +158,34 @@ public class RobotContainer {
         );
 
         // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! test ! maybe for choreo purposes just ignore the choreo angle?
+        // ! instead, do what colin did with having a headingsupplier for drivewithjoysticks
 
-        // ————— fuel ————— //
+        // ————— processed fuel bindings ————— //
+        // ! at beginning of match, intake comes down automatically just do it in pivot.setposition or whatever
+        // intake
+        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+
+        // shoot
+        controller.y().whileTrue(
+            new Shoot(
+                poseEstimator,
+                intake,
+                hopper,
+                shooter,
+                new Pose2d()
+            ).andThen(
+                new DriveWithJoysticks(
+                    drive, 
+                    poseEstimator, 
+                    null, 
+                    null, 
+                    null
+                )
+            )
+        );
+
+        // ————— raw fuel bindings ————— //
 
         // intake
         // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
@@ -172,12 +198,12 @@ public class RobotContainer {
         // hopper
         // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
-        
+
         // shooter
-        controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
-        controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
-        controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
+        // controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
+        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
+        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
         // controller.x().onTrue(shooter.getSetAnglerPositionCommand(FuelConstants.ANGLER_UP_ANGLE));
         // controller.y().onTrue(shooter.getSetAnglerPositionCommand(Rotations.of(0.12)));

@@ -4,6 +4,9 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.units.measure.*;
 
 public class FuelConstants {
@@ -51,6 +54,4 @@ public class FuelConstants {
 
     public static final Angle ANGLER_UP_ANGLE = Rotations.of(0.08);
     public static final Angle ANGLER_DOWN_ANGLE = Rotations.of(0.18254);
-    
-    // the interpolated map should probably exist here
 }

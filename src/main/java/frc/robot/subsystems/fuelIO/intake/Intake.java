@@ -36,17 +36,29 @@ public class Intake extends SubsystemBase {
 
     // ————— raw command factories ————— //
 
+    public void setIntakeVoltage(Voltage volts) {
+        intakeIO.setVoltage(volts);
+    }
+
     public Command getSetIntakeVoltageCommand(Voltage volts) {
-        return runOnce(() -> intakeIO.setVoltage(volts));
+        return runOnce(() -> setIntakeVoltage(volts));
+    }
+
+    public void setPivotVoltage(Voltage volts) {
+        pivotIO.setVoltage(volts);
     }
 
     // ! do not call if pivotIO.setPosition() is active
     public Command getSetPivotVoltageCommand(Voltage volts) {
-        return runOnce(() -> pivotIO.setVoltage(volts));
+        return runOnce(() -> setPivotVoltage(volts));
+    }
+
+    public void setPivotPosition(Angle angle) {
+        pivotAngle = angle;
     }
 
     public Command getSetPivotPositionCommand(Angle angle) {
-        return runOnce(() -> pivotAngle = angle);
+        return runOnce(() -> setPivotPosition(angle));
     }
 
     public boolean getIntakeOn() {

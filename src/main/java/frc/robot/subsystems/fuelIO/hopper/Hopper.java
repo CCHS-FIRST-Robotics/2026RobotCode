@@ -24,8 +24,12 @@ public class Hopper extends SubsystemBase {
 
     // ————— raw command factories ————— //
 
+    public void setHopperVoltage(Voltage volts) {
+        io.setVoltage(volts);
+    }
+
     public Command getSetHopperVoltageCommand(Voltage volts) {
-        return runOnce(() -> io.setVoltage(volts));
+        return runOnce(() -> setHopperVoltage(volts));
     }
 
     public void intakeFuel() {
