@@ -4,8 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.math.system.plant.*;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
@@ -27,7 +26,7 @@ public class ShooterIOSim implements ShooterIO {
     private AngularVelocity prevVelocity = RotationsPerSecond.of(0);
 
     public ShooterIOSim() {
-
+        motor.setState(0, 0);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class PivotIOSim implements PivotIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public PivotIOSim() {
-        motor.setState(Constants.PIVOT_START_ANGLE.in(Radians), 0);
+        motor.setState(Constants.PIVOT_START_ANGLE.in(Radians) * FuelConstants.PIVOT_GEAR_RATIO, 0);
     }
 
     @Override

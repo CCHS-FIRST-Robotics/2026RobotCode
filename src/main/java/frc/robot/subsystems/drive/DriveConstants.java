@@ -2,19 +2,18 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.*;
-import org.ironmaple.simulation.drivesims.COTS;
-import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
-import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotBase;
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.configs.*;
 
 public class DriveConstants { // * indicates a physical measurement
     public static final CANBus CAN_BUS = new CANBus("", "./logs/example.hoot");

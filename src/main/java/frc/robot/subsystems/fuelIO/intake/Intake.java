@@ -29,12 +29,14 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        if(Constants.ENABLE_PIVOT_SET_POSITION) {
+        if (Constants.ENABLE_PIVOT_SET_POSITION) {
             pivotIO.setPosition(pivotAngle);
         }
     }
 
     // ————— raw command factories ————— //
+
+    // intake
 
     public void setIntakeVoltage(Voltage volts) {
         intakeIO.setVoltage(volts);
@@ -43,6 +45,8 @@ public class Intake extends SubsystemBase {
     public Command getSetIntakeVoltageCommand(Voltage volts) {
         return runOnce(() -> setIntakeVoltage(volts));
     }
+
+    // pivot
 
     public void setPivotVoltage(Voltage volts) {
         pivotIO.setVoltage(volts);
@@ -60,9 +64,9 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> setPivotPosition(angle));
     }
 
+    // util
+
     public boolean getIntakeOn() {
         return Math.abs(intakeIOInputs.voltage) > 0;
     }
-
-    // ————— processed command factories ————— //
 }

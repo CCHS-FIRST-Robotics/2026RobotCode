@@ -33,8 +33,6 @@ public class KickerIOReal implements KickerIO {
         motorConfig.smartCurrentLimit(30);
         motorConfig.voltageCompensation(12);
 
-        // ! inverted
-
         motorConfig.idleMode(IdleMode.kCoast);
 
         motorConfig.encoder

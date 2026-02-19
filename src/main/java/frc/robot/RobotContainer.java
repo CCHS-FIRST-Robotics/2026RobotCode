@@ -1,45 +1,53 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
 import choreo.auto.AutoChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.poseEstimator.PoseEstimator;
-import frc.robot.subsystems.fuelIO.*;
-import frc.robot.subsystems.fuelIO.intake.*;
-import frc.robot.subsystems.fuelIO.hopper.*;
-import frc.robot.subsystems.fuelIO.shooter.*;
+import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
+import frc.robot.subsystems.fuelIO.*;
+import frc.robot.subsystems.fuelIO.hopper.*;
+import frc.robot.subsystems.fuelIO.intake.*;
+import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
-    // controllers
+    // ————— controllers ————— //
+
     private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
 
-    // subsystems
+    // ————— subsystems ————— //
+
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Intake intake;
     private final Hopper hopper;
     private final Shooter shooter;
 
-    // utils
+    // ————— utils ————— //
+
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
     private FuelSim fuelSimulation;
 
+    // ————— testing variables ————— //
+
     private final Pose2d startPose = Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM
         ? new Pose2d(3, 3, new Rotation2d())
-        : new Pose2d(0, 0, new Rotation2d());
+        : new Pose2d(0, 0, new Rotation2d()); // ! should be in constants
+    private double shooterVelocity = 0; // ! 
+    private double hoodAngle = 0; // ! 
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -157,10 +165,9 @@ public class RobotContainer {
             )
         );
 
-        // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! rewrite
-
         // ————— processed fuel bindings ————— //
-        // intake and turn robot towards // ! somewhere
+        
+        // intake and turn robot in the direction it's driving
         controller.x().whileTrue(
             new IntakeCommand(
                 intake
@@ -183,12 +190,12 @@ public class RobotContainer {
 
         // shoot and turn robot towards // ! somewhere
         controller.y().whileTrue(
-            new ShootCommand(
+            new ShooterCommand(
                 poseEstimator,
                 intake,
                 hopper,
                 shooter,
-                () -> {return new Pose2d();} // targetPose
+                () -> {return Constants.FieldConstants.BLUE_HUB.toPose2d();} // targetPose
             ).alongWith(
                 new DriveWithJoysticks(
                     drive, 
@@ -198,7 +205,7 @@ public class RobotContainer {
                     () -> controller.getRightX(),
                     () -> ShooterCalculator.getRobotRotationToTarget(
                         poseEstimator.getPose(),
-                        new Pose2d(8, 4, new Rotation2d()) // targetPose
+                        Constants.FieldConstants.BLUE_HUB.toPose2d() // targetPose
                     )
                 )
             ).alongWith(
@@ -206,11 +213,11 @@ public class RobotContainer {
                 new InstantCommand(
                     () -> fuelSimulation.launchFuel(
                         () -> shooter.getShooterLinearVelocity(), 
-                        () -> shooter.getHoodAngle(),
+                        () -> shooter.getHoodShotAngle(),
                         Rotations.of(0),
                         new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
                     )
-                ) :
+                ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
                 new InstantCommand()
             )
         );
@@ -222,7 +229,7 @@ public class RobotContainer {
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
-        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
         // hopper
@@ -231,9 +238,7 @@ public class RobotContainer {
 
         // shooter
         // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
-        // controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)));
-        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(50)));
-        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
         // controller.x().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
         // controller.y().onTrue(shooter.getSetHoodPositionCommand(Rotations.of(0.12)));
@@ -242,12 +247,40 @@ public class RobotContainer {
         // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
         // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
-        // ————— misc. testing ————— //
+        // ————— testing ————— //
         
         // sysid
         // controller.x().whileTrue(drive.sysIdFull());
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
+
+        controller.leftTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity -= 2.5;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
+
+        controller.rightTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity += 2.5;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
+
+        controller.leftBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle += 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
+
+        controller.rightBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle -= 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
     }
 
     // ————— autos ————— //
@@ -292,13 +325,14 @@ public class RobotContainer {
             () -> intake.getIntakeOn(), 
             () -> hopper.intakeFuel()
         );
-        // fuelSimulation.spawnStartingFuel();
         fuelSimulation.setSubticks(1);
         fuelSimulation.start();
+
+        // fuelSimulation.spawnStartingFuel();
     }
 
     public void updateSimulation() { // called by Robot.java on simulationPeriodic
-        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // ! not sure if this has to be here if it's only called in simulationPeriodic
+        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // not sure if this has to be here if it's only called in simulationPeriodic
             return;
         }
 

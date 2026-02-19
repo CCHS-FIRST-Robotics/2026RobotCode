@@ -2,10 +2,9 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public final class Constants {
@@ -24,10 +23,10 @@ public final class Constants {
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // ! should be changed for comp
     public static final Angle HOOD_START_ANGLE = FuelConstants.HOOD_DOWN_ANGLE;
     
-    public static final boolean ENABLE_PIVOT_SET_POSITION = true;
+    public static final boolean ENABLE_PIVOT_SET_POSITION = false;
     public static final boolean ENABLE_HOOD_SET_POSITION = true;
 
-    public static class FieldConstants {
+    public static class FieldConstants { // ! 
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);
         public static final Distance FIELD_WIDTH_Y = Inches.of(316.64);
         

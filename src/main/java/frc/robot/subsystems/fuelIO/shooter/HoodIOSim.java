@@ -24,7 +24,7 @@ public class HoodIOSim implements HoodIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public HoodIOSim() {
-        motor.setState(Constants.HOOD_START_ANGLE.in(Radians), 0);
+        motor.setState(Constants.HOOD_START_ANGLE.in(Radians) * FuelConstants.HOOD_GEAR_RATIO, 0);
     }
 
     @Override

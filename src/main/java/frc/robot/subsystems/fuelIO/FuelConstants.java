@@ -20,17 +20,17 @@ public class FuelConstants {
     // ————— kinematics ————— //
     
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
-    public static final double INTAKE_GEAR_RATIO = 5; // !
-    public static final double PIVOT_GEAR_RATIO = 25 * 84 / 50;
-    public static final double HOPPER_GEAR_RATIO = 1; // ! 
+    public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect, but no one cares
+    public static final double PIVOT_GEAR_RATIO = 25.0 * 50.0 / 84.0; // ! 
+    public static final double HOPPER_GEAR_RATIO = 4.0;
     public static final double SHOOTER_GEAR_RATIO = 1;
-    public static final double HOOD_GEAR_RATIO = 60 / 17;
+    public static final double HOOD_GEAR_RATIO = 60.0 / 17.0;
     public static final double KICKER_GEAR_RATIO = 1;
 
     // ————— PIDF ————— //
 
-    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! tuned with motionmagic
-    public static final double PIVOT_KCOS = 0.22;
+    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! needs tuning
+    public static final double PIVOT_KCOS = 0.22; // ! needs tuning
 
     public static final ClosedLoopConfig HOOD_PID = new ClosedLoopConfig().pid(5, 0, 0); // ! needs tuning
     public static final double HOOD_KCOS = 0; // ! needs tuning
@@ -49,7 +49,7 @@ public class FuelConstants {
     public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3);
     public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
 
-    // when hood is zeroed so that 0 shoots the ball horizontally // ! outdated
-    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.08);
-    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0.18254);
+    // when hood is zeroed at horizontal
+    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.25); // !
+    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0); // !
 }

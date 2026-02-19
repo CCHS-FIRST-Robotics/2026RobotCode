@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.*;
+import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.Constants;
-import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
 public class Drive extends SubsystemBase {    
     private enum DRIVE_MODE {
@@ -56,24 +56,6 @@ public class Drive extends SubsystemBase {
     };
 
     // ————— characterization ————— //
-
-    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            Volts.per(Second).of(1), // ramp rate
-            Volts.of(1.75), // step voltage
-            Seconds.of(4), // timeout
-            (state) -> Logger.recordOutput("outputs/drive/sysIdState", state.toString()) // send the data to advantagekit
-            // (state) -> SignalLogger.writeString("driveSysId", state.toString()) // send the data to SignalLogger
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.runCharacterization(
-                new Voltage[] {volts, volts, volts, volts}, 
-                new Angle[] {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
-            ), // characterization supplier
-            null, // no log consumer needed since advantagekit records the data
-            this
-        )
-    );
     
     private Voltage[] characterizationVolts = {
         Volts.of(0), 
@@ -115,6 +97,26 @@ public class Drive extends SubsystemBase {
         
         thetaPID.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
     }
+
+    // ————— utils ————— //
+
+    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            Volts.per(Second).of(1), // ramp rate
+            Volts.of(1.75), // step voltage
+            Seconds.of(4), // timeout
+            (state) -> Logger.recordOutput("outputs/drive/sysIdState", state.toString()) // send the data to advantagekit
+            // (state) -> SignalLogger.writeString("driveSysId", state.toString()) // send the data to SignalLogger
+        ),
+        new SysIdRoutine.Mechanism(
+            (volts) -> this.runCharacterization(
+                new Voltage[] {volts, volts, volts, volts}, 
+                new Angle[] {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
+            ), // characterization supplier
+            null, // no log consumer needed since advantagekit records the data
+            this
+        )
+    );
 
     @Override
     public void periodic() {
@@ -223,15 +225,6 @@ public class Drive extends SubsystemBase {
         speeds = speedsInput;
     }
 
-    // ————— sysid ————— // 
-
-    public Command sysIdFull() {
-        return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
-            .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
-            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
-            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
-    }
-
     // ————— poseEstimator ————— //
 
     public void setPoseEstimator(PoseEstimator poseEstimator) {
@@ -318,7 +311,14 @@ public class Drive extends SubsystemBase {
     }
     
     // ————— utils ————— //
-    
+
+    public Command sysIdFull() {
+        return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+    }
+
     public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration) {
         return MathUtil.clamp(velocity, prevVelocity - maxAcceleration, prevVelocity + maxAcceleration);
     }

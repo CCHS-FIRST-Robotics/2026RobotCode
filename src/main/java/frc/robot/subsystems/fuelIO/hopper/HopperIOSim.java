@@ -21,7 +21,7 @@ public class HopperIOSim implements HopperIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public HopperIOSim() {
-
+        motor.setState(0, 0);
     }
 
     @Override

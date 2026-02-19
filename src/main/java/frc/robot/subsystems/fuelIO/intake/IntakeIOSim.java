@@ -21,7 +21,7 @@ public class IntakeIOSim implements IntakeIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public IntakeIOSim() {
-
+        motor.setState(0, 0);
     }
 
     @Override

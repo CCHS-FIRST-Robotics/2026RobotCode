@@ -5,8 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import com.revrobotics.*;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
@@ -40,7 +40,7 @@ public class PivotIOReal implements PivotIO {
         motorConfig.smartCurrentLimit(30);
         motorConfig.voltageCompensation(12);
         
-        motorConfig.inverted(true); // !
+        motorConfig.inverted(true);
         
         motorConfig.idleMode(IdleMode.kCoast);
 

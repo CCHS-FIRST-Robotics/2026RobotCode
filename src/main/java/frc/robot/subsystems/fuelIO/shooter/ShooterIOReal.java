@@ -2,10 +2,10 @@ package frc.robot.subsystems.fuelIO.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
-import com.ctre.phoenix6.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 

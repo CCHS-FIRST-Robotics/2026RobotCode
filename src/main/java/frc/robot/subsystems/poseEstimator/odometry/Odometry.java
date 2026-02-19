@@ -1,11 +1,10 @@
 package frc.robot.subsystems.poseEstimator.odometry;
 
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import java.util.concurrent.locks.*;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.*;
 
 public class Odometry {
     private final GyroIO gyroIO;
@@ -39,7 +38,7 @@ public class Odometry {
 
     private Rotation2d gyroYaw = new Rotation2d();
 
-    public Odometry(GyroIO gyroIO, OdometryConsumer consumer, Drive drive){
+    public Odometry(GyroIO gyroIO, OdometryConsumer consumer, Drive drive) {
         this.gyroIO = gyroIO;
         this.consumer = consumer;
         this.drive = drive;

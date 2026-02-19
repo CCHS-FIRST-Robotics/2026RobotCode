@@ -1,14 +1,14 @@
 package frc.robot.utils;
 
-import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
-import choreo.auto.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
-import frc.robot.Constants;
+import choreo.auto.*;
+import org.ironmaple.simulation.drivesims.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.poseEstimator.PoseEstimator;
+import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.Constants;
 
 public class AutoGenerator {
     private final AutoFactory autoFactory;
@@ -25,7 +25,7 @@ public class AutoGenerator {
             poseEstimator::getPose,
             (pose) -> {
                 poseEstimator.resetPosition(pose);
-                if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM){
+                if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
                     driveSimulation.setSimulationWorldPose(pose);
                 }
             },

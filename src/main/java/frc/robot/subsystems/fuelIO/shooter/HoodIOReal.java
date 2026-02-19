@@ -5,8 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import com.revrobotics.*;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.units.measure.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
@@ -24,11 +24,11 @@ public class HoodIOReal implements HoodIO {
 
         // encoders
         encoder = motor.getEncoder();
-        encoder.setPosition(Constants.HOOD_START_ANGLE.in(Rotations)); // ! 
+        encoder.setPosition(Constants.HOOD_START_ANGLE.in(Rotations));
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.HOOD_PID);
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // ! 
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // !
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
 
@@ -40,10 +40,9 @@ public class HoodIOReal implements HoodIO {
         motorConfig.smartCurrentLimit(30);
         motorConfig.voltageCompensation(12);
 
-        // ! inverted
-        motorConfig.inverted(true);
+        motorConfig.inverted(true); // ! 
 
-        motorConfig.idleMode(IdleMode.kCoast);
+        motorConfig.idleMode(IdleMode.kBrake);
 
         motorConfig.encoder
         .positionConversionFactor(1 / FuelConstants.HOOD_GEAR_RATIO)

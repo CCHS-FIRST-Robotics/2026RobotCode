@@ -1,19 +1,14 @@
 package frc.robot.utils;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.*;
 import java.util.ArrayList;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class FuelSim {
     protected static final double PERIOD = 0.02; // sec
@@ -503,7 +498,7 @@ public class FuelSim {
      * @param launchHeight Height of the fuel to launch at. Make sure this is higher than your robot's bumper height, or else it will collide with your robot immediately.
      * @throws IllegalStateException if robot is not registered
      */
-    public void launchFuel(Supplier<LinearVelocity> launchVelocitySupplier, Supplier<Angle> hoodAngleSupplier, Angle turretYaw, Transform3d robotToShooter) {
+    public void launchFuel(DoubleSupplier launchVelocitySupplier, DoubleSupplier hoodAngleSupplier, Angle turretYaw, Transform3d robotToShooter) {
         if (robotPoseSupplier == null || robotFieldSpeedsSupplier == null) {
             throw new IllegalStateException("Robot must be registered before launching fuel.");
         }
@@ -512,8 +507,8 @@ public class FuelSim {
                 .plus(robotToShooter);
         ChassisSpeeds fieldSpeeds = this.robotFieldSpeedsSupplier.get();
 
-        double horizontalVel = Math.cos(hoodAngleSupplier.get().in(Radians)) * launchVelocitySupplier.get().in(MetersPerSecond);
-        double verticalVel = Math.sin(hoodAngleSupplier.get().in(Radians)) * launchVelocitySupplier.get().in(MetersPerSecond);
+        double horizontalVel = Math.cos(Rotations.of(hoodAngleSupplier.getAsDouble()).in(Radians)) * launchVelocitySupplier.getAsDouble();
+        double verticalVel = Math.sin(Rotations.of(hoodAngleSupplier.getAsDouble()).in(Radians)) * launchVelocitySupplier.getAsDouble();
         double xVel = horizontalVel
                 * Math.cos(
                         turretYaw.plus(launchPose.getRotation().getMeasureZ()).in(Radians));

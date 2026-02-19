@@ -2,27 +2,28 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.function.Supplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.math.geometry.*;
+import java.util.function.*;
 import frc.robot.subsystems.poseEstimator.*;
-import frc.robot.utils.ShooterCalculator;
-import frc.robot.utils.ShooterCalculator.ShooterState;
+import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
+import frc.robot.utils.*;
+import frc.robot.utils.ShooterCalculator.*;
 
-public class ShootCommand extends Command {
+public class ShooterCommand extends Command {
     private final PoseEstimator poseEstimator;
+    
     private final Intake intake;
     private final Hopper hopper;
     private final Shooter shooter;
     
     private final Supplier<Pose2d> targetPoseSupplier;
 
-    public ShootCommand(
+    public ShooterCommand(
         PoseEstimator poseEstimator,
         Intake intake,
         Hopper hopper,
@@ -30,6 +31,7 @@ public class ShootCommand extends Command {
         Supplier<Pose2d> targetPoseSupplier
     ) {
         this.poseEstimator = poseEstimator;
+        
         this.intake = intake;
         this.hopper = hopper;
         this.shooter = shooter;
@@ -46,13 +48,13 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
+        // shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
     }
 
     @Override
     public void end(boolean interrupted) {
         hopper.setHopperVoltage(Volts.of(0));
-        shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), FuelConstants.HOOD_DOWN_ANGLE));
+        // shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), FuelConstants.HOOD_DOWN_ANGLE));
         shooter.setKickerVoltage(Volts.of(0));
     }
 }

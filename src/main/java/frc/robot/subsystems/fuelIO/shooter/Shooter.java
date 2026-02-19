@@ -3,10 +3,10 @@ package frc.robot.subsystems.fuelIO.shooter;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
-import frc.robot.utils.ShooterCalculator.ShooterState;
 import edu.wpi.first.units.measure.*;
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.*;
+import frc.robot.utils.ShooterCalculator.ShooterState;
+import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO shooterIO;
@@ -51,6 +51,8 @@ public class Shooter extends SubsystemBase {
 
     // ————— raw command factories ————— //
 
+    // shooter
+
     public void setShooterVoltage(Voltage volts) {
         shooterIO.setVoltage(volts);
     }
@@ -71,6 +73,8 @@ public class Shooter extends SubsystemBase {
         return runOnce(() -> setShooterVelocity(velocity));
     }
 
+    // hood
+
     public void setHoodVoltage(Voltage volts) {
         hoodIO.setVoltage(volts);
     }
@@ -87,6 +91,8 @@ public class Shooter extends SubsystemBase {
         return runOnce(() -> setHoodPosition(angle));
     }
 
+    // kicker
+
     public void setKickerVoltage(Voltage volts) {
         kickerIO.setVoltage(volts);
     }
@@ -95,23 +101,28 @@ public class Shooter extends SubsystemBase {
         return runOnce(() -> setKickerVoltage(volts));
     }
 
+    // util
+
     public double getShooterAngularVelocity() {
         return shooterIOInputs.velocity;
     }
 
-    public LinearVelocity getShooterLinearVelocity() {
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/linearVelocity")
+    public double getShooterLinearVelocity() {
         double angularVelocity = RotationsPerSecond.of(shooterIOInputs.velocity).in(RadiansPerSecond);
-        return InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
+        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity * 2);
+        return linearVelocity.in(MetersPerSecond); // multiply by shooter wheel radius
     }
 
-    public Angle getHoodAngle() {
-        return Rotations.of(hoodIOInputs.position);
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/hoodShotAngle")
+    public double getHoodShotAngle() {
+        return 0.25 - hoodIOInputs.position; // when hood is 0, it shoots vertically
     }
 
     // ————— processed command factories ————— //
 
     public void runShooterState(ShooterState state) {
-        if(Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
             shooterIO.setVelocity(state.velocity());
         } else {
             shooterVelocity = state.velocity();

@@ -21,7 +21,7 @@ public class KickerIOSim implements KickerIO {
     private Voltage appliedVoltage = Volts.of(0);
 
     public KickerIOSim() {
-
+        motor.setState(0, 0);
     }
 
     @Override

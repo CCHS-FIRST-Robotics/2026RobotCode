@@ -6,14 +6,12 @@ package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.*;
+import edu.wpi.first.math.interpolation.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.units.measure.*;
-import frc.robot.Constants.FieldConstants;
+import java.util.function.Supplier;
+import frc.robot.Constants.*;
 
 public class ShooterCalculator {
     public static final InterpolatingTreeMap<Double, ShooterState> SHOOTER_STATE_MAP = new InterpolatingTreeMap<>(
