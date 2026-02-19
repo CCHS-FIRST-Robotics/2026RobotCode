@@ -4,9 +4,6 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.units.measure.*;
 
 public class FuelConstants {
@@ -23,22 +20,22 @@ public class FuelConstants {
     // ————— kinematics ————— //
     
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
-    public static final double INTAKE_GEAR_RATIO = 5; // ! 
+    public static final double INTAKE_GEAR_RATIO = 5; // !
     public static final double PIVOT_GEAR_RATIO = 25 * 84 / 50;
     public static final double HOPPER_GEAR_RATIO = 1; // ! 
     public static final double SHOOTER_GEAR_RATIO = 1;
     public static final double HOOD_GEAR_RATIO = 60 / 17;
-    public static final double KICKER_GEAR_RATIO = 1; // ! 
+    public static final double KICKER_GEAR_RATIO = 1;
 
     // ————— PIDF ————— //
 
-    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! tuned with motionmagic, because otherwise I'd literally break the intake
+    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! tuned with motionmagic
     public static final double PIVOT_KCOS = 0.22;
 
-    public static final ClosedLoopConfig HOOD_PID = new ClosedLoopConfig().pid(5, 0, 0); // ! 
-    public static final double HOOD_KCOS = 0; // ! 
+    public static final ClosedLoopConfig HOOD_PID = new ClosedLoopConfig().pid(5, 0, 0); // ! needs tuning
+    public static final double HOOD_KCOS = 0; // ! needs tuning
 
-    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! 
+    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
     .withKP(2)
     .withKI(0)
     .withKD(0)
@@ -48,10 +45,11 @@ public class FuelConstants {
 
     // ————— physical constants ————— //
     
-    // when intake is zeroed at horizontal
+    // when pivot is zeroed at horizontal
     public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3);
     public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
 
+    // when hood is zeroed so that 0 shoots the ball horizontally // ! outdated
     public static final Angle HOOD_UP_ANGLE = Rotations.of(0.08);
     public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0.18254);
 }

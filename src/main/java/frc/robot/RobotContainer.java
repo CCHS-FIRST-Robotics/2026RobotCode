@@ -1,7 +1,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.math.geometry.*;
@@ -153,35 +152,66 @@ public class RobotContainer {
                 poseEstimator,
                 () -> -controller.getLeftY(), // xbox controller is flipped
                 () -> controller.getLeftX(), 
-                () -> controller.getRightX()
+                () -> controller.getRightX(),
+                null
             )
         );
 
-        // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! test ! maybe for choreo purposes just ignore the choreo angle?
-        // ! instead, do what colin did with having a headingsupplier for drivewithjoysticks
+        // controller.x().onTrue(new InstantCommand(() -> drive.toggleFollowIntake())); // ! rewrite
 
         // ————— processed fuel bindings ————— //
-        // ! at beginning of match, intake comes down automatically just do it in pivot.setposition or whatever
-        // intake
-        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        // intake and turn robot towards // ! somewhere
+        controller.x().whileTrue(
+            new IntakeCommand(
+                intake
+            ).alongWith(
+                new DriveWithJoysticks(
+                    drive, 
+                    poseEstimator, 
+                    () -> -controller.getLeftY(), // xbox controller is flipped
+                    () -> controller.getLeftX(), 
+                    () -> controller.getRightX(),
+                    () -> {
+                        return new Rotation2d(Math.atan2( // negatives are to map xbox controller to the cartesian plane
+                            -controller.getLeftX(), 
+                            -controller.getLeftY()
+                        ) + Math.PI); // intake is on back of robot
+                    }
+                )
+            )
+        );
 
-        // shoot
+        // shoot and turn robot towards // ! somewhere
         controller.y().whileTrue(
-            new Shoot(
+            new ShootCommand(
                 poseEstimator,
                 intake,
                 hopper,
                 shooter,
-                new Pose2d()
-            ).andThen(
+                () -> {return new Pose2d();} // targetPose
+            ).alongWith(
                 new DriveWithJoysticks(
                     drive, 
                     poseEstimator, 
-                    null, 
-                    null, 
-                    null
+                    () -> -controller.getLeftY(), // xbox controller is flipped
+                    () -> controller.getLeftX(), 
+                    () -> controller.getRightX(),
+                    () -> ShooterCalculator.getRobotRotationToTarget(
+                        poseEstimator.getPose(),
+                        new Pose2d(8, 4, new Rotation2d()) // targetPose
+                    )
                 )
+            ).alongWith(
+                Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
+                new InstantCommand(
+                    () -> fuelSimulation.launchFuel(
+                        () -> shooter.getShooterLinearVelocity(), 
+                        () -> shooter.getHoodAngle(),
+                        Rotations.of(0),
+                        new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
+                    )
+                ) :
+                new InstantCommand()
             )
         );
 
@@ -196,8 +226,8 @@ public class RobotContainer {
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
         // hopper
-        // controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
-        // controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
+        // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
+        // controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
 
         // shooter
         // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
@@ -213,15 +243,7 @@ public class RobotContainer {
         // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // ————— misc. testing ————— //
-
-        // fuelSimulation
-        // controller.x().onTrue(new InstantCommand(() -> fuelSimulation.launchFuel(
-        //     () -> shooter.getShooterLinearVelocity(), 
-        //     () -> shooter.getHoodAngle(),
-        //     Rotations.of(0),
-        //     new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
-        // ))); 
-
+        
         // sysid
         // controller.x().whileTrue(drive.sysIdFull());
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
@@ -270,7 +292,7 @@ public class RobotContainer {
             () -> intake.getIntakeOn(), 
             () -> hopper.intakeFuel()
         );
-        fuelSimulation.spawnStartingFuel();
+        // fuelSimulation.spawnStartingFuel();
         fuelSimulation.setSubticks(1);
         fuelSimulation.start();
     }

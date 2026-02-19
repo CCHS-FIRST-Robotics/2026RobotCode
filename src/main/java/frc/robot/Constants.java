@@ -18,7 +18,6 @@ public final class Constants {
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
     public static final boolean USE_ALLIANCE_FLIPPING = false; // !
-    // ! also something for which hub to autoaim to
 
     public static final int CONTROLLER_PORT = 0; // 0 for gamesir, 1 for xbox
 

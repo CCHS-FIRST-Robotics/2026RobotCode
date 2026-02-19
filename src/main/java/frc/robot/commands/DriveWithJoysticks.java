@@ -6,21 +6,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
-import java.util.function.DoubleSupplier;
+
+import java.util.function.*;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
-
-
-// ! grrr grrr add a headingsupplier
 public class DriveWithJoysticks extends Command {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
 
-    private final DoubleSupplier xSupplier;
-    private final DoubleSupplier ySupplier;
-    private final DoubleSupplier oSupplier;
+    private final DoubleSupplier xVelocitySupplier;
+    private final DoubleSupplier yVelocitySupplier;
+    private final DoubleSupplier thetaVelocitySupplier;
+
+    private final Supplier<Rotation2d> thetaSupplier;
     
     private final double DEADBAND = 0.1;
     private final double EXPONENT = 2;
@@ -28,28 +29,30 @@ public class DriveWithJoysticks extends Command {
     public DriveWithJoysticks(
         Drive drive, 
         PoseEstimator poseEstimator,
-        DoubleSupplier xSupplier, 
-        DoubleSupplier ySupplier, 
-        DoubleSupplier oSupplier
+        DoubleSupplier xVelocitySupplier, 
+        DoubleSupplier yVelocitySupplier, 
+        DoubleSupplier thetaVelocitySupplier,
+        Supplier<Rotation2d> thetaSupplier
     ) {
         addRequirements(drive);
-        addRequirements(poseEstimator);
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;
 
-        this.xSupplier = xSupplier;
-        this.ySupplier = ySupplier;
-        this.oSupplier = oSupplier;
+        this.xVelocitySupplier = xVelocitySupplier;
+        this.yVelocitySupplier = yVelocitySupplier;
+        this.thetaVelocitySupplier = thetaVelocitySupplier;
+
+        this.thetaSupplier = thetaSupplier;
     }
 
     @Override
     public void execute() {
         // get linear velocity vector
-        Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+        Translation2d linearVelocity = getLinearVelocityFromJoysticks(xVelocitySupplier.getAsDouble(), yVelocitySupplier.getAsDouble());
 
         // get angular velocity scalar
-        double angularVelocity = MathUtil.applyDeadband(oSupplier.getAsDouble(), DEADBAND); // apply deadband
+        double angularVelocity = MathUtil.applyDeadband(thetaVelocitySupplier.getAsDouble(), DEADBAND); // apply deadband
         angularVelocity = Math.copySign(Math.pow(angularVelocity, EXPONENT), angularVelocity); // apply exponent
 
         // convert to chassisSpeeds
@@ -58,6 +61,17 @@ public class DriveWithJoysticks extends Command {
             -linearVelocity.getY() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );
+
+        if (thetaSupplier != null) {
+            speeds = new ChassisSpeeds(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                drive.getThetaController().calculate(
+                    poseEstimator.getPose().getRotation().getRadians(),
+                    thetaSupplier.get().getRadians()
+                )
+            );
+        }
         
         // run velocity
         drive.runVelocity(

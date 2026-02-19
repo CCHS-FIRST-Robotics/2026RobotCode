@@ -40,11 +40,11 @@ public class Shooter extends SubsystemBase {
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("subsystems/fuelIO/shooter/kicker", kickerIOInputs);
 
-        if(Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) { // in sim, shooter PID needs to be called constantly
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) { // in sim, shooter PID needs to be called constantly
             shooterIO.setVelocity(shooterVelocity);
         }
 
-        if(Constants.ENABLE_HOOD_SET_POSITION) {
+        if (Constants.ENABLE_HOOD_SET_POSITION) {
             hoodIO.setPosition(hoodAngle);
         }
     }

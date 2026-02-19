@@ -6,6 +6,8 @@ package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
@@ -18,21 +20,30 @@ public class ShooterCalculator {
         InverseInterpolator.forDouble(), // ! idk why it's inverse
         ShooterState::interpolate
     ); // ! should probably be in a constants file
+    
+    static {
+        SHOOTER_STATE_MAP.put(5.34, new ShooterState(RotationsPerSecond.of(2900), Degrees.of(27)));
+        SHOOTER_STATE_MAP.put(4.90, new ShooterState(RotationsPerSecond.of(2700), Degrees.of(26)));
+    }
 
+    // get the shooter state in order to shoot at the target pose
     public static ShooterState getShooterStateFromMap(Pose2d robotPose, Pose2d targetPose) {
-        Transform2d robotToTarget = robotPose.minus(targetPose);
+        Transform2d robotToTarget = robotPose.minus(targetPose); // ! might need to flip
         ShooterState shot = SHOOTER_STATE_MAP.get(robotToTarget.getTranslation().getNorm());
         return new ShooterState(shot.velocity, shot.angle);
     }
 
-    public static Rotation2d getRobotRotation(Pose2d robotPose, Pose2d targetPose) {
-        Transform2d robotToTarget = robotPose.minus(targetPose);
-        return robotToTarget.getRotation(); // ! no no no absolutely not thi
+    // get the field-relative angle that the robot must face in order to point at the supplied target pose
+    public static Rotation2d getRobotRotationToTarget(Pose2d robotPose, Pose2d targetPose) {
+        Translation2d targetToRobot = targetPose.getTranslation().minus(robotPose.getTranslation());
+        return new Rotation2d(Math.atan2(targetToRobot.getY(), targetToRobot.getX()));
     }
 
     // add getShooterStateFromMath
 
-    public static Pose2d getTargetPoseFromRobotPosition(Pose2d robotPose) {
+    // get where the robot should be aiming based on its position on the field and its allaince
+    public static Pose2d getTargetPoseFromRobotPosition(Supplier<Pose2d> robotPoseSupplier) {
+        Pose2d robotPose = robotPoseSupplier.get();
         if (robotPose.getX() < FieldConstants.ALLIANCE_ZONE_WIDTH_X.in(Meters)) {
             return FieldConstants.BLUE_HUB.toPose2d();
         }

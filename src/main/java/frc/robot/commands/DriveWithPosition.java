@@ -33,7 +33,6 @@ public class DriveWithPosition extends Command {
         Transform2d targetTransform
     ) {
         addRequirements(drive);
-        addRequirements(poseEstimator);
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;

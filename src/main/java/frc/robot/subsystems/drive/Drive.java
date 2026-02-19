@@ -18,9 +18,9 @@ import frc.robot.subsystems.poseEstimator.PoseEstimator;
 public class Drive extends SubsystemBase {    
     private enum DRIVE_MODE {
         DISABLED,
+        CHARACTERIZING,
         POSITION,
-        VELOCITY,
-        CHARACTERIZING
+        VELOCITY
     };
     private DRIVE_MODE controlMode = DRIVE_MODE.DISABLED;
     
@@ -92,7 +92,7 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPID = new PIDController(5, 0, 0);
     private final PIDController yPID = new PIDController(5, 0, 0);
-    private final PIDController oPID = new PIDController(5, 0, 0);
+    private final PIDController thetaPID = new PIDController(5, 0, 0);
     
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
@@ -113,7 +113,7 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
         modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
         
-        oPID.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
+        thetaPID.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
     }
 
     @Override
@@ -148,13 +148,13 @@ public class Drive extends SubsystemBase {
                 // get PIDs
                 double xOutput = xPID.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
                 double yOutput = yPID.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                double oOutput = oPID.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double thetaOutput = thetaPID.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     twistSetpoint.dx + xOutput,
                     twistSetpoint.dy + yOutput,
-                    twistSetpoint.dtheta + oOutput,
+                    twistSetpoint.dtheta + thetaOutput,
                     poseEstimator.getPose().getRotation()
                 );
                 // fallthrough to VELOCITY case; no break statement needed
@@ -303,6 +303,18 @@ public class Drive extends SubsystemBase {
 
     public ChassisSpeeds getPrevSpeeds() {
         return prevSpeeds;
+    }
+
+    public PIDController getXController() {
+        return xPID;
+    }
+
+    public PIDController getYController() {
+        return yPID;
+    }
+
+    public PIDController getThetaController() {
+        return thetaPID;
     }
     
     // ————— utils ————— //
