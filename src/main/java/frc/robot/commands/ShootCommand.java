@@ -14,7 +14,7 @@ import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
 import frc.robot.utils.ShooterCalculator.*;
 
-public class ShooterCommand extends Command {
+public class ShootCommand extends Command {
     private final PoseEstimator poseEstimator;
     
     private final Intake intake;
@@ -23,7 +23,7 @@ public class ShooterCommand extends Command {
     
     private final Supplier<Pose2d> targetPoseSupplier;
 
-    public ShooterCommand(
+    public ShootCommand(
         PoseEstimator poseEstimator,
         Intake intake,
         Hopper hopper,

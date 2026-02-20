@@ -2,78 +2,76 @@ package frc.robot.subsystems.fuelIO.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.revrobotics.*;
-import com.revrobotics.spark.*;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.ctre.phoenix6.*;
+import com.ctre.phoenix6.hardware.*;
+import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.units.measure.*;
-import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class HoodIOReal implements HoodIO {
-    private final SparkMax motor;
-    private final SparkMaxConfig motorConfig = new SparkMaxConfig();
-    private final RelativeEncoder encoder;
+    private final TalonFX motor;
+    private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
-    public HoodIOReal(int hoodId) {
-        motor = new SparkMax(hoodId, MotorType.kBrushless);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
+    private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
 
-        // start config
-        motor.setCANTimeout(500);
+    private final StatusSignal<Voltage> voltageSignal;
+    private final StatusSignal<Current> currentSignal;
+    private final StatusSignal<Angle> positionSignal;
+    private final StatusSignal<AngularVelocity> velocitySignal;
+    private final StatusSignal<Temperature> temperatureSignal;
 
-        // encoders
-        encoder = motor.getEncoder();
-        encoder.setPosition(Constants.HOOD_START_ANGLE.in(Rotations));
+    public HoodIOReal(int id) {
+        motor = new TalonFX(id);
 
-        // pid 
-        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.HOOD_PID);
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute))); // !
-        motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
-        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
+        // motor config
+        motorConfig.Slot0 = FuelConstants.HOOD_PIDF;
+        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        motor.getConfigurator().apply(motorConfig);
 
-        // miscellaneous settings
-        motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
-        motorConfig.encoder.quadratureMeasurementPeriod(10);
-        motorConfig.encoder.quadratureAverageDepth(2);
-
-        motorConfig.smartCurrentLimit(30);
-        motorConfig.voltageCompensation(12);
-
-        motorConfig.inverted(true); // ! 
-
-        motorConfig.idleMode(IdleMode.kBrake);
-
-        motorConfig.encoder
-        .positionConversionFactor(1 / FuelConstants.HOOD_GEAR_RATIO)
-        .velocityConversionFactor(1 / FuelConstants.HOOD_GEAR_RATIO);
-
-        // stop config
-        motor.setCANTimeout(0);
-        motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // status signals
+        voltageSignal = motor.getMotorVoltage();
+        currentSignal = motor.getStatorCurrent();
+        positionSignal = motor.getPosition();
+        velocitySignal = motor.getVelocity();
+        temperatureSignal = motor.getDeviceTemp();
+        BaseStatusSignal.setUpdateFrequencyForAll(
+            50.0, 
+            voltageSignal, 
+            currentSignal, 
+            positionSignal, 
+            velocitySignal, 
+            temperatureSignal
+        );
+        ParentDevice.optimizeBusUtilizationForAll(motor);
     }
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {
-        inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.current = motor.getOutputCurrent();
-        inputs.position = encoder.getPosition();
-        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
-        inputs.temperature = motor.getMotorTemperature();
+        BaseStatusSignal.refreshAll(
+            voltageSignal, 
+            currentSignal, 
+            positionSignal, 
+            velocitySignal, 
+            temperatureSignal
+        );
+        
+        inputs.voltage = voltageSignal.getValue().in(Volts);
+        inputs.current = currentSignal.getValue().in(Amps);
+        inputs.position = positionSignal.getValue().in(Rotations);
+        inputs.velocity = velocitySignal.getValue().in(RotationsPerSecond);
+        inputs.temperature = temperatureSignal.getValue().in(Celsius);
     }
 
     @Override
     public void setVoltage(Voltage volts) {
-        motor.setVoltage(volts);
+        motor.setControl(voltageRequest.withOutput(volts));
     }
 
     @Override
     public void setPosition(Angle angle) {
-        motor.getClosedLoopController().setSetpoint(
-            angle.in(Rotations), 
-            SparkMax.ControlType.kMAXMotionPositionControl, 
-            ClosedLoopSlot.kSlot0, 
-            FuelConstants.HOOD_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
-        );
+        motor.setControl(positionVoltageRequest.withPosition(angle));
     }
 }

@@ -43,11 +43,8 @@ public class RobotContainer {
 
     // ————— testing variables ————— //
 
-    private final Pose2d startPose = Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM
-        ? new Pose2d(3, 3, new Rotation2d())
-        : new Pose2d(0, 0, new Rotation2d()); // ! should be in constants
-    private double shooterVelocity = 0; // ! 
-    private double hoodAngle = 0; // ! 
+    private double shooterVelocity = 0;
+    private double hoodAngle = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -65,7 +62,7 @@ public class RobotContainer {
                         new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
                     }, 
                     drive, 
-                    startPose
+                    Constants.ROBOT_START_POSE
                 );
                 intake = new Intake(
                     new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID), 
@@ -102,7 +99,7 @@ public class RobotContainer {
                         )
                     },
                     drive, 
-                    startPose
+                    Constants.ROBOT_START_POSE
                 );
                 intake = new Intake(
                     new IntakeIOSim(), 
@@ -190,7 +187,7 @@ public class RobotContainer {
 
         // shoot and turn robot towards // ! somewhere
         controller.y().whileTrue(
-            new ShooterCommand(
+            new ShootCommand(
                 poseEstimator,
                 intake,
                 hopper,
@@ -224,7 +221,7 @@ public class RobotContainer {
 
         // ————— raw fuel bindings ————— //
 
-        // intake
+        // // intake
         // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
@@ -232,20 +229,21 @@ public class RobotContainer {
         // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
         // controller.b().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
-        // hopper
+        // // hopper
         // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
         // controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
 
-        // shooter
+        // // shooter
         // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
-        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
+        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(70)));
+        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
-        // controller.x().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
-        // controller.y().onTrue(shooter.getSetHoodPositionCommand(Rotations.of(0.12)));
-        // controller.b().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
+        // controller.leftBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
+        // controller.rightBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
 
-        // controller.x().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
-        // controller.b().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
+        // controller.leftTrigger().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
+        // controller.rightTrigger().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
 
         // ————— testing ————— //
         
@@ -305,7 +303,7 @@ public class RobotContainer {
 
     private void configureSimulation() {
         // drive
-        driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, startPose);
+        driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
         // drive
@@ -361,8 +359,8 @@ public class RobotContainer {
             return;
         }
 
-        driveSimulation.setSimulationWorldPose(startPose);
-        poseEstimator.resetPosition(startPose);
+        driveSimulation.setSimulationWorldPose(Constants.ROBOT_START_POSE);
+        poseEstimator.resetPosition(Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 }

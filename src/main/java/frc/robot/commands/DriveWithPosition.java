@@ -40,8 +40,6 @@ public class DriveWithPosition extends Command {
         this.targetTransform = targetTransform;
     }
 
-    // ! add driving to a specific apriltag
-
     @Override
     public void initialize() {
         if (targetTransform != null) {

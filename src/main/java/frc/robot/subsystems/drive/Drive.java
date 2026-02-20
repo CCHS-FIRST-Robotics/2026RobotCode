@@ -322,20 +322,4 @@ public class Drive extends SubsystemBase {
     public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration) {
         return MathUtil.clamp(velocity, prevVelocity - maxAcceleration, prevVelocity + maxAcceleration);
     }
-
-    public double[] getWheelRadiusCharacterizationPositions() {
-        double[] values = new double[4];
-        for (int i = 0; i < 4; i++) {
-            values[i] = modules[i].getWheelRadiusCharacterizationPosition();
-        }
-        return values;
-    }
-
-    public double getFFCharacterizationVelocity() {
-        double output = 0.0;
-        for (int i = 0; i < 4; i++) {
-            output += modules[i].getFFCharacterizationVelocity() / 4.0;
-        }
-        return output;
-    }
 }

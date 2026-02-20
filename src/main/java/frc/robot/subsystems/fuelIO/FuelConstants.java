@@ -21,10 +21,10 @@ public class FuelConstants {
     
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
     public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect, but no one cares
-    public static final double PIVOT_GEAR_RATIO = 25.0 * 50.0 / 84.0; // ! 
+    public static final double PIVOT_GEAR_RATIO = 25.0 / 84.0 * 50.0;
     public static final double HOPPER_GEAR_RATIO = 4.0;
     public static final double SHOOTER_GEAR_RATIO = 1;
-    public static final double HOOD_GEAR_RATIO = 60.0 / 17.0;
+    public static final double HOOD_GEAR_RATIO = 60.0 / 17.0; // ! ! ! ! ! ! ! ! ! 
     public static final double KICKER_GEAR_RATIO = 1;
 
     // ————— PIDF ————— //
@@ -32,16 +32,22 @@ public class FuelConstants {
     public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! needs tuning
     public static final double PIVOT_KCOS = 0.22; // ! needs tuning
 
-    public static final ClosedLoopConfig HOOD_PID = new ClosedLoopConfig().pid(5, 0, 0); // ! needs tuning
-    public static final double HOOD_KCOS = 0; // ! needs tuning
-
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
-    .withKP(2)
+    .withKP(0.3)
     .withKI(0)
     .withKD(0)
     .withKS(0)
     .withKV(0.13259)
     .withKA(0);
+
+    public static final Slot0Configs HOOD_PIDF = new Slot0Configs() // ! needs tuning
+    .withKP(0)
+    .withKI(0)
+    .withKD(0)
+    .withKS(0)
+    .withKV(0)
+    .withKA(0);
+    // ! probably doesn't need kcos
 
     // ————— physical constants ————— //
     
@@ -50,6 +56,6 @@ public class FuelConstants {
     public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
 
     // when hood is zeroed at horizontal
-    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.25); // !
-    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0); // !
+    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.05);
+    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0);
 }
