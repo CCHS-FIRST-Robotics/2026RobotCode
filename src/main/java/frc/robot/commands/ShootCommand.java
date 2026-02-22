@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
+import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
@@ -47,7 +48,9 @@ public class ShootCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() { 
+        Translation2d robotToTarget = poseEstimator.getPose().getTranslation().minus(targetPoseSupplier.get().getTranslation());
+        Logger.recordOutput("distFromTarget", robotToTarget.getNorm());
         // shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
     }
 

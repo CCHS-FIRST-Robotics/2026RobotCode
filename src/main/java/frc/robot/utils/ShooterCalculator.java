@@ -17,11 +17,11 @@ public class ShooterCalculator {
     public static final InterpolatingTreeMap<Double, ShooterState> SHOOTER_STATE_MAP = new InterpolatingTreeMap<>(
         InverseInterpolator.forDouble(), // ! idk why it's inverse
         ShooterState::interpolate
-    ); // ! should probably be in a constants file
+    );
     
     static {
-        SHOOTER_STATE_MAP.put(5.34, new ShooterState(RotationsPerSecond.of(2900), Degrees.of(27)));
-        SHOOTER_STATE_MAP.put(4.90, new ShooterState(RotationsPerSecond.of(2700), Degrees.of(26)));
+        SHOOTER_STATE_MAP.put(4.500495, new ShooterState(RotationsPerSecond.of(30.187498), Rotations.of(0.04)));
+        SHOOTER_STATE_MAP.put(4.721449, new ShooterState(RotationsPerSecond.of(25.156248), Rotations.of(0.02)));
     }
 
     // get the shooter state in order to shoot at the target pose

@@ -219,6 +219,8 @@ public class RobotContainer {
             )
         );
 
+        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+
         // ————— raw fuel bindings ————— //
 
         // // intake
@@ -234,16 +236,14 @@ public class RobotContainer {
         // controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
 
         // // shooter
-        // controller.x().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(20)));
-        // controller.y().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
-        // controller.b().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(70)));
-        // controller.a().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
+        // controller.rightTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
+        // controller.leftTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
 
         // controller.leftBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
         // controller.rightBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
 
-        // controller.leftTrigger().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
-        // controller.rightTrigger().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
+        // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
+        // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // ————— testing ————— //
         
@@ -252,33 +252,33 @@ public class RobotContainer {
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
 
-        controller.leftTrigger().onTrue(
-            new InstantCommand(() -> {
-                shooterVelocity -= 2.5;
-                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-            })
-        );
+        // controller.leftTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         shooterVelocity -= 2.5;
+        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //     })
+        // );
 
-        controller.rightTrigger().onTrue(
-            new InstantCommand(() -> {
-                shooterVelocity += 2.5;
-                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-            })
-        );
+        // controller.rightTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         shooterVelocity += 2.5;
+        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //     })
+        // );
 
-        controller.leftBumper().onTrue(
-            new InstantCommand(() -> {
-                hoodAngle += 0.01;
-                shooter.setHoodPosition(Rotations.of(hoodAngle));
-            })
-        );
+        // controller.leftBumper().onTrue(
+        //     new InstantCommand(() -> {
+        //         hoodAngle += 0.01;
+        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //     })
+        // );
 
-        controller.rightBumper().onTrue(
-            new InstantCommand(() -> {
-                hoodAngle -= 0.01;
-                shooter.setHoodPosition(Rotations.of(hoodAngle));
-            })
-        );
+        // controller.rightBumper().onTrue(
+        //     new InstantCommand(() -> {
+        //         hoodAngle -= 0.01;
+        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //     })
+        // );
     }
 
     // ————— autos ————— //

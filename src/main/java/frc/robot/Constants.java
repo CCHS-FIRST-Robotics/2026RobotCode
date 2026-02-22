@@ -20,15 +20,15 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0; // 0 for gamesir, 1 for xbox
     
-    public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM
-        ? new Pose2d(3, 3, new Rotation2d())
-        : new Pose2d(0, 0, new Rotation2d());
+    public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
+    new Pose2d(3, 3, new Rotation2d()) : 
+    new Pose2d(0, 0, new Rotation2d());
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // !
     public static final Angle HOOD_START_ANGLE = FuelConstants.HOOD_DOWN_ANGLE;
     
     public static final boolean ENABLE_PIVOT_SET_POSITION = false;
-    public static final boolean ENABLE_HOOD_SET_POSITION = false;
+    public static final boolean ENABLE_HOOD_SET_POSITION = true;
 
     public static class FieldConstants {
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);

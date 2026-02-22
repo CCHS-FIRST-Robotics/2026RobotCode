@@ -19,7 +19,6 @@ public class Shooter extends SubsystemBase {
     private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
     private AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
-    private Angle hoodAngle = Constants.HOOD_START_ANGLE;
 
     public Shooter(
         ShooterIO shooterIO, 
@@ -42,10 +41,6 @@ public class Shooter extends SubsystemBase {
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) { // in sim, shooter PID needs to be called constantly
             shooterIO.setVelocity(shooterVelocity);
-        }
-
-        if (Constants.ENABLE_HOOD_SET_POSITION) {
-            hoodIO.setPosition(hoodAngle);
         }
     }
 
@@ -84,7 +79,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setHoodPosition(Angle angle) {
-        hoodAngle = angle;
+        hoodIO.setPosition(angle);
     }
 
     public Command getSetHoodPositionCommand(Angle angle) {

@@ -24,7 +24,7 @@ public class FuelConstants {
     public static final double PIVOT_GEAR_RATIO = 25.0 / 84.0 * 50.0;
     public static final double HOPPER_GEAR_RATIO = 4.0;
     public static final double SHOOTER_GEAR_RATIO = 1;
-    public static final double HOOD_GEAR_RATIO = 60.0 / 17.0; // ! ! ! ! ! ! ! ! ! 
+    public static final double HOOD_GEAR_RATIO = 64.0 / 30.0 * 60.0;
     public static final double KICKER_GEAR_RATIO = 1;
 
     // ————— PIDF ————— //
@@ -41,7 +41,7 @@ public class FuelConstants {
     .withKA(0);
 
     public static final Slot0Configs HOOD_PIDF = new Slot0Configs() // ! needs tuning
-    .withKP(0)
+    .withKP(70)
     .withKI(0)
     .withKD(0)
     .withKS(0)
