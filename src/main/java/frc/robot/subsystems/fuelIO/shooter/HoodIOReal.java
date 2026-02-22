@@ -4,9 +4,9 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.*;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
@@ -15,7 +15,7 @@ public class HoodIOReal implements HoodIO {
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     private final VoltageOut voltageRequest = new VoltageOut(0);
-    private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
+    private final PositionVoltage positionVoltageRequest = new PositionVoltage(0);
 
     private final StatusSignal<Voltage> voltageSignal;
     private final StatusSignal<Current> currentSignal;
@@ -27,16 +27,13 @@ public class HoodIOReal implements HoodIO {
         motor = new TalonFX(id);
 
         // motor config
-        motorConfig.Slot0 = FuelConstants.HOOD_PIDF;
-
         motor.setPosition(Rotations.of(0));
-
-        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
-        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        motorConfig.Slot0 = FuelConstants.HOOD_PIDF;
         motorConfig.Feedback.withSensorToMechanismRatio(FuelConstants.HOOD_GEAR_RATIO);
+        motorConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        motorConfig.CurrentLimits.StatorCurrentLimit = 40;
         motor.getConfigurator().apply(motorConfig);
-
 
         // status signals
         voltageSignal = motor.getMotorVoltage();

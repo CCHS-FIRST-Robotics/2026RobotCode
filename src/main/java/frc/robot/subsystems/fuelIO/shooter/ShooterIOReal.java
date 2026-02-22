@@ -14,7 +14,7 @@ public class ShooterIOReal implements ShooterIO {
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     private final VoltageOut voltageRequest = new VoltageOut(0);
-    private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0.0);
+    private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0);
 
     private final StatusSignal<Voltage> voltageSignal;
     private final StatusSignal<Current> currentSignal;
