@@ -12,14 +12,14 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 public class HoodIOSim implements HoodIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
-            DCMotor.getNEO(1), 
+            DCMotor.getKrakenX60(1), 
             0.00001, 
             1
         ), 
-        DCMotor.getNEO(1)
+        DCMotor.getKrakenX60(1)
     );
 
-    private final PIDController PID = new PIDController(2, 0, 0);
+    private final PIDController PID = new PIDController(150, 0, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
 

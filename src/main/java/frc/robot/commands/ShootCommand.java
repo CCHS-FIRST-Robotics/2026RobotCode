@@ -51,13 +51,13 @@ public class ShootCommand extends Command {
     public void execute() { 
         Translation2d robotToTarget = poseEstimator.getPose().getTranslation().minus(targetPoseSupplier.get().getTranslation());
         Logger.recordOutput("distFromTarget", robotToTarget.getNorm());
-        // shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
+        shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
     }
 
     @Override
     public void end(boolean interrupted) {
         hopper.setHopperVoltage(Volts.of(0));
-        // shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), FuelConstants.HOOD_DOWN_ANGLE));
+        shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), FuelConstants.HOOD_DOWN_ANGLE));
         shooter.setKickerVoltage(Volts.of(0));
     }
 }

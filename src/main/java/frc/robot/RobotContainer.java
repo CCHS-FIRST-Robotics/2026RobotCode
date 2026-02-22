@@ -252,33 +252,33 @@ public class RobotContainer {
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
 
-        // controller.leftTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity -= 2.5;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        controller.leftTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity -= 1.25;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
 
-        // controller.rightTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity += 2.5;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        controller.rightTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity += 1.25;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
 
-        // controller.leftBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle += 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        controller.leftBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle += 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
 
-        // controller.rightBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle -= 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        controller.rightBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle -= 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
     }
 
     // ————— autos ————— //
