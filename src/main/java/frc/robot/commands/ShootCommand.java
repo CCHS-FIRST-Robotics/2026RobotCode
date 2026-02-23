@@ -50,7 +50,7 @@ public class ShootCommand extends Command {
     @Override
     public void execute() { 
         Translation2d robotToTarget = poseEstimator.getPose().getTranslation().minus(targetPoseSupplier.get().getTranslation());
-        Logger.recordOutput("distFromTarget", robotToTarget.getNorm());
+        Logger.recordOutput("outputs/poseEstimator/distFromTarget", robotToTarget.getNorm());
         shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(poseEstimator.getPose(), targetPoseSupplier.get()));
     }
 

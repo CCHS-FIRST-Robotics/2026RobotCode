@@ -40,7 +40,7 @@ public class Shooter extends SubsystemBase {
         kickerIO.updateInputs(kickerIOInputs);
         Logger.processInputs("subsystems/fuelIO/shooter/kicker", kickerIOInputs);
 
-        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) { // in sim, shooter PID needs to be called constantly
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) { // sim PIDs must be called externally
             shooterIO.setVelocity(shooterVelocity);
             hoodIO.setPosition(hoodAngle);
         }
@@ -111,8 +111,8 @@ public class Shooter extends SubsystemBase {
     @AutoLogOutput(key = "outputs/fuelIO/shooter/linearVelocity")
     public double getShooterLinearVelocity() {
         double angularVelocity = RotationsPerSecond.of(shooterIOInputs.velocity).in(RadiansPerSecond);
-        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity * 2);
-        return linearVelocity.in(MetersPerSecond); // multiply by shooter wheel radius
+        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
+        return linearVelocity.in(MetersPerSecond) / 2; // because backspin: https://www.chiefdelphi.com/t/determine-flywheel-velocity-for-ball-exit-velocity/394940/2
     }
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/hoodShotAngle")

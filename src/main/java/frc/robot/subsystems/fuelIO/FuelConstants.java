@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 
 public class FuelConstants {
@@ -17,8 +18,8 @@ public class FuelConstants {
     public static final int HOOD_MOTOR_ID = 54;
     public static final int KICKER_MOTOR_ID = 55;
 
-    // ————— kinematics ————— //
-    
+    // ————— physical constants ————— //
+
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
     public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect, but no one cares
     public static final double PIVOT_GEAR_RATIO = 25.0 / 84.0 * 50.0;
@@ -26,6 +27,22 @@ public class FuelConstants {
     public static final double SHOOTER_GEAR_RATIO = 1;
     public static final double HOOD_GEAR_RATIO = 64.0 / 30.0 * 60.0;
     public static final double KICKER_GEAR_RATIO = 1;
+    
+    // when pivot is zeroed at horizontal
+    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3);
+    public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
+
+    // when hood is zeroed at horizontal
+    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.05);
+    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0);
+
+    public static final Distance INTAKE_WIDTH = Inches.of(11.5); // ! 
+    public static final Transform3d SHOOTER_POSITION = new Transform3d(
+        Inches.of(11), 
+        Inches.of(0), 
+        Inches.of(18), 
+        new Rotation3d()
+    ); // ! 
 
     // ————— PIDF ————— //
 
@@ -48,14 +65,4 @@ public class FuelConstants {
     .withKV(0)
     .withKA(0);
     // ! probably doesn't need kcos
-
-    // ————— physical constants ————— //
-    
-    // when pivot is zeroed at horizontal
-    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3);
-    public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
-
-    // when hood is zeroed at horizontal
-    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.05);
-    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0);
 }

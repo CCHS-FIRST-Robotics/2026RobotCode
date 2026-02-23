@@ -294,8 +294,12 @@ public class Drive extends SubsystemBase {
         return sampleModuleDeltas;
     }
 
-    public ChassisSpeeds getPrevSpeeds() {
+    public ChassisSpeeds getRobotRelativeSpeeds() {
         return prevSpeeds;
+    }
+
+    public ChassisSpeeds getFieldRelativeSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(prevSpeeds, poseEstimator.getPose().getRotation());
     }
 
     public PIDController getXController() {

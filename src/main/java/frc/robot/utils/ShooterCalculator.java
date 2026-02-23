@@ -20,17 +20,18 @@ public class ShooterCalculator {
     );
     
     static {
-        SHOOTER_STATE_MAP.put(4.3661181434947265, new ShooterState(RotationsPerSecond.of(28.929685), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(22.640623), Rotations.of(0.03)));
-        SHOOTER_STATE_MAP.put(4.439996114327355, new ShooterState(RotationsPerSecond.of(23.898436), Rotations.of(0.08)));
-        SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(18.867186), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(3.134703804104257, new ShooterState(RotationsPerSecond.of(25.156248), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(2.597315571788894, new ShooterState(RotationsPerSecond.of(22.640623), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(3.7132919261998163, new ShooterState(RotationsPerSecond.of(23.898436), Rotations.of(0.06)));
-    } // ! I wonder how they're doing it for passing
+        SHOOTER_STATE_MAP.put(4.3661181434947265, new ShooterState(RotationsPerSecond.of(57.85937), Rotations.of(0.04)));
+        SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.03)));
+        SHOOTER_STATE_MAP.put(4.439996114327355, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.08)));
+        SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(37.734372), Rotations.of(0.04)));
+        SHOOTER_STATE_MAP.put(3.134703804104257, new ShooterState(RotationsPerSecond.of(50.312496), Rotations.of(0.04)));
+        SHOOTER_STATE_MAP.put(2.597315571788894, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.04)));
+        SHOOTER_STATE_MAP.put(3.7132919261998163, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.06)));
+    }
 
     // get the shooter state in order to shoot at the target pose
     public static ShooterState getShooterStateFromMap(Pose2d robotPose, Pose2d targetPose) {
+        // ! so we need to account for robot movement
         Transform2d robotToTarget = robotPose.minus(targetPose);
         ShooterState shot = SHOOTER_STATE_MAP.get(robotToTarget.getTranslation().getNorm());
         return new ShooterState(shot.velocity, shot.angle);
@@ -41,8 +42,6 @@ public class ShooterCalculator {
         Translation2d targetToRobot = targetPose.getTranslation().minus(robotPose.getTranslation());
         return new Rotation2d(Math.atan2(targetToRobot.getY(), targetToRobot.getX()));
     }
-
-    // add getShooterStateFromMath
 
     // get where the robot should be aiming based on its position on the field and its allaince
     public static Pose2d getTargetPoseFromRobotPosition(Supplier<Pose2d> robotPoseSupplier) {

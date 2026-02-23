@@ -43,8 +43,8 @@ public class RobotContainer {
 
     // ————— testing variables ————— //
 
-    private double shooterVelocity = 0;
-    private double hoodAngle = 0;
+    // private double shooterVelocity = 0;
+    // private double hoodAngle = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -212,7 +212,7 @@ public class RobotContainer {
                         () -> shooter.getShooterLinearVelocity(), 
                         () -> shooter.getHoodShotAngle(),
                         Rotations.of(0),
-                        new Transform3d(Inches.of(11), Inches.of(0), Inches.of(18), new Rotation3d())
+                        FuelConstants.SHOOTER_POSITION
                     )
                 ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
                 new InstantCommand()
@@ -252,33 +252,33 @@ public class RobotContainer {
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
 
-        controller.leftTrigger().onTrue(
-            new InstantCommand(() -> {
-                shooterVelocity -= 1.25;
-                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-            })
-        );
+        // controller.leftTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         shooterVelocity -= 1.25;
+        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //     })
+        // );
 
-        controller.rightTrigger().onTrue(
-            new InstantCommand(() -> {
-                shooterVelocity += 1.25;
-                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-            })
-        );
+        // controller.rightTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         shooterVelocity += 1.25;
+        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //     })
+        // );
 
-        controller.leftBumper().onTrue(
-            new InstantCommand(() -> {
-                hoodAngle += 0.01;
-                shooter.setHoodPosition(Rotations.of(hoodAngle));
-            })
-        );
+        // controller.leftBumper().onTrue(
+        //     new InstantCommand(() -> {
+        //         hoodAngle += 0.01;
+        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //     })
+        // );
 
-        controller.rightBumper().onTrue(
-            new InstantCommand(() -> {
-                hoodAngle -= 0.01;
-                shooter.setHoodPosition(Rotations.of(hoodAngle));
-            })
-        );
+        // controller.rightBumper().onTrue(
+        //     new InstantCommand(() -> {
+        //         hoodAngle -= 0.01;
+        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //     })
+        // );
     }
 
     // ————— autos ————— //
@@ -313,10 +313,10 @@ public class RobotContainer {
             DriveConstants.WIDTH_Y.in(Meters),
             Inches.of(6).in(Meters),
             () -> poseEstimator.getPose(),
-            () -> drive.getPrevSpeeds() // ! might be robot relative and probably is
+            () -> drive.getFieldRelativeSpeeds()
         );
         fuelSimulation.registerIntake(
-            -DriveConstants.WIDTH_X.div(2).in(Meters) - Inches.of(11.5).in(Meters),
+            -DriveConstants.WIDTH_X.div(2).in(Meters) - FuelConstants.INTAKE_WIDTH.in(Meters),
             -DriveConstants.WIDTH_X.div(2).in(Meters),
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),

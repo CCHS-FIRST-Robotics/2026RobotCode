@@ -16,6 +16,8 @@ public final class Constants {
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
+    public static final boolean REALISTIC_MATCH_IN_SIM = false; // ! rename lol
+
     public static final boolean USE_ALLIANCE_FLIPPING = false; // !
 
     public static final int CONTROLLER_PORT = 0; // 0 for gamesir, 1 for xbox
@@ -28,7 +30,7 @@ public final class Constants {
     public static final Angle HOOD_START_ANGLE = FuelConstants.HOOD_DOWN_ANGLE;
     
     public static final boolean ENABLE_PIVOT_SET_POSITION = false;
-    public static final boolean ENABLE_HOOD_SET_POSITION = true;
+    public static final boolean ENABLE_HOOD_SET_POSITION = true; // ! this isn't even a thing anymore
 
     public static class FieldConstants {
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);
