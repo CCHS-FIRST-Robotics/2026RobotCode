@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
 import choreo.auto.AutoChooser;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
+import frc.robot.utils.HubTracker.Shift;
 
 public class RobotContainer {
     // ————— controllers ————— //
@@ -155,7 +158,7 @@ public class RobotContainer {
             new DriveWithJoysticks(
                 drive, 
                 poseEstimator,
-                () -> -controller.getLeftY(), // xbox controller is flipped
+                () -> -controller.getLeftY(), // xbox controller is flipped, x velocity relative to field is "forward" from driver perspective
                 () -> controller.getLeftX(), 
                 () -> controller.getRightX(),
                 null
@@ -208,18 +211,25 @@ public class RobotContainer {
             ).alongWith(
                 Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
                 new InstantCommand(
-                    () -> fuelSimulation.launchFuel(
-                        () -> shooter.getShooterLinearVelocity(), 
-                        () -> shooter.getHoodShotAngle(),
-                        Rotations.of(0),
-                        FuelConstants.SHOOTER_POSITION
-                    )
+                    () -> {
+                        if (Constants.REALISTIC_SIM) {
+                            if (hopper.getHopperEmpty()) {
+                                return;
+                            }
+                            hopper.shootFuel();
+                        }
+
+                        fuelSimulation.launchFuel(
+                            () -> shooter.getShooterLinearVelocity(), 
+                            () -> shooter.getHoodShotAngle(),
+                            Rotations.of(0),
+                            FuelConstants.SHOOTER_POSITION
+                        );
+                    }
                 ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
                 new InstantCommand()
             )
         );
-
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
 
         // ————— raw fuel bindings ————— //
 
@@ -281,7 +291,7 @@ public class RobotContainer {
         // );
     }
 
-    // ————— autos ————— //
+    // ————— autonomous ————— //
 
     private void configureAutos() {
         autoGenerator = new AutoGenerator(drive, poseEstimator, driveSimulation);
@@ -290,13 +300,43 @@ public class RobotContainer {
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
 
-        autoChooser.select("Back Up"); // pick a default auto
+        autoChooser.select("Back Up"); // picks a default auto
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
+    public void autonomousPeriodic() {
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
+            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubTracker.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubTracker.getCurrentShift().orElse(HubTracker.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubTracker.isActive());
+            Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/hubScore", 
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                FuelSim.BLUE_HUB.getScore() : 
+                FuelSim.RED_HUB.getScore()
+            );
+        }
+    }
+
     public Command getAutonomousCommand() { // called by Robot.java on autonomousInit
         return autoChooser.selectedCommand();
+    }
+
+    // ————— teleop ————— //
+
+    public void teleopPeriodic() {
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
+            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubTracker.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubTracker.getCurrentShift().orElse(HubTracker.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubTracker.isActive());
+            Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/hubScore", 
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                FuelSim.BLUE_HUB.getScore() : 
+                FuelSim.RED_HUB.getScore()
+            );
+        }
     }
 
     // ————— simulation ————— //
@@ -307,7 +347,7 @@ public class RobotContainer {
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
         // drive
-        fuelSimulation = new FuelSim("FuelSimulation");
+        fuelSimulation = new FuelSim();
         fuelSimulation.registerRobot(
             DriveConstants.WIDTH_X.in(Meters),
             DriveConstants.WIDTH_Y.in(Meters),
@@ -316,51 +356,58 @@ public class RobotContainer {
             () -> drive.getFieldRelativeSpeeds()
         );
         fuelSimulation.registerIntake(
-            -DriveConstants.WIDTH_X.div(2).in(Meters) - FuelConstants.INTAKE_WIDTH.in(Meters),
+            -DriveConstants.WIDTH_X.div(2).in(Meters) - FuelConstants.INTAKE_WIDTH_X.in(Meters),
             -DriveConstants.WIDTH_X.div(2).in(Meters),
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),
-            () -> intake.getIntakeOn(), 
-            () -> hopper.intakeFuel()
+            () -> {
+                return intake.getIntakeOn() && (Constants.REALISTIC_SIM ? !hopper.getHopperFull() : true);
+            }, 
+            () -> {
+                if (Constants.REALISTIC_SIM) {
+                    if (hopper.getHopperFull()) {
+                        return;
+                    }
+                    hopper.intakeFuel();
+                }
+            }
         );
         fuelSimulation.setSubticks(1);
         fuelSimulation.start();
 
-        // fuelSimulation.spawnStartingFuel();
+        if (Constants.REALISTIC_SIM) {
+            fuelSimulation.spawnStartingFuel();
+        }
     }
 
-    public void updateSimulation() { // called by Robot.java on simulationPeriodic
+    public void simulationPeriodic() { // called by Robot.java on simulationPeriodic
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // not sure if this has to be here if it's only called in simulationPeriodic
             return;
         }
 
         // drive
         SimulatedArena.getInstance().simulationPeriodic();
-        Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
-        Logger.recordOutput(
-            "FieldSimulation/Coral", 
-            SimulatedArena.getInstance().getGamePiecesArrayByType("Coral")
-        );
-        Logger.recordOutput(
-            "FieldSimulation/Algae", 
-            SimulatedArena.getInstance().getGamePiecesArrayByType("Algae")
-        );
-        Logger.recordOutput(
-            "FieldSimulation/Note", 
-            SimulatedArena.getInstance().getGamePiecesArrayByType("Note")
-        );
+        Logger.recordOutput("outputs/simulation/fieldSimulation/robotPosition", driveSimulation.getSimulatedDriveTrainPose());
 
         // fuel
         fuelSimulation.stepSim();
     }
 
-    public void resetSimulationField() { // called by Robot.java on disabledInit (only runs if in SIM mode)
+    public void resetSimulation() { // called by Robot.java on disabledInit (only runs if in SIM mode)
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
             return;
         }
 
+        // drive
         driveSimulation.setSimulationWorldPose(Constants.ROBOT_START_POSE);
         poseEstimator.resetPosition(Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().resetFieldForAuto();
+
+        // fuel
+        fuelSimulation.clearFuel();
+
+        if (Constants.REALISTIC_SIM) {
+            fuelSimulation.spawnStartingFuel();
+        }
     }
 }

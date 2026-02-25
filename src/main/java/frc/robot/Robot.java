@@ -1,7 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+
 import org.littletonrobotics.junction.*;
 import org.littletonrobotics.junction.wpilog.*;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -45,7 +48,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        robotContainer.resetSimulationField();
+        robotContainer.resetSimulation();
     }
 
     @Override
@@ -72,7 +75,9 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        robotContainer.teleopPeriodic();
+    }
 
     @Override
     public void testInit() {
@@ -87,6 +92,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        robotContainer.updateSimulation();
+        robotContainer.simulationPeriodic();
     }
 }

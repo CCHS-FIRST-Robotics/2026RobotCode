@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.measure.*;
+import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class HoodIOReal implements HoodIO {
@@ -27,7 +28,7 @@ public class HoodIOReal implements HoodIO {
         motor = new TalonFX(id);
 
         // motor config
-        motor.setPosition(Rotations.of(0));
+        motor.setPosition(Constants.HOOD_START_ANGLE);
         motorConfig.Slot0 = FuelConstants.HOOD_PIDF;
         motorConfig.Feedback.withSensorToMechanismRatio(FuelConstants.HOOD_GEAR_RATIO);
         motorConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);

@@ -4,11 +4,13 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import java.util.ArrayList;
 import java.util.function.*;
+
+import org.littletonrobotics.junction.Logger;
 
 public class FuelSim {
     protected static final double PERIOD = 0.02; // sec
@@ -165,8 +167,8 @@ public class FuelSim {
             }
 
             // hubs
-            handleHubCollisions(Hub.BLUE_HUB, subticks);
-            handleHubCollisions(Hub.RED_HUB, subticks);
+            handleHubCollisions(BLUE_HUB, subticks);
+            handleHubCollisions(RED_HUB, subticks);
 
             handleTrenchCollisions();
         }
@@ -307,26 +309,14 @@ public class FuelSim {
 
     /**
      * Creates a new instance of FuelSim
-     * @param tableKey NetworkTable to log fuel positions to as an array of {@link Translation3d} structs.
      */
-    public FuelSim(String tableKey) {
+    public FuelSim() {
         // Initialize grid
         for (int i = 0; i < GRID_COLS; i++) {
             for (int j = 0; j < GRID_ROWS; j++) {
                 grid[i][j] = new ArrayList<Fuel>();
             }
         }
-
-        fuelPublisher = NetworkTableInstance.getDefault()
-                .getStructArrayTopic(tableKey + "/Fuels", Translation3d.struct)
-                .publish();
-    }
-
-    /**
-     * Creates a new instance of FuelSim with log path "/Fuel Simulation"
-     */
-    public FuelSim() {
-        this("/Fuel Simulation");
     }
 
     /**
@@ -373,13 +363,14 @@ public class FuelSim {
         // Logger.recordOutput("Fuel Simulation/Lines (debug)", lines);
     }
 
-    protected StructArrayPublisher<Translation3d> fuelPublisher;
-
     /**
      * Adds array of `Translation3d`'s to NetworkTables at tableKey + "/Fuels"
      */
     public void logFuels() {
-        fuelPublisher.set(fuels.stream().map((fuel) -> fuel.pos).toArray(Translation3d[]::new));
+        Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/fuels", 
+            fuels.stream().map((fuel) -> fuel.pos).toArray(Translation3d[]::new)
+        );
     }
 
     /**
@@ -724,14 +715,20 @@ public class FuelSim {
         registerIntake(xMin.in(Meters), xMax.in(Meters), yMin.in(Meters), yMax.in(Meters));
     }
 
-    public static class Hub {
-        public static final Hub BLUE_HUB =
-                new Hub(new Translation2d(4.61, FIELD_WIDTH / 2), new Translation3d(5.3, FIELD_WIDTH / 2, 0.89), 1);
-        public static final Hub RED_HUB = new Hub(
-                new Translation2d(FIELD_LENGTH - 4.61, FIELD_WIDTH / 2),
-                new Translation3d(FIELD_LENGTH - 5.3, FIELD_WIDTH / 2, 0.89),
-                -1);
+    public static final Hub BLUE_HUB = new Hub(
+            new Translation2d(4.61, FIELD_WIDTH / 2), 
+            new Translation3d(5.3, FIELD_WIDTH / 2, 0.89), 
+            1,
+            Alliance.Blue
+        );
+    public static final Hub RED_HUB = new Hub(
+        new Translation2d(FIELD_LENGTH - 4.61, FIELD_WIDTH / 2),
+        new Translation3d(FIELD_LENGTH - 5.3, FIELD_WIDTH / 2, 0.89),
+        -1,
+        Alliance.Red
+    );
 
+    public static class Hub {
         protected static final double ENTRY_HEIGHT = 1.83;
         protected static final double ENTRY_RADIUS = 0.56;
 
@@ -745,20 +742,24 @@ public class FuelSim {
         protected final Translation2d center;
         protected final Translation3d exit;
         protected final int exitVelXMult;
+        protected final Alliance alliance;
 
         protected int score = 0;
 
-        protected Hub(Translation2d center, Translation3d exit, int exitVelXMult) {
+        protected Hub(Translation2d center, Translation3d exit, int exitVelXMult, Alliance alliance) {
             this.center = center;
             this.exit = exit;
             this.exitVelXMult = exitVelXMult;
+            this.alliance = alliance;
         }
 
         protected void handleHubInteraction(Fuel fuel, int subticks) {
             if (didFuelScore(fuel, subticks)) {
                 fuel.pos = exit;
                 fuel.vel = getDispersalVelocity();
-                score++;
+                if (HubTracker.isActive(alliance)) {
+                    score++;
+                }
             }
         }
 

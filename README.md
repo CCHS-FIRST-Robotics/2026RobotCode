@@ -27,7 +27,6 @@
      - Back dashboard IP address is 10.32.05.17:5800
  - Code: 
      - Template taken from https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced
-     - A lot was changed, check 
  - Advantagekit: 
      - Custom assets: https://docs.advantagescope.org/more-features/custom-assets
      - To set these up to be displayed in advantagescope, go to Help > Use Custom Assets Folder and then select the folder called "advantagescope_assets" in this project
@@ -38,13 +37,14 @@
  - MrCal: 
      - https://docs.google.com/document/d/1SDDetHYSshZeu1tcnOC5SHEPUEZCRtlPO9kb6NCubQs/edit?usp=sharing
  - CAN IDs: 
-     - Drivebase motors are 11, 12, 21, 22, 31, 32, 41, 42 (units digit 1 is drive, 2 is turn)
-     - Drivebase CANCoders are 1, 2, 3, 4
+     - Drivebase motors are 11, 12, 21, 22, 31, 32, 41, 42 (units digit 1 is drive, 2 is turn, 3 is CANCoder)
+     - Drivebase CANCoders are 13, 23, 33, 43
      - Pigeon is 5
      - Subsystems are 50, 51, ...
  - Phoenix Tuner X: 
-     - Must be running robot code to show any devices
+     - RoboRIO must be running robot code to show any devices
  - RevLib: 
     - Make sure version is fully updated before trying to flash firmware
     - To set up a Sparkmax, turn off all power, hold down reset button, and plug it into computer through usb-c
     - Should show up as Unknown Device in Rev Hardware Client and then you can format it from there
+    - Make sure there isn't secretly a new Rev Hardware Client app before flashing firmware

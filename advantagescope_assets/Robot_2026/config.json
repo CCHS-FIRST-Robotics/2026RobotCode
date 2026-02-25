@@ -32,6 +32,17 @@
                 {"axis": "y", "degrees": 0}, 
                 {"axis": "z", "degrees": 15}
             ]
+        },
+        {
+            "name": "Intake",
+            "fov": "92",
+            "resolution": [1920, 1400],
+            "position": [-0.6700, 0, 0.4890],
+            "rotations": [
+                {"axis": "x", "degrees": 0}, 
+                {"axis": "y", "degrees": 0}, 
+                {"axis": "z", "degrees": 180}
+            ]
         }
     ]
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.fuelIO.hopper;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.*;
 
@@ -45,5 +46,13 @@ public class Hopper extends SubsystemBase {
     @AutoLogOutput(key = "outputs/fuelIO/hopper/numFuel")
     public int getNumFuel() {
         return numFuel;
+    }
+
+    public boolean getHopperFull() {
+        return numFuel >= FuelConstants.HOPPER_FUEL_CAPACITY;
+    }
+
+    public boolean getHopperEmpty() {
+        return numFuel <= 0;
     }
 }

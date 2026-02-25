@@ -14,6 +14,7 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
 import frc.robot.utils.ShooterCalculator.*;
+import frc.robot.Constants;
 
 public class ShootCommand extends Command {
     private final PoseEstimator poseEstimator;
@@ -57,7 +58,7 @@ public class ShootCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         hopper.setHopperVoltage(Volts.of(0));
-        shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), FuelConstants.HOOD_DOWN_ANGLE));
+        shooter.runShooterState(new ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
         shooter.setKickerVoltage(Volts.of(0));
     }
 }

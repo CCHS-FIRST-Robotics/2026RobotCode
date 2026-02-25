@@ -29,20 +29,8 @@ public class FuelConstants {
     public static final double KICKER_GEAR_RATIO = 1;
     
     // when pivot is zeroed at horizontal
-    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3);
+    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3); // !
     public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
-
-    // when hood is zeroed at horizontal
-    public static final Angle HOOD_UP_ANGLE = Rotations.of(0.05);
-    public static final Angle HOOD_DOWN_ANGLE = Rotations.of(0);
-
-    public static final Distance INTAKE_WIDTH = Inches.of(11.5); // ! 
-    public static final Transform3d SHOOTER_POSITION = new Transform3d(
-        Inches.of(11), 
-        Inches.of(0), 
-        Inches.of(18), 
-        new Rotation3d()
-    ); // ! 
 
     // ————— PIDF ————— //
 
@@ -64,5 +52,15 @@ public class FuelConstants {
     .withKS(0)
     .withKV(0)
     .withKA(0);
-    // ! probably doesn't need kcos
+
+    // ————— sim ————— //
+    
+    public static final Distance INTAKE_WIDTH_X = Inches.of(11.5); // ! 
+    public static final int HOPPER_FUEL_CAPACITY = 30; // ! 
+    public static final Transform3d SHOOTER_POSITION = new Transform3d(
+        Inches.of(11), 
+        Inches.of(0), 
+        Inches.of(18), 
+        new Rotation3d()
+    ); // ! 
 }
