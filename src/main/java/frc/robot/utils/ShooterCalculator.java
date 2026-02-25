@@ -10,7 +10,8 @@ import edu.wpi.first.math.*;
 import edu.wpi.first.math.interpolation.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
-import java.util.function.Supplier;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.*;
 
 public class ShooterCalculator {
@@ -30,10 +31,8 @@ public class ShooterCalculator {
     }
 
     // get the shooter state in order to shoot at the target pose
-    public static ShooterState getShooterStateFromMap(Pose2d robotPose, Pose2d targetPose) {
-        // ! so we need to account for robot movement
-        Transform2d robotToTarget = robotPose.minus(targetPose);
-        ShooterState shot = SHOOTER_STATE_MAP.get(robotToTarget.getTranslation().getNorm());
+    public static ShooterState getShooterStateFromMap(double distance) {
+        ShooterState shot = SHOOTER_STATE_MAP.get(distance);
         return new ShooterState(shot.velocity, shot.angle);
     }
 
@@ -44,16 +43,35 @@ public class ShooterCalculator {
     }
 
     // get where the robot should be aiming based on its position on the field and its allaince
-    public static Pose2d getTargetPoseFromRobotPosition(Supplier<Pose2d> robotPoseSupplier) {
-        Pose2d robotPose = robotPoseSupplier.get();
-        if (robotPose.getX() < FieldConstants.ALLIANCE_ZONE_WIDTH_X.in(Meters)) {
-            return FieldConstants.BLUE_HUB.toPose2d();
+    public static Pose2d getTargetPoseFromRobotPosition(Pose2d robotPose) { // ! look at what 5000 actually does because this algo is flawed
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) { // flip everything to blue alliance reference frame
+            robotPose = getAllianceFlippedPose(robotPose);
         }
 
-        return FieldConstants.BLUE_PASS;
+        Pose2d targetPose = new Pose2d();
 
-        // passing logic
-        // ! awwww fuck we need another case depending on alliance
+        if (robotPose.getX() < FieldConstants.ALLIANCE_ZONE_WIDTH_X.in(Meters)) { // hub
+            targetPose = FieldConstants.BLUE_HUB.toPose2d();
+        } else { // passing
+            if (robotPose.getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // left
+                targetPose = FieldConstants.BLUE_PASS_LEFT;
+            } else {
+                targetPose = FieldConstants.BLUE_PASS_RIGHT;
+            }
+        }
+
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+            return targetPose;
+        } else {
+            return getAllianceFlippedPose(targetPose); // rotate around center for red alliance
+        }
+    }
+
+    public static Pose2d getAllianceFlippedPose(Pose2d pose) {
+        return pose.rotateAround(
+            new Translation2d(FieldConstants.FIELD_WIDTH_X.div(2), FieldConstants.FIELD_WIDTH_Y.div(2)), 
+            new Rotation2d(Degrees.of(180))
+        );
     }
 
     public static record ShooterState(AngularVelocity velocity, Angle angle) {

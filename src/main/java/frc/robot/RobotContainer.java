@@ -22,7 +22,6 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
-import frc.robot.utils.HubTracker.Shift;
 
 public class RobotContainer {
     // ————— controllers ————— //
@@ -195,7 +194,7 @@ public class RobotContainer {
                 intake,
                 hopper,
                 shooter,
-                () -> {return Constants.FieldConstants.BLUE_HUB.toPose2d();} // targetPose
+                () -> ShooterCalculator.getTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
             ).alongWith(
                 new DriveWithJoysticks(
                     drive, 
@@ -205,7 +204,7 @@ public class RobotContainer {
                     () -> controller.getRightX(),
                     () -> ShooterCalculator.getRobotRotationToTarget(
                         poseEstimator.getPose(),
-                        Constants.FieldConstants.BLUE_HUB.toPose2d() // targetPose
+                        ShooterCalculator.getTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
                     )
                 )
             ).alongWith(
@@ -319,7 +318,7 @@ public class RobotContainer {
         }
     }
 
-    public Command getAutonomousCommand() { // called by Robot.java on autonomousInit
+    public Command getAutonomousCommand() {
         return autoChooser.selectedCommand();
     }
 
@@ -380,7 +379,7 @@ public class RobotContainer {
         }
     }
 
-    public void simulationPeriodic() { // called by Robot.java on simulationPeriodic
+    public void simulationPeriodic() {
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // not sure if this has to be here if it's only called in simulationPeriodic
             return;
         }
@@ -393,14 +392,18 @@ public class RobotContainer {
         fuelSimulation.stepSim();
     }
 
-    public void resetSimulation() { // called by Robot.java on disabledInit (only runs if in SIM mode)
+    public void resetSimulation() {
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
             return;
         }
 
         // drive
-        driveSimulation.setSimulationWorldPose(Constants.ROBOT_START_POSE);
-        poseEstimator.resetPosition(Constants.ROBOT_START_POSE);
+        Pose2d startPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+        Constants.ROBOT_START_POSE : 
+        ShooterCalculator.getAllianceFlippedPose(Constants.ROBOT_START_POSE);
+
+        driveSimulation.setSimulationWorldPose(startPose);
+        poseEstimator.resetPosition(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
 
         // fuel

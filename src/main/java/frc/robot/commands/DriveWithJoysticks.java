@@ -3,13 +3,14 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
-import frc.robot.Constants;
 
 public class DriveWithJoysticks extends Command {
     private final Drive drive;
@@ -75,7 +76,9 @@ public class DriveWithJoysticks extends Command {
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,
-                Constants.USE_ALLIANCE_FLIPPING ? poseEstimator.getPose().getRotation().plus(new Rotation2d(Math.PI)) : poseEstimator.getPose().getRotation()
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                poseEstimator.getPose().getRotation() : 
+                poseEstimator.getPose().getRotation().plus(new Rotation2d(Math.PI)) // flip if red alliance
             )
         );
     }

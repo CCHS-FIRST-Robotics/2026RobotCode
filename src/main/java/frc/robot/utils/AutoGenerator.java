@@ -30,9 +30,10 @@ public class AutoGenerator {
                 }
             },
             drive::runAutoPosition,
-            Constants.USE_ALLIANCE_FLIPPING, 
+            true, // ! I fucking think (idk what "If this returns true, when on the red alliance" is supposed to mean)
             drive
         );
+        choreo.util.ChoreoAllianceFlipUtil.flip(new Pose2d());
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;
