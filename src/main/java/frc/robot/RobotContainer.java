@@ -11,8 +11,6 @@ import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
-
-import frc.robot.Constants.FieldConstants.Zones;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -171,7 +169,7 @@ public class RobotContainer {
             new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 5, new Rotation2d(67)))
         );
 
-        Zones.logAllZones();
+        Constants.FieldConstants.Zones.logAllZones();
         
         // intake and turn robot in the direction it's driving
         controller.y().whileTrue(
