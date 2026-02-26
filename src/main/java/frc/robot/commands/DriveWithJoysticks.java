@@ -5,12 +5,13 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Zones;
 
 public class DriveWithJoysticks extends Command {
     private final Drive drive;
@@ -21,8 +22,7 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier thetaVelocitySupplier;
 
     private final Supplier<Rotation2d> thetaSupplier;
-    
-    private final double DEADBAND = 0.1;
+
     private final double EXPONENT = 2;
 
     public DriveWithJoysticks(
@@ -51,7 +51,7 @@ public class DriveWithJoysticks extends Command {
         Translation2d linearVelocity = getLinearVelocityFromJoysticks(xVelocitySupplier.getAsDouble(), yVelocitySupplier.getAsDouble());
 
         // get angular velocity scalar
-        double angularVelocity = MathUtil.applyDeadband(thetaVelocitySupplier.getAsDouble(), DEADBAND); // apply deadband
+        double angularVelocity = thetaVelocitySupplier.getAsDouble();
         angularVelocity = Math.copySign(Math.pow(angularVelocity, EXPONENT), angularVelocity); // apply exponent
 
         // convert to chassisSpeeds
@@ -61,6 +61,7 @@ public class DriveWithJoysticks extends Command {
             -angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );
 
+        // override with supplied theta
         if (thetaSupplier != null) {
             speeds = new ChassisSpeeds(
                 speeds.vxMetersPerSecond,
@@ -68,6 +69,31 @@ public class DriveWithJoysticks extends Command {
                 drive.getThetaController().calculate(
                     poseEstimator.getPose().getRotation().getRadians(),
                     thetaSupplier.get().getRadians()
+                )
+            );
+        }
+
+        // override with under trench angle
+        if (Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+            double yOutput = 0;
+            if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
+                yOutput = drive.getYController().calculate(
+                    poseEstimator.getPose().getY(),
+                    FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
+                );
+            } else { // bottom
+                yOutput = drive.getYController().calculate(
+                    poseEstimator.getPose().getY(),
+                    FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
+                );
+            }
+
+            speeds = new ChassisSpeeds(
+                speeds.vxMetersPerSecond,
+                yOutput,
+                drive.getThetaController().calculate(
+                    poseEstimator.getPose().getRotation().getRadians(),
+                    0
                 )
             );
         }
@@ -89,12 +115,8 @@ public class DriveWithJoysticks extends Command {
     }
 
     private Translation2d getLinearVelocityFromJoysticks(double x, double y) {
-        // apply deadband
-        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+        double linearMagnitude = Math.pow(Math.hypot(x, y), EXPONENT); // apply exponent
         Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
-
-        // apply exponent
-        linearMagnitude = Math.pow(linearMagnitude, EXPONENT);
 
         return new Pose2d(new Translation2d(), linearDirection)
             .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))

@@ -13,7 +13,7 @@ import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
-import frc.robot.utils.ShooterCalculator.*;
+import frc.robot.utils.Calculator.*;
 import frc.robot.Constants;
 
 public class ShootCommand extends Command {
@@ -53,7 +53,7 @@ public class ShootCommand extends Command {
         Pose2d robotPose = poseEstimator.getPose();
         Pose2d targetPose = targetPoseSupplier.get();
         Translation2d robotToTarget = robotPose.getTranslation().minus(targetPose.getTranslation());
-        shooter.runShooterState(ShooterCalculator.getShooterStateFromMap(robotToTarget.getNorm()));
+        shooter.runShooterState(Calculator.getShooterStateFromMap(robotToTarget.getNorm()));
         
         Logger.recordOutput("outputs/commands/shootCommand/target", targetPose);
         Logger.recordOutput("outputs/commands/shootCommand/distFromTarget", robotToTarget.getNorm());

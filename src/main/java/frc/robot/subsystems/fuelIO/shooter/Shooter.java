@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.*;
-import frc.robot.utils.ShooterCalculator.ShooterState;
+import frc.robot.utils.Calculator.ShooterState;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {

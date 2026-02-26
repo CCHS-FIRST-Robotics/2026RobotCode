@@ -157,7 +157,7 @@ public class Drive extends SubsystemBase {
                     twistSetpoint.dx + xOutput,
                     twistSetpoint.dy + yOutput,
                     twistSetpoint.dtheta + thetaOutput,
-                    poseEstimator.getPose().getRotation()
+                    poseEstimator.getPose().getRotation() // ! alliance matters
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 

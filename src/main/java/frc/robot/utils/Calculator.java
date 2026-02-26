@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.*;
 
-public class ShooterCalculator {
+public class Calculator {
     public static final InterpolatingTreeMap<Double, ShooterState> SHOOTER_STATE_MAP = new InterpolatingTreeMap<>(
         InverseInterpolator.forDouble(),
         ShooterState::interpolate
@@ -43,7 +43,7 @@ public class ShooterCalculator {
     }
 
     // get where the robot should be aiming based on its position on the field and its allaince
-    public static Pose2d getTargetPoseFromRobotPosition(Pose2d robotPose) { // ! look at what 5000 actually does because this algo is flawed
+    public static Pose2d getTargetPoseFromRobotPosition(Pose2d robotPose) {
         if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) { // flip everything to blue alliance reference frame
             robotPose = getAllianceFlippedPose(robotPose);
         }

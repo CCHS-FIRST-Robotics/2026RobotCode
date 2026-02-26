@@ -29,13 +29,13 @@ public class FuelConstants {
     public static final double KICKER_GEAR_RATIO = 1;
     
     // when pivot is zeroed at horizontal
-    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.3); // !
-    public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.095);
+    public static final Angle PIVOT_UP_ANGLE = Rotations.of(0.2); // !
+    public static final Angle PIVOT_DOWN_ANGLE = Rotations.of(-0.0976); // ! 
 
     // ————— PIDF ————— //
 
-    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(15, 0, 0); // ! needs tuning
-    public static final double PIVOT_KCOS = 0.22; // ! needs tuning
+    public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(10, 0, 0); // ! needs tuning
+    public static final double PIVOT_KCOS = 0.45; // ! needs tuning
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
     .withKP(0.3)
