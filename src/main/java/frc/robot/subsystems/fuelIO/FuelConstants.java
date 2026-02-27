@@ -17,6 +17,7 @@ public class FuelConstants {
     public static final int SHOOTER_MOTOR_ID = 53;
     public static final int HOOD_MOTOR_ID = 54;
     public static final int KICKER_MOTOR_ID = 55;
+    public static final int CLIMBER_MOTOR_ID = 56;
 
     // ————— physical constants ————— //
 

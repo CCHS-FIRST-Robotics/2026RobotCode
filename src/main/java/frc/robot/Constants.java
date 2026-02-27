@@ -25,9 +25,9 @@ public final class Constants {
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d()); // in real, it gets reset immediately anyways
 
-    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // !
+    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // ! 
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
-    
+
     public static class FieldConstants {
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);
         public static final Distance FIELD_WIDTH_Y = Inches.of(316.64);
@@ -54,7 +54,7 @@ public final class Constants {
         public static final Distance TRENCH_DISTANCE_X = Inches.of(182.11);
         public static final Distance TRENCH_WIDTH_Y = Inches.of(50.59);
         public static final Distance TRENCH_ZONE_WIDTH_X = Meters.of(1);
-        
+
         public class Zones {
             public static class Zone {
                 protected final double xMin, xMax, yMin, yMax;

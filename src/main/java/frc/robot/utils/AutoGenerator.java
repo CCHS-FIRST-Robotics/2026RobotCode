@@ -8,6 +8,9 @@ import org.ironmaple.simulation.drivesims.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.subsystems.fuelIO.intake.*;
+import frc.robot.subsystems.fuelIO.hopper.*;
+import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.Constants;
 
 public class AutoGenerator {
@@ -15,11 +18,17 @@ public class AutoGenerator {
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
+    private final Intake intake;
+    private final Hopper hopper;
+    private final Shooter shooter;
 
     public AutoGenerator(
         Drive drive, 
         PoseEstimator poseEstimator,
-        SwerveDriveSimulation driveSimulation
+        SwerveDriveSimulation driveSimulation,
+        Intake intake,
+        Hopper hopper,
+        Shooter shooter
     ) {
         autoFactory = new AutoFactory(
             poseEstimator::getPose,
@@ -37,6 +46,9 @@ public class AutoGenerator {
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;
+        this.intake = intake;
+        this.hopper = hopper;
+        this.shooter = shooter;
     }
 
     // ————— testing routines ————— //
