@@ -159,7 +159,7 @@ public class RobotContainer {
         // regular joystick drive
         drive.setDefaultCommand(
             new DriveWithJoysticks(
-                drive, 
+                drive,
                 poseEstimator,
                 () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped, x velocity relative to field is "forward" from driver perspective
                 () -> controller.getLeftXWithDeadband(), 
@@ -170,75 +170,76 @@ public class RobotContainer {
 
         // ————— processed fuel bindings ————— //
 
-        // // intake and turn robot in the direction it's driving
-        // controller.x().whileTrue(
-        //     new IntakeCommand(
-        //         intake
-        //     ).alongWith(
-        //         new DriveWithJoysticks(
-        //             drive, 
-        //             poseEstimator, 
-        //             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-        //             () -> controller.getLeftXWithDeadband(), 
-        //             () -> controller.getRightXWithDeadband(),
-        //             () -> {
-        //                 return new Rotation2d(Math.atan2( // negatives are to map xbox controller to the cartesian plane
-        //                     -controller.getLeftXWithDeadband(), 
-        //                     -controller.getLeftYWithDeadband()
-        //                 ) + Math.PI); // intake is on back of robot
-        //             }
-        //         )
-        //     )
-        // );
+        // intake and turn robot in the direction it's driving
+        controller.x().whileTrue(
+            new IntakeCommand(
+                intake
+            ).alongWith(
+                new DriveWithJoysticks(
+                    drive, 
+                    poseEstimator, 
+                    () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
+                    () -> controller.getLeftXWithDeadband(), 
+                    () -> controller.getRightXWithDeadband(),
+                    () -> {
+                        return new Rotation2d(Math.atan2( // negatives are to map xbox controller to the cartesian plane
+                            -controller.getLeftXWithDeadband(), 
+                            -controller.getLeftYWithDeadband()
+                        ) + Math.PI); // intake is on back of robot
+                    }
+                )
+            )
+        );
 
-        // // shoot and turn robot towards // ! somewhere
-        // controller.y().whileTrue(
-        //     new ShootCommand(
-        //         poseEstimator,
-        //         intake,
-        //         hopper,
-        //         shooter,
-        //         () -> Calculator.getTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
-        //     ).alongWith(
-        //         new DriveWithJoysticks(
-        //             drive, 
-        //             poseEstimator, 
-        //             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-        //             () -> controller.getLeftXWithDeadband(), 
-        //             () -> controller.getRightXWithDeadband(),
-        //             () -> Calculator.getRobotRotationToTarget(
-        //                 poseEstimator.getPose(),
-        //                 Calculator.getTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
-        //             )
-        //         )
-        //     ).alongWith(
-        //         Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
-        //         new InstantCommand(
-        //             () -> {
-        //                 if (Constants.REALISTIC_SIM) {
-        //                     if (hopper.getHopperEmpty()) {
-        //                         return;
-        //                     }
-        //                     hopper.shootFuel();
-        //                 }
+        // shoot and turn robot towards target pose
+        controller.y().whileTrue(
+            new ShootCommand(
+                drive,
+                poseEstimator,
+                intake,
+                hopper,
+                shooter,
+                () -> Calculator.calculateTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
+                , true
+            ).alongWith(
+                new DriveWithJoysticks(
+                    drive, 
+                    poseEstimator, 
+                    () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
+                    () -> controller.getLeftXWithDeadband(), 
+                    () -> controller.getRightXWithDeadband(),
+                    () -> Calculator.getRobotRotationToTarget()
+                )
+            ).alongWith(
+                Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
+                new InstantCommand(
+                    () -> {
+                        if (Constants.REALISTIC_SIM) {
+                            if (hopper.getHopperEmpty()) {
+                                return;
+                            }
+                            hopper.shootFuel();
+                        }
 
-        //                 fuelSimulation.launchFuel(
-        //                     () -> shooter.getShooterLinearVelocity(), 
-        //                     () -> shooter.getHoodShotAngle(),
-        //                     Rotations.of(0),
-        //                     FuelConstants.SHOOTER_POSITION
-        //                 );
-        //             }
-        //         ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
-        //         new InstantCommand()
-        //     )
-        // );
+                        fuelSimulation.launchFuel(
+                            () -> shooter.getShooterLinearVelocity(), 
+                            () -> shooter.getHoodShotAngle(),
+                            Rotations.of(0),
+                            FuelConstants.SHOOTER_POSITION
+                        );
+                    }
+                ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
+                new InstantCommand()
+            )
+        );
+
+        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
 
         // ————— raw fuel bindings ————— //
 
-        // // intake
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        // intake
+        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand 
 
@@ -256,9 +257,9 @@ public class RobotContainer {
         // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
         // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
-        controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(4)));
-        controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
-        controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-4)));
+        // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(4)));
+        // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
+        // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-4)));
 
         // ————— testing ————— //
         
@@ -406,7 +407,7 @@ public class RobotContainer {
         // drive
         Pose2d startPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
         Constants.ROBOT_START_POSE : 
-        Calculator.getAllianceFlippedPose(Constants.ROBOT_START_POSE);
+        Calculator.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
 
         driveSimulation.setSimulationWorldPose(startPose);
         poseEstimator.resetPosition(startPose);

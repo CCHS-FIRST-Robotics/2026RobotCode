@@ -489,7 +489,7 @@ public class FuelSim {
      * @param launchHeight Height of the fuel to launch at. Make sure this is higher than your robot's bumper height, or else it will collide with your robot immediately.
      * @throws IllegalStateException if robot is not registered
      */
-    public void launchFuel(DoubleSupplier launchVelocitySupplier, DoubleSupplier hoodAngleSupplier, Angle turretYaw, Transform3d robotToShooter) {
+    public void launchFuel(Supplier<LinearVelocity> launchVelocitySupplier, Supplier<Angle> hoodAngleSupplier, Angle turretYaw, Transform3d robotToShooter) {
         if (robotPoseSupplier == null || robotFieldSpeedsSupplier == null) {
             throw new IllegalStateException("Robot must be registered before launching fuel.");
         }
@@ -498,8 +498,8 @@ public class FuelSim {
                 .plus(robotToShooter);
         ChassisSpeeds fieldSpeeds = this.robotFieldSpeedsSupplier.get();
 
-        double horizontalVel = Math.cos(Rotations.of(hoodAngleSupplier.getAsDouble()).in(Radians)) * launchVelocitySupplier.getAsDouble();
-        double verticalVel = Math.sin(Rotations.of(hoodAngleSupplier.getAsDouble()).in(Radians)) * launchVelocitySupplier.getAsDouble();
+        double horizontalVel = Math.cos(hoodAngleSupplier.get().in(Radians)) * launchVelocitySupplier.get().in(MetersPerSecond);
+        double verticalVel = Math.sin(hoodAngleSupplier.get().in(Radians)) * launchVelocitySupplier.get().in(MetersPerSecond);
         double xVel = horizontalVel
                 * Math.cos(
                         turretYaw.plus(launchPose.getRotation().getMeasureZ()).in(Radians));

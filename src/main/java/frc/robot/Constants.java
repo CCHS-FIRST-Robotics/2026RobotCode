@@ -18,12 +18,12 @@ public final class Constants {
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
     public static final boolean REALISTIC_SIM = false;
-
-    public static final int CONTROLLER_PORT = 0;
     
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d()); // in real, it gets reset immediately anyways
+
+    public static final int CONTROLLER_PORT = 0;
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // ! 
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);

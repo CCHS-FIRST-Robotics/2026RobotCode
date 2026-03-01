@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.*;
+
+import frc.robot.utils.Calculator;
 import frc.robot.utils.Calculator.ShooterState;
 import frc.robot.Constants;
 
@@ -109,15 +111,13 @@ public class Shooter extends SubsystemBase {
     }
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/linearVelocity")
-    public double getShooterLinearVelocity() {
-        double angularVelocity = RotationsPerSecond.of(shooterIOInputs.velocity).in(RadiansPerSecond);
-        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity * 2);  // multiply by shooter wheel radius
-        return linearVelocity.in(MetersPerSecond) / 2; // because backspin: https://www.chiefdelphi.com/t/determine-flywheel-velocity-for-ball-exit-velocity/394940/2
+    public LinearVelocity getShooterLinearVelocity() {
+        return Calculator.calculateShooterLinearVelocity(RotationsPerSecond.of(shooterIOInputs.velocity));
     }
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/hoodShotAngle")
-    public double getHoodShotAngle() {
-        return 0.25 - hoodIOInputs.position; // when hood is 0, it shoots vertically
+    public Angle getHoodShotAngle() {
+        return Rotations.of(0.25 - hoodIOInputs.position); // when hood is 0, it shoots vertically
     }
 
     // ————— processed command factories ————— //

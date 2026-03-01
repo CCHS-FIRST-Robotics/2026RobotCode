@@ -6,7 +6,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
@@ -17,6 +17,7 @@ import frc.robot.utils.Calculator.*;
 import frc.robot.Constants;
 
 public class ShootCommand extends Command {
+    private final Drive drive;
     private final PoseEstimator poseEstimator;
     
     private final Intake intake;
@@ -26,14 +27,16 @@ public class ShootCommand extends Command {
     private final Supplier<Pose2d> targetPoseSupplier;
 
     public ShootCommand(
+        Drive drive,
         PoseEstimator poseEstimator,
         Intake intake,
         Hopper hopper,
         Shooter shooter,
-        Supplier<Pose2d> targetPoseSupplier
+        Supplier<Pose2d> targetPoseSupplier,
+        boolean tempBoolean
     ) {
+        this.drive = drive;
         this.poseEstimator = poseEstimator;
-        
         this.intake = intake;
         this.hopper = hopper;
         this.shooter = shooter;
@@ -50,13 +53,12 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        Pose2d robotPose = poseEstimator.getPose();
-        Pose2d targetPose = targetPoseSupplier.get();
-        Translation2d robotToTarget = robotPose.getTranslation().minus(targetPose.getTranslation());
-        shooter.runShooterState(Calculator.getShooterStateFromMap(robotToTarget.getNorm()));
-        
-        Logger.recordOutput("outputs/commands/shootCommand/target", targetPose);
-        Logger.recordOutput("outputs/commands/shootCommand/distFromTarget", robotToTarget.getNorm());
+        shooter.runShooterState(Calculator.getShooterStateFromMapIterative(
+            poseEstimator.getPose(), 
+            targetPoseSupplier.get(),
+            drive.getFieldRelativeSpeeds(), 
+            3
+        ));
     }
 
     @Override

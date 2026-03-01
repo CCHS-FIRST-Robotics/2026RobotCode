@@ -64,4 +64,5 @@ public class FuelConstants {
         Inches.of(18), 
         new Rotation3d()
     ); // ! 
+    public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
 }
