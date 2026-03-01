@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.Optional;
 
-public class HubTracker {
+public class HubUtil {
     public static final Alliance DEFAULT_AUTO_WINNER = Alliance.Blue; // for when FMS doesn't exist (e.g. in realistic sim)
 
     /**
@@ -117,7 +117,7 @@ public class HubTracker {
 
     /**
      * Returns the {@link Alliance} that won auto as specified by the FMS/Driver Station's game specific message data.
-     * Will return {@link HubTracker#DEFAULT_AUTO_WINNER} if no game message or alliance is available.
+     * Will return {@link HubUtil#DEFAULT_AUTO_WINNER} if no game message or alliance is available.
      */
     public static Optional<Alliance> getAutoWinner() {
         String msg = DriverStation.getGameSpecificMessage();

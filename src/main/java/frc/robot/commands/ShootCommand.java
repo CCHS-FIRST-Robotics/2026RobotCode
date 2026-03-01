@@ -13,7 +13,7 @@ import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
-import frc.robot.utils.Calculator.*;
+import frc.robot.utils.ShootUtil.*;
 import frc.robot.Constants;
 
 public class ShootCommand extends Command {
@@ -53,7 +53,7 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        shooter.runShooterState(Calculator.getShooterStateFromMapIterative(
+        shooter.runShooterState(ShootUtil.getShooterStateFromMapIterative(
             poseEstimator.getPose(), 
             targetPoseSupplier.get(),
             drive.getFieldRelativeSpeeds(), 

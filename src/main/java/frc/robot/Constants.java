@@ -55,6 +55,13 @@ public final class Constants {
         public static final Distance TRENCH_WIDTH_Y = Inches.of(50.59);
         public static final Distance TRENCH_ZONE_WIDTH_X = Meters.of(1);
 
+        public static Pose2d calculateAllianceFlippedPose(Pose2d pose) {
+            return pose.rotateAround(
+                new Translation2d(FieldConstants.FIELD_WIDTH_X.div(2), FieldConstants.FIELD_WIDTH_Y.div(2)), 
+                new Rotation2d(Degrees.of(180))
+        );
+    }
+
         public class Zones {
             public static class Zone {
                 protected final double xMin, xMax, yMin, yMax;

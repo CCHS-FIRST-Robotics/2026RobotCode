@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.*;
 
-import frc.robot.utils.Calculator;
-import frc.robot.utils.Calculator.ShooterState;
+import frc.robot.utils.ShootUtil;
+import frc.robot.utils.ShootUtil.ShooterState;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
@@ -112,7 +112,7 @@ public class Shooter extends SubsystemBase {
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/linearVelocity")
     public LinearVelocity getShooterLinearVelocity() {
-        return Calculator.calculateShooterLinearVelocity(RotationsPerSecond.of(shooterIOInputs.velocity));
+        return ShootUtil.calculateShooterLinearVelocity(RotationsPerSecond.of(shooterIOInputs.velocity));
     }
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/hoodShotAngle")

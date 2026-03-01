@@ -757,7 +757,7 @@ public class FuelSim {
             if (didFuelScore(fuel, subticks)) {
                 fuel.pos = exit;
                 fuel.vel = getDispersalVelocity();
-                if (HubTracker.isActive(alliance)) {
+                if (HubUtil.isActive(alliance)) {
                     score++;
                 }
             }

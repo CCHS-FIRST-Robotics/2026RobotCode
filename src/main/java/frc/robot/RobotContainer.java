@@ -199,7 +199,7 @@ public class RobotContainer {
                 intake,
                 hopper,
                 shooter,
-                () -> Calculator.calculateTargetPoseFromRobotPosition(poseEstimator.getPose()) // targetPose
+                () -> ShootUtil.getTargetPose(poseEstimator.getPose()) // targetPose
                 , true
             ).alongWith(
                 new DriveWithJoysticks(
@@ -208,7 +208,7 @@ public class RobotContainer {
                     () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
                     () -> controller.getLeftXWithDeadband(), 
                     () -> controller.getRightXWithDeadband(),
-                    () -> Calculator.getRobotRotationToTarget()
+                    () -> ShootUtil.getRobotRotationToTarget()
                 )
             ).alongWith(
                 Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
@@ -313,9 +313,9 @@ public class RobotContainer {
 
     public void autonomousPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubTracker.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubTracker.getCurrentShift().orElse(HubTracker.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubTracker.isActive());
+            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubUtil.isActive());
             Logger.recordOutput(
             "outputs/simulation/fuelSimulation/hubScore", 
                 DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
@@ -333,9 +333,9 @@ public class RobotContainer {
 
     public void teleopPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubTracker.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubTracker.getCurrentShift().orElse(HubTracker.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubTracker.isActive());
+            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubUtil.isActive());
             Logger.recordOutput(
             "outputs/simulation/fuelSimulation/hubScore", 
                 DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
@@ -407,7 +407,7 @@ public class RobotContainer {
         // drive
         Pose2d startPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
         Constants.ROBOT_START_POSE : 
-        Calculator.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
+        Constants.FieldConstants.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
 
         driveSimulation.setSimulationWorldPose(startPose);
         poseEstimator.resetPosition(startPose);

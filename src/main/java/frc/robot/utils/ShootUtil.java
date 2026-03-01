@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
-public class Calculator {
+public class ShootUtil {
     public static final InterpolatingTreeMap<Double, ShooterState> SHOOTER_STATE_MAP = new InterpolatingTreeMap<>(
         InverseInterpolator.forDouble(),
         ShooterState::interpolate
@@ -36,31 +36,33 @@ public class Calculator {
 
     public static Rotation2d robotRotationToTarget = new Rotation2d();
 
-    // ! order these functions in a way that makes sense later
+    // ! rename
+    // ————— outwards-pointing functions ————— //
 
-    public static LinearVelocity calculateShooterLinearVelocity(AngularVelocity angularVelocity) {
-        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity.in(RadiansPerSecond) * FuelConstants.SHOOTER_WHEEL_RADIUS.in(Inches));  // multiply by shooter wheel radius
-        return linearVelocity.div(2); // because backspin: https://www.chiefdelphi.com/t/determine-flywheel-velocity-for-ball-exit-velocity/394940/2
+    public static Pose2d getTargetPose(Pose2d robotPose) {
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) { // flip everything to blue alliance reference frame
+            robotPose = FieldConstants.calculateAllianceFlippedPose(robotPose);
+        }
+
+        Pose2d targetPose = new Pose2d();
+
+        if (robotPose.getX() < FieldConstants.ALLIANCE_ZONE_WIDTH_X.in(Meters)) { // hub
+            targetPose = FieldConstants.BLUE_HUB.toPose2d();
+        } else { // passing
+            if (robotPose.getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // left
+                targetPose = FieldConstants.BLUE_PASS_LEFT;
+            } else {
+                targetPose = FieldConstants.BLUE_PASS_RIGHT;
+            }
+        }
+
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+            return targetPose;
+        } else {
+            return FieldConstants.calculateAllianceFlippedPose(targetPose); // rotate around center for red alliance
+        }
     }
-
-    public static Distance calculateRobotToTargetDistance(Pose2d robotPose, Pose2d targetPose) {
-        return Meters.of(robotPose.getTranslation().minus(targetPose.getTranslation()).getNorm());
-    }
-
-    // only accounts for x direction (that's what the cosine is for)
-    public static Time calculateTimeOfFlight(LinearVelocity velocity, Angle angle, Distance distance) {
-        double hoodShotAngle = Math.PI / 2 - angle.in(Radians);
-        return Seconds.of(distance.in(Meters) / (velocity.in(MetersPerSecond) * Math.cos(hoodShotAngle)));
-    }
-
-    public static Pose2d calculateTargetFuturePose(Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, Time timeOfFlight) {
-        double x = targetPose.getX() - robotFieldRelativeSpeeds.vxMetersPerSecond * timeOfFlight.in(Seconds);
-        double y = targetPose.getY() - robotFieldRelativeSpeeds.vyMetersPerSecond * timeOfFlight.in(Seconds);
-
-        return new Pose2d(x, y, new Rotation2d());
-    }
-
-    // get the shooter state in order to shoot at the target pose
+    
     public static ShooterState getShooterStateFromMap(Pose2d robotPose, Pose2d targetPose) {
         Distance targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
         ShooterState shot = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
@@ -98,46 +100,39 @@ public class Calculator {
         return shot;
     }
 
-    // get the field-relative angle that the robot must face in order to point at the supplied target pose
-    public static Rotation2d calculateRobotRotationToTarget(Pose2d robotPose, Pose2d targetPose) {
-        Translation2d targetToRobot = targetPose.getTranslation().minus(robotPose.getTranslation());
-        return new Rotation2d(Math.atan2(targetToRobot.getY(), targetToRobot.getX()));
-    }
-
     public static Rotation2d getRobotRotationToTarget() {
         return robotRotationToTarget;
     }
 
-    // get where the robot should be aiming based on its position on the field and its allaince
-    public static Pose2d calculateTargetPoseFromRobotPosition(Pose2d robotPose) {
-        if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) { // flip everything to blue alliance reference frame
-            robotPose = calculateAllianceFlippedPose(robotPose);
-        }
+    // ————— calculators for shooter state ————— //
 
-        Pose2d targetPose = new Pose2d();
-
-        if (robotPose.getX() < FieldConstants.ALLIANCE_ZONE_WIDTH_X.in(Meters)) { // hub
-            targetPose = FieldConstants.BLUE_HUB.toPose2d();
-        } else { // passing
-            if (robotPose.getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // left
-                targetPose = FieldConstants.BLUE_PASS_LEFT;
-            } else {
-                targetPose = FieldConstants.BLUE_PASS_RIGHT;
-            }
-        }
-
-        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
-            return targetPose;
-        } else {
-            return calculateAllianceFlippedPose(targetPose); // rotate around center for red alliance
-        }
+    private static Distance calculateRobotToTargetDistance(Pose2d robotPose, Pose2d targetPose) {
+        return Meters.of(robotPose.getTranslation().minus(targetPose.getTranslation()).getNorm());
     }
 
-    public static Pose2d calculateAllianceFlippedPose(Pose2d pose) {
-        return pose.rotateAround(
-            new Translation2d(FieldConstants.FIELD_WIDTH_X.div(2), FieldConstants.FIELD_WIDTH_Y.div(2)), 
-            new Rotation2d(Degrees.of(180))
-        );
+    private static Rotation2d calculateRobotRotationToTarget(Pose2d robotPose, Pose2d targetPose) {
+        Translation2d targetToRobot = targetPose.getTranslation().minus(robotPose.getTranslation());
+        return new Rotation2d(Math.atan2(targetToRobot.getY(), targetToRobot.getX()));
+    }
+
+    // ————— calculators for iterative shooter state ————— //
+
+    public static LinearVelocity calculateShooterLinearVelocity(AngularVelocity angularVelocity) {
+        LinearVelocity linearVelocity = InchesPerSecond.of(angularVelocity.in(RadiansPerSecond) * FuelConstants.SHOOTER_WHEEL_RADIUS.in(Inches));  // multiply by shooter wheel radius
+        return linearVelocity.div(2); // because backspin: https://www.chiefdelphi.com/t/determine-flywheel-velocity-for-ball-exit-velocity/394940/2
+    }
+
+    // only accounts for x direction (that's what the cosine is for)
+    public static Time calculateTimeOfFlight(LinearVelocity velocity, Angle angle, Distance distance) {
+        double hoodShotAngle = Math.PI / 2 - angle.in(Radians);
+        return Seconds.of(distance.in(Meters) / (velocity.in(MetersPerSecond) * Math.cos(hoodShotAngle)));
+    }
+
+    public static Pose2d calculateTargetFuturePose(Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, Time timeOfFlight) {
+        double x = targetPose.getX() - robotFieldRelativeSpeeds.vxMetersPerSecond * timeOfFlight.in(Seconds);
+        double y = targetPose.getY() - robotFieldRelativeSpeeds.vyMetersPerSecond * timeOfFlight.in(Seconds);
+
+        return new Pose2d(x, y, new Rotation2d());
     }
 
     public static record ShooterState(
