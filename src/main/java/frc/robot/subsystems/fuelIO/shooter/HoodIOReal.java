@@ -24,6 +24,8 @@ public class HoodIOReal implements HoodIO {
     private final StatusSignal<AngularVelocity> velocitySignal;
     private final StatusSignal<Temperature> temperatureSignal;
 
+    private Angle positionSetpoint = Rotations.of(0);
+
     public HoodIOReal(int id) {
         motor = new TalonFX(id);
 
@@ -68,6 +70,8 @@ public class HoodIOReal implements HoodIO {
         inputs.position = positionSignal.getValue().in(Rotations);
         inputs.velocity = velocitySignal.getValue().in(RotationsPerSecond);
         inputs.temperature = temperatureSignal.getValue().in(Celsius);
+
+        inputs.positionSetpoint = positionSetpoint.in(Rotations);
     }
 
     @Override
@@ -78,5 +82,7 @@ public class HoodIOReal implements HoodIO {
     @Override
     public void setPosition(Angle angle) {
         motor.setControl(positionVoltageRequest.withPosition(angle));
+
+        positionSetpoint = angle;
     }
 }

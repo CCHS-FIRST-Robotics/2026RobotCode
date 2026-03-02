@@ -11,6 +11,8 @@ public interface ShooterIO {
         public double position;
         public double velocity;
         public double temperature;
+
+        public double velocitySetpoint;
     }
 
     public default void updateInputs(ShooterIOInputs inputs) {}

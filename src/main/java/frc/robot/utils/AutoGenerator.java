@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
@@ -76,5 +77,27 @@ public class AutoGenerator {
 
     public Command backUp() {
         return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
+    }
+
+    public AutoRoutine awesomeIntake() {
+        AutoRoutine routine = autoFactory.newRoutine("Test");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("Intaketest", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("Intaketest", 1);
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            // new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get()) // ! add the catch later
+            // .andThen(trajectory0.resetOdometry())
+            trajectory0.resetOdometry()
+            .andThen(trajectory0.cmd())
+            .andThen(intake.getSetIntakeVoltageCommand(Volts.of(5)))
+            .andThen(trajectory1.cmd())
+            .andThen(hopper.getSetHopperVoltageCommand(Volts.of(5)))
+            .andThen(new InstantCommand(() -> shooter.runShooterState(null)))
+        );
+
+        return routine;
     }
 }

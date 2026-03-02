@@ -22,6 +22,8 @@ public class ShooterIOReal implements ShooterIO {
     private final StatusSignal<AngularVelocity> velocitySignal;
     private final StatusSignal<Temperature> temperatureSignal;
 
+    public AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);
+
     public ShooterIOReal(int shooterId) {
         motor = new TalonFX(shooterId);
 
@@ -63,6 +65,8 @@ public class ShooterIOReal implements ShooterIO {
         inputs.position = positionSignal.getValue().in(Rotations);
         inputs.velocity = velocitySignal.getValue().in(RotationsPerSecond);
         inputs.temperature = temperatureSignal.getValue().in(Celsius);
+
+        inputs.velocitySetpoint = velocitySetpoint.in(RotationsPerSecond);
     }
 
     @Override
@@ -73,5 +77,7 @@ public class ShooterIOReal implements ShooterIO {
     @Override
     public void setVelocity(AngularVelocity velocity) {
         motor.setControl(velocityVoltageRequest.withVelocity(velocity));
+
+        velocitySetpoint = velocity;
     }
 }

@@ -11,6 +11,8 @@ public interface PivotIO {
         public double position;
         public double velocity;
         public double temperature;
+
+        public double positionSetpoint;
     }
     
     public default void updateInputs(PivotIOInputs inputs) {}

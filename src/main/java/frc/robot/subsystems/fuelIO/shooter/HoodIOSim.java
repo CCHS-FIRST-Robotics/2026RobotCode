@@ -22,6 +22,7 @@ public class HoodIOSim implements HoodIO {
     private final PIDController PID = new PIDController(150, 0, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
+    private Angle positionSetpoint;
 
     public HoodIOSim() {
         motor.setState(Constants.HOOD_START_ANGLE.in(Radians) * FuelConstants.HOOD_GEAR_RATIO, 0);
@@ -36,6 +37,8 @@ public class HoodIOSim implements HoodIO {
         inputs.position = motor.getAngularPositionRotations() / FuelConstants.HOOD_GEAR_RATIO;
         inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.HOOD_GEAR_RATIO;
         inputs.temperature = Celsius.of(20).in(Celsius);
+
+        inputs.positionSetpoint = positionSetpoint.in(Rotations);
     }
 
     @Override
@@ -54,5 +57,7 @@ public class HoodIOSim implements HoodIO {
         motor.setInputVoltage(volts);
         
         appliedVoltage = Volts.of(volts);
+
+        positionSetpoint = angle;
     }
 }

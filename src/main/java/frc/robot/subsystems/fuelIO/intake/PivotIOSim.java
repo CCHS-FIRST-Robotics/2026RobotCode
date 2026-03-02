@@ -22,6 +22,7 @@ public class PivotIOSim implements PivotIO {
     private final PIDController PID = new PIDController(15, 0, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
+    private Angle positionSetpoint = Rotations.of(0);
 
     public PivotIOSim() {
         motor.setState(Constants.PIVOT_START_ANGLE.in(Radians) * FuelConstants.PIVOT_GEAR_RATIO, 0);
@@ -36,6 +37,8 @@ public class PivotIOSim implements PivotIO {
         inputs.position = motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO;
         inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.PIVOT_GEAR_RATIO;
         inputs.temperature = Celsius.of(20).in(Celsius);
+
+        inputs.positionSetpoint = positionSetpoint.in(Rotations);
     }
 
     @Override
@@ -54,5 +57,7 @@ public class PivotIOSim implements PivotIO {
         motor.setInputVoltage(volts);
         
         appliedVoltage = Volts.of(volts);
+
+        positionSetpoint = angle;
     }
 }

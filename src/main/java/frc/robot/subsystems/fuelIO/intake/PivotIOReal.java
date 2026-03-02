@@ -16,6 +16,8 @@ public class PivotIOReal implements PivotIO {
     private final SparkMaxConfig motorConfig = new SparkMaxConfig();
     private final RelativeEncoder encoder;
 
+    private Angle positionSetpoint = Rotations.of(0);
+
     public PivotIOReal(int id) {
         motor = new SparkMax(id, MotorType.kBrushless);
 
@@ -60,6 +62,8 @@ public class PivotIOReal implements PivotIO {
         inputs.position = encoder.getPosition();
         inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
         inputs.temperature = motor.getMotorTemperature();
+
+        inputs.positionSetpoint = positionSetpoint.in(Rotations);
     }
 
     @Override
@@ -75,5 +79,7 @@ public class PivotIOReal implements PivotIO {
             ClosedLoopSlot.kSlot0,
             FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
         );
+
+        positionSetpoint = angle;
     }
 }
