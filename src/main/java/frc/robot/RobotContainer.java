@@ -238,8 +238,8 @@ public class RobotContainer {
         // ————— raw fuel bindings ————— //
 
         // intake
-        controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
-        controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand 
 
@@ -333,6 +333,7 @@ public class RobotContainer {
 
     public void teleopPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
+            Logger.recordOutput("outputs/simulation/fuelSimulation/autoWinner", HubUtil.getAutoWinner());
             Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
             Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
             Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubUtil.isActive());

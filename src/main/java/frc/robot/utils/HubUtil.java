@@ -55,14 +55,14 @@ public class HubUtil {
      * Will return {@code false} if disabled or in between auto and teleop.
      */
     public static boolean isActive(Alliance alliance, Shift shift) {
-        Optional<Alliance> autoWinner = getAutoWinner();
+        Alliance autoWinner = getAutoWinner();
         switch (shift.activeType) {
             case BOTH:
                 return true;
             case AUTO_WINNER:
-                return autoWinner.isPresent() && autoWinner.get() == alliance;
+                return autoWinner == alliance;
             case AUTO_LOSER:
-                return autoWinner.isPresent() && autoWinner.get() != alliance;
+                return autoWinner != alliance;
             default:
                 return false;
         }
@@ -119,16 +119,16 @@ public class HubUtil {
      * Returns the {@link Alliance} that won auto as specified by the FMS/Driver Station's game specific message data.
      * Will return {@link HubUtil#DEFAULT_AUTO_WINNER} if no game message or alliance is available.
      */
-    public static Optional<Alliance> getAutoWinner() {
+    public static Alliance getAutoWinner() {
         String msg = DriverStation.getGameSpecificMessage();
         char msgChar = msg.length() > 0 ? msg.charAt(0) : ' ';
         switch (msgChar) {
             case 'B':
-                return Optional.of(Alliance.Blue);
+                return Alliance.Blue;
             case 'R':
-                return Optional.of(Alliance.Red);
+                return Alliance.Red;
             default:
-                return Optional.of(DEFAULT_AUTO_WINNER);
+                return DEFAULT_AUTO_WINNER;
         }
     }
 
