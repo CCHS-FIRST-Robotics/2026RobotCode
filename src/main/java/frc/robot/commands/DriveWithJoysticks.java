@@ -88,12 +88,13 @@ public class DriveWithJoysticks extends Command {
                 );
             }
 
+            double robotYawRadians = poseEstimator.getPose().getRotation().getRadians();
             speeds = new ChassisSpeeds(
                 speeds.vxMetersPerSecond,
                 yOutput,
                 drive.getThetaController().calculate(
-                    poseEstimator.getPose().getRotation().getRadians(),
-                    0
+                    robotYawRadians,
+                    Math.abs(robotYawRadians) < Math.PI / 2 ? 0 : Math.PI
                 )
             );
         }

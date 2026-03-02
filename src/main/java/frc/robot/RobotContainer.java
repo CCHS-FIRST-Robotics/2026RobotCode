@@ -168,6 +168,8 @@ public class RobotContainer {
             )
         );
 
+        // ! add slow modes for velo and accel
+
         // ————— processed fuel bindings ————— //
 
         // intake and turn robot in the direction it's driving
@@ -311,6 +313,7 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
+    // ! logging should NOT be in simulation folder
     public void autonomousPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));

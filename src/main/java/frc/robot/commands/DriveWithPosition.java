@@ -63,7 +63,7 @@ public class DriveWithPosition extends Command {
             && Math.abs(
                 MathUtil.inputModulus(poseEstimator.getPose().getRotation().getRotations(), 0, 1)
                 - MathUtil.inputModulus(targetPose.getRotation().getRotations(), 0, 1)
-            ) < 0.005;
+            ) < 0.005; // ! test without inputModulus, it should work
             // ! the below would probably be good to add, more testing is necessary
             // && drive.getChassisSpeeds().vxMetersPerSecond < 0.1
             // && drive.getChassisSpeeds().vyMetersPerSecond < 0.1
