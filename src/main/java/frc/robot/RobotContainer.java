@@ -23,6 +23,7 @@ import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.utils.*;
 
+@SuppressWarnings("unused")
 public class RobotContainer {
     // ————— controllers ————— //
 
