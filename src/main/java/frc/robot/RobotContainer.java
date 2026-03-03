@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.*;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -39,6 +39,7 @@ public class RobotContainer {
 
     // ————— utils ————— //
 
+    private CommandFactory commandFactory;
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
     private SwerveDriveSimulation driveSimulation;
@@ -149,6 +150,16 @@ public class RobotContainer {
 
         drive.setPoseEstimator(poseEstimator);
 
+        commandFactory = new CommandFactory(
+            controller, 
+            drive, 
+            poseEstimator, 
+            intake, 
+            hopper, 
+            shooter,
+            fuelSimulation
+        );
+
         configureButtonBindings();
         configureAutos();
     }
@@ -157,82 +168,23 @@ public class RobotContainer {
         // ————— drive ————— //
         
         // regular joystick drive
-        drive.setDefaultCommand(
-            new DriveWithJoysticks(
-                drive,
-                poseEstimator,
-                () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped, x velocity relative to field is "forward" from driver perspective
-                () -> controller.getLeftXWithDeadband(), 
-                () -> controller.getRightXWithDeadband(),
-                null
-            )
-        );
+        drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
         // ! add slow modes for velo and accel
 
         // ————— processed fuel bindings ————— //
 
-        // intake and turn robot in the direction it's driving
-        controller.x().whileTrue(
-            new IntakeCommand(
-                intake
-            ).alongWith(
-                new DriveWithJoysticks(
-                    drive, 
-                    poseEstimator, 
-                    () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-                    () -> controller.getLeftXWithDeadband(), 
-                    () -> controller.getRightXWithDeadband(),
-                    () -> {
-                        return new Rotation2d(Math.atan2( // negatives are to map xbox controller to the cartesian plane
-                            -controller.getLeftXWithDeadband(), 
-                            -controller.getLeftYWithDeadband()
-                        ) + Math.PI); // intake is on back of robot
-                    }
-                )
-            )
+        controller.leftTrigger().whileTrue(
+            commandFactory.getDriveAndIntakeCommand()
+        );
+
+        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndIntakeAndShootCommand()
         );
 
         // shoot and turn robot towards target pose
-        controller.y().whileTrue(
-            new ShootCommand(
-                drive,
-                poseEstimator,
-                intake,
-                hopper,
-                shooter,
-                () -> ShootUtil.getTargetPose(poseEstimator.getPose()) // targetPose
-                , true
-            ).alongWith(
-                new DriveWithJoysticks(
-                    drive, 
-                    poseEstimator, 
-                    () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-                    () -> controller.getLeftXWithDeadband(), 
-                    () -> controller.getRightXWithDeadband(),
-                    () -> ShootUtil.getRobotRotationToTarget()
-                )
-            ).alongWith(
-                Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ? 
-                new InstantCommand(
-                    () -> {
-                        if (Constants.REALISTIC_SIM) {
-                            if (hopper.getHopperEmpty()) {
-                                return;
-                            }
-                            hopper.shootFuel();
-                        }
-
-                        fuelSimulation.launchFuel(
-                            () -> shooter.getShooterLinearVelocity(), 
-                            () -> shooter.getHoodShotAngle(),
-                            Rotations.of(0),
-                            FuelConstants.SHOOTER_POSITION
-                        );
-                    }
-                ).andThen(Commands.waitSeconds(0.5)).repeatedly() :
-                new InstantCommand()
-            )
+        controller.rightTrigger().whileTrue(
+            commandFactory.getDriveAndShootCommand()
         );
 
         controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
@@ -302,11 +254,20 @@ public class RobotContainer {
     // ————— autonomous ————— //
 
     private void configureAutos() {
-        autoGenerator = new AutoGenerator(drive, poseEstimator, driveSimulation, intake, hopper, shooter);
+        autoGenerator = new AutoGenerator(
+            drive, 
+            poseEstimator, 
+            intake, 
+            hopper, 
+            shooter, 
+            driveSimulation, 
+            commandFactory
+        );
         autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
+        autoChooser.addRoutine("IntakeAndShoot", () -> autoGenerator.intakeAndShoot());
 
         autoChooser.select("Back Up"); // picks a default auto
 

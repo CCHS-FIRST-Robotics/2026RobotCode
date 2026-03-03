@@ -22,7 +22,7 @@ public class HoodIOSim implements HoodIO {
     private final PIDController PID = new PIDController(150, 0, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
-    private Angle positionSetpoint;
+    private Angle positionSetpoint = Rotations.of(0);
 
     public HoodIOSim() {
         motor.setState(Constants.HOOD_START_ANGLE.in(Radians) * FuelConstants.HOOD_GEAR_RATIO, 0);
