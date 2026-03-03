@@ -4,7 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
@@ -56,6 +56,7 @@ public class CommandFactory {
 
     public Command getDriveAndShootCommand() {
         return getShootCommand()
+        .alongWith(getSlowDriveCommand(MetersPerSecond.of(2), MetersPerSecondPerSecond.of(10)))
         .alongWith(getDriveWithJoysticksShooterCommand())
         .alongWith(
             (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
@@ -69,16 +70,16 @@ public class CommandFactory {
         .alongWith(getDriveAndShootCommand());
     }
 
-    public Command getSlowDriveCommand() {
+    public Command getSlowDriveCommand(LinearVelocity velocity, LinearAcceleration acceleration) {
         return Commands.startEnd(
             () -> {
-                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(1); // *
+                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = velocity; // *
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
-                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10);
+                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = acceleration;
                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
             }, 
             () -> {
-                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = RobotBase.isReal() ? MetersPerSecond.of(2) : MetersPerSecond.of(5); // *
+                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(2) : MetersPerSecond.of(5); // *
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);

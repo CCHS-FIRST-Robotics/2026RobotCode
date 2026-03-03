@@ -172,7 +172,7 @@ public class RobotContainer {
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
         controller.x().whileTrue(
-            commandFactory.getSlowDriveCommand()
+            commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
         );
 
         // ————— processed fuel bindings ————— //
