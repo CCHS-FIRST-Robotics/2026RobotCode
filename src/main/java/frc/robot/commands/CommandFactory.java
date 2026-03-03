@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
@@ -66,6 +67,23 @@ public class CommandFactory {
     public Command getDriveAndIntakeAndShootCommand() {
         return getIntakeCommand()
         .alongWith(getDriveAndShootCommand());
+    }
+
+    public Command getSlowDriveCommand() {
+        return Commands.startEnd(
+            () -> {
+                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(1); // *
+                DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
+                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10);
+                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+            }, 
+            () -> {
+                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = RobotBase.isReal() ? MetersPerSecond.of(2) : MetersPerSecond.of(5); // *
+                DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
+                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
+                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+            }
+        );
     }
 
     // ! add an auto climb

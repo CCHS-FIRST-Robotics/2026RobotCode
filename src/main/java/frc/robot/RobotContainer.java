@@ -171,7 +171,9 @@ public class RobotContainer {
         // regular joystick drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
-        // ! add slow modes for velo and accel
+        controller.x().whileTrue(
+            commandFactory.getSlowDriveCommand()
+        );
 
         // ————— processed fuel bindings ————— //
 
