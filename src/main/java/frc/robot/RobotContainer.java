@@ -171,7 +171,7 @@ public class RobotContainer {
         // regular joystick drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
-        controller.x().whileTrue(
+        controller.rightStick().whileTrue( // remapped as gamesir R4
             commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
         );
 
@@ -185,7 +185,6 @@ public class RobotContainer {
             commandFactory.getDriveAndIntakeAndShootCommand()
         );
 
-        // shoot and turn robot towards target pose
         controller.rightTrigger().whileTrue(
             commandFactory.getDriveAndShootCommand()
         );
@@ -194,14 +193,16 @@ public class RobotContainer {
 
         // ————— raw fuel bindings ————— //
 
-        // intake
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(12)));
+        // // intake
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(8)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
-        // controller.x().onTrue(intake.getSetPivotPositionCommand 
+        // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
+        // controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
+        // controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
 
         // // hopper
-        // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(5)));
+        // controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(10)));
         // controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)));
 
         // // shooter
@@ -214,6 +215,7 @@ public class RobotContainer {
         // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
         // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
+        // // climber
         // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(4)));
         // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
         // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-4)));
