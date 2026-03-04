@@ -32,6 +32,10 @@ public class HoodIOReal implements HoodIO {
         // motor config
         motor.setPosition(Constants.HOOD_START_ANGLE);
         motorConfig.Slot0 = FuelConstants.HOOD_PIDF;
+        motorConfig.SoftwareLimitSwitch.withForwardSoftLimitEnable(true); // ! idk if the units or gear ratio are correct
+        motorConfig.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+        motorConfig.SoftwareLimitSwitch.withForwardSoftLimitThreshold(FuelConstants.HOOD_MAX_UP_ANGLE);
+        motorConfig.SoftwareLimitSwitch.withReverseSoftLimitThreshold(FuelConstants.HOOD_MAX_DOWN_ANGLE);
         motorConfig.Feedback.withSensorToMechanismRatio(FuelConstants.HOOD_GEAR_RATIO);
         motorConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;

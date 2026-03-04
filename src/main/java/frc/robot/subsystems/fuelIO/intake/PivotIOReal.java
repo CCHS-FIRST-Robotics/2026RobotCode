@@ -33,7 +33,7 @@ public class PivotIOReal implements PivotIO {
         motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)));
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
-
+        
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
         motorConfig.encoder.quadratureMeasurementPeriod(10);
@@ -51,6 +51,10 @@ public class PivotIOReal implements PivotIO {
         .velocityConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO);
 
         // stop config
+        motorConfig.softLimit.forwardSoftLimitEnabled(true); // ! idk if the units are correct
+        motorConfig.softLimit.reverseSoftLimitEnabled(true);
+        motorConfig.softLimit.forwardSoftLimit(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations));
+        motorConfig.softLimit.reverseSoftLimit(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations));
         motor.setCANTimeout(0);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

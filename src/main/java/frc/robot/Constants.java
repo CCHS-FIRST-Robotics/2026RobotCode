@@ -25,7 +25,7 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0;
 
-    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_DOWN_ANGLE; // ! 
+    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! 
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
     public static class FieldConstants {

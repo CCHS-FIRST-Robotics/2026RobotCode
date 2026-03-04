@@ -135,7 +135,7 @@ public class CommandFactory {
         return Commands.startEnd(
             () -> {
                 intake.setIntakeVoltage(Volts.of(12));
-                intake.setPivotPosition(FuelConstants.PIVOT_DOWN_ANGLE);
+                intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
             },
             () -> intake.setIntakeVoltage(Volts.of(0))
         );

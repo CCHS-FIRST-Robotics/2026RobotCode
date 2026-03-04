@@ -103,7 +103,7 @@ public class AutoGenerator {
         routine.active().onTrue(
             (
                 trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE))
+                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
             )
             .andThen(trajectory0.cmd())
             .andThen(
