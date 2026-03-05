@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
@@ -25,13 +26,20 @@ public class ShootUtil {
     );
 
     static {
-        SHOOTER_STATE_MAP.put(4.3661181434947265, new ShooterState(RotationsPerSecond.of(57.85937), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.03)));
-        SHOOTER_STATE_MAP.put(4.439996114327355, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.08)));
-        SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(37.734372), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(3.134703804104257, new ShooterState(RotationsPerSecond.of(50.312496), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(2.597315571788894, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.04)));
-        SHOOTER_STATE_MAP.put(3.7132919261998163, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.06)));
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) { // ! measured with kicker at 3 volts
+            SHOOTER_STATE_MAP.put(5.892394, new ShooterState(RotationsPerSecond.of(69.212891), Rotations.of(0.051758)));
+            SHOOTER_STATE_MAP.put(4.077568, new ShooterState(RotationsPerSecond.of(58.449219), Rotations.of(0.051758)));
+            SHOOTER_STATE_MAP.put(3.172064, new ShooterState(RotationsPerSecond.of(49.283203), Rotations.of(0.031982)));
+            SHOOTER_STATE_MAP.put(2.18186, new ShooterState(RotationsPerSecond.of(46.9375), Rotations.of(0.002197)));
+        } else {
+            SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(37.734372), Rotations.of(0.04)));
+            SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.03)));
+            SHOOTER_STATE_MAP.put(2.597315571788894, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.04)));
+            SHOOTER_STATE_MAP.put(3.134703804104257, new ShooterState(RotationsPerSecond.of(50.312496), Rotations.of(0.04)));
+            SHOOTER_STATE_MAP.put(3.7132919261998163, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.06)));
+            SHOOTER_STATE_MAP.put(4.3661181434947265, new ShooterState(RotationsPerSecond.of(57.85937), Rotations.of(0.04)));
+            SHOOTER_STATE_MAP.put(4.439996114327355, new ShooterState(RotationsPerSecond.of(47.796872), Rotations.of(0.08)));
+        }
     }
 
     public static Rotation2d robotRotationToTarget = new Rotation2d();

@@ -60,8 +60,8 @@ public class FuelConstants {
 
     // ————— sim ————— //
     
-    public static final Distance INTAKE_WIDTH_X = Inches.of(11.5); // ! 
-    public static final int HOPPER_FUEL_CAPACITY = 30; // ! 
+    public static final Distance INTAKE_WIDTH_X = Inches.of(11); // ! 
+    public static final int HOPPER_FUEL_CAPACITY = 40; // ! 
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
         Inches.of(11), 
         Inches.of(0), 
