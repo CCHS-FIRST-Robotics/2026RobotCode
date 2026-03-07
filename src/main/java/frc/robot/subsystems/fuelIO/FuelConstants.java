@@ -64,7 +64,7 @@ public class FuelConstants {
     public static final int HOPPER_FUEL_CAPACITY = 40; // ! 
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
         Inches.of(11), 
-        Inches.of(0), 
+        Inches.of(1), 
         Inches.of(18), 
         new Rotation3d()
     ); // ! 

@@ -72,7 +72,7 @@ public class CommandFactory {
 
     public Command getSlowDriveCommand(LinearVelocity velocity, LinearAcceleration acceleration) {
         return Commands.startEnd(
-            () -> {
+            () -> { // ! have an ALLOWED_LINEAR SPEED and then a MAX_ALLOWED 
                 DriveConstants.MAX_ALLOWED_LINEAR_SPEED = velocity; // *
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = acceleration;
@@ -110,7 +110,7 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
             () -> {
-                return new Rotation2d(Math.atan2( // negatives are to map xbox controller to the cartesian plane
+                return new Rotation2d(Math.atan2( // negatives map xbox controller to the cartesian plane
                     -controller.getLeftXWithDeadband(), 
                     -controller.getLeftYWithDeadband()
                 ) + Math.PI); // intake is on back of robot
@@ -134,7 +134,7 @@ public class CommandFactory {
     public Command getIntakeCommand() {
         return Commands.startEnd(
             () -> {
-                intake.setIntakeVoltage(Volts.of(12));
+                intake.setIntakeVoltage(Volts.of(10));
                 intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
             },
             () -> intake.setIntakeVoltage(Volts.of(0))
@@ -151,7 +151,7 @@ public class CommandFactory {
             3
         )))
         .alongWith( // allow shooting
-            Commands.waitSeconds(1) // waits for shooter to get up to speed // ! does this work
+            Commands.waitSeconds(1) // waits for shooter to get up to speed
             .andThen(
                 hopper.getSetHopperVoltageCommand(Volts.of(5))
                 .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(5)))

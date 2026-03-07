@@ -215,7 +215,7 @@ public class RobotContainer {
         // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
         // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
-        // // climber
+        // climber
         // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(4)));
         // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
         // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-4)));

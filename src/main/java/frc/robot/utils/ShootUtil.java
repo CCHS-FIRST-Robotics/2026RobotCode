@@ -73,20 +73,20 @@ public class ShootUtil {
     
     public static ShooterState getShooterStateFromMap(Pose2d robotPose, Pose2d targetPose) {
         Distance targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
-        ShooterState shot = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
+        ShooterState shooterState = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
 
         robotRotationToTarget = calculateRobotRotationToTarget(robotPose, targetPose);
 
         Logger.recordOutput("outputs/fuelIO/shooter/targetPose", targetPose);
         Logger.recordOutput("outputs/fuelIO/shooter/targetDistance", targetDistance);
 
-        return new ShooterState(shot.velocity, shot.angle);
+        return new ShooterState(shooterState.velocity, shooterState.angle);
     }
 
     public static ShooterState getShooterStateFromMapIterative(Pose2d robotPose, Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, int iterations) {
         Distance targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
-        ShooterState shot = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
-        Time timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shot.velocity), shot.angle, targetDistance);
+        ShooterState shooterState = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
+        Time timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shooterState.velocity), shooterState.angle, targetDistance);
 
         Pose2d targetFuturePose = new Pose2d();
         for(int i = 0; i < iterations; i++) {
@@ -94,8 +94,8 @@ public class ShootUtil {
             
             // update values for new future pose
             targetDistance = calculateRobotToTargetDistance(robotPose, targetFuturePose);
-            shot = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
-            timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shot.velocity), shot.angle, targetDistance);
+            shooterState = SHOOTER_STATE_MAP.get(targetDistance.in(Meters));
+            timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shooterState.velocity), shooterState.angle, targetDistance);
         }
 
         robotRotationToTarget = calculateRobotRotationToTarget(robotPose, targetFuturePose);
@@ -105,7 +105,7 @@ public class ShootUtil {
         Logger.recordOutput("outputs/fuelIO/shooter/targetFuturePose", targetFuturePose);
         Logger.recordOutput("outputs/fuelIO/shooter/timeOfFlight", timeOfFlight);
 
-        return shot;
+        return shooterState;
     }
 
     public static Rotation2d getRobotRotationToTarget() {

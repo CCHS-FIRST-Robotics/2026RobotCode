@@ -161,21 +161,27 @@ public class Drive extends SubsystemBase {
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
-                speeds = new ChassisSpeeds(
-                    clampVelocity(
+                speeds = new ChassisSpeeds( // clamp velocities
+                    Math.min(speeds.vxMetersPerSecond, DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    Math.min(speeds.vyMetersPerSecond, DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    Math.min(speeds.omegaRadiansPerSecond, DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
+                );
+
+                speeds = new ChassisSpeeds( // clamp accelerations
+                    clampAcceleration(
                         speeds.vxMetersPerSecond, 
                         prevSpeeds.vxMetersPerSecond, 
                         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
                     ),
-                    clampVelocity(
+                    clampAcceleration(
                         speeds.vyMetersPerSecond, 
                         prevSpeeds.vyMetersPerSecond, 
                         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
                     ),
-                    clampVelocity(
+                    clampAcceleration(
                         speeds.omegaRadiansPerSecond, 
                         prevSpeeds.omegaRadiansPerSecond, 
-                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * Constants.PERIOD
+                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
                     )
                 );
             
@@ -323,7 +329,7 @@ public class Drive extends SubsystemBase {
             .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 
-    public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration) {
+    public double clampAcceleration(double velocity, double prevVelocity, double maxAcceleration) {
         return MathUtil.clamp(velocity, prevVelocity - maxAcceleration, prevVelocity + maxAcceleration);
     }
 }
