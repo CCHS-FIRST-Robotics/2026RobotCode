@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
+import java.util.function.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
+import frc.robot.utils.ShootUtil.ShooterState;
 import frc.robot.Constants;
 
 public class CommandFactory {
@@ -25,6 +27,10 @@ public class CommandFactory {
     private final Shooter shooter;
 
     private final FuelSim fuelSimulation;
+
+    private final Voltage intakeVolts = Volts.of(10);
+    private final Voltage hopperVolts = Volts.of(10);
+    private final Voltage kickerVolts = Volts.of(5); // ! 
 
     public CommandFactory(
         Controller controller,
@@ -55,14 +61,9 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand() {
-        return getShootCommand()
-        .alongWith(getSlowDriveCommand(MetersPerSecond.of(2), MetersPerSecondPerSecond.of(10)))
-        .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(
-            (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
-            getSimShootCommand() :
-            new InstantCommand()).repeatedly()
-        );
+        return getSlowDriveCommand(MetersPerSecond.of(2), MetersPerSecondPerSecond.of(10))
+        .alongWith(getUpdateShootUtilCommand()).alongWith(getDriveWithJoysticksShooterCommand())
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterState()));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -72,7 +73,7 @@ public class CommandFactory {
 
     public Command getSlowDriveCommand(LinearVelocity velocity, LinearAcceleration acceleration) {
         return Commands.startEnd(
-            () -> { // ! have an ALLOWED_LINEAR SPEED and then a MAX_ALLOWED 
+            () -> {
                 DriveConstants.MAX_ALLOWED_LINEAR_SPEED = velocity; // *
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = acceleration;
@@ -88,6 +89,14 @@ public class CommandFactory {
     }
 
     // ! add an auto climb
+
+    public Command getUpdateShootUtilCommand() {
+        return Commands.run(() -> ShootUtil.updateIterative(
+            poseEstimator.getPose(), 
+            ShootUtil.getTargetPose(poseEstimator.getPose()), 
+            drive.getRobotRelativeSpeeds(), 3)
+        );
+    }
 
     // ————— drive ————— //
 
@@ -125,7 +134,7 @@ public class CommandFactory {
             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
-            () -> ShootUtil.getRobotRotationToTarget()
+            () -> ShootUtil.getRobotRotation()
         );
     }
 
@@ -134,7 +143,7 @@ public class CommandFactory {
     public Command getIntakeCommand() {
         return Commands.startEnd(
             () -> {
-                intake.setIntakeVoltage(Volts.of(10));
+                intake.setIntakeVoltage(intakeVolts);
                 intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
             },
             () -> intake.setIntakeVoltage(Volts.of(0))
@@ -143,23 +152,22 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand() {
-        return Commands.run(() -> shooter.runShooterState(ShootUtil.getShooterStateFromMapIterative( // start shooting
-            poseEstimator.getPose(), 
-            ShootUtil.getTargetPose(poseEstimator.getPose()),
-            drive.getFieldRelativeSpeeds(), 
-            3
-        )))
+    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) {
+        return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(1) // waits for shooter to get up to speed
             .andThen(
-                hopper.getSetHopperVoltageCommand(Volts.of(5))
-                .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(5)))
+                hopper.getSetHopperVoltageCommand(hopperVolts)
+                .alongWith(shooter.getSetKickerVoltageCommand(kickerVolts))
             )
+        ).alongWith(
+            (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
+            getSimShootCommand() :
+            new InstantCommand()).repeatedly()
         ).finallyDo( // stop everything
             () -> {
                 hopper.setHopperVoltage(Volts.of(0));
-                shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
+                // ! shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
                 shooter.setKickerVoltage(Volts.of(0));
             }
         );

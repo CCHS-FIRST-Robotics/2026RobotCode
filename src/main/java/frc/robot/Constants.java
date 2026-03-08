@@ -25,6 +25,8 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0;
 
+    public static final boolean TRENCH_ALIGN = true;
+
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! 
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
@@ -103,14 +105,13 @@ public final class Constants {
                     );
                 }
 
-                /** list of corners, with the bottom left corner repeated at the end to form a closed loop */
                 public Translation2d[] getCorners() {
                     return new Translation2d[] {
                         new Translation2d(xMin, yMin),
                         new Translation2d(xMax, yMin),
                         new Translation2d(xMax, yMax),
                         new Translation2d(xMin, yMax),
-                        new Translation2d(xMin, yMin)
+                        new Translation2d(xMin, yMin) // bottom left mirrored for a closed loop
                     };
                 }
             }

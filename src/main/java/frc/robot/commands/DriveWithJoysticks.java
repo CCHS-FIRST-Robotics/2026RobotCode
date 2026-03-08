@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.Zones;
 
@@ -74,7 +75,7 @@ public class DriveWithJoysticks extends Command {
         }
 
         // override with under trench angle
-        if (Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+        if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
             if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
                 yOutput = drive.getYController().calculate(

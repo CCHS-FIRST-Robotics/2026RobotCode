@@ -12,13 +12,13 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO shooterIO;
-    private final ShooterIOInputsAutoLogged shooterIOInputs = new ShooterIOInputsAutoLogged();
+    public final ShooterIOInputsAutoLogged shooterIOInputs = new ShooterIOInputsAutoLogged();
 
     private final HoodIO hoodIO;
-    private final HoodIOInputsAutoLogged hoodIOInputs = new HoodIOInputsAutoLogged();
+    public final HoodIOInputsAutoLogged hoodIOInputs = new HoodIOInputsAutoLogged();
 
     private final KickerIO kickerIO;
-    private final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
+    public final KickerIOInputsAutoLogged kickerIOInputs = new KickerIOInputsAutoLogged();
 
     private AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
     private Angle hoodAngle = Rotations.of(0);

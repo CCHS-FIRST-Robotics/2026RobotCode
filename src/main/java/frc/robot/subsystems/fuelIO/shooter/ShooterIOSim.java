@@ -38,6 +38,8 @@ public class ShooterIOSim implements ShooterIO {
         inputs.position = motor.getAngularPositionRotations() / FuelConstants.SHOOTER_GEAR_RATIO;
         inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO;
         inputs.temperature = Celsius.of(20).in(Celsius);
+
+        inputs.velocitySetpoint = prevVelocity.in(RotationsPerSecond);
     }
 
     @Override

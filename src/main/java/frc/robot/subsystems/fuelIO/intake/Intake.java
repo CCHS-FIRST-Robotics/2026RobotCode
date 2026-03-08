@@ -7,10 +7,10 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     private final IntakeIO intakeIO;
-    private final IntakeIOInputsAutoLogged intakeIOInputs = new IntakeIOInputsAutoLogged();
+    public final IntakeIOInputsAutoLogged intakeIOInputs = new IntakeIOInputsAutoLogged();
 
     private final PivotIO pivotIO;
-    private final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
+    public final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
     Angle pivotAngle = Constants.PIVOT_START_ANGLE;
 

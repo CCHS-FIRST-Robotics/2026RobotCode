@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
+import java.io.*;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.utils.*;
+import frc.robot.utils.ShootUtil.ShooterState;
 
 @SuppressWarnings("unused")
 public class RobotContainer {
@@ -48,8 +50,8 @@ public class RobotContainer {
 
     // ————— testing variables ————— //
 
-    // private double shooterVelocity = 0;
-    // private double hoodAngle = 0;
+    private double shooterVelocity = 0;
+    private double hoodAngle = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -177,24 +179,36 @@ public class RobotContainer {
 
         // ————— processed fuel bindings ————— //
 
-        controller.leftTrigger().whileTrue(
-            commandFactory.getDriveAndIntakeCommand()
-        );
+        // controller.leftTrigger().whileTrue(
+        //     commandFactory.getDriveAndIntakeCommand()
+        // );
 
-        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndIntakeAndShootCommand()
-        );
+        // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+        //     commandFactory.getDriveAndIntakeAndShootCommand()
+        // );
 
-        controller.rightTrigger().whileTrue(
-            commandFactory.getDriveAndShootCommand()
-        );
+        // controller.rightTrigger().whileTrue(
+        //     commandFactory.getDriveAndShootCommand()
+        // );
 
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+        // controller.x().whileTrue(commandFactory.getShootCommand(
+        //     () -> new ShooterState(
+        //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint), 
+        //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
+        //     )
+        // ));
+
+        // controller.y().whileTrue(
+        //     commandFactory.getUpdateShootUtilCommand()
+        //     .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
+        // );
+
+        // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
 
         // ————— raw fuel bindings ————— //
 
         // // intake
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(8)));
+        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(10)));
         // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
 
         // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
@@ -212,7 +226,7 @@ public class RobotContainer {
         // controller.leftBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
         // controller.rightBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
 
-        // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(3)));
+        // controller.y().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(5)));
         // controller.a().onTrue(shooter.getSetKickerVoltageCommand(Volts.of(0)));
 
         // climber
@@ -227,33 +241,50 @@ public class RobotContainer {
         // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
         // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
 
-        // controller.leftTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity -= 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        controller.leftTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity -= 1.25;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
 
-        // controller.rightTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity += 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        controller.rightTrigger().onTrue(
+            new InstantCommand(() -> {
+                shooterVelocity += 1.25;
+                shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+            })
+        );
 
-        // controller.leftBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle += 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        controller.leftBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle += 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
 
-        // controller.rightBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle -= 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        controller.rightBumper().onTrue(
+            new InstantCommand(() -> {
+                hoodAngle -= 0.01;
+                shooter.setHoodPosition(Rotations.of(hoodAngle));
+            })
+        );
+
+        controller.a().onTrue(
+            new InstantCommand(() -> 
+                {
+                    FileWriter writer;
+                    try {
+                        writer = new FileWriter("shooterStates.txt", true);
+
+                        writer.write("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
+
+                        writer.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            )
+        );
     }
 
     // ————— autonomous ————— //
@@ -321,6 +352,7 @@ public class RobotContainer {
         // drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+        Constants.FieldConstants.Zones.logAllZones();
 
         // drive
         fuelSimulation = new FuelSim();

@@ -7,7 +7,7 @@ import org.littletonrobotics.junction.*;
 
 public class Hopper extends SubsystemBase {
     private final HopperIO io;
-    private final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
+    public final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
     private int numFuel;
 
