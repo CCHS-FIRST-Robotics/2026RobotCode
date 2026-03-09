@@ -39,6 +39,8 @@ public class FuelConstants {
 
     // ————— PIDF ————— //
 
+    // ! FOR ALL OF THESE REMEMBER TO CHECK WHETHER THE SOFT LIMITS FOR POSITIONING ACTUALLY APPLY
+
     public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(10, 0, 0); // ! needs tuning
     public static final double PIVOT_KCOS = 0.45; // ! needs tuning
 
@@ -60,7 +62,7 @@ public class FuelConstants {
 
     // ————— sim ————— //
     
-    public static final Distance INTAKE_WIDTH_X = Inches.of(11); // ! 
+    public static final Distance INTAKE_WIDTH_X = Inches.of(11.5); // ! 
     public static final int HOPPER_FUEL_CAPACITY = 40; // ! 
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
         Inches.of(11), 

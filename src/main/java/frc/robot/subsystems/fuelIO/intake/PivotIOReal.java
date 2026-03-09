@@ -51,9 +51,9 @@ public class PivotIOReal implements PivotIO {
         .velocityConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO);
 
         // stop config
-        motorConfig.softLimit.forwardSoftLimitEnabled(true); // ! idk if the units are correct
+        motorConfig.softLimit.forwardSoftLimitEnabled(true);
         motorConfig.softLimit.reverseSoftLimitEnabled(true);
-        motorConfig.softLimit.forwardSoftLimit(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations));
+        motorConfig.softLimit.forwardSoftLimit(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations)); // ! idk if the units are correct
         motorConfig.softLimit.reverseSoftLimit(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations));
         motor.setCANTimeout(0);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

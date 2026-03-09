@@ -30,7 +30,7 @@ public class CommandFactory {
 
     private final Voltage intakeVolts = Volts.of(10);
     private final Voltage hopperVolts = Volts.of(10);
-    private final Voltage kickerVolts = Volts.of(5); // ! 
+    private final Voltage kickerVolts = Volts.of(5);
 
     public CommandFactory(
         Controller controller,
@@ -71,6 +71,7 @@ public class CommandFactory {
         .alongWith(getDriveAndShootCommand());
     }
 
+    // ! I don't like this
     public Command getSlowDriveCommand(LinearVelocity velocity, LinearAcceleration acceleration) {
         return Commands.startEnd(
             () -> {
@@ -85,16 +86,6 @@ public class CommandFactory {
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
             }
-        );
-    }
-
-    // ! add an auto climb
-
-    public Command getUpdateShootUtilCommand() {
-        return Commands.run(() -> ShootUtil.updateIterative(
-            poseEstimator.getPose(), 
-            ShootUtil.getTargetPose(poseEstimator.getPose()), 
-            drive.getRobotRelativeSpeeds(), 3)
         );
     }
 
@@ -167,7 +158,7 @@ public class CommandFactory {
         ).finallyDo( // stop everything
             () -> {
                 hopper.setHopperVoltage(Volts.of(0));
-                // ! shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
+                shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
                 shooter.setKickerVoltage(Volts.of(0));
             }
         );
@@ -191,5 +182,15 @@ public class CommandFactory {
                 );
             }
         ).andThen(Commands.waitSeconds(0.5));
+    }
+
+    // ————— util ————— //
+
+    public Command getUpdateShootUtilCommand() {
+        return Commands.run(() -> ShootUtil.updateIterative(
+            poseEstimator.getPose(), 
+            ShootUtil.getTargetPose(poseEstimator.getPose()), 
+            drive.getRobotRelativeSpeeds(), 3)
+        );
     }
 }

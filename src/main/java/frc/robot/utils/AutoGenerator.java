@@ -46,7 +46,7 @@ public class AutoGenerator {
                 }
             },
             drive::runAutoPosition,
-            true, // ! I fucking think (idk what "If this returns true, when on the red alliance" is supposed to mean)
+            true,
             drive
         );
         choreo.util.ChoreoAllianceFlipUtil.flip(new Pose2d());
@@ -72,7 +72,7 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            // new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get()) // ! add the catch later
+            // new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get())
             // .andThen(trajectory0.resetOdometry())
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
@@ -87,8 +87,6 @@ public class AutoGenerator {
     public Command backUp() {
         return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
     }
-
-    // ! apparently you can just splice together pieces of different trajectories from choreo, so I can make two under the trench trajectories and then just reuse them every time
 
     public AutoRoutine intakeAndShoot() {
         AutoRoutine routine = autoFactory.newRoutine("IntakeAndShoot");

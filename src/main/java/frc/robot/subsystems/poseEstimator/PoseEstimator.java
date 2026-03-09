@@ -67,7 +67,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public void resetPosition(Pose2d pose) { // ! I don't remember if or why this works
+    public void resetPosition(Pose2d pose) {
         // "the library automatically takes care of offsetting the gyro angle" - SwerveDrivePoseEstimator.resetPosition
         odometryEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
         visionEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);

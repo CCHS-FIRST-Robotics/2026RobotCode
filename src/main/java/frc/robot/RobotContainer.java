@@ -168,77 +168,77 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // ————— drive ————— //
-        
-        // regular joystick drive
+        // ————— competition bindings ————— //
+
+        // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
+        // drive slow
         controller.rightStick().whileTrue( // remapped as gamesir R4
             commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
         );
 
-        // ————— processed fuel bindings ————— //
+        // drive and intake
+        controller.leftTrigger().whileTrue(
+            commandFactory.getDriveAndIntakeCommand()
+        );
 
-        // controller.leftTrigger().whileTrue(
-        //     commandFactory.getDriveAndIntakeCommand()
+        // drive and intake and shoot
+        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndIntakeAndShootCommand()
+        );
+
+        // drive and shoot
+        controller.rightTrigger().whileTrue(
+            commandFactory.getDriveAndShootCommand()
+        );
+
+        // ————— simulation bindings ————— //
+
+        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+
+        // ————— testing for BPS ————— //
+
+        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
+        //     () -> new ShooterState(
+        //         RotationsPerSecond.of(30), 
+        //         Rotations.of(0)
+        //     )
+        // ));
+
+        // controller.x().onTrue(
+        //     hopper.getSetHopperVoltageCommand(Volts.of(2))
+        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(2)))
+        // );
+        // controller.y().onTrue(
+        //     hopper.getSetHopperVoltageCommand(Volts.of(2))
+        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6)))
+        // );
+        // controller.b().onTrue(
+        //     hopper.getSetHopperVoltageCommand(Volts.of(6))
+        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6)))
+        // );
+        // controller.a().onTrue(
+        //     hopper.getSetHopperVoltageCommand(Volts.of(0))
+        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(0)))
         // );
 
-        // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-        //     commandFactory.getDriveAndIntakeAndShootCommand()
-        // );
+        // ————— testing for shooter map ————— //
 
-        // controller.rightTrigger().whileTrue(
-        //     commandFactory.getDriveAndShootCommand()
-        // );
+        // // ! remember to uncomment the hopper and kicker voltage in commandfactory
 
-        controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
-            () -> new ShooterState(
-                RotationsPerSecond.of(35), 
-                Rotations.of(0)
-            )
-        ));
-
-        // controller.y().whileTrue(
+        // controller.x().whileTrue(
         //     commandFactory.getUpdateShootUtilCommand()
         //     .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
         // );
 
-        // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
-
-        // ————— raw fuel bindings ————— //
-
-        // // intake
-        // controller.x().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(10)));
-        // controller.b().onTrue(intake.getSetIntakeVoltageCommand(Volts.of(0)));
-
-        // controller.x().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_UP_ANGLE));
-        // controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
-        // controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_DOWN_ANGLE));
-
-        // hopper
-        controller.x().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(2)).alongWith(shooter.getSetKickerVoltageCommand(Volts.of(2))));
-        controller.y().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(2)).alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6))));
-        controller.b().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(6)).alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6))));
-        controller.a().onTrue(hopper.getSetHopperVoltageCommand(Volts.of(0)).alongWith(shooter.getSetKickerVoltageCommand(Volts.of(0))));
-
-        // // shooter
-        // controller.rightTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)));
-        // controller.leftTrigger().onTrue(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)));
-
-        // controller.leftBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_DOWN_ANGLE));
-        // controller.rightBumper().onTrue(shooter.getSetHoodPositionCommand(FuelConstants.HOOD_UP_ANGLE));
-
-        // climber
-        // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(4)));
-        // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
-        // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-4)));
-
-        // ————— testing ————— //
-        
-        // sysid
-        // controller.x().whileTrue(drive.sysIdFull());
-        // controller.y().whileTrue(Commands.runOnce(SignalLogger::start).andThen(drive.sysIdFull()));
-        // controller.a().onFalse(Commands.runOnce(SignalLogger::stop));
+        // // ! remember to comment out the finallyDo
+        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
+        //     () -> new ShooterState(
+        //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
+        //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
+        //     )
+        // ));
 
         // controller.leftTrigger().onTrue(
         //     new InstantCommand(() -> {
@@ -268,6 +268,7 @@ public class RobotContainer {
         //     })
         // );
 
+        // // ! make inputs private later
         // controller.a().onTrue(
         //     new InstantCommand(() -> 
         //         {
@@ -309,12 +310,12 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
-    // ! logging should NOT be in simulation folder
     public void autonomousPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubUtil.isActive());
+            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
+            
             Logger.recordOutput(
             "outputs/simulation/fuelSimulation/hubScore", 
                 DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
@@ -332,10 +333,11 @@ public class RobotContainer {
 
     public void teleopPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/simulation/fuelSimulation/autoWinner", HubUtil.getAutoWinner());
-            Logger.recordOutput("outputs/simulation/fuelSimulation/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/simulation/fuelSimulation/hubActive", HubUtil.isActive());
+            Logger.recordOutput("outputs/fieldInfo/autoWinner", HubUtil.getAutoWinner());
+            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", Math.round(HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)).in(Seconds)));
+            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
+            
             Logger.recordOutput(
             "outputs/simulation/fuelSimulation/hubScore", 
                 DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 

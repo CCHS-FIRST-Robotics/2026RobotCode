@@ -89,7 +89,7 @@ public class DriveConstants { // * indicates a physical measurement
     // ————— drivetrain ————— //
 
     public static final Mass ROBOT_WEIGHT = Pounds.of(74.088); // ! *
-    public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! *
+    public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! default value
     public static final Distance WIDTH_X = Inches.of(27.5); // *
     public static final Distance WIDTH_Y = Inches.of(27.5); // *
     public static final Distance TRACK_WIDTH_X = Inches.of(22.25); // *
@@ -119,7 +119,7 @@ public class DriveConstants { // * indicates a physical measurement
     public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
     private static final Current SLIP_CURRENT = Amps.of(120.0);
 
-    // these are only used for simulation // ! https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template/
+    // these are only used for simulation
     private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01);
     private static final MomentOfInertia TURN_INERTIA = KilogramSquareMeters.of(0.01);
     private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2); // simulated voltage necessary to overcome friction

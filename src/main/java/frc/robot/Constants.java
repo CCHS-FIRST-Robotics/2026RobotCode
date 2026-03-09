@@ -17,17 +17,17 @@ public final class Constants {
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
-    public static final boolean REALISTIC_SIM = false;
+    public static final boolean REALISTIC_SIM = true;
     
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 
-    new Pose2d(0, 0, new Rotation2d()); // in real, it gets reset immediately anyways
+    new Pose2d(0, 0, new Rotation2d());
 
     public static final int CONTROLLER_PORT = 0;
 
     public static final boolean TRENCH_ALIGN = false;
 
-    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! 
+    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! remember to change this for comp
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
     public static class FieldConstants {
@@ -111,7 +111,7 @@ public final class Constants {
                         new Translation2d(xMax, yMin),
                         new Translation2d(xMax, yMax),
                         new Translation2d(xMin, yMax),
-                        new Translation2d(xMin, yMin) // bottom left mirrored for a closed loop
+                        new Translation2d(xMin, yMin) // bottom left is mirrored to form a closed loop
                     };
                 }
             }
@@ -154,10 +154,10 @@ public final class Constants {
             );
 
             public static void logAllZones() {
-                Logger.recordOutput("Zones/Trenches/Blue Bottom", BLUE_BOTTOM_TRENCH.getCorners());
-                Logger.recordOutput("Zones/Trenches/Blue Top", BLUE_TOP_TRENCH.getCorners());
-                Logger.recordOutput("Zones/Trenches/Red Bottom", RED_BOTTOM_TRENCH.getCorners());
-                Logger.recordOutput("Zones/Trenches/Red Top", RED_TOP_TRENCH.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", BLUE_BOTTOM_TRENCH.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", BLUE_TOP_TRENCH.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", RED_BOTTOM_TRENCH.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", RED_TOP_TRENCH.getCorners());
             }
         }
     }
