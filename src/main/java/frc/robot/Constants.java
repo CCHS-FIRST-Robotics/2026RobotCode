@@ -25,7 +25,7 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0;
 
-    public static final boolean TRENCH_ALIGN = false;
+    public static final boolean TRENCH_ALIGN = true;
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! remember to change this for comp
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
