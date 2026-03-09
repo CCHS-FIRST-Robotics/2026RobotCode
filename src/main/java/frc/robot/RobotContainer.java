@@ -170,32 +170,36 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // ————— competition bindings ————— //
 
-        // drive
-        drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+        // // drive
+        // drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
-        // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
-        );
+        // // drive slow
+        // controller.rightStick().whileTrue( // remapped as gamesir R4
+        //     commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
+        // );
 
-        // drive and intake
-        controller.leftTrigger().whileTrue(
-            commandFactory.getDriveAndIntakeCommand()
-        );
+        // // drive and intake
+        // controller.leftTrigger().whileTrue(
+        //     commandFactory.getDriveAndIntakeCommand()
+        // );
 
         // drive and intake and shoot
-        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndIntakeAndShootCommand()
-        );
+        // controller.leftTrigger().whileTrue(
+        //     commandFactory.getDriveAndIntakeAndShootCommand()
+        // );
 
         // drive and shoot
-        controller.rightTrigger().whileTrue(
-            commandFactory.getDriveAndShootCommand()
-        );
+        // controller.rightTrigger().whileTrue(
+        //     commandFactory.getDriveAndShootCommand()
+        // );
 
         // ————— simulation bindings ————— //
 
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+        controller.x().onTrue(new InstantCommand(() -> hopper.setHopperVelocity(RotationsPerSecond.of(1))));
+        controller.y().onTrue(new InstantCommand(() -> hopper.setHopperVelocity(RotationsPerSecond.of(4))));
+        controller.b().onTrue(new InstantCommand(() -> hopper.setHopperVelocity(RotationsPerSecond.of(10))));
+        controller.a().onTrue(new InstantCommand(() -> hopper.setHopperVelocity(RotationsPerSecond.of(0))));
+        controller.leftTrigger().onTrue(new InstantCommand(() -> hopper.setHopperVoltage(Volts.of(0))));
 
         // ————— testing for BPS ————— //
 
