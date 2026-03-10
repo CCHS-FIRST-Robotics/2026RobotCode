@@ -220,11 +220,11 @@ public class RobotContainer {
         //     })
         // );
 
-        controller.leftBumper().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.4)));
-        controller.x().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.3)));
-        controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
-        controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
-        controller.a().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-0.04)));
+        // controller.leftBumper().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.4)));
+        // controller.x().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.3)));
+        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        // controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
+        // controller.a().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-0.04)));
 
         // ————— testing for climb ————— //
 
@@ -236,25 +236,25 @@ public class RobotContainer {
 
         // ! remember to comment out the set hopper and kicker voltage in commandfactory
 
-        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
-        //     () -> new ShooterState(
-        //         RotationsPerSecond.of(30), 
-        //         Rotations.of(0)
-        //     )
-        // ));
+        controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
+            () -> new ShooterState(
+                RotationsPerSecond.of(30), 
+                Rotations.of(0)
+            )
+        ));
 
-        // controller.x().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity += 5;
-        //         hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
-        //     })
-        // );
-        // // controller.b().onTrue(
-        // //     new InstantCommand(() -> {
-        // //         hopperVelocity -= 5;
-        // //         hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
-        // //     })
-        // // );
+        controller.x().onTrue(
+            new InstantCommand(() -> {
+                hopperVelocity += 5;
+                hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+            })
+        );
+        controller.b().onTrue(
+            new InstantCommand(() -> {
+                hopperVelocity -= 5;
+                hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+            })
+        );
         // controller.y().onTrue(
         //     new InstantCommand(() -> {
         //         kickerVelocity += 5;
