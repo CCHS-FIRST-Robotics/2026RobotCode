@@ -75,6 +75,11 @@ public class Drive extends SubsystemBase {
     private final PIDController xPID = new PIDController(5, 0, 0);
     private final PIDController yPID = new PIDController(5, 0, 0);
     private final PIDController thetaPID = new PIDController(5, 0, 0);
+
+    // // for choreo
+    // private final PIDController xPID = new PIDController(45, 0, 5); // 45
+    // private final PIDController yPID = new PIDController(45, 0, 5);
+    // private final PIDController thetaPID = new PIDController(50, 0, 10); // 50 10
     
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
@@ -147,6 +152,8 @@ public class Drive extends SubsystemBase {
                 Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
             case POSITION:
+                Logger.recordOutput("outputs/drive/targetPose", positionSetpoint);
+
                 // get PIDs
                 double xOutput = xPID.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
                 double yOutput = yPID.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
@@ -161,29 +168,29 @@ public class Drive extends SubsystemBase {
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
-                speeds = new ChassisSpeeds( // clamp velocities
-                    Math.min(speeds.vxMetersPerSecond, DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    Math.min(speeds.vyMetersPerSecond, DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    Math.min(speeds.omegaRadiansPerSecond, DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
-                );
+                // speeds = new ChassisSpeeds( // clamp velocities
+                //     MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                //     MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                //     MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
+                // );
 
-                speeds = new ChassisSpeeds( // clamp accelerations
-                    clampAcceleration(
-                        speeds.vxMetersPerSecond, 
-                        prevSpeeds.vxMetersPerSecond, 
-                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                    ),
-                    clampAcceleration(
-                        speeds.vyMetersPerSecond, 
-                        prevSpeeds.vyMetersPerSecond, 
-                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                    ),
-                    clampAcceleration(
-                        speeds.omegaRadiansPerSecond, 
-                        prevSpeeds.omegaRadiansPerSecond, 
-                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
-                    )
-                );
+                // speeds = new ChassisSpeeds( // clamp accelerations
+                //     clampAcceleration(
+                //         speeds.vxMetersPerSecond, 
+                //         prevSpeeds.vxMetersPerSecond, 
+                //         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                //     ),
+                //     clampAcceleration(
+                //         speeds.vyMetersPerSecond, 
+                //         prevSpeeds.vyMetersPerSecond, 
+                //         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                //     ),
+                //     clampAcceleration(
+                //         speeds.omegaRadiansPerSecond, 
+                //         prevSpeeds.omegaRadiansPerSecond, 
+                //         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
+                //     )
+                // );
             
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
@@ -191,7 +198,13 @@ public class Drive extends SubsystemBase {
                 prevSpeeds = speeds;
 
                 SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
+                SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
+                    moduleStates, 
+                    speeds,
+                    DriveConstants.MAX_ALLOWED_LINEAR_SPEED, 
+                    DriveConstants.MAX_ALLOWED_LINEAR_SPEED, 
+                    DriveConstants.MAX_ALLOWED_ANGULAR_SPEED
+                );
 
                 // run modules
                 for (int i = 0; i < 4; i++) {

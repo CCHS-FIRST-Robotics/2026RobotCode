@@ -113,10 +113,15 @@ public class DriveConstants { // * indicates a physical measurement
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 
     public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
-    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(2) : MetersPerSecond.of(5); // *
-    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
-    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(2) : MetersPerSecond.of(5);
+    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
+    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
+    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+    public static LinearVelocity ALLOWED_LINEAR_SPEED = MAX_ALLOWED_LINEAR_SPEED;
+    public static AngularVelocity ALLOWED_ANGULAR_SPEED = MAX_ALLOWED_ANGULAR_SPEED;
+    public static LinearAcceleration ALLOWED_LINEAR_ACCEL = MAX_ALLOWED_LINEAR_ACCEL;
+    public static AngularAcceleration ALLOWED_ANGULAR_ACCEL = MAX_ALLOWED_ANGULAR_ACCEL;
+    
     private static final Current SLIP_CURRENT = Amps.of(120.0);
 
     // these are only used for simulation

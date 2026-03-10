@@ -23,7 +23,7 @@ public class ShooterIOSim implements ShooterIO {
     private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.13259, 0);
 
     private Voltage appliedVoltage = Volts.of(0);
-    private AngularVelocity prevVelocity = RotationsPerSecond.of(0);
+    private AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);
 
     public ShooterIOSim() {
         motor.setState(0, 0);
@@ -39,7 +39,7 @@ public class ShooterIOSim implements ShooterIO {
         inputs.velocity = Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO;
         inputs.temperature = Celsius.of(20).in(Celsius);
 
-        inputs.velocitySetpoint = prevVelocity.in(RotationsPerSecond);
+        inputs.velocitySetpoint = velocitySetpoint.in(RotationsPerSecond);
     }
 
     @Override
@@ -55,12 +55,12 @@ public class ShooterIOSim implements ShooterIO {
             Rotations.per(Minute).of(motor.getAngularVelocityRPM()).in(RotationsPerSecond) / FuelConstants.SHOOTER_GEAR_RATIO, 
             velocity.in(RotationsPerSecond)
         ) + FF.calculateWithVelocities(
-            prevVelocity.in(RotationsPerSecond),
+            velocitySetpoint.in(RotationsPerSecond),
             velocity.in(RotationsPerSecond)
         );
         motor.setInputVoltage(volts);
         
         appliedVoltage = Volts.of(volts);
-        prevVelocity = velocity;
+        velocitySetpoint = velocity;
     }
 }

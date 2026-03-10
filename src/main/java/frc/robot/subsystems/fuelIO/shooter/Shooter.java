@@ -22,6 +22,8 @@ public class Shooter extends SubsystemBase {
 
     private AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
     private Angle hoodAngle = Rotations.of(0);
+    private AngularVelocity kickerVelocity = RotationsPerSecond.of(0);
+
 
     public Shooter(
         ShooterIO shooterIO, 
@@ -46,6 +48,8 @@ public class Shooter extends SubsystemBase {
             shooterIO.setVelocity(shooterVelocity);
             hoodIO.setPosition(hoodAngle);
         }
+
+        kickerIO.setVelocity(kickerVelocity);
     }
 
     // ————— raw command factories ————— //
@@ -102,6 +106,14 @@ public class Shooter extends SubsystemBase {
 
     public Command getSetKickerVoltageCommand(Voltage volts) {
         return runOnce(() -> setKickerVoltage(volts));
+    }
+
+    public void setKickerVelocity(AngularVelocity velocity) {
+        kickerVelocity = velocity;
+    }
+
+    public Command getSetKickerVelocityCommand(AngularVelocity velocity) {
+        return runOnce(() -> setKickerVelocity(velocity));
     }
 
     // util

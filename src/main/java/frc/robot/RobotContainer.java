@@ -53,6 +53,10 @@ public class RobotContainer {
     private double shooterVelocity = 0;
     private double hoodAngle = 0;
 
+    @AutoLogOutput
+    private double hopperVelocity = 0;
+    private double kickerVelocity = 0;
+
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
             case REAL: // real robot, instantiate hardware IO implementations
@@ -174,30 +178,59 @@ public class RobotContainer {
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
         // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
-        );
+        // controller.rightStick().whileTrue( // remapped as gamesir R4
+        //     commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
+        // );
 
-        // drive and intake
-        controller.leftTrigger().whileTrue(
-            commandFactory.getDriveAndIntakeCommand()
-        );
+        // // drive and intake
+        // controller.leftTrigger().whileTrue(
+        //     commandFactory.getDriveAndIntakeCommand()
+        // );
 
-        // drive and intake and shoot
-        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndIntakeAndShootCommand()
-        );
+        // // drive and intake and shoot
+        // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+        //     commandFactory.getDriveAndIntakeAndShootCommand()
+        // );
 
-        // drive and shoot
-        controller.rightTrigger().whileTrue(
-            commandFactory.getDriveAndShootCommand()
-        );
+        // // drive and shoot
+        // controller.rightTrigger().whileTrue(
+        //     commandFactory.getDriveAndShootCommand()
+        // );
 
         // ————— simulation bindings ————— //
 
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+        // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+
+        // ————— testing for pivot ————— //
+
+        // controller.leftTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         hopperVelocity -= 0.5;
+        //         intake.setPivotVoltage(Volts.of(hopperVelocity));
+        //     })
+        // );
+        // controller.rightTrigger().onTrue(
+        //     new InstantCommand(() -> {
+        //         hopperVelocity += 0.5;
+        //         intake.setPivotVoltage(Volts.of(hopperVelocity));
+        //     })
+        // );
+
+        controller.leftBumper().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.4)));
+        controller.x().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.3)));
+        controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.1)));
+        controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
+        controller.a().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-0.04)));
+
+        // ————— testing for climb ————— //
+
+        // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(2)));
+        // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
+        // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-2)));
 
         // ————— testing for BPS ————— //
+
+        // ! remember to comment out the set hopper and kicker voltage in commandfactory
 
         // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
         //     () -> new ShooterState(
@@ -207,20 +240,41 @@ public class RobotContainer {
         // ));
 
         // controller.x().onTrue(
-        //     hopper.getSetHopperVoltageCommand(Volts.of(2))
-        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(2)))
+        //     new InstantCommand(() -> {
+        //         hopperVelocity += 5;
+        //         hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+        //     })
         // );
+        // // controller.b().onTrue(
+        // //     new InstantCommand(() -> {
+        // //         hopperVelocity -= 5;
+        // //         hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+        // //     })
+        // // );
         // controller.y().onTrue(
-        //     hopper.getSetHopperVoltageCommand(Volts.of(2))
-        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6)))
-        // );
-        // controller.b().onTrue(
-        //     hopper.getSetHopperVoltageCommand(Volts.of(6))
-        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(6)))
+        //     new InstantCommand(() -> {
+        //         kickerVelocity += 5;
+        //         shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+        //     })
         // );
         // controller.a().onTrue(
-        //     hopper.getSetHopperVoltageCommand(Volts.of(0))
-        //     .alongWith(shooter.getSetKickerVoltageCommand(Volts.of(0)))
+        //     new InstantCommand(() -> {
+        //         kickerVelocity -= 5;
+        //         shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+        //     })
+        // );
+
+        // controller.x().onTrue(
+        //     new InstantCommand(() -> {
+        //         hopperVelocity += 1;
+        //         hopper.setHopperVoltage(Volts.of(hopperVelocity));
+        //     })
+        // );
+        // controller.b().onTrue(
+        //     new InstantCommand(() -> {
+        //         hopperVelocity -= 1;
+        //         hopper.setHopperVoltage(Volts.of(hopperVelocity));
+        //     })
         // );
 
         // ————— testing for shooter map ————— //
@@ -233,7 +287,7 @@ public class RobotContainer {
         // );
 
         // // ! remember to comment out the finallyDo
-        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
+        // controller.y().whileTrue(commandFactory.getShootCommand(
         //     () -> new ShooterState(
         //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
         //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
@@ -303,9 +357,10 @@ public class RobotContainer {
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
-        autoChooser.addRoutine("IntakeAndShoot", () -> autoGenerator.intakeAndShoot());
+        autoChooser.addRoutine("CenterFuel", () -> autoGenerator.centerFuel());
+        autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
-        autoChooser.select("Back Up"); // picks a default auto
+        autoChooser.select("frank"); // picks a default auto
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }

@@ -11,9 +11,13 @@ public interface KickerIO {
         public double position;
         public double velocity;
         public double temperature;
+
+        public double velocitySetpoint;
     }
 
     public default void updateInputs(KickerIOInputs inputs) {}
 
     public default void setVoltage(Voltage volts) {}
+
+    public default void setVelocity(AngularVelocity velocity) {}
 }

@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 
@@ -23,15 +25,15 @@ public class FuelConstants {
 
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
     public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect, but no one cares
-    public static final double PIVOT_GEAR_RATIO = 25.0 / 84.0 * 50.0;
+    public static final double PIVOT_GEAR_RATIO = 75.0 / 84.0 * 50.0;
     public static final double HOPPER_GEAR_RATIO = 4.0;
     public static final double SHOOTER_GEAR_RATIO = 1;
     public static final double HOOD_GEAR_RATIO = 64.0 / 30.0 * 60.0;
     public static final double KICKER_GEAR_RATIO = 1;
     
     // when pivot is zeroed at horizontal
-    public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.2); // !
-    public static final Angle PIVOT_MAX_DOWN_ANGLE = Rotations.of(-0.0976); // !
+    public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.4); // !
+    public static final Angle PIVOT_MAX_DOWN_ANGLE = Rotations.of(-0.056);
 
     // when hood is zeroed at horizontal
     public static final Angle HOOD_MAX_UP_ANGLE = Rotations.of(0.1); // !
@@ -42,7 +44,10 @@ public class FuelConstants {
     // ! FOR ALL OF THESE REMEMBER TO CHECK WHETHER THE SOFT LIMITS FOR POSITIONING ACTUALLY APPLY
 
     public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(10, 0, 0); // ! needs tuning
-    public static final double PIVOT_KCOS = 0.45; // ! needs tuning
+    public static final double PIVOT_KCOS = 0.5; // ! needs tuning
+
+    public static final ClosedLoopConfig HOPPER_PID = new ClosedLoopConfig().pid(0.001, 0, 0); // ! needs tuning
+    public static final SimpleMotorFeedforward HOPPER_FF = new SimpleMotorFeedforward(0, 0.1209, 0); // ! needs tuning
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
     .withKP(0.3)
@@ -59,6 +64,9 @@ public class FuelConstants {
     .withKS(0)
     .withKV(0)
     .withKA(0);
+
+    public static final ClosedLoopConfig KICKER_PID = new ClosedLoopConfig().pid(0.000075, 0, 0.005); // ! needs tuning
+    public static final SimpleMotorFeedforward KICKER_FF = new SimpleMotorFeedforward(0, 0.13, 0); // ! needs tuning
 
     // ————— sim ————— //
     

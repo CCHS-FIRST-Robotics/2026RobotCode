@@ -29,8 +29,8 @@ public class CommandFactory {
     private final FuelSim fuelSimulation;
 
     private final Voltage intakeVolts = Volts.of(10);
-    private final Voltage hopperVolts = Volts.of(10);
-    private final Voltage kickerVolts = Volts.of(5);
+    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(10);
+    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(5);
 
     public CommandFactory(
         Controller controller,
@@ -61,7 +61,12 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand() {
-        return getSlowDriveCommand(MetersPerSecond.of(2), MetersPerSecondPerSecond.of(10))
+        return getSlowDriveCommand(
+            MetersPerSecond.of(1.5), 
+            RotationsPerSecond.of(0.25), 
+            MetersPerSecondPerSecond.of(10),
+            RotationsPerSecondPerSecond.of(10 / DriveConstants.TRACK_RADIUS)
+        )
         .alongWith(getUpdateShootUtilCommand()).alongWith(getDriveWithJoysticksShooterCommand())
         .alongWith(getShootCommand(() -> ShootUtil.getShooterState()));
     }
@@ -71,20 +76,24 @@ public class CommandFactory {
         .alongWith(getDriveAndShootCommand());
     }
 
-    // ! I don't like this
-    public Command getSlowDriveCommand(LinearVelocity velocity, LinearAcceleration acceleration) {
+    public Command getSlowDriveCommand(
+        LinearVelocity linearVelocity, 
+        AngularVelocity angularVelocity, 
+        LinearAcceleration linearAcceleration,
+        AngularAcceleration angularAcceleration
+    ) {
         return Commands.startEnd(
             () -> {
-                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = velocity; // *
-                DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
-                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = acceleration;
-                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+                DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
+                DriveConstants.ALLOWED_ANGULAR_SPEED = angularVelocity;
+                DriveConstants.ALLOWED_LINEAR_ACCEL = linearAcceleration;
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = angularAcceleration;
             }, 
             () -> {
-                DriveConstants.MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(2) : MetersPerSecond.of(5); // *
-                DriveConstants.MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / DriveConstants.TRACK_RADIUS);
-                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / DriveConstants.TRACK_RADIUS);
+                DriveConstants.ALLOWED_LINEAR_SPEED = DriveConstants.MAX_ALLOWED_LINEAR_SPEED;
+                DriveConstants.ALLOWED_ANGULAR_SPEED = DriveConstants.MAX_ALLOWED_ANGULAR_SPEED;
+                DriveConstants.ALLOWED_LINEAR_ACCEL = DriveConstants.MAX_ALLOWED_LINEAR_ACCEL;
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL;
             }
         );
     }
@@ -106,13 +115,13 @@ public class CommandFactory {
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
-            () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-            () -> controller.getLeftXWithDeadband(), 
-            () -> controller.getRightXWithDeadband(),
+            () -> -controller.getLeftYWithDeadband(0.8), // xbox controller is flipped
+            () -> controller.getLeftXWithDeadband(0.8), 
+            () -> controller.getRightXWithDeadband(0.8),
             () -> {
                 return new Rotation2d(Math.atan2( // negatives map xbox controller to the cartesian plane
-                    -controller.getLeftXWithDeadband(), 
-                    -controller.getLeftYWithDeadband()
+                    -controller.getLeftXWithDeadband(0.8), 
+                    -controller.getLeftYWithDeadband(0.8)
                 ) + Math.PI); // intake is on back of robot
             }
         );
@@ -135,7 +144,7 @@ public class CommandFactory {
         return Commands.startEnd(
             () -> {
                 intake.setIntakeVoltage(intakeVolts);
-                intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
+                // intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE); // ! do this at the end of shoot command
             },
             () -> intake.setIntakeVoltage(Volts.of(0))
         );
@@ -146,10 +155,11 @@ public class CommandFactory {
     public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) {
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
-            Commands.waitSeconds(1) // waits for shooter to get up to speed
+            Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
-                hopper.getSetHopperVoltageCommand(hopperVolts)
-                .alongWith(shooter.getSetKickerVoltageCommand(kickerVolts))
+                // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
+                // .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
+                // .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         ).alongWith(
             (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
@@ -157,9 +167,10 @@ public class CommandFactory {
             new InstantCommand()).repeatedly()
         ).finallyDo( // stop everything
             () -> {
-                hopper.setHopperVoltage(Volts.of(0));
+                // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+                // hopper.setHopperVelocity(RotationsPerSecond.of(0));
                 shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
-                shooter.setKickerVoltage(Volts.of(0));
+                // shooter.setKickerVelocity(RotationsPerSecond.of(0));
             }
         );
     }

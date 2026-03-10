@@ -2,6 +2,7 @@ package frc.robot.subsystems.poseEstimator;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -19,6 +20,8 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     private final SwerveDrivePoseEstimator odometryEstimator;
     private final SwerveDrivePoseEstimator visionEstimator;
     private final SwerveDrivePoseEstimator combinedEstimator;
+
+    private final Field2d field2d = new Field2d();
 
     private final Drive drive;
 
@@ -61,10 +64,14 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     public void periodic() {  
         odometry.periodic();
         vision.periodic();
+
+        field2d.setRobotPose(getPose());
         
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/visionPoseEstimate", visionEstimator.getEstimatedPosition());
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+    
+        SmartDashboard.putData("outputs/poseEstimator/field2d", field2d);
     }
 
     public void resetPosition(Pose2d pose) {

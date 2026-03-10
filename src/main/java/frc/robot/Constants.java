@@ -17,7 +17,7 @@ public final class Constants {
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
-    public static final boolean REALISTIC_SIM = true;
+    public static final boolean REALISTIC_SIM = false;
     
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 

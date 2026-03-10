@@ -44,9 +44,7 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void disabledInit() {
-        robotContainer.resetSimulation();
-    }
+    public void disabledInit() {}
 
     @Override
     public void disabledPeriodic() {}
@@ -59,6 +57,8 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(autonomousCommand);
         }
+
+        robotContainer.resetSimulation();
     }
 
     @Override
@@ -69,6 +69,8 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) { // stops autonomous when teleop starts
             autonomousCommand.cancel();
         }
+
+        robotContainer.resetSimulation();
     }
 
     @Override
@@ -85,7 +87,9 @@ public class Robot extends LoggedRobot {
     public void testPeriodic() {}
 
     @Override
-    public void simulationInit() {}
+    public void simulationInit() {
+        robotContainer.resetSimulation();
+    }
 
     @Override
     public void simulationPeriodic() {

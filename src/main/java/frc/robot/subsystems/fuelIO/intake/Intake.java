@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        // pivotIO.setPosition(pivotAngle); // NEO PID and sim PIDs must be called externally
+        pivotIO.setPosition(pivotAngle); // NEO PID and sim PIDs must be called externally
     }
 
     // ————— raw command factories ————— //
@@ -37,7 +37,9 @@ public class Intake extends SubsystemBase {
     // intake
 
     public void setIntakeVoltage(Voltage volts) {
-        intakeIO.setVoltage(volts);
+        if (pivotDown()) {
+            intakeIO.setVoltage(volts);
+        }
     }
 
     public Command getSetIntakeVoltageCommand(Voltage volts) {
@@ -66,5 +68,9 @@ public class Intake extends SubsystemBase {
 
     public boolean getIntakeOn() {
         return Math.abs(intakeIOInputs.voltage) > 0;
+    }
+
+    public boolean pivotDown() {
+        return pivotIOInputs.position < 0;
     }
 }

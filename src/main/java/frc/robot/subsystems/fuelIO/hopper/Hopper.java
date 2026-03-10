@@ -1,5 +1,7 @@
 package frc.robot.subsystems.fuelIO.hopper;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
@@ -8,6 +10,8 @@ import org.littletonrobotics.junction.*;
 public class Hopper extends SubsystemBase {
     private final HopperIO io;
     public final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
+
+    AngularVelocity velocity = RotationsPerSecond.of(0);
 
     private int numFuel;
 
@@ -19,6 +23,8 @@ public class Hopper extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("subsystems/fuelIO/hopper", inputs);
+
+        // io.setVelocity(velocity);
     }
 
     // ————— raw command factories ————— //
@@ -31,6 +37,14 @@ public class Hopper extends SubsystemBase {
 
     public Command getSetHopperVoltageCommand(Voltage volts) {
         return runOnce(() -> setHopperVoltage(volts));
+    }
+
+    public void setHopperVelocity(AngularVelocity velocity) {
+        this.velocity = velocity;;
+    }
+
+    public Command getSetHopperVelocityCommand(AngularVelocity velocity) {
+        return runOnce(() -> setHopperVelocity(velocity));
     }
 
     // util

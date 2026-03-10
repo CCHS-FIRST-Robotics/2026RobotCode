@@ -47,8 +47,6 @@ public class DriveWithPosition extends Command {
         if (targetTransform != null) {
             targetPose = poseEstimator.getPose().plus(targetTransform);
         }
-
-        Logger.recordOutput("outputs/commands/driveWithPosition/targetPose", targetPose);
     }
 
     @Override

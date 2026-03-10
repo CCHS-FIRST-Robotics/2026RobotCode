@@ -68,7 +68,6 @@ public class AutoGenerator {
 
         // load trajectories
         AutoTrajectory trajectory0 = routine.trajectory("Test", 0);
-        AutoTrajectory trajectory1 = routine.trajectory("Test", 1);
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
@@ -76,7 +75,6 @@ public class AutoGenerator {
             // .andThen(trajectory0.resetOdometry())
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
-            .andThen(trajectory1.cmd())
         );
 
         return routine;
@@ -88,14 +86,14 @@ public class AutoGenerator {
         return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
     }
 
-    public AutoRoutine intakeAndShoot() {
-        AutoRoutine routine = autoFactory.newRoutine("IntakeAndShoot");
+    public AutoRoutine centerFuel() {
+        AutoRoutine routine = autoFactory.newRoutine("CenterFuel");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("IntakeAndShoot", 0);
-        AutoTrajectory trajectory1 = routine.trajectory("IntakeAndShoot", 1); // begin intake
-        AutoTrajectory trajectory2 = routine.trajectory("IntakeAndShoot", 2); // stop intake
-        AutoTrajectory trajectory3 = routine.trajectory("IntakeAndShoot", 3); // shoot
+        AutoTrajectory trajectory0 = routine.trajectory("CenterFuel", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("CenterFuel", 1); // begin intake
+        AutoTrajectory trajectory2 = routine.trajectory("CenterFuel", 2); // stop intake
+        // shoot
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
@@ -112,7 +110,29 @@ public class AutoGenerator {
                 trajectory2.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
             )
-            .andThen(trajectory3.cmd())
+            .andThen(commandFactory.getDriveAndShootCommand())
+        );
+
+        return routine;
+    }
+
+    public AutoRoutine outpostFuel() {
+        AutoRoutine routine = autoFactory.newRoutine("OutpostFuel");
+
+        AutoTrajectory trajectory0 = routine.trajectory("OutpostFuel", 0);
+        // wait for outpost input
+        AutoTrajectory trajectory1 = routine.trajectory("OutpostFuel", 1);
+        // shoot
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            (
+                trajectory0.resetOdometry()
+                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+            )
+            .andThen(trajectory0.cmd())
+            .andThen(Commands.waitSeconds(4))
+            .andThen(trajectory1.cmd())
             .andThen(commandFactory.getDriveAndShootCommand())
         );
 
