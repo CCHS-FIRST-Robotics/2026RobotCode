@@ -35,6 +35,10 @@ public class Hopper extends SubsystemBase {
         io.setVoltage(volts);
     }
 
+    public void setHopperVelocity(AngularVelocity velocity) {
+        io.setVelocity(velocity);
+    }
+
     public Command getSetHopperVoltageCommand(Voltage volts) {
         return runOnce(() -> setHopperVoltage(volts));
     }

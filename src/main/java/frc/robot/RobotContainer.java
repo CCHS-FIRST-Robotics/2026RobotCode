@@ -174,14 +174,18 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // ————— competition bindings ————— //
 
-        // drive
-        drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+        // // drive
+        // drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
         // drive slow
         // controller.rightStick().whileTrue( // remapped as gamesir R4
         //     commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
         // );
 
+        // // drive and intake
+        // controller.leftTrigger().whileTrue(
+        //     commandFactory.getDriveAndIntakeCommand()
+        // );
         // // drive and intake
         // controller.leftTrigger().whileTrue(
         //     commandFactory.getDriveAndIntakeCommand()

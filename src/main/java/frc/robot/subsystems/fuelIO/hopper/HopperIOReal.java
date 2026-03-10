@@ -1,14 +1,13 @@
 package frc.robot.subsystems.fuelIO.hopper;
 
-import static edu.wpi.first.units.Units.*;
-
-import com.revrobotics.*;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
+import static edu.wpi.first.units.Units.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class HopperIOReal implements HopperIO {
@@ -22,11 +21,6 @@ public class HopperIOReal implements HopperIO {
 
     public HopperIOReal(int id) {
         motor = new SparkMax(id, MotorType.kBrushless);
-
-        // start config
-        motor.setCANTimeout(500);
-
-        // encoders
         encoder = motor.getEncoder();
         encoder.setPosition(0.0);
 
@@ -59,8 +53,8 @@ public class HopperIOReal implements HopperIO {
     public void updateInputs(HopperIOInputs inputs) {
         inputs.voltage = motor.getAppliedOutput() * motor.getBusVoltage();
         inputs.current = motor.getOutputCurrent();
-        inputs.position = encoder.getPosition();
-        inputs.velocity = Rotations.per(Minute).of(encoder.getVelocity()).in(RotationsPerSecond);
+        inputs.position = encoder.getPosition(); // Now in motor rotations (adjusted by gear ratio)
+        inputs.velocity = encoder.getVelocity(); // Now in RPM (adjusted by gear ratio)
         inputs.temperature = motor.getMotorTemperature();
 
         inputs.velocitySetpoint = velocitySetpoint.in(RotationsPerSecond);

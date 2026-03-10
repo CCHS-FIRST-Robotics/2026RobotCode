@@ -13,10 +13,12 @@ public interface HopperIO {
         public double temperature;
 
         public double velocitySetpoint;
+
+        public double velocitySetpoint;
     }
-    
+
     public default void updateInputs(HopperIOInputs inputs) {}
-    
+
     public default void setVoltage(Voltage volts) {}
 
     public default void setVelocity(AngularVelocity velocity) {}
