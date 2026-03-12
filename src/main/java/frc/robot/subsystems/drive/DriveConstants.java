@@ -15,7 +15,7 @@ import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.*;
 import frc.robot.Constants;
 
-public class DriveConstants { // * indicates a physical measurement
+public class DriveConstants {
     public static final CANBus CAN_BUS = new CANBus("", "./logs/example.hoot");
     public static final double ODOMETRY_FREQUENCY = CAN_BUS.isNetworkFD() ? 250.0 : 100.0;
 
@@ -80,7 +80,7 @@ public class DriveConstants { // * indicates a physical measurement
 
     // ————— modules ————— //
 
-    private static final Distance WHEEL_RADIUS = Inches.of(2); // * 
+    private static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.2;
     private static final double MODULE_COUPLE_RATIO = 3.125;
     private static final double MODULE_DRIVE_GEAR_RATIO = 5.902777777777778;
@@ -90,10 +90,10 @@ public class DriveConstants { // * indicates a physical measurement
 
     public static final Mass ROBOT_WEIGHT = Pounds.of(100); // robot is 100, battery is 13, bumpers are // ! 
     public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! default value
-    public static final Distance WIDTH_X = Inches.of(27.5); // *
-    public static final Distance WIDTH_Y = Inches.of(27.5); // *
-    public static final Distance TRACK_WIDTH_X = Inches.of(22.25); // *
-    public static final Distance TRACK_WIDTH_Y = Inches.of(22.25); // *
+    public static final Distance WIDTH_X = Inches.of(27.5);
+    public static final Distance WIDTH_Y = Inches.of(27.5);
+    public static final Distance TRACK_WIDTH_X = Inches.of(22.25);
+    public static final Distance TRACK_WIDTH_Y = Inches.of(22.25);
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR

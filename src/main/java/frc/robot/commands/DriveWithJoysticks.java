@@ -46,6 +46,7 @@ public class DriveWithJoysticks extends Command {
         this.thetaSupplier = thetaSupplier;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void execute() {
         // get linear velocity vector
