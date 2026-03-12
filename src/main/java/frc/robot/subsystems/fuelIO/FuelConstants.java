@@ -32,12 +32,12 @@ public class FuelConstants {
     public static final double KICKER_GEAR_RATIO = 1;
     
     // when pivot is zeroed at horizontal
-    public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.37); // !
+    public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.37);
     public static final Angle PIVOT_MAX_DOWN_ANGLE = Rotations.of(-0.056);
 
     // when hood is zeroed at horizontal
     public static final Angle HOOD_MAX_UP_ANGLE = Rotations.of(0.1); // !
-    public static final Angle HOOD_MAX_DOWN_ANGLE = Rotations.of(0); // !
+    public static final Angle HOOD_MAX_DOWN_ANGLE = Rotations.of(0);
 
     // ————— PIDF ————— //
 

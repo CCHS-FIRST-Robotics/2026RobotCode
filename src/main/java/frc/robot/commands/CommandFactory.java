@@ -142,10 +142,7 @@ public class CommandFactory {
 
     public Command getIntakeCommand() {
         return Commands.startEnd(
-            () -> {
-                intake.setIntakeVoltage(intakeVolts);
-                // intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE); // ! do this at the end of shoot command
-            },
+            () -> intake.setIntakeVoltage(intakeVolts),
             () -> intake.setIntakeVoltage(Volts.of(0))
         );
     }
@@ -155,16 +152,19 @@ public class CommandFactory {
     public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) {
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
-            Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
+            Commands.waitSeconds(0.5) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
-                // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
-                hopper.getSetHopperVelocityCommand(hopperVelocity)
+                (Commands.waitSeconds(1)
+                .andThen(
+                    intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
+                ))
+                .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         ).alongWith(
-            (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
-            getSimShootCommand() :
-            new InstantCommand()).repeatedly()
+            Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
+            getSimShootCommand().repeatedly() :
+            new InstantCommand()
         ).finallyDo( // stop everything
             () -> {
                 // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
