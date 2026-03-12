@@ -22,9 +22,9 @@ public class AutoGenerator {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
 
-    // private final Intake intake;
-    // private final Hopper hopper;
-    // private final Shooter shooter;
+    private final Intake intake;
+    private final Hopper hopper;
+    private final Shooter shooter;
 
     private final CommandFactory commandFactory;
 
@@ -54,9 +54,9 @@ public class AutoGenerator {
         this.drive = drive;
         this.poseEstimator = poseEstimator;
 
-        // this.intake = intake;
-        // this.hopper = hopper;
-        // this.shooter = shooter;
+        this.intake = intake;
+        this.hopper = hopper;
+        this.shooter = shooter;
 
         this.commandFactory = commandFactory;
     }
@@ -71,8 +71,6 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            // new DriveWithPosition(drive, poseEstimator, trajectory0.getInitialPose().get())
-            // .andThen(trajectory0.resetOdometry())
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
         );
