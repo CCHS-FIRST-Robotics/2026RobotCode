@@ -189,26 +189,26 @@ public class Drive extends SubsystemBase {
                 // fallthrough to VELOCITY case; no break statement needed // ! 
             case VELOCITY: 
                 speeds = new ChassisSpeeds( // clamp velocities
-                    MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
+                    MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
                 );
 
                 speeds = new ChassisSpeeds( // clamp accelerations
                     clampAcceleration(
                         speeds.vxMetersPerSecond, 
                         prevSpeeds.vxMetersPerSecond, 
-                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                        DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
                     ),
                     clampAcceleration(
                         speeds.vyMetersPerSecond, 
                         prevSpeeds.vyMetersPerSecond, 
-                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                        DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
                     ),
                     clampAcceleration(
                         speeds.omegaRadiansPerSecond, 
                         prevSpeeds.omegaRadiansPerSecond, 
-                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
+                        DriveConstants.ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
                     )
                 );
             
@@ -221,9 +221,9 @@ public class Drive extends SubsystemBase {
                 SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
                     moduleStates, 
                     speeds,
-                    DriveConstants.MAX_ALLOWED_LINEAR_SPEED, 
-                    DriveConstants.MAX_ALLOWED_LINEAR_SPEED, 
-                    DriveConstants.MAX_ALLOWED_ANGULAR_SPEED
+                    DriveConstants.ALLOWED_LINEAR_SPEED, 
+                    DriveConstants.ALLOWED_LINEAR_SPEED, 
+                    DriveConstants.ALLOWED_ANGULAR_SPEED
                 );
 
                 // run modules

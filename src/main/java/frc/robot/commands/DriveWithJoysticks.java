@@ -58,9 +58,9 @@ public class DriveWithJoysticks extends Command {
 
         // convert to chassisSpeeds
         ChassisSpeeds speeds = new ChassisSpeeds(
-            linearVelocity.getX() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
-            -linearVelocity.getY() * DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
-            -angularVelocity * DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
+            linearVelocity.getX() * DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
+            -linearVelocity.getY() * DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
+            -angularVelocity * DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );
 
         // override with supplied theta

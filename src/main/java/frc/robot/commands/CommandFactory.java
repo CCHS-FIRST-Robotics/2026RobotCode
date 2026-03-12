@@ -62,12 +62,13 @@ public class CommandFactory {
 
     public Command getDriveAndShootCommand() {
         return getSlowDriveCommand(
-            MetersPerSecond.of(1.5), 
-            RotationsPerSecond.of(0.25), 
-            MetersPerSecondPerSecond.of(10),
-            RotationsPerSecondPerSecond.of(10 / DriveConstants.TRACK_RADIUS)
+            MetersPerSecond.of(1), 
+            DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
+            DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+            DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
         )
-        .alongWith(getUpdateShootUtilCommand()).alongWith(getDriveWithJoysticksShooterCommand())
+        .alongWith(getUpdateShootUtilCommand())
+        .alongWith(getDriveWithJoysticksShooterCommand())
         .alongWith(getShootCommand(() -> ShootUtil.getShooterState()));
     }
 
@@ -201,7 +202,7 @@ public class CommandFactory {
         return Commands.run(() -> ShootUtil.updateIterative(
             poseEstimator.getPose(), 
             ShootUtil.getTargetPose(poseEstimator.getPose()), 
-            drive.getRobotRelativeSpeeds(), 3)
+            drive.getFieldRelativeSpeeds(), 3)
         );
     }
 }

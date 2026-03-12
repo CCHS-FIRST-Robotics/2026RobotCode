@@ -63,8 +63,7 @@ public class ShootUtil {
     private static ShooterState shooterState = new ShooterState();
     private static Rotation2d robotRotation = new Rotation2d();
 
-    // ! rename
-    // ————— outwards-pointing functions ————— //
+    // ————— public functions ————— //
 
     public static Pose2d getTargetPose(Pose2d robotPose) {
         if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) { // flip everything to blue alliance reference frame
@@ -148,13 +147,12 @@ public class ShootUtil {
         return linearVelocity.div(2); // because backspin: https://www.chiefdelphi.com/t/determine-flywheel-velocity-for-ball-exit-velocity/394940/2
     }
 
-    // only accounts for x direction (that's what the cosine is for)
-    public static Time calculateTimeOfFlight(LinearVelocity velocity, Angle angle, Distance distance) {
+    private static Time calculateTimeOfFlight(LinearVelocity velocity, Angle angle, Distance distance) {
         double hoodShotAngle = Math.PI / 2 - angle.in(Radians);
-        return Seconds.of(distance.in(Meters) / (velocity.in(MetersPerSecond) * Math.cos(hoodShotAngle)));
+        return Seconds.of(distance.in(Meters) / (velocity.in(MetersPerSecond) * Math.cos(hoodShotAngle))); // only accounts for x direction (that's what the cosine is for)
     }
 
-    public static Pose2d calculateTargetFuturePose(Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, Time timeOfFlight) {
+    private static Pose2d calculateTargetFuturePose(Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, Time timeOfFlight) {
         double x = targetPose.getX() - robotFieldRelativeSpeeds.vxMetersPerSecond * timeOfFlight.in(Seconds);
         double y = targetPose.getY() - robotFieldRelativeSpeeds.vyMetersPerSecond * timeOfFlight.in(Seconds);
 
