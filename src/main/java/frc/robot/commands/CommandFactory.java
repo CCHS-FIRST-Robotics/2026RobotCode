@@ -29,8 +29,8 @@ public class CommandFactory {
     private final FuelSim fuelSimulation;
 
     private final Voltage intakeVolts = Volts.of(10);
-    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(10);
-    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(5);
+    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(15);
+    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(30);
 
     public CommandFactory(
         Controller controller,
@@ -158,8 +158,8 @@ public class CommandFactory {
             Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
                 // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
-                // .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
-                // .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
+                hopper.getSetHopperVelocityCommand(hopperVelocity)
+                .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         ).alongWith(
             (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
@@ -168,9 +168,9 @@ public class CommandFactory {
         ).finallyDo( // stop everything
             () -> {
                 // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
-                // hopper.setHopperVelocity(RotationsPerSecond.of(0));
-                shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
-                // shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                hopper.setHopperVelocity(RotationsPerSecond.of(0));
+                // shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
+                shooter.setKickerVelocity(RotationsPerSecond.of(0));
             }
         );
     }

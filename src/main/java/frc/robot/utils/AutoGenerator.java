@@ -22,9 +22,9 @@ public class AutoGenerator {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
 
-    private final Intake intake;
-    private final Hopper hopper;
-    private final Shooter shooter;
+    // private final Intake intake;
+    // private final Hopper hopper;
+    // private final Shooter shooter;
 
     private final CommandFactory commandFactory;
 
@@ -45,7 +45,7 @@ public class AutoGenerator {
                     driveSimulation.setSimulationWorldPose(pose);
                 }
             },
-            drive::runAutoPosition,
+            drive::runPositionChoreo,
             true,
             drive
         );
@@ -54,9 +54,9 @@ public class AutoGenerator {
         this.drive = drive;
         this.poseEstimator = poseEstimator;
 
-        this.intake = intake;
-        this.hopper = hopper;
-        this.shooter = shooter;
+        // this.intake = intake;
+        // this.hopper = hopper;
+        // this.shooter = shooter;
 
         this.commandFactory = commandFactory;
     }
@@ -99,16 +99,16 @@ public class AutoGenerator {
         routine.active().onTrue(
             (
                 trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                // .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
             )
             .andThen(trajectory0.cmd())
             .andThen(
                 trajectory1.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
+                // .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
             )
             .andThen(
                 trajectory2.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+                // .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
             )
             .andThen(commandFactory.getDriveAndShootCommand())
         );
@@ -128,7 +128,7 @@ public class AutoGenerator {
         routine.active().onTrue(
             (
                 trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                // .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
             )
             .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))

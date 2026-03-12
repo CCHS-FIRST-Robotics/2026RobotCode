@@ -27,7 +27,7 @@ public final class Constants {
 
     public static final boolean TRENCH_ALIGN = false;
 
-    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_DOWN_ANGLE; // ! remember to change this for comp
+    public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
     public static class FieldConstants {
@@ -61,8 +61,8 @@ public final class Constants {
             return pose.rotateAround(
                 new Translation2d(FieldConstants.FIELD_WIDTH_X.div(2), FieldConstants.FIELD_WIDTH_Y.div(2)), 
                 new Rotation2d(Degrees.of(180))
-        );
-    }
+            );
+        }
 
         public class Zones {
             public static class Zone {

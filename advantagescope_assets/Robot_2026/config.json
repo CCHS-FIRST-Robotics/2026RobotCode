@@ -15,7 +15,7 @@
             "name": "FrontLeft",
             "fov": "92",
             "resolution": [1920, 1400],
-            "position": [0.2921, -0.3429, 0.127],
+            "position": [0.2921, 0.3429, 0.127],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": -30}, 
@@ -26,7 +26,7 @@
             "name": "FrontRight",
             "fov": "92",
             "resolution": [1920, 1400],
-            "position": [0.2921, 0.3429, 0.127],
+            "position": [0.2921, -0.3429, 0.127],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": -30}, 

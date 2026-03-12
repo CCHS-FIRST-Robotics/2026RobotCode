@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.*;
 import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.utils.TunableControls.*;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {    
@@ -72,36 +73,30 @@ public class Drive extends SubsystemBase {
 
     // ————— position ————— //
 
-    private final PIDController xPID = new PIDController(5, 0, 0);
-    private final PIDController yPID = new PIDController(5, 0, 0);
-    private final PIDController thetaPID = new PIDController(5, 0, 0);
+    private final PIDController xPIDPosition = new PIDController(5, 0, 0);
+    private final PIDController yPIDPosition = new PIDController(5, 0, 0);
+    private final PIDController thetaPIDPosition = new PIDController(5, 0, 0);
 
-    // // for choreo
-    // private final PIDController xPID = new PIDController(45, 0, 5); // 45
-    // private final PIDController yPID = new PIDController(45, 0, 5);
-    // private final PIDController thetaPID = new PIDController(50, 0, 10); // 50 10
-    
+    ControlConstants xPConstants = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants xPTunableControlConstants = new TunableControlConstants("xP", xPConstants);
+    ControlConstants yPConstants = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants yPTunableControlConstants = new TunableControlConstants("yP", yPConstants);
+    ControlConstants thetaPConstants = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants thetaPTunableControlConstants = new TunableControlConstants("thetaP", thetaPConstants);
+
+    private final TunablePIDController xPIDChoreo = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController yPIDChoreo = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController thetaPIDChoreo = new TunablePIDController(xPTunableControlConstants);
+
     private Pose2d positionSetpoint = new Pose2d();
-    private Twist2d twistSetpoint = new Twist2d();
+    private ChassisSpeeds velocitySetpoint = new ChassisSpeeds();
+
+    boolean usingChoreo = false;
 
     // ————— velocity ————— //
 
     private ChassisSpeeds speeds = new ChassisSpeeds();
     private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
-
-    public Drive(
-        ModuleIO flModuleIO,
-        ModuleIO frModuleIO,
-        ModuleIO blModuleIO,
-        ModuleIO brModuleIO
-    ) {
-        modules[0] = new Module(flModuleIO, 0, DriveConstants.SWERVE_MODULE_CONSTANTS[0]);
-        modules[1] = new Module(frModuleIO, 1, DriveConstants.SWERVE_MODULE_CONSTANTS[1]);
-        modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
-        modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
-        
-        thetaPID.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
-    }
 
     // ————— utils ————— //
 
@@ -122,6 +117,21 @@ public class Drive extends SubsystemBase {
             this
         )
     );
+
+    public Drive(
+        ModuleIO flModuleIO,
+        ModuleIO frModuleIO,
+        ModuleIO blModuleIO,
+        ModuleIO brModuleIO
+    ) {
+        modules[0] = new Module(flModuleIO, 0, DriveConstants.SWERVE_MODULE_CONSTANTS[0]);
+        modules[1] = new Module(frModuleIO, 1, DriveConstants.SWERVE_MODULE_CONSTANTS[1]);
+        modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
+        modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
+        
+        thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
+        // thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
+    }
 
     @Override
     public void periodic() {
@@ -154,43 +164,53 @@ public class Drive extends SubsystemBase {
             case POSITION:
                 Logger.recordOutput("outputs/drive/targetPose", positionSetpoint);
 
+                double xOutput;
+                double yOutput;
+                double thetaOutput;
+
                 // get PIDs
-                double xOutput = xPID.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                double yOutput = yPID.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                double thetaOutput = thetaPID.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                if (!usingChoreo) {
+                    xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                    yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                    thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                } else {
+                    xOutput = xPIDChoreo.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                    yOutput = yPIDChoreo.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                    thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                }
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    twistSetpoint.dx + xOutput,
-                    twistSetpoint.dy + yOutput,
-                    twistSetpoint.dtheta + thetaOutput,
+                    xOutput + velocitySetpoint.vxMetersPerSecond,
+                    yOutput + velocitySetpoint.vyMetersPerSecond,
+                    thetaOutput + velocitySetpoint.omegaRadiansPerSecond,
                     poseEstimator.getPose().getRotation()
                 );
-                // fallthrough to VELOCITY case; no break statement needed
+                // fallthrough to VELOCITY case; no break statement needed // ! 
             case VELOCITY: 
-                // speeds = new ChassisSpeeds( // clamp velocities
-                //     MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                //     MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                //     MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
-                // );
+                speeds = new ChassisSpeeds( // clamp velocities
+                    MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                    MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
+                );
 
-                // speeds = new ChassisSpeeds( // clamp accelerations
-                //     clampAcceleration(
-                //         speeds.vxMetersPerSecond, 
-                //         prevSpeeds.vxMetersPerSecond, 
-                //         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                //     ),
-                //     clampAcceleration(
-                //         speeds.vyMetersPerSecond, 
-                //         prevSpeeds.vyMetersPerSecond, 
-                //         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                //     ),
-                //     clampAcceleration(
-                //         speeds.omegaRadiansPerSecond, 
-                //         prevSpeeds.omegaRadiansPerSecond, 
-                //         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
-                //     )
-                // );
+                speeds = new ChassisSpeeds( // clamp accelerations
+                    clampAcceleration(
+                        speeds.vxMetersPerSecond, 
+                        prevSpeeds.vxMetersPerSecond, 
+                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                    ),
+                    clampAcceleration(
+                        speeds.vyMetersPerSecond, 
+                        prevSpeeds.vyMetersPerSecond, 
+                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                    ),
+                    clampAcceleration(
+                        speeds.omegaRadiansPerSecond, 
+                        prevSpeeds.omegaRadiansPerSecond, 
+                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
+                    )
+                );
             
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
@@ -230,13 +250,13 @@ public class Drive extends SubsystemBase {
     public void runPosition(Pose2d pose) {
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = pose;
-        twistSetpoint = new Twist2d();
+        velocitySetpoint = new ChassisSpeeds();
     }
 
-    public void runAutoPosition(SwerveSample sample) {
+    public void runPositionChoreo(SwerveSample sample) {
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = sample.getPose();
-        twistSetpoint = sample.getChassisSpeeds().toTwist2d(0.02);
+        velocitySetpoint = sample.getChassisSpeeds();
     }
 
     public void runVelocity(ChassisSpeeds speedsInput) {
@@ -321,16 +341,16 @@ public class Drive extends SubsystemBase {
         return ChassisSpeeds.fromRobotRelativeSpeeds(prevSpeeds, poseEstimator.getPose().getRotation());
     }
 
-    public PIDController getXController() {
-        return xPID;
+    public PIDController getXPositionController() {
+        return xPIDPosition;
     }
 
-    public PIDController getYController() {
-        return yPID;
+    public PIDController getYPositionController() {
+        return yPIDPosition;
     }
 
-    public PIDController getThetaController() {
-        return thetaPID;
+    public PIDController getThetaPositionController() {
+        return thetaPIDPosition;
     }
     
     // ————— utils ————— //

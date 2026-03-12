@@ -30,9 +30,9 @@ public class PivotIOReal implements PivotIO {
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.05).in(Rotations.per(Minute)));
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.15).in(Rotations.per(Minute))); // ! slow
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
-        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations));
+        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.15).in(Rotations));
         
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
@@ -53,8 +53,8 @@ public class PivotIOReal implements PivotIO {
         // stop config
         motorConfig.softLimit.forwardSoftLimitEnabled(true);
         motorConfig.softLimit.reverseSoftLimitEnabled(true);
-        motorConfig.softLimit.forwardSoftLimit(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations));
-        motorConfig.softLimit.reverseSoftLimit(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations));
+        motorConfig.softLimit.forwardSoftLimit(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations) + 0.01);
+        motorConfig.softLimit.reverseSoftLimit(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations) + 0.01);
         motor.setCANTimeout(0);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -68,16 +68,6 @@ public class PivotIOReal implements PivotIO {
         inputs.temperature = motor.getMotorTemperature();
 
         inputs.positionSetpoint = positionSetpoint.in(Rotations);
-
-        // if (inputs.velocity > 0) { // going up
-        //     if (inputs.position > 0.3 && !pastSlack) { // past the slack
-        //         motor.getEncoder().setPosition(inputs.position + Degrees.of(20).in(Rotations));
-        //     } else {
-        //         motor.getEncoder.setPosition
-        //     }
-        // } else {
-
-        // }
     }
 
     @Override
@@ -93,8 +83,6 @@ public class PivotIOReal implements PivotIO {
             ClosedLoopSlot.kSlot0,
             FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
         );
-
-        // set an encoder offset 20 degrees
 
         positionSetpoint = angle;
     }

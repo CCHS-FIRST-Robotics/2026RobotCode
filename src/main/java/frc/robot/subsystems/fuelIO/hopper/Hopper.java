@@ -3,9 +3,9 @@ package frc.robot.subsystems.fuelIO.hopper;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.*;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class Hopper extends SubsystemBase {
     private final HopperIO io;
@@ -24,7 +24,7 @@ public class Hopper extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("subsystems/fuelIO/hopper", inputs);
 
-        // io.setVelocity(velocity);
+        io.setVelocity(velocity);
     }
 
     // ————— raw command factories ————— //
@@ -40,7 +40,7 @@ public class Hopper extends SubsystemBase {
     }
 
     public void setHopperVelocity(AngularVelocity velocity) {
-        this.velocity = velocity;;
+        this.velocity = velocity;
     }
 
     public Command getSetHopperVelocityCommand(AngularVelocity velocity) {

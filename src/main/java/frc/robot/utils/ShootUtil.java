@@ -25,12 +25,30 @@ public class ShootUtil {
         ShooterState::interpolate
     );
 
+    /**
+     * SHOOTER_STATE_MAP.put(5.560, new ShooterState(RotationsPerSecond.of(68.203125), Rotations.of(0.077392578125)));
+     * SHOOTER_STATE_MAP.put(5.065, new ShooterState(RotationsPerSecond.of(60.70703125), Rotations.of(0.06127929687500001)));
+     * SHOOTER_STATE_MAP.put(4.538, new ShooterState(RotationsPerSecond.of(60.3671875), Rotations.of(0.06127929687500001)));
+     * SHOOTER_STATE_MAP.put(4.024, new ShooterState(RotationsPerSecond.of(55.40234375), Rotations.of(0.0517578125)));
+     * SHOOTER_STATE_MAP.put(3.449, new ShooterState(RotationsPerSecond.of(52.06054687499999), Rotations.of(0.0517578125)));
+     * 
+     * 
+     * 
+     * 
+     */
+
     static {
-        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) { // ! measured with kicker at 3 volts
-            SHOOTER_STATE_MAP.put(5.892394, new ShooterState(RotationsPerSecond.of(69.212891), Rotations.of(0.051758)));
-            SHOOTER_STATE_MAP.put(4.077568, new ShooterState(RotationsPerSecond.of(58.449219), Rotations.of(0.051758)));
-            SHOOTER_STATE_MAP.put(3.172064, new ShooterState(RotationsPerSecond.of(49.283203), Rotations.of(0.031982)));
-            SHOOTER_STATE_MAP.put(2.18186, new ShooterState(RotationsPerSecond.of(46.9375), Rotations.of(0.002197)));
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
+            SHOOTER_STATE_MAP.put(5.227799, new ShooterState(RotationsPerSecond.of(61.33203125), Rotations.of(0.0517578125)));
+            SHOOTER_STATE_MAP.put(3.432713, new ShooterState(RotationsPerSecond.of(52.4296875), Rotations.of(0.037353515625)));
+            SHOOTER_STATE_MAP.put(1.811582, new ShooterState(RotationsPerSecond.of(45.8046875), Rotations.of(0.002197265625)));
+
+
+            // ! measured with kicker at 3 volts
+            // SHOOTER_STATE_MAP.put(5.892394, new ShooterState(RotationsPerSecond.of(69.212891), Rotations.of(0.051758)));
+            // SHOOTER_STATE_MAP.put(4.077568, new ShooterState(RotationsPerSecond.of(58.449219), Rotations.of(0.051758)));
+            // SHOOTER_STATE_MAP.put(3.172064, new ShooterState(RotationsPerSecond.of(49.283203), Rotations.of(0.031982)));
+            // SHOOTER_STATE_MAP.put(2.18186, new ShooterState(RotationsPerSecond.of(46.9375), Rotations.of(0.002197)));
         } else {
             SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(37.734372), Rotations.of(0.04)));
             SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.03)));

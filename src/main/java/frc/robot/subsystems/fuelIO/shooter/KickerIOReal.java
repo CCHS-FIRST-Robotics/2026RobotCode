@@ -77,7 +77,7 @@ public class KickerIOReal implements KickerIO {
             velocity.in(RPM), 
             SparkMax.ControlType.kVelocity, 
             ClosedLoopSlot.kSlot0,
-            feedforward.calculateWithVelocities(velocitySetpoint.in(RotationsPerSecond), velocity.in(RotationsPerSecond))
+            feedforward.calculateWithVelocities(velocitySetpoint.in(RotationsPerSecond), velocity.in(RotationsPerSecond)) * FuelConstants.KICKER_GEAR_RATIO
         );
 
         velocitySetpoint = velocity;

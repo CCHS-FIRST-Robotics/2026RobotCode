@@ -77,7 +77,7 @@ public class HopperIOReal implements HopperIO {
             velocity.in(RPM), 
             SparkMax.ControlType.kVelocity, 
             ClosedLoopSlot.kSlot0,
-            feedforward.calculateWithVelocities(velocitySetpoint.in(RotationsPerSecond), velocity.in(RotationsPerSecond))
+            feedforward.calculateWithVelocities(velocitySetpoint.in(RotationsPerSecond), velocity.in(RotationsPerSecond)) * FuelConstants.HOPPER_GEAR_RATIO
         );
 
         velocitySetpoint = velocity;

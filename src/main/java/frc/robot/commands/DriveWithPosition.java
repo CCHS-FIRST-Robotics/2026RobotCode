@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
-import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 

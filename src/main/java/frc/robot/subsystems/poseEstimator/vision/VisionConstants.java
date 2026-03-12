@@ -33,14 +33,14 @@ public class VisionConstants {
     public static Transform3d robotToCamera0 = new Transform3d(
         Inches.of(10), 
         Inches.of(10.75), 
-        Inches.of(5), 
-        new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(-15))
+        Inches.of(8), 
+        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(-15))
     );
     public static Transform3d robotToCamera1 = new Transform3d(
         Inches.of(10), 
         Inches.of(-10.75), 
-        Inches.of(5), // ! from the floor or from the center of robot?
-        new Rotation3d(Degrees.of(0), Degrees.of(30), Degrees.of(5)) // ! should be 15 for yaw
+        Inches.of(8),
+        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(15))
     );
 
     // Basic filtering thresholds

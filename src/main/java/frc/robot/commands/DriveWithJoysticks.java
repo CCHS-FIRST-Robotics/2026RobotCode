@@ -67,7 +67,7 @@ public class DriveWithJoysticks extends Command {
             speeds = new ChassisSpeeds(
                 speeds.vxMetersPerSecond,
                 speeds.vyMetersPerSecond,
-                drive.getThetaController().calculate(
+                drive.getThetaPositionController().calculate(
                     poseEstimator.getPose().getRotation().getRadians(),
                     thetaSupplier.get().getRadians()
                 )
@@ -78,12 +78,12 @@ public class DriveWithJoysticks extends Command {
         if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
             if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
-                yOutput = drive.getYController().calculate(
+                yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
                 );
             } else { // bottom
-                yOutput = drive.getYController().calculate(
+                yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
                 );
@@ -93,7 +93,7 @@ public class DriveWithJoysticks extends Command {
             speeds = new ChassisSpeeds(
                 speeds.vxMetersPerSecond,
                 yOutput,
-                drive.getThetaController().calculate(
+                drive.getThetaPositionController().calculate(
                     robotYawRadians,
                     Math.abs(robotYawRadians) < Math.PI / 2 ? 0 : Math.PI
                 )
