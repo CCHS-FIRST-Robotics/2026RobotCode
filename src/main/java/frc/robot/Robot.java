@@ -1,12 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveConstants;
 import edu.wpi.first.wpilibj.Threads;
-
-import static edu.wpi.first.units.Units.*;
-
 import org.littletonrobotics.junction.*;
 import org.littletonrobotics.junction.wpilog.*;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -81,11 +76,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
         robotContainer.teleopPeriodic();
-
-        Logger.recordOutput("fuck1", DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond));
-        Logger.recordOutput("fuck2", DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond));
-        Logger.recordOutput("fuck3", DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond));
-        Logger.recordOutput("fuck4", DriveConstants.ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond));
     }
 
     @Override

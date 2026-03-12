@@ -13,8 +13,6 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.*;
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import frc.robot.Constants;
 
 public class DriveConstants {
