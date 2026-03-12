@@ -358,7 +358,7 @@ public class RobotContainer {
         autoChooser.addRoutine("CenterFuel", () -> autoGenerator.centerFuel());
         autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
-        autoChooser.select("frank"); // picks a default auto
+        autoChooser.select("Back Up"); // picks a default auto
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }

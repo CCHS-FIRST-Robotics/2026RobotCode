@@ -84,11 +84,26 @@ public class AutoGenerator {
         return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
     }
 
+    public AutoRoutine beMean() {
+        AutoRoutine routine = autoFactory.newRoutine("BeMean");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("BeMean", 0);
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen(trajectory0.cmd())
+        );
+
+        return routine;
+    }
+
     public AutoRoutine centerFuel() {
         AutoRoutine routine = autoFactory.newRoutine("CenterFuel");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("CenterFuel", 0);
+        AutoTrajectory trajectory0 = routine.trajectory("CenterFuel", 0); // bring pivot down
         AutoTrajectory trajectory1 = routine.trajectory("CenterFuel", 1); // begin intake
         AutoTrajectory trajectory2 = routine.trajectory("CenterFuel", 2); // stop intake
         // shoot
@@ -102,11 +117,11 @@ public class AutoGenerator {
             .andThen(trajectory0.cmd())
             .andThen(
                 trajectory1.cmd()
-                // .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
             )
             .andThen(
                 trajectory2.cmd()
-                // .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
             )
             .andThen(commandFactory.getDriveAndShootCommand())
         );
@@ -114,11 +129,13 @@ public class AutoGenerator {
         return routine;
     }
 
+    // ! make one that is both center and outpost
+
     public AutoRoutine outpostFuel() {
         AutoRoutine routine = autoFactory.newRoutine("OutpostFuel");
 
         AutoTrajectory trajectory0 = routine.trajectory("OutpostFuel", 0);
-        // wait for outpost input
+        // wait for outpost fuel
         AutoTrajectory trajectory1 = routine.trajectory("OutpostFuel", 1);
         // shoot
 

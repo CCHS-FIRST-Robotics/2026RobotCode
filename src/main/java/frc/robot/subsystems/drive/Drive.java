@@ -186,31 +186,33 @@ public class Drive extends SubsystemBase {
                     thetaOutput + velocitySetpoint.omegaRadiansPerSecond,
                     poseEstimator.getPose().getRotation()
                 );
-                // fallthrough to VELOCITY case; no break statement needed // ! 
+                // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
-                speeds = new ChassisSpeeds( // clamp velocities
-                    MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
-                    MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
-                );
+                if (!usingChoreo) {
+                    speeds = new ChassisSpeeds( // clamp velocities
+                        MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                        MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
+                        MathUtil.clamp(speeds.omegaRadiansPerSecond, -DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond))
+                    );
 
-                speeds = new ChassisSpeeds( // clamp accelerations
-                    clampAcceleration(
-                        speeds.vxMetersPerSecond, 
-                        prevSpeeds.vxMetersPerSecond, 
-                        DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                    ),
-                    clampAcceleration(
-                        speeds.vyMetersPerSecond, 
-                        prevSpeeds.vyMetersPerSecond, 
-                        DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
-                    ),
-                    clampAcceleration(
-                        speeds.omegaRadiansPerSecond, 
-                        prevSpeeds.omegaRadiansPerSecond, 
-                        DriveConstants.ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
-                    )
-                );
+                    speeds = new ChassisSpeeds( // clamp accelerations
+                        clampAcceleration(
+                            speeds.vxMetersPerSecond, 
+                            prevSpeeds.vxMetersPerSecond, 
+                            DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                        ),
+                        clampAcceleration(
+                            speeds.vyMetersPerSecond, 
+                            prevSpeeds.vyMetersPerSecond, 
+                            DriveConstants.ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                        ),
+                        clampAcceleration(
+                            speeds.omegaRadiansPerSecond, 
+                            prevSpeeds.omegaRadiansPerSecond, 
+                            DriveConstants.ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecondPerSecond) * Constants.PERIOD
+                        )
+                    );
+                }
             
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
@@ -249,18 +251,21 @@ public class Drive extends SubsystemBase {
 
     public void runPosition(Pose2d pose) {
         controlMode = DRIVE_MODE.POSITION;
+        usingChoreo = false;
         positionSetpoint = pose;
         velocitySetpoint = new ChassisSpeeds();
     }
 
     public void runPositionChoreo(SwerveSample sample) {
         controlMode = DRIVE_MODE.POSITION;
+        usingChoreo = true;
         positionSetpoint = sample.getPose();
         velocitySetpoint = sample.getChassisSpeeds();
     }
 
     public void runVelocity(ChassisSpeeds speedsInput) {
         controlMode = DRIVE_MODE.VELOCITY;
+        usingChoreo = false;
         speeds = speedsInput;
     }
 

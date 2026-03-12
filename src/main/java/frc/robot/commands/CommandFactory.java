@@ -155,18 +155,22 @@ public class CommandFactory {
         .alongWith( // allow shooting
             Commands.waitSeconds(0.5) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
-                (Commands.waitSeconds(1)
-                .andThen(
+                (
+                    Commands.waitSeconds(1)
+                    .andThen(
                     intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
-                ))
+                    )
+                )
                 .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
-        ).alongWith(
+        )
+        .alongWith(
             Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
             getSimShootCommand().repeatedly() :
             new InstantCommand()
-        ).finallyDo( // stop everything
+        )
+        .finallyDo( // stop everything
             () -> {
                 // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
@@ -193,16 +197,19 @@ public class CommandFactory {
                     FuelConstants.SHOOTER_POSITION
                 );
             }
-        ).andThen(Commands.waitSeconds(0.5));
+        )
+        .andThen(Commands.waitSeconds(0.5));
     }
 
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
-        return Commands.run(() -> ShootUtil.updateIterative(
-            poseEstimator.getPose(), 
-            ShootUtil.getTargetPose(poseEstimator.getPose()), 
-            drive.getFieldRelativeSpeeds(), 3)
+        return Commands.run(
+            () -> ShootUtil.updateIterative(
+                poseEstimator.getPose(), 
+                ShootUtil.getTargetPose(poseEstimator.getPose()), 
+                drive.getFieldRelativeSpeeds(), 3
+            )
         );
     }
 }
