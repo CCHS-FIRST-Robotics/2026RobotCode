@@ -179,9 +179,14 @@ public class RobotContainer {
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
         // drive slow
-        // controller.rightStick().whileTrue( // remapped as gamesir R4
-        //     commandFactory.getSlowDriveCommand(MetersPerSecond.of(1), MetersPerSecondPerSecond.of(10))
-        // );
+        controller.rightStick().whileTrue( // remapped as gamesir R4
+            commandFactory.getSlowDriveCommand(
+                MetersPerSecond.of(1), 
+                RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
+                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+            )
+        );
 
         // // drive and intake
         // controller.leftTrigger().whileTrue(

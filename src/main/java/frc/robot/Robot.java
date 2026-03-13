@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Threads;
 import org.littletonrobotics.junction.*;
 import org.littletonrobotics.junction.wpilog.*;
@@ -17,12 +18,11 @@ public class Robot extends LoggedRobot {
             case REAL: // running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
+                CameraServer.startAutomaticCapture();
                 break;
-
             case SIM: // running a physics simulator, log to NetworkTables
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
-
             case REPLAY: // replaying a log, set up replay source
                 setUseTiming(false); 
                 String logPath = LogFileUtil.findReplayLog();
@@ -44,7 +44,9 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        robotContainer.resetSimulation();
+    }
 
     @Override
     public void disabledPeriodic() {}
@@ -57,12 +59,12 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(autonomousCommand);
         }
-
-        robotContainer.resetSimulation();
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        robotContainer.autonomousPeriodic();
+    }
 
     @Override
     public void teleopInit() {

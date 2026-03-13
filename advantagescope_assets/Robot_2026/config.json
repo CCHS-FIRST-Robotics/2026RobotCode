@@ -35,9 +35,9 @@
         },
         {
             "name": "Intake",
-            "fov": "92",
+            "fov": "68.5",
             "resolution": [1920, 1400],
-            "position": [-0.6700, 0, 0.4890],
+            "position": [0.09398, 0, 0.4572],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": 0}, 

@@ -30,7 +30,7 @@ public class CommandFactory {
 
     private final Voltage intakeVolts = Volts.of(10);
     private final AngularVelocity hopperVelocity = RotationsPerSecond.of(15);
-    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(30);
+    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60);
 
     public CommandFactory(
         Controller controller,
@@ -68,8 +68,8 @@ public class CommandFactory {
             DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
         )
         .alongWith(getUpdateShootUtilCommand())
-        .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterState()));
+        // .alongWith(getDriveWithJoysticksShooterCommand())
+        .alongWith(getShootCommand(() -> new ShooterState(RotationsPerSecond.of(30), Rotations.of(0))));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -123,7 +123,7 @@ public class CommandFactory {
                 return new Rotation2d(Math.atan2( // negatives map xbox controller to the cartesian plane
                     -controller.getLeftXWithDeadband(0.8), 
                     -controller.getLeftYWithDeadband(0.8)
-                ) + Math.PI); // intake is on back of robot
+                ) + Math.PI); // intake is on back of robot // ! grr grr vibe code
             }
         );
     }
@@ -150,16 +150,14 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) {
+    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) { // ! use pivot supplier
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
-            Commands.waitSeconds(0.5) // waits for shooter to get up to speed // ! waitUntil
+            Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
                 (
-                    Commands.waitSeconds(1)
-                    .andThen(
-                    intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
-                    )
+                        Commands.waitSeconds(1)
+                        .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE))
                 )
                 .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -172,9 +170,9 @@ public class CommandFactory {
         )
         .finallyDo( // stop everything
             () -> {
-                // intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+                intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
-                // shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
+                shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
                 shooter.setKickerVelocity(RotationsPerSecond.of(0));
             }
         );

@@ -220,13 +220,24 @@ public class Drive extends SubsystemBase {
                 prevSpeeds = speeds;
 
                 SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
-                    moduleStates, 
-                    speeds,
-                    DriveConstants.ALLOWED_LINEAR_SPEED, 
-                    DriveConstants.ALLOWED_LINEAR_SPEED, 
-                    DriveConstants.ALLOWED_ANGULAR_SPEED
-                );
+                
+                if (!usingChoreo) {
+                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
+                        moduleStates, 
+                        speeds,
+                        DriveConstants.ALLOWED_LINEAR_SPEED, 
+                        DriveConstants.ALLOWED_LINEAR_SPEED, 
+                        DriveConstants.ALLOWED_ANGULAR_SPEED
+                    );
+                } else {
+                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
+                        moduleStates, 
+                        speeds,
+                        DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
+                        DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
+                        DriveConstants.MAX_THEORETICAL_ANGULAR_SPEED
+                    );
+                }
 
                 // run modules
                 for (int i = 0; i < 4; i++) {
