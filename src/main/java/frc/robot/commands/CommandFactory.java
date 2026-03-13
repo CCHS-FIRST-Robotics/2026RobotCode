@@ -60,7 +60,7 @@ public class CommandFactory {
         .alongWith(getDriveWithJoysticksIntakeCommand());
     }
 
-    public Command getDriveAndShootCommand() {
+    public Command getDriveAndShootCommand(boolean usePivot) {
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -68,13 +68,16 @@ public class CommandFactory {
             DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
         )
         .alongWith(getUpdateShootUtilCommand())
-        // .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> new ShooterState(RotationsPerSecond.of(30), Rotations.of(0))));
+        .alongWith(getDriveWithJoysticksShooterCommand())
+        // .alongWith(getShootCommand(() -> new ShooterState(RotationsPerSecond.of(30), Rotations.of(0))))
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterState(), () -> usePivot))
+        .alongWith(new InstantCommand(() -> System.out.println("SHOOTING SHOOTING SHOOTING SHOOTING SHOOTING")));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
         return getIntakeCommand()
-        .alongWith(getDriveAndShootCommand());
+        .alongWith(getDriveAndShootCommand(false))
+        .alongWith(new InstantCommand(() -> System.out.println("HIHIHIAHIHIHIHAIHIDHISHDIHDIWH")).repeatedly());
     }
 
     public Command getSlowDriveCommand(
@@ -120,10 +123,17 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(0.8), 
             () -> controller.getRightXWithDeadband(0.8),
             () -> {
-                return new Rotation2d(Math.atan2( // negatives map xbox controller to the cartesian plane
-                    -controller.getLeftXWithDeadband(0.8), 
-                    -controller.getLeftYWithDeadband(0.8)
-                ) + Math.PI); // intake is on back of robot // ! grr grr vibe code
+                double x = controller.getLeftXWithDeadband(0.8);
+                double y = controller.getLeftYWithDeadband(0.8);
+
+                if (x == 0 && y == 0) {
+                    return null;
+                }
+                
+                return new Rotation2d(
+                    Math.atan2(-x, -y) // negatives map xbox controller to the cartesian plane
+                    + Math.PI // intake is on back of robot
+                );
             }
         );
     }
@@ -150,14 +160,17 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier) { // ! use pivot supplier
+    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) { // ! use pivot supplier
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
                 (
-                        Commands.waitSeconds(1)
-                        .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE))
+                    usePivotSupplier.getAsBoolean() ? 
+                    Commands.waitSeconds(1)
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)) : 
+                    Commands.waitSeconds(1)
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
                 .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -170,7 +183,9 @@ public class CommandFactory {
         )
         .finallyDo( // stop everything
             () -> {
-                intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
+                if (usePivotSupplier.getAsBoolean()) {
+                    intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
+                }
                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
                 shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
                 shooter.setKickerVelocity(RotationsPerSecond.of(0));

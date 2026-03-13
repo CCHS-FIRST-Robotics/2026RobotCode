@@ -123,7 +123,7 @@ public class AutoGenerator {
                 trajectory2.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
             )
-            .andThen(commandFactory.getDriveAndShootCommand())
+            .andThen(commandFactory.getDriveAndShootCommand(true))
         );
 
         return routine;
@@ -148,7 +148,7 @@ public class AutoGenerator {
             .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))
             .andThen(trajectory1.cmd())
-            .andThen(commandFactory.getDriveAndShootCommand())
+            .andThen(commandFactory.getDriveAndShootCommand(true))
         );
 
         return routine;

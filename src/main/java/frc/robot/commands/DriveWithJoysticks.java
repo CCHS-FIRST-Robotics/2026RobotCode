@@ -64,7 +64,7 @@ public class DriveWithJoysticks extends Command {
         );
 
         // override with supplied theta
-        if (thetaSupplier != null) {
+        if (thetaSupplier != null && thetaSupplier.get() != null) {
             speeds = new ChassisSpeeds(
                 speeds.vxMetersPerSecond,
                 speeds.vyMetersPerSecond,

@@ -188,19 +188,19 @@ public class RobotContainer {
             )
         );
 
-        // // drive and intake
-        // controller.leftTrigger().whileTrue(
-        //     commandFactory.getDriveAndIntakeCommand()
-        // );
+        // drive and intake
+        controller.leftTrigger().whileTrue(
+            commandFactory.getDriveAndIntakeCommand()
+        );
 
-        // // drive and intake and shoot
-        // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-        //     commandFactory.getDriveAndIntakeAndShootCommand()
-        // );
+        // drive and intake and shoot
+        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndIntakeAndShootCommand()
+        );
 
         // drive and shoot
         controller.rightTrigger().whileTrue(
-            commandFactory.getDriveAndShootCommand()
+            commandFactory.getDriveAndShootCommand(true)
         );
 
         // ————— simulation bindings ————— //
