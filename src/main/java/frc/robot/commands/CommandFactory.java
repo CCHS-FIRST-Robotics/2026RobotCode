@@ -168,9 +168,9 @@ public class CommandFactory {
                 (
                     usePivotSupplier.getAsBoolean() ? 
                     Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)) : 
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE, true)) : 
                     Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, true))
                 )
                 .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -184,7 +184,7 @@ public class CommandFactory {
         .finallyDo( // stop everything
             () -> {
                 if (usePivotSupplier.getAsBoolean()) {
-                    intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
+                    intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE, true);
                 }
                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
                 shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));

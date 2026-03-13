@@ -13,6 +13,7 @@ public class Intake extends SubsystemBase {
     public final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
     Angle pivotAngle = Constants.PIVOT_START_ANGLE;
+    boolean pivotSlow = false;
 
     public Intake(
         IntakeIO intakeIO, 
@@ -29,7 +30,7 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        pivotIO.setPosition(pivotAngle); // NEO PID and sim PIDs must be called externally
+        pivotIO.setPosition(pivotAngle, pivotSlow); // NEO PID and sim PIDs must be called externally
     }
 
     // ————— raw command factories ————— //
@@ -56,12 +57,13 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> setPivotVoltage(volts));
     }
 
-    public void setPivotPosition(Angle angle) {
+    public void setPivotPosition(Angle angle, boolean slow) {
         pivotAngle = angle;
+        pivotSlow = slow;
     }
 
-    public Command getSetPivotPositionCommand(Angle angle) {
-        return runOnce(() -> setPivotPosition(angle));
+    public Command getSetPivotPositionCommand(Angle angle, boolean slow) {
+        return runOnce(() -> setPivotPosition(angle, slow));
     }
 
     // util

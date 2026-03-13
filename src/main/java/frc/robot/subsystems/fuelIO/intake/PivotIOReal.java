@@ -30,9 +30,16 @@ public class PivotIOReal implements PivotIO {
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute))); // ! slow
-        motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)));
-        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.25).in(Rotations));
+        
+        // slow pivoting maxMotion
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
+        motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)), ClosedLoopSlot.kSlot0);
+        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations), ClosedLoopSlot.kSlot0);
+        
+        // fast pivoting maxMotion
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot1);
+        motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)), ClosedLoopSlot.kSlot1);
+        motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations), ClosedLoopSlot.kSlot1);
         
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
@@ -76,14 +83,23 @@ public class PivotIOReal implements PivotIO {
     }
 
     @Override
-    public void setPosition(Angle angle) { // ! how to compensate for slop
-        motor.getClosedLoopController().setSetpoint(
-            angle.in(Rotations), 
-            SparkMax.ControlType.kMAXMotionPositionControl, 
-            ClosedLoopSlot.kSlot0,
-            FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
-        );
-
+    public void setPosition(Angle angle, boolean slow) { // ! how to compensate for slop
+        if (slow) {
+            motor.getClosedLoopController().setSetpoint(
+                angle.in(Rotations), 
+                SparkMax.ControlType.kMAXMotionPositionControl, 
+                ClosedLoopSlot.kSlot0,
+                FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
+            );
+        } else {
+            motor.getClosedLoopController().setSetpoint(
+                angle.in(Rotations), 
+                SparkMax.ControlType.kMAXMotionPositionControl, 
+                ClosedLoopSlot.kSlot1,
+                FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
+            );
+        }
+        
         positionSetpoint = angle;
     }
 }

@@ -189,7 +189,7 @@ public class RobotContainer {
         );
 
         // drive and intake
-        controller.leftTrigger().whileTrue(
+        controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
             commandFactory.getDriveAndIntakeCommand()
         );
 
@@ -199,7 +199,7 @@ public class RobotContainer {
         );
 
         // drive and shoot
-        controller.rightTrigger().whileTrue(
+        controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
             commandFactory.getDriveAndShootCommand(true)
         );
 
