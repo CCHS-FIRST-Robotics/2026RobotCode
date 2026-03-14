@@ -3,6 +3,7 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import java.util.function.*;
@@ -111,6 +112,11 @@ public class CommandFactory {
                 return new Rotation2d(
                     Math.atan2(-x, -y) // negatives map xbox controller to the cartesian plane
                     + Math.PI // intake is on back of robot
+                    - (
+                        DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ?
+                        0 : 
+                        Math.PI
+                    )
                 );
             }, 
             false
@@ -124,7 +130,9 @@ public class CommandFactory {
             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
-            () -> ShootUtil.getRobotRotation(), 
+            () -> {
+                return ShootUtil.getRobotRotation().minus(new Rotation2d(Degrees.of(3)));
+            }, 
             true
         );
     }
@@ -165,7 +173,7 @@ public class CommandFactory {
     public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) { // ! use pivot supplier
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
-            Commands.waitSeconds(1) // waits for shooter to get up to speed // ! waitUntil
+            Commands.waitSeconds(1.5) // waits for shooter to get up to speed // ! waitUntil
             .andThen(
                 (
                     usePivotSupplier.getAsBoolean() ? 

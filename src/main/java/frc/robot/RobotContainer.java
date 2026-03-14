@@ -209,7 +209,7 @@ public class RobotContainer {
             commandFactory.getDriveAndShootCommand(true)
         );
 
-        // pivot // ! should I even have these be toggleable
+        // pivot // ! should I even have these be toggleable // ! make it a toggle leftbumper
         controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE, false));
         controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false));
 

@@ -29,7 +29,7 @@ public class ShooterIOReal implements ShooterIO {
 
         // motor config
         motorConfig.Slot0 = FuelConstants.SHOOTER_PIDF;
-        motorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+        motorConfig.CurrentLimits.SupplyCurrentLimit = 80;
         motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         motor.getConfigurator().apply(motorConfig);
 
