@@ -27,7 +27,6 @@ public class ShootUtil {
 
     /**
      * 
-     * 
      */
 
     static {
