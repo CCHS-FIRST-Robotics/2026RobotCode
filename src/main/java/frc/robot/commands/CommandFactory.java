@@ -69,7 +69,6 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        // .alongWith(getShootCommand(() -> new ShooterState(RotationsPerSecond.of(30), Rotations.of(0))))
         .alongWith(getShootCommand(() -> ShootUtil.getShooterState(), () -> usePivot))
         .alongWith(new InstantCommand(() -> System.out.println("SHOOTING SHOOTING SHOOTING SHOOTING SHOOTING")));
     }

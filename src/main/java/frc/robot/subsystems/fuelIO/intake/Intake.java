@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        pivotIO.setPosition(pivotAngle, pivotSlow); // NEO PID and sim PIDs must be called externally
+        // pivotIO.setPosition(pivotAngle, pivotSlow); // NEO PID and sim PIDs must be called externally
     }
 
     // ————— raw command factories ————— //

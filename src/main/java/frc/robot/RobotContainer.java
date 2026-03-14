@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.measure.*;
 import java.io.*;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
@@ -178,6 +179,14 @@ public class RobotContainer {
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
+        // x-lock
+        controller.x().whileTrue(
+            Commands.run(() -> drive.runCharacterization(
+                new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+                new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
+            )
+        );
+
         // drive slow
         controller.rightStick().whileTrue( // remapped as gamesir R4
             commandFactory.getSlowDriveCommand(
@@ -205,7 +214,7 @@ public class RobotContainer {
 
         // ————— simulation bindings ————— //
 
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+        // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
 
         // ————— testing for pivot ————— //
 
@@ -251,7 +260,8 @@ public class RobotContainer {
         //     () -> new ShooterState(
         //         RotationsPerSecond.of(30), 
         //         Rotations.of(0)
-        //     )
+        //     ), 
+        //     () -> false
         // ));
 
         // controller.x().onTrue(
@@ -304,7 +314,8 @@ public class RobotContainer {
         //     () -> new ShooterState(
         //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
         //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
-        //     )
+        //     ), 
+        //     () -> false
         // ));
 
         // controller.leftTrigger().onTrue(

@@ -39,7 +39,7 @@ public class KickerIOReal implements KickerIO {
         motorConfig.encoder.quadratureMeasurementPeriod(10);
         motorConfig.encoder.quadratureAverageDepth(2);
         
-        motorConfig.smartCurrentLimit(30);
+        motorConfig.smartCurrentLimit(40);
         motorConfig.voltageCompensation(12);
         
         motorConfig.inverted(false);

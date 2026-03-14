@@ -48,7 +48,7 @@ public class FuelConstants {
     public static final SimpleMotorFeedforward HOPPER_FF = new SimpleMotorFeedforward(0, 0.13, 0);
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
-    .withKP(0.3)
+    .withKP(0.5)
     .withKI(0)
     .withKD(0)
     .withKS(0)
