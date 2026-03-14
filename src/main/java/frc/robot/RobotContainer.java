@@ -39,7 +39,7 @@ public class RobotContainer {
     private final Intake intake;
     private final Hopper hopper;
     private final Shooter shooter;
-    private final Climber climber;
+    // private final Climber climber;
 
     // ————— utils ————— //
 
@@ -87,7 +87,7 @@ public class RobotContainer {
                     new HoodIOReal(FuelConstants.HOOD_MOTOR_ID), 
                     new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
                 );
-                climber = new Climber(new ClimberIOReal(FuelConstants.CLIMBER_MOTOR_ID));
+                // climber = new Climber(new ClimberIOReal(FuelConstants.CLIMBER_MOTOR_ID));
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
@@ -125,7 +125,7 @@ public class RobotContainer {
                     new HoodIOSim(),
                     new KickerIOSim()
                 );
-                climber = new Climber(new ClimberIO() {});
+                // climber = new Climber(new ClimberIO() {});
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
@@ -153,7 +153,7 @@ public class RobotContainer {
                     new HoodIO() {},
                     new KickerIO() {}
                 );
-                climber = new Climber(new ClimberIO() {});
+                // climber = new Climber(new ClimberIO() {});
                 break;
         }
 
@@ -209,29 +209,19 @@ public class RobotContainer {
             commandFactory.getDriveAndShootCommand(true)
         );
 
+        // pivot // ! should I even have these be toggleable
+        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE, false));
+        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false));
+
+        // unstick hopper // ! not sure if this even works
+        controller.b().whileTrue(Commands.startEnd(
+            () -> hopper.setHopperVelocity(RotationsPerSecond.of(-1)), 
+            () -> hopper.setHopperVelocity(RotationsPerSecond.of(0))
+        ));
+
         // ————— simulation bindings ————— //
 
         // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
-
-        // ————— testing for pivot ————— //
-
-        // controller.leftTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity -= 0.5;
-        //         intake.setPivotVoltage(Volts.of(hopperVelocity));
-        //     })
-        // );
-        // controller.rightTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity += 0.5;
-        //         intake.setPivotVoltage(Volts.of(hopperVelocity));
-        //     })
-        // );
-
-        // controller.leftBumper().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.381333)));
-        // controller.y().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0.2)));
-        // controller.b().onTrue(intake.getSetPivotPositionCommand(Rotations.of(0)));
-        // controller.a().onTrue(intake.getSetPivotPositionCommand(Rotations.of(-0.04)));
 
         // ————— testing for position control / autos ————— //
 
@@ -243,15 +233,22 @@ public class RobotContainer {
         //     )
         // );
 
-        // ————— testing for climb ————— //
-
-        // controller.y().onTrue(climber.getSetClimberVoltageCommand(Volts.of(2)));
-        // controller.b().onTrue(climber.getSetClimberVoltageCommand(Volts.of(0)));
-        // controller.a().onTrue(climber.getSetClimberVoltageCommand(Volts.of(-2)));
-
         // ————— testing for BPS ————— //
 
         // // ! remember to comment out the set hopper and kicker voltage in commandfactory
+
+        // controller.leftTrigger().whileTrue(
+        //     new StartEndCommand(
+        //         () -> {
+        //             hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+        //             shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+        //         },
+        //         () -> {
+        //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
+        //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
+        //         }
+        //     )
+        // );
 
         // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
         //     () -> new ShooterState(
@@ -282,31 +279,16 @@ public class RobotContainer {
         //     })
         // );
 
-        // controller.leftTrigger().whileTrue(
-        //     new StartEndCommand(
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
-        //         },
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
-        //         }
-        //     )
-        // );
-
-        // controller.leftBumper().onTrue(hopper.getSetHopperVelocityCommand(RotationsPerSecond.of(-1)));
-
         // ————— testing for shooter map ————— //
 
         // // ! remember to uncomment the hopper and kicker voltage in commandfactory
+        // // ! remember to comment out the finallyDo
 
         // controller.x().whileTrue(
         //     commandFactory.getUpdateShootUtilCommand()
         //     .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
         // );
 
-        // // ! remember to comment out the finallyDo
         // controller.y().whileTrue(commandFactory.getShootCommand(
         //     () -> new ShooterState(
         //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
@@ -314,6 +296,14 @@ public class RobotContainer {
         //     ), 
         //     () -> false
         // ));
+
+        // controller.a().onTrue(
+        //     new InstantCommand(() -> 
+        //         {
+        //             System.out.println("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
+        //         }
+        //     )
+        // );
 
         // controller.leftTrigger().onTrue(
         //     new InstantCommand(() -> {
@@ -341,14 +331,6 @@ public class RobotContainer {
         //         hoodAngle += 0.01;
         //         shooter.setHoodPosition(Rotations.of(hoodAngle));
         //     })
-        // );
-
-        // controller.a().onTrue(
-        //     new InstantCommand(() -> 
-        //         {
-        //             System.out.println("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
-        //         }
-        //     )
         // );
     }
 
