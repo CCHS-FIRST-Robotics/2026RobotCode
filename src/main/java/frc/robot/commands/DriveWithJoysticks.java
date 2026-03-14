@@ -23,6 +23,7 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier thetaVelocitySupplier;
 
     private final Supplier<Rotation2d> thetaSupplier;
+    private final boolean xLockWhileStationary;
 
     private final double EXPONENT = 2;
 
@@ -32,7 +33,8 @@ public class DriveWithJoysticks extends Command {
         DoubleSupplier xVelocitySupplier, 
         DoubleSupplier yVelocitySupplier, 
         DoubleSupplier thetaVelocitySupplier,
-        Supplier<Rotation2d> thetaSupplier
+        Supplier<Rotation2d> thetaSupplier, 
+        boolean xLockWhileStationary
     ) {
         addRequirements(drive);
 
@@ -44,6 +46,7 @@ public class DriveWithJoysticks extends Command {
         this.thetaVelocitySupplier = thetaVelocitySupplier;
 
         this.thetaSupplier = thetaSupplier;
+        this.xLockWhileStationary = xLockWhileStationary;
     }
 
     @SuppressWarnings("unused")
@@ -99,6 +102,15 @@ public class DriveWithJoysticks extends Command {
                     Math.abs(robotYawRadians) < Math.PI / 2 ? 0 : Math.PI
                 )
             );
+        }
+
+        if (xLockWhileStationary
+            && Math.abs(speeds.vxMetersPerSecond) < 0.05
+            && Math.abs(speeds.vyMetersPerSecond) < 0.05
+            && Math.abs(speeds.omegaRadiansPerSecond) < 0.05
+        ) {
+            drive.xLock();
+            return;
         }
                 
         // run velocity

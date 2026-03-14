@@ -79,28 +79,6 @@ public class CommandFactory {
         .alongWith(new InstantCommand(() -> System.out.println("HIHIHIAHIHIHIHAIHIDHISHDIHDIWH")).repeatedly());
     }
 
-    public Command getSlowDriveCommand(
-        LinearVelocity linearVelocity, 
-        AngularVelocity angularVelocity, 
-        LinearAcceleration linearAcceleration,
-        AngularAcceleration angularAcceleration
-    ) {
-        return Commands.startEnd(
-            () -> {
-                DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
-                DriveConstants.ALLOWED_ANGULAR_SPEED = angularVelocity;
-                DriveConstants.ALLOWED_LINEAR_ACCEL = linearAcceleration;
-                DriveConstants.ALLOWED_ANGULAR_ACCEL = angularAcceleration;
-            }, 
-            () -> {
-                DriveConstants.ALLOWED_LINEAR_SPEED = DriveConstants.MAX_ALLOWED_LINEAR_SPEED;
-                DriveConstants.ALLOWED_ANGULAR_SPEED = DriveConstants.MAX_ALLOWED_ANGULAR_SPEED;
-                DriveConstants.ALLOWED_LINEAR_ACCEL = DriveConstants.MAX_ALLOWED_LINEAR_ACCEL;
-                DriveConstants.ALLOWED_ANGULAR_ACCEL = DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL;
-            }
-        );
-    }
-
     // ————— drive ————— //
 
     public Command getDriveWithJoysticksCommand() {
@@ -110,7 +88,8 @@ public class CommandFactory {
             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped, x velocity relative to field is "forward" from driver perspective
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
-            null
+            null, 
+            false
         );
     }
 
@@ -133,7 +112,8 @@ public class CommandFactory {
                     Math.atan2(-x, -y) // negatives map xbox controller to the cartesian plane
                     + Math.PI // intake is on back of robot
                 );
-            }
+            }, 
+            false
         );
     }
 
@@ -144,7 +124,30 @@ public class CommandFactory {
             () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
-            () -> ShootUtil.getRobotRotation()
+            () -> ShootUtil.getRobotRotation(), 
+            true
+        );
+    }
+
+    public Command getSlowDriveCommand(
+        LinearVelocity linearVelocity, 
+        AngularVelocity angularVelocity, 
+        LinearAcceleration linearAcceleration,
+        AngularAcceleration angularAcceleration
+    ) {
+        return Commands.startEnd(
+            () -> {
+                DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
+                DriveConstants.ALLOWED_ANGULAR_SPEED = angularVelocity;
+                DriveConstants.ALLOWED_LINEAR_ACCEL = linearAcceleration;
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = angularAcceleration;
+            }, 
+            () -> {
+                DriveConstants.ALLOWED_LINEAR_SPEED = DriveConstants.MAX_ALLOWED_LINEAR_SPEED;
+                DriveConstants.ALLOWED_ANGULAR_SPEED = DriveConstants.MAX_ALLOWED_ANGULAR_SPEED;
+                DriveConstants.ALLOWED_LINEAR_ACCEL = DriveConstants.MAX_ALLOWED_LINEAR_ACCEL;
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL;
+            }
         );
     }
 

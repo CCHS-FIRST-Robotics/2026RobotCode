@@ -88,7 +88,7 @@ public class DriveConstants {
     
     // ————— drivetrain ————— //
 
-    public static final Mass ROBOT_WEIGHT = Pounds.of(100); // robot is 100, battery is 13, bumpers are // ! 
+    public static final Mass ROBOT_WEIGHT = Pounds.of(123); // robot is 100, bumpers are 10, battery is 13
     public static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(6.883); // ! default value
     public static final Distance WIDTH_X = Inches.of(27.5);
     public static final Distance WIDTH_Y = Inches.of(27.5);

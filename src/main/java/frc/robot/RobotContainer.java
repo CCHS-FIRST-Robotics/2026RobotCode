@@ -181,10 +181,7 @@ public class RobotContainer {
 
         // x-lock
         controller.x().whileTrue(
-            Commands.run(() -> drive.runCharacterization(
-                new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-                new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
-            )
+            Commands.run(() -> drive.xLock())
         );
 
         // drive slow

@@ -371,6 +371,13 @@ public class Drive extends SubsystemBase {
     
     // ————— utils ————— //
 
+    public void xLock() {
+        runCharacterization(
+            new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+            new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)}
+        );
+    }
+
     public Command sysIdFull() {
         return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
             .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
