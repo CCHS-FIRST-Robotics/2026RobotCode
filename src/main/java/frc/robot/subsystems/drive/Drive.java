@@ -84,9 +84,13 @@ public class Drive extends SubsystemBase {
     ControlConstants thetaPConstants = new ControlConstants().withPID(5, 0, 0);
     TunableControlConstants thetaPTunableControlConstants = new TunableControlConstants("thetaP", thetaPConstants);
 
-    private final TunablePIDController xPIDChoreo = new TunablePIDController(xPTunableControlConstants);
-    private final TunablePIDController yPIDChoreo = new TunablePIDController(xPTunableControlConstants);
-    private final TunablePIDController thetaPIDChoreo = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController xPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController yPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController thetaPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
+
+    private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
+    private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
+    private final PIDController thetaPIDChoreo = new PIDController(5, 0, 0);
 
     private Pose2d positionSetpoint = new Pose2d();
     private ChassisSpeeds velocitySetpoint = new ChassisSpeeds();
@@ -130,7 +134,7 @@ public class Drive extends SubsystemBase {
         modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
         
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
-        // thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
+        thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
     }
 
     @Override
@@ -174,9 +178,15 @@ public class Drive extends SubsystemBase {
                     yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
                     thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 } else {
-                    xOutput = xPIDChoreo.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                    yOutput = yPIDChoreo.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                    thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    if (Constants.TUNING_CHOREO) {
+                        xOutput = xPIDChoreoTunable.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                        yOutput = yPIDChoreoTunable.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                        thetaOutput = thetaPIDChoreoTunable.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    } else {
+                        xOutput = xPIDChoreo.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                        yOutput = yPIDChoreo.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                        thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    }
                 }
 
                 // create chassisspeeds object with FOC

@@ -27,6 +27,8 @@ public final class Constants {
 
     public static final boolean TRENCH_ALIGN = true;
 
+    public static final boolean TUNING_CHOREO = false;
+
     public static final boolean USE_PIVOT = true;
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;

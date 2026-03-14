@@ -349,11 +349,14 @@ public class RobotContainer {
         autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
-        autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
-        autoChooser.addRoutine("CenterFuel", () -> autoGenerator.centerFuel());
+        autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
+        autoChooser.addRoutine("BeMeanBottom", () -> autoGenerator.beMeanBottom());
+        autoChooser.addRoutine("BeMeanTop", () -> autoGenerator.beMeanTop());
+        autoChooser.addRoutine("CenterFuelBottom", () -> autoGenerator.centerFuelBottom());
+        autoChooser.addRoutine("CenterFuelTop", () -> autoGenerator.centerFuelTop());
         autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
-        autoChooser.select("Back Up"); // picks a default auto
+        autoChooser.select("BackUpAndShoot"); // picks a default auto
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
