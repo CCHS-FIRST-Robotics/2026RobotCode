@@ -70,14 +70,12 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterState(), () -> usePivot))
-        .alongWith(new InstantCommand(() -> System.out.println("SHOOTING SHOOTING SHOOTING SHOOTING SHOOTING")));
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterState(), () -> usePivot));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
         return getIntakeCommand()
-        .alongWith(getDriveAndShootCommand(false))
-        .alongWith(new InstantCommand(() -> System.out.println("HIHIHIAHIHIHIHAIHIDHISHDIHDIWH")).repeatedly());
+        .alongWith(getDriveAndShootCommand(false));
     }
 
     // ————— drive ————— //

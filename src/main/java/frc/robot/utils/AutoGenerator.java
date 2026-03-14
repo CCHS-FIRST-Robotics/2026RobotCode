@@ -133,7 +133,7 @@ public class AutoGenerator {
             .andThen(trajectory0.cmd())
             .andThen(
                 trajectory1.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
             )
             .andThen(
                 trajectory2.cmd()
@@ -163,7 +163,7 @@ public class AutoGenerator {
             .andThen(trajectory0.cmd())
             .andThen(
                 trajectory1.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(12)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
             )
             .andThen(
                 trajectory2.cmd()
