@@ -133,10 +133,10 @@ public class CommandFactory {
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
-            () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
-            () -> controller.getLeftXWithDeadband(), 
-            () -> controller.getRightXWithDeadband(),
-            () -> {
+            () -> 0, // xbox controller is flipped
+            () -> 0, 
+            () -> 0,
+            () -> { // ! vibe coded
                 Pose2d currentPose = poseEstimator.getPose();
                 Pose2d targetPose = ShootUtil.getTargetPose(currentPose);
                 double distance = currentPose.getTranslation()

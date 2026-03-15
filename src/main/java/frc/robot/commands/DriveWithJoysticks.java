@@ -79,8 +79,7 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
-        // override with under trench angle
-        // override with under trench angle
+        // override with under trench angle // ! vibe coded
         if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
             boolean isTopTrench = poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters);
