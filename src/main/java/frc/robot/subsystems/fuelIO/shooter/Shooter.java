@@ -118,6 +118,11 @@ public class Shooter extends SubsystemBase {
 
     // util
 
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/shooterUpToSpeed")
+    public boolean getShooterUpToSpeed() {
+        return Math.abs(shooterIOInputs.velocity - shooterIOInputs.velocitySetpoint) < 2;
+    }
+
     public double getShooterAngularVelocity() {
         return shooterIOInputs.velocity;
     }

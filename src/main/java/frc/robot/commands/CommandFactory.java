@@ -190,7 +190,8 @@ public class CommandFactory {
     public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) { // ! use pivot supplier
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
-            Commands.waitSeconds(1.5) // waits for shooter to get up to speed // ! waitUntil
+            Commands.waitSeconds(0.1)
+            .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
             .andThen(
                 (
                     usePivotSupplier.getAsBoolean() ? 
