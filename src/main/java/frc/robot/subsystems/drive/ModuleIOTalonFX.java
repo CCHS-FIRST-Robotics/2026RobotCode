@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Amps;
 import static frc.robot.utils.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -100,6 +101,8 @@ public abstract class ModuleIOTalonFX implements ModuleIO {
         turnConfig.MotionMagic.MotionMagicExpo_kV = 0.12 * constants.SteerMotorGearRatio;
         turnConfig.MotionMagic.MotionMagicExpo_kA = 0.1;
         turnConfig.ClosedLoopGeneral.ContinuousWrap = true;
+        turnConfig.CurrentLimits.StatorCurrentLimit = DriveConstants.TURN_STATOR_CURRENT_LIMIT.in(Amps);
+        turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         turnConfig.MotorOutput.Inverted = constants.SteerMotorInverted
                 ? InvertedValue.Clockwise_Positive
                 : InvertedValue.CounterClockwise_Positive;

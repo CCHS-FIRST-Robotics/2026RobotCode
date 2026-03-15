@@ -123,7 +123,8 @@ public class DriveConstants {
     public static LinearAcceleration ALLOWED_LINEAR_ACCEL = MAX_ALLOWED_LINEAR_ACCEL;
     public static AngularAcceleration ALLOWED_ANGULAR_ACCEL = MAX_ALLOWED_ANGULAR_ACCEL;
     
-    private static final Current SLIP_CURRENT = Amps.of(60.0);
+    private static final Current DRIVE_STATOR_CURRENT_LIMIT = Amps.of(60.0);
+    public static final Current TURN_STATOR_CURRENT_LIMIT = Amps.of(40.0);
 
     // these are only used for simulation
     private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01);
@@ -148,7 +149,7 @@ public class DriveConstants {
     .withDriveMotorGains(DRIVE_PIDF)
     .withSteerMotorClosedLoopOutput(TURN_PID_TYPE)
     .withDriveMotorClosedLoopOutput(DRIVE_PID_TYPE)
-    .withSlipCurrent(SLIP_CURRENT)
+    .withSlipCurrent(DRIVE_STATOR_CURRENT_LIMIT)
     .withSpeedAt12Volts(MAX_THEORETICAL_LINEAR_SPEED)
     .withDriveMotorType(DRIVE_MOTOR_TYPE)
     .withSteerMotorType(TURN_MOTOR_TYPE)
