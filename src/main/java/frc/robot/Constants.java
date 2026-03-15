@@ -61,7 +61,7 @@ public final class Constants {
 
         public static final Distance TRENCH_DISTANCE_X = Inches.of(182.11);
         public static final Distance TRENCH_WIDTH_Y = Inches.of(50.59);
-        public static final Distance TRENCH_ZONE_WIDTH_X = Meters.of(1);
+        public static final Distance TRENCH_ZONE_WIDTH_X = Meters.of(1.5);
 
         public static Pose2d calculateAllianceFlippedPose(Pose2d pose) {
             return pose.rotateAround(
@@ -146,7 +146,7 @@ public final class Constants {
                 FieldConstants.TRENCH_DISTANCE_X
                 .plus(TRENCH_ZONE_WIDTH_X), 
                 Meters.of(0),
-                FieldConstants.TRENCH_WIDTH_Y
+                FieldConstants.TRENCH_WIDTH_Y.plus(Meters.of(0.5))
             );
             private static final Zone BLUE_TOP_TRENCH = BLUE_BOTTOM_TRENCH.mirroredY();
             private static final Zone RED_BOTTOM_TRENCH = BLUE_BOTTOM_TRENCH.mirroredX();

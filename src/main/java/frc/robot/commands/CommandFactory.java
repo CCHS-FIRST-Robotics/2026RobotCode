@@ -103,12 +103,12 @@ public class CommandFactory {
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
-            () -> -controller.getLeftYWithDeadband(0.8), // xbox controller is flipped
-            () -> controller.getLeftXWithDeadband(0.8), 
-            () -> controller.getRightXWithDeadband(0.8),
+            () -> -controller.getLeftYWithDeadband(0.6), // xbox controller is flipped
+            () -> controller.getLeftXWithDeadband(0.6), 
+            () -> controller.getRightXWithDeadband(0.6),
             () -> {
-                double x = controller.getLeftXWithDeadband(0.8);
-                double y = controller.getLeftYWithDeadband(0.8);
+                double x = controller.getLeftXWithDeadband(0.6);
+                double y = controller.getLeftYWithDeadband(0.6);
 
                 if (x == 0 && y == 0) {
                     return null;
