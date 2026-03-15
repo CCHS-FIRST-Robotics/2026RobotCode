@@ -200,8 +200,19 @@ public class CommandFactory {
                     Commands.waitSeconds(1)
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
-                .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
-                .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
+                .alongWith(
+                    Commands.run(() -> {
+                        if (shooter.getShooterUpToSpeed()) {
+                            hopper.setHopperVelocity(hopperVelocity);
+                            shooter.setKickerVelocity(kickerVelocity);
+                        } else {
+                            hopper.setHopperVelocity(RotationsPerSecond.of(0));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    })
+                )
+                // .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
+                // .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         )
         .alongWith(
