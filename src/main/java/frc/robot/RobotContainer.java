@@ -209,15 +209,19 @@ public class RobotContainer {
             commandFactory.getDriveAndShootCommand(true)
         );
 
-        // pivot // ! should I even have these be toggleable // ! make it a toggle leftbumper
-        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE, false));
-        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false));
+        controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
 
-        // unstick hopper // ! not sure if this even works
-        controller.b().whileTrue(Commands.startEnd(
-            () -> hopper.setHopperVelocity(RotationsPerSecond.of(-1)), 
-            () -> hopper.setHopperVelocity(RotationsPerSecond.of(0))
-        ));
+        // pivot // ! should I even have these be toggleable // ! make it a toggle leftbumper
+        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
+        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
+
+        // // unstick hopper // ! not sure if this even works
+        // controller.b().whileTrue(Commands.startEnd(
+        //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(-1)), 
+        //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(0))
+        // ));
+
+        controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
 
         // ————— simulation bindings ————— //
 

@@ -25,7 +25,7 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0;
 
-    public static final boolean TRENCH_ALIGN = false;
+    public static boolean TRENCH_ALIGN = true;
 
     public static final boolean TUNING_CHOREO = false;
 

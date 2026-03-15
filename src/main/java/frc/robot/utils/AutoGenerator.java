@@ -81,7 +81,8 @@ public class AutoGenerator {
     // ————— competition routines ————— //
 
     public Command backUpAndShoot() {
-        return new DriveWithPosition(drive, poseEstimator, new Transform2d(-1.5, 0, new Rotation2d()))
+        return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+        .alongWith(new DriveWithPosition(drive, poseEstimator, new Transform2d(-1.5, 0, new Rotation2d())))
         .andThen(commandFactory.getDriveAndShootCommand(true));
     }
 
@@ -126,11 +127,15 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            (
-                trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false))
+            trajectory0.resetOdometry()
+            .andThen(
+                trajectory0.cmd()
+                .alongWith(
+                    Commands.waitSeconds(1)
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                )
             )
-            .andThen(trajectory0.cmd())
+            .andThen(Commands.waitSeconds(3))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
@@ -156,11 +161,15 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            (
-                trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false))
+            trajectory0.resetOdometry()
+            .andThen(
+                trajectory0.cmd()
+                .alongWith(
+                    Commands.waitSeconds(1)
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                )
             )
-            .andThen(trajectory0.cmd())
+            .andThen(Commands.waitSeconds(3))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
@@ -185,9 +194,10 @@ public class AutoGenerator {
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
-            (
-                trajectory0.resetOdometry()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, false))
+            trajectory0.resetOdometry()
+            .andThen(
+                trajectory0.cmd()
+                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
             )
             .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))

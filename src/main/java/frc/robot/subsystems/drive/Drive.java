@@ -75,7 +75,7 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPIDPosition = new PIDController(5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(5, 0, 0);
+    private final PIDController thetaPIDPosition = new PIDController(15, 0, 2);
 
     ControlConstants xPConstants = new ControlConstants().withPID(5, 0, 0);
     TunableControlConstants xPTunableControlConstants = new TunableControlConstants("xP", xPConstants);

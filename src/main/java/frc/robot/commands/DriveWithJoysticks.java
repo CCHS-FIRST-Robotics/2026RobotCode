@@ -24,6 +24,7 @@ public class DriveWithJoysticks extends Command {
 
     private final Supplier<Rotation2d> thetaSupplier;
     private final boolean xLockWhileStationary;
+    private final BooleanSupplier trenchAlignSupplier;
 
     private final double EXPONENT = 2;
 
@@ -34,7 +35,8 @@ public class DriveWithJoysticks extends Command {
         DoubleSupplier yVelocitySupplier, 
         DoubleSupplier thetaVelocitySupplier,
         Supplier<Rotation2d> thetaSupplier, 
-        boolean xLockWhileStationary
+        boolean xLockWhileStationary,
+        BooleanSupplier trenchAlignSupplier
     ) {
         addRequirements(drive);
 
@@ -47,9 +49,9 @@ public class DriveWithJoysticks extends Command {
 
         this.thetaSupplier = thetaSupplier;
         this.xLockWhileStationary = xLockWhileStationary;
+        this.trenchAlignSupplier = trenchAlignSupplier;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void execute() {
         // get linear velocity vector
@@ -79,18 +81,29 @@ public class DriveWithJoysticks extends Command {
         }
 
         // override with under trench angle
-        if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+        // override with under trench angle
+        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
-            if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
+            boolean isTopTrench = poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters);
+            boolean isRedAlliance = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+            
+            if (isTopTrench) { // top
                 yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
                 );
+                System.out.println("TOPTOPTOPTOPTOP" + poseEstimator.getPose().getY());
             } else { // bottom
                 yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
                 );
+                System.out.println("BOTTOM BOTTOM BOTTOM" + poseEstimator.getPose().getY());
+            }
+
+            // Flip Y output for red alliance because field-relative transform will flip it again
+            if (isRedAlliance) {
+                yOutput = -yOutput;
             }
 
             double robotYawRadians = poseEstimator.getPose().getRotation().getRadians();
@@ -103,6 +116,8 @@ public class DriveWithJoysticks extends Command {
                 )
             );
         }
+
+
 
         if (xLockWhileStationary
             && Math.abs(speeds.vxMetersPerSecond) < 0.05

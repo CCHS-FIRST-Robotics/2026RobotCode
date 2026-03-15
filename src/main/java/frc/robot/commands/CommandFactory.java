@@ -57,8 +57,14 @@ public class CommandFactory {
     // ————— processed ————— //
 
     public Command getDriveAndIntakeCommand() {
-        return getIntakeCommand()
-        .alongWith(getDriveWithJoysticksIntakeCommand());
+        return getSlowDriveCommand(
+            MetersPerSecond.of(1), 
+            DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
+            DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+            DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+        )
+        .alongWith(getDriveWithJoysticksIntakeCommand())
+        .alongWith(getIntakeCommand());
     }
 
     public Command getDriveAndShootCommand(boolean usePivot) {
@@ -88,7 +94,8 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
             null, 
-            false
+            false, 
+            () -> Constants.TRENCH_ALIGN
         );
     }
 
@@ -117,7 +124,8 @@ public class CommandFactory {
                     )
                 );
             }, 
-            false
+            false, 
+            () -> Constants.TRENCH_ALIGN
         );
     }
 
@@ -129,9 +137,20 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
             () -> {
-                return ShootUtil.getRobotRotation().minus(new Rotation2d(Degrees.of(3)));
-            }, 
-            true
+                Pose2d currentPose = poseEstimator.getPose();
+                Pose2d targetPose = ShootUtil.getTargetPose(currentPose);
+                double distance = currentPose.getTranslation()
+                    .minus(targetPose.getTranslation())
+                    .getNorm(); // distance in meters
+                
+                // Scale offset: e.g., 1 degree per meter, or use a multiplier
+                double offsetDegrees = distance * 0.25; // adjust multiplier as needed
+                
+                return ShootUtil.getRobotRotation()
+                    .minus(new Rotation2d(Degrees.of(offsetDegrees)));
+            },
+            true, 
+            () -> Constants.TRENCH_ALIGN
         );
     }
 
@@ -176,9 +195,9 @@ public class CommandFactory {
                 (
                     usePivotSupplier.getAsBoolean() ? 
                     Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE, true)) : 
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)) : 
                     Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE, true))
+                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
                 .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -192,7 +211,7 @@ public class CommandFactory {
         .finallyDo( // stop everything
             () -> {
                 if (usePivotSupplier.getAsBoolean()) {
-                    intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE, true);
+                    intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                 }
                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
                 shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));

@@ -49,7 +49,7 @@ public class PivotIOSim implements PivotIO {
     }
 
     @Override
-    public void setPosition(Angle angle, boolean slow) { // I'm not going to make a trapezoid profile, so slow doesn't do anything here
+    public void setPosition(Angle angle) { // I'm not going to make a trapezoid profile, so slow doesn't do anything here
         double volts = PID.calculate(
             motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO, 
             angle.in(Rotations)
