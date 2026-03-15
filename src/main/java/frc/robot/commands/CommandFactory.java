@@ -245,6 +245,16 @@ public class CommandFactory {
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
+        if (Constants.RECORD_DISTANCE_ONCE) {
+            return Commands.runOnce(
+            () -> ShootUtil.updateIterative(
+                poseEstimator.getPose(), 
+                ShootUtil.getTargetPose(poseEstimator.getPose()), 
+                drive.getFieldRelativeSpeeds(), 3
+            )
+        );
+        }
+
         return Commands.run(
             () -> ShootUtil.updateIterative(
                 poseEstimator.getPose(), 

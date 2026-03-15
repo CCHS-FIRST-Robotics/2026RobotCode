@@ -31,6 +31,8 @@ public final class Constants {
 
     public static final boolean USE_PIVOT = true;
 
+    public static final boolean RECORD_DISTANCE_ONCE = true;
+
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
