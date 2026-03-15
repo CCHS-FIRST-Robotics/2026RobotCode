@@ -32,7 +32,7 @@ public class PivotIOReal implements PivotIO {
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
         
         // maxMotion // ! fast and slow
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.1).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations), ClosedLoopSlot.kSlot0);
         
