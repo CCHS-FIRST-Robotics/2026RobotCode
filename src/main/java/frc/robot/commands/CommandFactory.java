@@ -30,7 +30,7 @@ public class CommandFactory {
     private final FuelSim fuelSimulation;
 
     private final Voltage intakeVolts = Volts.of(10);
-    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(15);
+    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(10);
     private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60);
 
     public CommandFactory(
@@ -200,19 +200,22 @@ public class CommandFactory {
                     Commands.waitSeconds(1)
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
+                // .alongWith( // ! didn't work
+                //     Commands.run(() -> {
+                //         if (shooter.getShooterUpToSpeed()) {
+                //             hopper.setHopperVelocity(hopperVelocity);
+                //             shooter.setKickerVelocity(kickerVelocity);
+                //         } else {
+                //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
+                //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                //         }
+                //     })
+                // )
                 .alongWith(
-                    Commands.run(() -> {
-                        if (shooter.getShooterUpToSpeed()) {
-                            hopper.setHopperVelocity(hopperVelocity);
-                            shooter.setKickerVelocity(kickerVelocity);
-                        } else {
-                            hopper.setHopperVelocity(RotationsPerSecond.of(0));
-                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
-                        }
-                    })
+                    Commands.waitSeconds(0.5)
+                    .andThen(hopper.getSetHopperVelocityCommand(hopperVelocity))
                 )
-                // .alongWith(hopper.getSetHopperVelocityCommand(hopperVelocity))
-                // .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
+                .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         )
         .alongWith(
@@ -258,12 +261,11 @@ public class CommandFactory {
     public Command getUpdateShootUtilCommand() {
         if (Constants.RECORD_DISTANCE_ONCE) {
             return Commands.runOnce(
-            () -> ShootUtil.updateIterative(
-                poseEstimator.getPose(), 
-                ShootUtil.getTargetPose(poseEstimator.getPose()), 
-                drive.getFieldRelativeSpeeds(), 3
-            )
-        );
+                () -> ShootUtil.update(
+                    poseEstimator.getPose(), 
+                    ShootUtil.getTargetPose(poseEstimator.getPose())
+                )
+            );
         }
 
         return Commands.run(

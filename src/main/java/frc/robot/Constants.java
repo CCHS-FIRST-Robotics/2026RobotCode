@@ -25,11 +25,14 @@ public final class Constants {
 
     public static final int CONTROLLER_PORT = 0;
 
+    public static final boolean COMPETITION = true;
+    public static final boolean TESTING_BPS = false;
+    public static final boolean TESTING_SHOOTER_MAP = false;
     public static boolean TRENCH_ALIGN = true;
-
+    public static final boolean TUNING_POSITION = false;
     public static final boolean TUNING_CHOREO = false;
 
-    public static final boolean USE_PIVOT = true;
+    public static final boolean USE_PIVOT = false;
 
     public static final boolean RECORD_DISTANCE_ONCE = true;
 
@@ -123,7 +126,7 @@ public final class Constants {
             }
 
             public static class ZoneCollection {
-                protected final Zone[] zones;
+                public final Zone[] zones;
 
                 public ZoneCollection(Zone... zones) {
                     this.zones = zones;
@@ -140,7 +143,7 @@ public final class Constants {
                 }
             }
 
-            private static final Zone BLUE_BOTTOM_TRENCH = new Zone(
+            private static final Zone BLUE_BOTTOM_TRENCH_ENTERING = new Zone(
                 FieldConstants.TRENCH_DISTANCE_X
                 .minus(TRENCH_ZONE_WIDTH_X), 
                 FieldConstants.TRENCH_DISTANCE_X
@@ -148,22 +151,44 @@ public final class Constants {
                 Meters.of(0),
                 FieldConstants.TRENCH_WIDTH_Y.plus(Meters.of(0.5))
             );
-            private static final Zone BLUE_TOP_TRENCH = BLUE_BOTTOM_TRENCH.mirroredY();
-            private static final Zone RED_BOTTOM_TRENCH = BLUE_BOTTOM_TRENCH.mirroredX();
-            private static final Zone RED_TOP_TRENCH = BLUE_TOP_TRENCH.mirroredX();
+            private static final Zone BLUE_TOP_TRENCH_ENTERING = BLUE_BOTTOM_TRENCH_ENTERING.mirroredY();
+            private static final Zone RED_BOTTOM_TRENCH_ENTERING = BLUE_BOTTOM_TRENCH_ENTERING.mirroredX();
+            private static final Zone RED_TOP_TRENCH_ENTERING = BLUE_TOP_TRENCH_ENTERING.mirroredX();
 
-            public static final ZoneCollection TRENCH_ZONES = new ZoneCollection(
-                BLUE_BOTTOM_TRENCH, 
-                BLUE_TOP_TRENCH, 
-                RED_BOTTOM_TRENCH, 
-                RED_TOP_TRENCH
+            public static final ZoneCollection TRENCH_ZONES_ENTERING = new ZoneCollection(
+                BLUE_BOTTOM_TRENCH_ENTERING, 
+                BLUE_TOP_TRENCH_ENTERING, 
+                RED_BOTTOM_TRENCH_ENTERING, 
+                RED_TOP_TRENCH_ENTERING
             );
 
+            private static final Zone BLUE_BOTTOM_TRENCH_EXITING = new Zone(
+                FieldConstants.TRENCH_DISTANCE_X
+                .minus(TRENCH_ZONE_WIDTH_X.minus(Meters.of(0.5))), 
+                FieldConstants.TRENCH_DISTANCE_X
+                .plus(TRENCH_ZONE_WIDTH_X.minus(Meters.of(0.5))), 
+                Meters.of(0),
+                FieldConstants.TRENCH_WIDTH_Y
+            );
+            private static final Zone BLUE_TOP_TRENCH_EXITING = BLUE_BOTTOM_TRENCH_EXITING.mirroredY();
+            private static final Zone RED_BOTTOM_TRENCH_EXITING = BLUE_BOTTOM_TRENCH_EXITING.mirroredX();
+            private static final Zone RED_TOP_TRENCH_EXITING = BLUE_TOP_TRENCH_EXITING.mirroredX();
+
+            public static final ZoneCollection TRENCH_ZONES_EXITING = new ZoneCollection(
+                BLUE_BOTTOM_TRENCH_EXITING, 
+                BLUE_TOP_TRENCH_EXITING, 
+                RED_BOTTOM_TRENCH_EXITING, 
+                RED_TOP_TRENCH_EXITING
+            );
+
+            public static ZoneCollection TRENCH_ZONES = TRENCH_ZONES_ENTERING;
+            public static boolean IN_TRENCH = false;
+
             public static void logAllZones() {
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", BLUE_BOTTOM_TRENCH.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", BLUE_TOP_TRENCH.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", RED_BOTTOM_TRENCH.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", RED_TOP_TRENCH.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", RED_TOP_TRENCH_ENTERING.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", RED_TOP_TRENCH_ENTERING.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", RED_TOP_TRENCH_ENTERING.getCorners());
+                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", RED_TOP_TRENCH_ENTERING.getCorners());
             }
         }
     }

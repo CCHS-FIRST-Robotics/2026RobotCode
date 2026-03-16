@@ -135,7 +135,7 @@ public class AutoGenerator {
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
             )
-            .andThen(Commands.waitSeconds(3))
+            .andThen(Commands.waitSeconds(1.5))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
@@ -169,7 +169,7 @@ public class AutoGenerator {
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
             )
-            .andThen(Commands.waitSeconds(3))
+            .andThen(Commands.waitSeconds(1.5))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))

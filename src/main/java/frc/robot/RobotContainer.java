@@ -179,49 +179,51 @@ public class RobotContainer {
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
-        // x-lock
-        controller.x().whileTrue(
-            Commands.run(() -> drive.xLock())
-        );
+        if (Constants.COMPETITION) {
+            // x-lock
+            controller.x().whileTrue(
+                Commands.run(() -> drive.xLock())
+            );
 
-        // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(
-                MetersPerSecond.of(1), 
-                RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
-                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
-            )
-        );
+            // drive slow
+            controller.rightStick().whileTrue( // remapped as gamesir R4
+                commandFactory.getSlowDriveCommand(
+                    MetersPerSecond.of(1), 
+                    RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
+                    DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+                    DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+                )
+            );
 
-        // drive and intake
-        controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-            commandFactory.getDriveAndIntakeCommand()
-        );
+            // drive and intake
+            controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
+                commandFactory.getDriveAndIntakeCommand()
+            );
 
-        // drive and intake and shoot
-        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndIntakeAndShootCommand()
-        );
+            // drive and intake and shoot
+            controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+                commandFactory.getDriveAndIntakeAndShootCommand()
+            );
 
-        // drive and shoot
-        controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndShootCommand(true)
-        );
+            // drive and shoot
+            controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
+                commandFactory.getDriveAndShootCommand(true)
+            );
 
-        controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
+            controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
 
-        // pivot // ! should I even have these be toggleable // ! make it a toggle leftbumper
-        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
-        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
+            // pivot // ! should I even have these be toggleable // ! make it a toggle leftbumper
+            controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
+            controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
 
-        // // unstick hopper // ! not sure if this even works
-        // controller.b().whileTrue(Commands.startEnd(
-        //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(-1)), 
-        //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(0))
-        // ));
+            // // unstick hopper // ! not sure if this even works
+            // controller.b().whileTrue(Commands.startEnd(
+            //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(-1)), 
+            //     () -> hopper.setHopperVelocity(RotationsPerSecond.of(0))
+            // ));
 
-        controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+            controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+        }
 
         // ————— simulation bindings ————— //
 
@@ -239,103 +241,107 @@ public class RobotContainer {
 
         // ————— testing for BPS ————— //
 
-        // // ! remember to comment out the set hopper and kicker voltage in commandfactory
+        // if (Constants.TESTING_BPS) {
+        //     // ! remember to comment out the set hopper and kicker voltage in commandfactory
 
-        // controller.leftTrigger().whileTrue(
-        //     new StartEndCommand(
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
-        //         },
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
-        //         }
-        //     )
-        // );
+        //     controller.leftTrigger().whileTrue(
+        //         new StartEndCommand(
+        //             () -> {
+        //                 hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
+        //                 shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+        //             },
+        //             () -> {
+        //                 hopper.setHopperVelocity(RotationsPerSecond.of(0));
+        //                 shooter.setKickerVelocity(RotationsPerSecond.of(0));
+        //             }
+        //         )
+        //     );
 
-        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
-        //     () -> new ShooterState(
-        //         RotationsPerSecond.of(30), 
-        //         Rotations.of(0)
-        //     ), 
-        //     () -> false
-        // ));
+        //     controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
+        //         () -> new ShooterState(
+        //             RotationsPerSecond.of(30), 
+        //             Rotations.of(0)
+        //         ), 
+        //         () -> false
+        //     ));
 
-        // controller.x().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity += 5;
-        //     })
-        // );
-        // controller.b().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity -= 5;
-        //     })
-        // );
-        // controller.y().onTrue(
-        //     new InstantCommand(() -> {
-        //         kickerVelocity += 10;
-        //     }) 
-        // );
-        // controller.a().onTrue(
-        //     new InstantCommand(() -> {
-        //         kickerVelocity -= 10;
-        //     })
-        // );
+        //     controller.x().onTrue(
+        //         new InstantCommand(() -> {
+        //             hopperVelocity += 5;
+        //         })
+        //     );
+        //     controller.b().onTrue(
+        //         new InstantCommand(() -> {
+        //             hopperVelocity -= 5;
+        //         })
+        //     );
+        //     controller.y().onTrue(
+        //         new InstantCommand(() -> {
+        //             kickerVelocity += 10;
+        //         }) 
+        //     );
+        //     controller.a().onTrue(
+        //         new InstantCommand(() -> {
+        //             kickerVelocity -= 10;
+        //         })
+        //     );
+        // }
 
-        // ————— testing for shooter map ————— //
+        // // ————— testing for shooter map ————— //
 
-        // // ! remember to uncomment the hopper and kicker voltage in commandfactory
-        // // ! remember to comment out the finallyDo
+        // if (Constants.TESTING_SHOOTER_MAP) {
+        //     // ! remember to uncomment the hopper and kicker voltage in commandfactory
+        //     // ! remember to comment out the finallyDo
 
-        // controller.x().whileTrue(
-        //     commandFactory.getUpdateShootUtilCommand()
-        //     .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
-        // );
+        //     controller.x().whileTrue(
+        //         commandFactory.getUpdateShootUtilCommand()
+        //         .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
+        //     );
 
-        // controller.y().whileTrue(commandFactory.getShootCommand(
-        //     () -> new ShooterState(
-        //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
-        //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
-        //     ), 
-        //     () -> false
-        // ));
+        //     controller.y().whileTrue(commandFactory.getShootCommand(
+        //         () -> new ShooterState(
+        //             RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
+        //             Rotations.of(shooter.hoodIOInputs.positionSetpoint)
+        //         ), 
+        //         () -> false
+        //     ));
 
-        // controller.a().onTrue(
-        //     new InstantCommand(() -> 
-        //         {
-        //             System.out.println("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
-        //         }
-        //     )
-        // );
+        //     controller.a().onTrue(
+        //         new InstantCommand(() -> 
+        //             {
+        //                 System.out.println("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
+        //             }
+        //         )
+        //     );
 
-        // controller.leftTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity -= 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        //     controller.leftTrigger().onTrue(
+        //         new InstantCommand(() -> {
+        //             shooterVelocity -= 1.25;
+        //             shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //         })
+        //     );
 
-        // controller.rightTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity += 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
+        //     controller.rightTrigger().onTrue(
+        //         new InstantCommand(() -> {
+        //             shooterVelocity += 1.25;
+        //             shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+        //         })
+        //     );
 
-        // controller.leftBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle -= 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        //     controller.leftBumper().onTrue(
+        //         new InstantCommand(() -> {
+        //             hoodAngle -= 0.01;
+        //             shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //         })
+        //     );
 
-        // controller.rightBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle += 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        //     controller.rightBumper().onTrue(
+        //         new InstantCommand(() -> {
+        //             hoodAngle += 0.01;
+        //             shooter.setHoodPosition(Rotations.of(hoodAngle));
+        //         })
+        //     );
+        // }
     }
 
     // ————— autonomous ————— //

@@ -42,6 +42,10 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         Threads.setCurrentThreadPriority(false, 10); // return to normal thread priority
         Logger.recordOutput("TRENCH_ALIGN", Constants.TRENCH_ALIGN);
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
     }
 
     @Override

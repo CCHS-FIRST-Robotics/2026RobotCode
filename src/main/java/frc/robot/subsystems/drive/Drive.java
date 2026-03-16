@@ -75,22 +75,33 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPIDPosition = new PIDController(5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(15, 0, 2);
+    private final PIDController thetaPIDPosition = new PIDController(9, 0.5, 0);
 
-    ControlConstants xPConstants = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants xPTunableControlConstants = new TunableControlConstants("xP", xPConstants);
-    ControlConstants yPConstants = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants yPTunableControlConstants = new TunableControlConstants("yP", yPConstants);
-    ControlConstants thetaPConstants = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants thetaPTunableControlConstants = new TunableControlConstants("thetaP", thetaPConstants);
+    ControlConstants xPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants xPTunableControlConstantsPosition = new TunableControlConstants("xP", xPConstantsPosition);
+    ControlConstants yPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants yPTunableControlConstantsPosition = new TunableControlConstants("yP", yPConstantsPosition);
+    ControlConstants thetaPConstantsPosition = new ControlConstants().withPID(9, 0, 0.5);
+    TunableControlConstants thetaPTunableControlConstantsPosition = new TunableControlConstants("thetaP", thetaPConstantsPosition);
 
-    private final TunablePIDController xPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
-    private final TunablePIDController yPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
-    private final TunablePIDController thetaPIDChoreoTunable = new TunablePIDController(xPTunableControlConstants);
+    private final TunablePIDController xPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
+    private final TunablePIDController yPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
+    private final TunablePIDController thetaPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
 
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController thetaPIDChoreo = new PIDController(5, 0, 0);
+
+    ControlConstants xPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants xPTunableControlConstantsChoreo = new TunableControlConstants("xP", xPConstantsChoreo);
+    ControlConstants yPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants yPTunableControlConstantsChoreo = new TunableControlConstants("yP", yPConstantsChoreo);
+    ControlConstants thetaPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
+    TunableControlConstants thetaPTunableControlConstantsChoreo = new TunableControlConstants("thetaP", thetaPConstantsChoreo);
+
+    private final TunablePIDController xPIDChoreoTunable = new TunablePIDController(xPTunableControlConstantsChoreo);
+    private final TunablePIDController yPIDChoreoTunable = new TunablePIDController(yPTunableControlConstantsChoreo);
+    private final TunablePIDController thetaPIDChoreoTunable = new TunablePIDController(thetaPTunableControlConstantsChoreo);
 
     private Pose2d positionSetpoint = new Pose2d();
     private ChassisSpeeds velocitySetpoint = new ChassisSpeeds();
@@ -174,9 +185,15 @@ public class Drive extends SubsystemBase {
 
                 // get PIDs
                 if (!usingChoreo) {
-                    xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                    yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                    thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    if (Constants.TUNING_POSITION) {
+                        xOutput = xPIDPositionTunable.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                        yOutput = yPIDPositionTunable.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                        thetaOutput = thetaPIDPositionTunable.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    } else {
+                        xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                        yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                        thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                    }
                 } else {
                     if (Constants.TUNING_CHOREO) {
                         xOutput = xPIDChoreoTunable.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());

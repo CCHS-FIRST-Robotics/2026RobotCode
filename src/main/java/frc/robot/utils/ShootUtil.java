@@ -27,6 +27,8 @@ public class ShootUtil {
 
     /**
      * 
+     * 
+     * 
      */
 
     static {
@@ -35,13 +37,15 @@ public class ShootUtil {
             SHOOTER_STATE_MAP.put(5.054863, new ShooterState(RotationsPerSecond.of(63.482421875), Rotations.of(0.06127929687500001)));
             SHOOTER_STATE_MAP.put(4.740929, new ShooterState(RotationsPerSecond.of(61.04296875), Rotations.of(0.057373046875)));
             SHOOTER_STATE_MAP.put(4.307612, new ShooterState(RotationsPerSecond.of(57.92578125), Rotations.of(0.06127929687500001)));
-            SHOOTER_STATE_MAP.put(3.953394, new ShooterState(RotationsPerSecond.of(56.755859375), Rotations.of(0.0517578125)));
-            SHOOTER_STATE_MAP.put(3.703103, new ShooterState(RotationsPerSecond.of(55.30078125), Rotations.of(0.0517578125)));
-            SHOOTER_STATE_MAP.put(3.280459, new ShooterState(RotationsPerSecond.of(52.2890625), Rotations.of(0.0517578125)));
+            SHOOTER_STATE_MAP.put(3.725, new ShooterState(RotationsPerSecond.of(57.556640625), Rotations.of(0.057861328125)));
+            SHOOTER_STATE_MAP.put(3.196, new ShooterState(RotationsPerSecond.of(51.31835937500001), Rotations.of(0.0478515625)));
+            // SHOOTER_STATE_MAP.put(3.953394, new ShooterState(RotationsPerSecond.of(56.755859375), Rotations.of(0.0517578125)));
+            // SHOOTER_STATE_MAP.put(3.703103, new ShooterState(RotationsPerSecond.of(55.30078125), Rotations.of(0.0517578125)));
+            // SHOOTER_STATE_MAP.put(3.280459, new ShooterState(RotationsPerSecond.of(52.2890625), Rotations.of(0.0517578125)));
             SHOOTER_STATE_MAP.put(2.788626, new ShooterState(RotationsPerSecond.of(49.326171875), Rotations.of(0.03173828125)));
             SHOOTER_STATE_MAP.put(2.302666, new ShooterState(RotationsPerSecond.of(46.767578125), Rotations.of(0.021728515625)));
-            SHOOTER_STATE_MAP.put(2.032611, new ShooterState(RotationsPerSecond.of(45.48632812500001), Rotations.of(0.0078125)));
-            SHOOTER_STATE_MAP.put(1.574256, new ShooterState(RotationsPerSecond.of(42.77734375), Rotations.of(0.0078125)));
+            SHOOTER_STATE_MAP.put(2.032611, new ShooterState(RotationsPerSecond.of(45.48632812500001), Rotations.of(0.0178125)));
+            SHOOTER_STATE_MAP.put(1.574256, new ShooterState(RotationsPerSecond.of(42.77734375), Rotations.of(0.018125)));
         } else {
             SHOOTER_STATE_MAP.put(1.6601040952847508, new ShooterState(RotationsPerSecond.of(37.734372), Rotations.of(0.04)));
             SHOOTER_STATE_MAP.put(1.9083062499099746, new ShooterState(RotationsPerSecond.of(45.281246), Rotations.of(0.03)));

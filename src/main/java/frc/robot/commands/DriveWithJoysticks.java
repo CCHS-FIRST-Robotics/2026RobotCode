@@ -53,6 +53,7 @@ public class DriveWithJoysticks extends Command {
 
     @Override
     public void execute() {
+        Zones.ZoneCollection currentZone = Zones.TRENCH_ZONES;
         // get linear velocity vector
         Translation2d linearVelocity = getLinearVelocityFromJoysticks(xVelocitySupplier.getAsDouble(), yVelocitySupplier.getAsDouble());
 
@@ -79,8 +80,26 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
+        // // if we have just entered a trench zone (check the ENTERING zone specifically)
+        // if (trenchAlignSupplier.getAsBoolean() 
+        //     && Zones.TRENCH_ZONES_ENTERING.contains(poseEstimator.getPose()) 
+        //     && !Zones.IN_TRENCH
+        // ) {
+        //     Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_EXITING;
+        //     Zones.IN_TRENCH = true;
+        // }
+
+        // // if we have just exited a trench zone (check the EXITING zone specifically)
+        // if (trenchAlignSupplier.getAsBoolean() 
+        //     && !Zones.TRENCH_ZONES_EXITING.contains(poseEstimator.getPose()) 
+        //     && Zones.IN_TRENCH
+        // ) {
+        //     Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_ENTERING;
+        //     Zones.IN_TRENCH = false;
+        // }
+
         // override with under trench angle // ! vibe coded
-        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES_ENTERING.contains(poseEstimator.getPose())) {
             double yOutput = 0;
             boolean isTopTrench = poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters);
             boolean isRedAlliance = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
@@ -114,8 +133,6 @@ public class DriveWithJoysticks extends Command {
                 )
             );
         }
-
-
 
         if (xLockWhileStationary
             && Math.abs(speeds.vxMetersPerSecond) < 0.05
