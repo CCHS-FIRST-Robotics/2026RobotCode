@@ -41,6 +41,7 @@ public class Robot extends LoggedRobot {
         Threads.setCurrentThreadPriority(true, 99); // switch thread to high priority to improve loop timing
         CommandScheduler.getInstance().run();
         Threads.setCurrentThreadPriority(false, 10); // return to normal thread priority
+        
         Logger.recordOutput("TRENCH_ALIGN", Constants.TRENCH_ALIGN);
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());

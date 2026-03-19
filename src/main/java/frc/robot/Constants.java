@@ -16,28 +16,25 @@ public final class Constants {
         REPLAY
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
-
-    public static final boolean REALISTIC_SIM = false;
     
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d());
 
-    public static final int CONTROLLER_PORT = 0;
+    // ————— real robot toggles ————— //
 
-    public static final boolean COMPETITION = true;
-    public static final boolean TESTING_BPS = false;
-    public static final boolean TESTING_SHOOTER_MAP = false;
     public static boolean TRENCH_ALIGN = true;
+    public static final boolean USE_PIVOT = false;
+
     public static final boolean TUNING_POSITION = false;
     public static final boolean TUNING_CHOREO = false;
 
-    public static final boolean USE_PIVOT = false;
-
-    public static final boolean RECORD_DISTANCE_ONCE = true;
-
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;
     public static final Angle HOOD_START_ANGLE = Rotations.of(0);
+
+    // ————— sim robot toggles ————— //
+
+    public static final boolean REALISTIC_SIM = false;
 
     public static class FieldConstants {
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);
@@ -182,7 +179,6 @@ public final class Constants {
             );
 
             public static ZoneCollection TRENCH_ZONES = TRENCH_ZONES_ENTERING;
-            public static boolean IN_TRENCH = false;
 
             public static void logAllZones() {
                 Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", RED_TOP_TRENCH_ENTERING.getCorners());

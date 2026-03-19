@@ -31,7 +31,7 @@ public class PivotIOReal implements PivotIO {
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
         
-        // maxMotion // ! fast and slow
+        // maxMotion
         motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations), ClosedLoopSlot.kSlot0);
@@ -78,7 +78,7 @@ public class PivotIOReal implements PivotIO {
     }
 
     @Override
-    public void setPosition(Angle angle) { // ! how to compensate for slop
+    public void setPosition(Angle angle) {
         motor.getClosedLoopController().setSetpoint(
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 

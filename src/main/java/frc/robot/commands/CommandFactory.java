@@ -121,7 +121,7 @@ public class CommandFactory {
                         DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ?
                         0 : 
                         Math.PI
-                    )
+                    ) // flip for alliance color
                 );
             }, 
             false, 
@@ -136,19 +136,7 @@ public class CommandFactory {
             () -> 0, // xbox controller is flipped
             () -> 0, 
             () -> 0,
-            () -> { // ! vibe coded
-                Pose2d currentPose = poseEstimator.getPose();
-                Pose2d targetPose = ShootUtil.getTargetPose(currentPose);
-                double distance = currentPose.getTranslation()
-                    .minus(targetPose.getTranslation())
-                    .getNorm(); // distance in meters
-                
-                // Scale offset: e.g., 1 degree per meter, or use a multiplier
-                double offsetDegrees = distance * 0.25; // adjust multiplier as needed
-                
-                return ShootUtil.getRobotRotation()
-                    .minus(new Rotation2d(Degrees.of(offsetDegrees)));
-            },
+            () -> ShootUtil.getRobotRotation(),
             true, 
             () -> Constants.TRENCH_ALIGN
         );
@@ -187,7 +175,7 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) { // ! use pivot supplier
+    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) {
         return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(0.1)
@@ -200,17 +188,6 @@ public class CommandFactory {
                     Commands.waitSeconds(1)
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
-                // .alongWith( // ! didn't work
-                //     Commands.run(() -> {
-                //         if (shooter.getShooterUpToSpeed()) {
-                //             hopper.setHopperVelocity(hopperVelocity);
-                //             shooter.setKickerVelocity(kickerVelocity);
-                //         } else {
-                //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
-                //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
-                //         }
-                //     })
-                // )
                 .alongWith(
                     Commands.waitSeconds(0.5)
                     .andThen(hopper.getSetHopperVelocityCommand(hopperVelocity))
@@ -259,15 +236,6 @@ public class CommandFactory {
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
-        if (Constants.RECORD_DISTANCE_ONCE) {
-            return Commands.runOnce(
-                () -> ShootUtil.update(
-                    poseEstimator.getPose(), 
-                    ShootUtil.getTargetPose(poseEstimator.getPose())
-                )
-            );
-        }
-
         return Commands.run(
             () -> ShootUtil.updateIterative(
                 poseEstimator.getPose(), 

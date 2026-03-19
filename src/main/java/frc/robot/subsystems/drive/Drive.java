@@ -78,12 +78,11 @@ public class Drive extends SubsystemBase {
     private final PIDController thetaPIDPosition = new PIDController(9, 0.5, 0);
 
     ControlConstants xPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants xPTunableControlConstantsPosition = new TunableControlConstants("xP", xPConstantsPosition);
+    TunableControlConstants xPTunableControlConstantsPosition = new TunableControlConstants("xPIDPosition", xPConstantsPosition);
     ControlConstants yPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants yPTunableControlConstantsPosition = new TunableControlConstants("yP", yPConstantsPosition);
+    TunableControlConstants yPTunableControlConstantsPosition = new TunableControlConstants("yPIDPosition", yPConstantsPosition);
     ControlConstants thetaPConstantsPosition = new ControlConstants().withPID(9, 0, 0.5);
-    TunableControlConstants thetaPTunableControlConstantsPosition = new TunableControlConstants("thetaP", thetaPConstantsPosition);
-
+    TunableControlConstants thetaPTunableControlConstantsPosition = new TunableControlConstants("thetaPIDPosition", thetaPConstantsPosition);
     private final TunablePIDController xPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
     private final TunablePIDController yPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
     private final TunablePIDController thetaPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
@@ -93,12 +92,11 @@ public class Drive extends SubsystemBase {
     private final PIDController thetaPIDChoreo = new PIDController(5, 0, 0);
 
     ControlConstants xPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants xPTunableControlConstantsChoreo = new TunableControlConstants("xP", xPConstantsChoreo);
+    TunableControlConstants xPTunableControlConstantsChoreo = new TunableControlConstants("xPIDChoreo", xPConstantsChoreo);
     ControlConstants yPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants yPTunableControlConstantsChoreo = new TunableControlConstants("yP", yPConstantsChoreo);
+    TunableControlConstants yPTunableControlConstantsChoreo = new TunableControlConstants("yPIDChoreo", yPConstantsChoreo);
     ControlConstants thetaPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants thetaPTunableControlConstantsChoreo = new TunableControlConstants("thetaP", thetaPConstantsChoreo);
-
+    TunableControlConstants thetaPTunableControlConstantsChoreo = new TunableControlConstants("thetaPIDChoreo", thetaPConstantsChoreo);
     private final TunablePIDController xPIDChoreoTunable = new TunablePIDController(xPTunableControlConstantsChoreo);
     private final TunablePIDController yPIDChoreoTunable = new TunablePIDController(yPTunableControlConstantsChoreo);
     private final TunablePIDController thetaPIDChoreoTunable = new TunablePIDController(thetaPTunableControlConstantsChoreo);

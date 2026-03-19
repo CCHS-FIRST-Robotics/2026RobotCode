@@ -53,7 +53,6 @@ public class DriveWithJoysticks extends Command {
 
     @Override
     public void execute() {
-        Zones.ZoneCollection currentZone = Zones.TRENCH_ZONES;
         // get linear velocity vector
         Translation2d linearVelocity = getLinearVelocityFromJoysticks(xVelocitySupplier.getAsDouble(), yVelocitySupplier.getAsDouble());
 
@@ -80,46 +79,24 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
-        // // if we have just entered a trench zone (check the ENTERING zone specifically)
-        // if (trenchAlignSupplier.getAsBoolean() 
-        //     && Zones.TRENCH_ZONES_ENTERING.contains(poseEstimator.getPose()) 
-        //     && !Zones.IN_TRENCH
-        // ) {
-        //     Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_EXITING;
-        //     Zones.IN_TRENCH = true;
-        // }
-
-        // // if we have just exited a trench zone (check the EXITING zone specifically)
-        // if (trenchAlignSupplier.getAsBoolean() 
-        //     && !Zones.TRENCH_ZONES_EXITING.contains(poseEstimator.getPose()) 
-        //     && Zones.IN_TRENCH
-        // ) {
-        //     Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_ENTERING;
-        //     Zones.IN_TRENCH = false;
-        // }
-
-        // override with under trench angle // ! vibe coded
-        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES_ENTERING.contains(poseEstimator.getPose())) {
+        // override with under trench angle
+        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
-            boolean isTopTrench = poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters);
-            boolean isRedAlliance = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
             
-            if (isTopTrench) { // top
+            if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
                 yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
                 );
-                System.out.println("TOPTOPTOPTOPTOP" + poseEstimator.getPose().getY());
             } else { // bottom
                 yOutput = drive.getYPositionController().calculate(
                     poseEstimator.getPose().getY(),
                     FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
                 );
-                System.out.println("BOTTOM BOTTOM BOTTOM" + poseEstimator.getPose().getY());
             }
 
-            // Flip Y output for red alliance because field-relative transform will flip it again
-            if (isRedAlliance) {
+            // flip y output for red alliance because field-relative transform will flip it again
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
                 yOutput = -yOutput;
             }
 

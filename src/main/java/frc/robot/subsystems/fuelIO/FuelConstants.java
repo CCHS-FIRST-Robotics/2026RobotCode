@@ -47,7 +47,7 @@ public class FuelConstants {
     public static final ClosedLoopConfig HOPPER_PID = new ClosedLoopConfig().pid(0.00025, 0, 0);
     public static final SimpleMotorFeedforward HOPPER_FF = new SimpleMotorFeedforward(0, 0.13, 0);
 
-    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs() // ! needs tuning
+    public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs()
     .withKP(0.3)
     .withKI(0)
     .withKD(0)
@@ -55,7 +55,7 @@ public class FuelConstants {
     .withKV(0.13259)
     .withKA(0);
 
-    public static final Slot0Configs HOOD_PIDF = new Slot0Configs() // ! needs tuning
+    public static final Slot0Configs HOOD_PIDF = new Slot0Configs()
     .withKP(70)
     .withKI(0)
     .withKD(0)
