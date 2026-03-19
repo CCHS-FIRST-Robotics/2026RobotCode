@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.measure.*;
-import java.io.*;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -24,9 +22,7 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.utils.*;
-import frc.robot.utils.ShootUtil.ShooterState;
 
-@SuppressWarnings("unused")
 public class RobotContainer {
     // ————— controllers ————— //
 
@@ -50,14 +46,6 @@ public class RobotContainer {
     private FuelSim fuelSimulation;
 
     // ————— testing variables ————— //
-
-    private double shooterVelocity = 0;
-    private double hoodAngle = 0;
-
-    @AutoLogOutput
-    private double hopperVelocity = 0;
-    @AutoLogOutput
-    private double kickerVelocity = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -219,117 +207,7 @@ public class RobotContainer {
 
         // ————— simulation bindings ————— //
 
-        // controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
-
-        // ————— testing for position control / autos ————— //
-
-        // controller.x().whileTrue(
-        //     new DriveWithPosition(
-        //         drive, 
-        //         poseEstimator, 
-        //         new Pose2d(1.5, 2.5, new Rotation2d())
-        //     )
-        // );
-
-        // ————— testing for BPS ————— //
-
-        // // ! remember to comment out the set hopper and kicker voltage in commandfactory
-
-        // controller.leftTrigger().whileTrue(
-        //     new StartEndCommand(
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(hopperVelocity));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
-        //         },
-        //         () -> {
-        //             hopper.setHopperVelocity(RotationsPerSecond.of(0));
-        //             shooter.setKickerVelocity(RotationsPerSecond.of(0));
-        //         }
-        //     )
-        // );
-
-        // controller.rightTrigger().whileTrue(commandFactory.getShootCommand(
-        //     () -> new ShooterState(
-        //         RotationsPerSecond.of(30), 
-        //         Rotations.of(0)
-        //     ), 
-        //     () -> false
-        // ));
-
-        // controller.x().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity += 5;
-        //     })
-        // );
-        // controller.b().onTrue(
-        //     new InstantCommand(() -> {
-        //         hopperVelocity -= 5;
-        //     })
-        // );
-        // controller.y().onTrue(
-        //     new InstantCommand(() -> {
-        //         kickerVelocity += 10;
-        //     }) 
-        // );
-        // controller.a().onTrue(
-        //     new InstantCommand(() -> {
-        //         kickerVelocity -= 10;
-        //     })
-        // );
-        
-        // ————— testing for shooter map ————— //
-
-        // // ! remember to uncomment the hopper and kicker voltage in commandfactory
-        // // ! remember to comment out the finallyDo
-
-        // controller.x().whileTrue(
-        //     commandFactory.getUpdateShootUtilCommand()
-        //     .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
-        // );
-
-        // controller.y().whileTrue(commandFactory.getShootCommand(
-        //     () -> new ShooterState(
-        //         RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint),
-        //         Rotations.of(shooter.hoodIOInputs.positionSetpoint)
-        //     ), 
-        //     () -> false
-        // ));
-
-        // controller.a().onTrue(
-        //     new InstantCommand(() -> 
-        //         {
-        //             System.out.println("SHOOTER_STATE_MAP.put(DISTANCE, new ShooterState(RotationsPerSecond.of(" + shooter.shooterIOInputs.velocity + "), Rotations.of(" + shooter.hoodIOInputs.position +  ")));\n");
-        //         }
-        //     )
-        // );
-
-        // controller.leftTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity -= 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
-
-        // controller.rightTrigger().onTrue(
-        //     new InstantCommand(() -> {
-        //         shooterVelocity += 1.25;
-        //         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-        //     })
-        // );
-
-        // controller.leftBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle -= 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
-
-        // controller.rightBumper().onTrue(
-        //     new InstantCommand(() -> {
-        //         hoodAngle += 0.01;
-        //         shooter.setHoodPosition(Rotations.of(hoodAngle));
-        //     })
-        // );
+        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
     }
 
     // ————— autonomous ————— //
