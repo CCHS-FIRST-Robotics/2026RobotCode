@@ -1,50 +1,42 @@
-# 2026RobotCode
+This was a triumph
+I'm making a note here, "Huge success"
+It's hard to overstate my satisfaction
+Aperture Science
+We do what we must because we can
+For the good of all of us, except the ones who are dead
 
-## To do:
- <!-- 
- ! general: 
- !  - reformat maplesim default files
- ! driving: 
- !  - sysid
- !  - add back the wheel radius characterization functionality
- !  - rotating around a swerve module
- !  - mini-autos https://www.chiefdelphi.com/t/frc-5000-hammerheads-2026-build-thread-open-alliance/507502/310?u=0713_ahsc
- !  - turn the drive: https://github.com/FRC-4481-Team-Rembrandts/4481-robot-2024-public/blob/main/src/main/java/frc/team4481/robot/autoaim/TurnToPose.java
- ! vision: 
- !  - apriltag 1 foot away from robot for camera on robot position
- !  - object detection
- !  - onboard video recording
- -->
+But there's no sense crying over every mistake
+You just keep on trying 'til you run out of cake
+And the science gets done, and you make a neat gun
+For the people who are still alive
 
-## Reference:
- - Radios:
-     - When first flashed, IP address is 10.0.1.1
-     - After being flashed, IP address should be 10.32.5.1
-     - For configuration, don't use their quick start guide, just power with 12V 2A through a VRM and go to the IP address
-     - https://www.youtube.com/watch?v=eQYytkdBkt4
- - OrangePis:
-     - Front dashboard IP address is 10.32.05.16:5800
-     - Back dashboard IP address is 10.32.05.17:5800
- - Code: 
-     - Template taken from https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced
- - Advantagekit: 
-     - Custom assets: https://docs.advantagescope.org/more-features/custom-assets
-     - To set these up to be displayed in advantagescope, go to Help > Use Custom Assets Folder and then select the folder called "advantagescope_assets" in this project
- - Controllers: 
-     - To remove controllers from Driver Station, double click on them
-        - This is helpful when pairing new controllers and they reach the limit of how many controllers DS shows
-     - Sometimes, a more niche controller (e.g. Gamesir) might show up as multiple controllers in DS
- - MrCal: 
-     - https://docs.google.com/document/d/1SDDetHYSshZeu1tcnOC5SHEPUEZCRtlPO9kb6NCubQs/edit?usp=sharing
- - CAN IDs: 
-     - Drivebase motors are 11, 12, 21, 22, 31, 32, 41, 42 (units digit 1 is drive, 2 is turn, 3 is CANCoder)
-     - Drivebase CANCoders are 13, 23, 33, 43
-     - Pigeon is 5
-     - Subsystems are 50, 51, ...
- - Phoenix Tuner X: 
-     - RoboRIO must be running robot code to show any devices
- - RevLib: 
-    - Make sure version is fully updated before trying to flash firmware
-    - To set up a Sparkmax, turn off all power, hold down reset button, and plug it into computer through usb-c
-    - Should show up as Unknown Device in Rev Hardware Client and then you can format it from there
-    - Make sure there isn't secretly a new Rev Hardware Client app before flashing firmware
+I'm not even angry
+I'm being so sincere right now
+Even though you broke my heart and killed me
+And tore me to pieces
+And threw every piece into a fire
+As they burned, it hurt because I was so happy for you
+
+Now these points of data make a beautiful line
+And we're out of beta, we're releasing on time
+So I'm glad I got burned, think of all the things we learned
+For the people who are still alive
+
+Go ahead and leave me
+I think I prefer to stay inside
+Maybe you'll find someone else to help you
+Maybe Black Mesa
+That was a joke; ha-ha, fat chance
+Anyway, this cake is great, it's so delicious and moist
+
+Look at me, still talking when there's science to do
+When I look out there, it makes me glad I'm not you
+I've experiments to run, there is research to be done
+On the people who are still alive
+
+And believe me, I am still alive
+I'm doing science and I'm still alive
+I feel fantastic and I'm still alive
+While you're dying, I'll be still alive
+And when you're dead, I will be still alive
+Still alive, still alive
