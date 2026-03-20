@@ -208,8 +208,6 @@ public class RobotContainer {
         // ————— simulation bindings ————— //
 
         controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
-
-        // test test test test 
     }
 
     // ————— autonomous ————— //
