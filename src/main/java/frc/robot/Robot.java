@@ -18,6 +18,7 @@ public class Robot extends LoggedRobot {
             case REAL: // running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
+                
                 CameraServer.startAutomaticCapture();
                 break;
             case SIM: // running a physics simulator, log to NetworkTables
@@ -42,7 +43,7 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         Threads.setCurrentThreadPriority(false, 10); // return to normal thread priority
         
-        Logger.recordOutput("TRENCH_ALIGN", Constants.TRENCH_ALIGN);
+        Logger.recordOutput("outputs/drive/TRENCH_ALIGN", Constants.TRENCH_ALIGN);
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());

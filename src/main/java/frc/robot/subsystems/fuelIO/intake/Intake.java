@@ -2,8 +2,11 @@ package frc.robot.subsystems.fuelIO.intake;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
+import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class Intake extends SubsystemBase {
     private final IntakeIO intakeIO;
@@ -13,6 +16,8 @@ public class Intake extends SubsystemBase {
     public final PivotIOInputsAutoLogged pivotIOInputs = new PivotIOInputsAutoLogged();
 
     Angle pivotAngle = Constants.PIVOT_START_ANGLE;
+
+    int hopperFuel;
 
     public Intake(
         IntakeIO intakeIO, 
@@ -30,7 +35,7 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
         if (Constants.USE_PIVOT) {
-            pivotIO.setPosition(pivotAngle); // NEO PID and sim PIDs must be called externally
+            pivotIO.setPosition(pivotAngle); // NEO and sim PIDs must be called externally
         }
     }
 
@@ -74,5 +79,26 @@ public class Intake extends SubsystemBase {
 
     public boolean pivotDown() {
         return pivotIOInputs.position < 0;
+    }
+
+    public void addHopperFuel() {
+        hopperFuel++;
+    }
+
+    public void subtractHopperFuel() {
+        hopperFuel--;
+    }
+
+    @AutoLogOutput(key = "outputs/fuelIO/intake/hopperFuel")
+    public int getHopperFuel() {
+        return hopperFuel;
+    }
+
+    public boolean getHopperFull() {
+        return hopperFuel >= FuelConstants.HOPPER_FUEL_CAPACITY;
+    }
+
+    public boolean getHopperEmpty() {
+        return hopperFuel <= 0;
     }
 }

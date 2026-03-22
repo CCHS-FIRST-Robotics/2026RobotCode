@@ -11,10 +11,8 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
-import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
-import frc.robot.utils.ShootUtil.ShooterState;
 import frc.robot.Constants;
 
 public class CommandFactory {
@@ -24,21 +22,18 @@ public class CommandFactory {
     private final PoseEstimator poseEstimator;
 
     private final Intake intake;
-    private final Hopper hopper;
     private final Shooter shooter;
 
     private final FuelSim fuelSimulation;
 
     private final Voltage intakeVolts = Volts.of(10);
-    private final AngularVelocity hopperVelocity = RotationsPerSecond.of(10);
-    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60);
+    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60); // ! 
 
     public CommandFactory(
         Controller controller,
         Drive drive,
         PoseEstimator poseEstimator,
         Intake intake,
-        Hopper hopper,
         Shooter shooter,
         FuelSim fuelSimulation
     ) {
@@ -48,7 +43,6 @@ public class CommandFactory {
         this.poseEstimator = poseEstimator;
         
         this.intake = intake;
-        this.hopper = hopper;
         this.shooter = shooter;
 
         this.fuelSimulation = fuelSimulation;
@@ -56,7 +50,7 @@ public class CommandFactory {
 
     // ————— processed ————— //
 
-    public Command getDriveAndIntakeCommand() {
+    public Command getDriveAndIntakeCommand() { // ! finn says this doesn't work
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -76,7 +70,7 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterState(), () -> usePivot));
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), () -> usePivot));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -94,8 +88,8 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
             null, 
-            false, 
-            () -> Constants.TRENCH_ALIGN
+            () -> Constants.TRENCH_ALIGN,
+            false
         );
     }
 
@@ -106,7 +100,7 @@ public class CommandFactory {
             () -> -controller.getLeftYWithDeadband(0.6), // xbox controller is flipped
             () -> controller.getLeftXWithDeadband(0.6), 
             () -> controller.getRightXWithDeadband(0.6),
-            () -> {
+            () -> { // turn the intake in the direction of the left joystick
                 double x = controller.getLeftXWithDeadband(0.6);
                 double y = controller.getLeftYWithDeadband(0.6);
 
@@ -116,7 +110,6 @@ public class CommandFactory {
                 
                 return new Rotation2d(
                     Math.atan2(-x, -y) // negatives map xbox controller to the cartesian plane
-                    + Math.PI // intake is on back of robot
                     - (
                         DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ?
                         0 : 
@@ -124,12 +117,25 @@ public class CommandFactory {
                     ) // flip for alliance color
                 );
             }, 
-            false, 
-            () -> Constants.TRENCH_ALIGN
+            () -> Constants.TRENCH_ALIGN,
+            false
         );
     }
 
     public Command getDriveWithJoysticksShooterCommand() {
+        if (Constants.SHOOT_ON_THE_MOVE) {
+            return new DriveWithJoysticks(
+                drive, 
+                poseEstimator, 
+                () -> -controller.getLeftYWithDeadband(), // xbox controller is flipped
+                () -> controller.getLeftXWithDeadband(), 
+                () -> controller.getRightXWithDeadband(),
+                () -> ShootUtil.getRobotRotation(),
+                () -> Constants.TRENCH_ALIGN,
+                true
+            );
+        }
+
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
@@ -137,8 +143,8 @@ public class CommandFactory {
             () -> 0, 
             () -> 0,
             () -> ShootUtil.getRobotRotation(),
-            true, 
-            () -> Constants.TRENCH_ALIGN
+            () -> Constants.TRENCH_ALIGN,
+            true
         );
     }
 
@@ -175,29 +181,24 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand(Supplier<ShooterState> shooterStateSupplier, BooleanSupplier usePivotSupplier) {
-        return Commands.run(() -> shooter.runShooterState(shooterStateSupplier.get()))
+    public Command getShootCommand(Supplier<AngularVelocity> shooterVelocitySupplier, BooleanSupplier usePivotSupplier) {
+        return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(0.1)
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
             .andThen(
                 (
                     usePivotSupplier.getAsBoolean() ? 
-                    Commands.waitSeconds(1)
+                    Commands.waitSeconds(2)
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)) : 
-                    Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
-                )
-                .alongWith(
-                    Commands.waitSeconds(0.5)
-                    .andThen(hopper.getSetHopperVelocityCommand(hopperVelocity))
+                    intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
                 )
                 .alongWith(shooter.getSetKickerVelocityCommand(kickerVelocity))
             )
         )
         .alongWith(
             Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
-            getSimShootCommand().repeatedly() :
+            getSimShootCommand() :
             new InstantCommand()
         )
         .finallyDo( // stop everything
@@ -205,8 +206,9 @@ public class CommandFactory {
                 if (usePivotSupplier.getAsBoolean()) {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                 }
-                hopper.setHopperVelocity(RotationsPerSecond.of(0));
-                shooter.runShooterState(new ShootUtil.ShooterState(RotationsPerSecond.of(0), Constants.HOOD_START_ANGLE));
+                if (Constants.CURRENT_BUTTON_BINDINGS != Constants.BUTTON_BINDINGS.TESTING_SHOOTER_MAP) {
+                    shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                }
                 shooter.setKickerVelocity(RotationsPerSecond.of(0));
             }
         );
@@ -216,31 +218,41 @@ public class CommandFactory {
         return Commands.runOnce(
             () -> {
                 if (Constants.REALISTIC_SIM) {
-                    if (hopper.getHopperEmpty()) {
+                    if (intake.getHopperEmpty()) {
                         return;
                     }
-                    hopper.shootFuel();
+                    intake.subtractHopperFuel();
                 }
 
-                fuelSimulation.launchFuel(
+                fuelSimulation.launchFuel( // ! make it shoot 2 balls at a time
                     () -> shooter.getShooterLinearVelocity(), 
-                    () -> shooter.getHoodShotAngle(),
+                    () -> Degrees.of(90).minus(FuelConstants.HOOD_ANGLE), // shot angle
                     Rotations.of(0),
                     FuelConstants.SHOOTER_POSITION
                 );
             }
         )
-        .andThen(Commands.waitSeconds(0.5));
+        .andThen(Commands.waitSeconds(0.5))
+        .repeatedly(); // time between shots // ! make realistic maybe
     }
 
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
-        return Commands.run(
-            () -> ShootUtil.updateIterative(
+        if (Constants.SHOOT_ON_THE_MOVE) {
+            return Commands.run(
+                () -> ShootUtil.updateIterative(
+                    poseEstimator.getPose(), 
+                    ShootUtil.getTargetPose(poseEstimator.getPose()), 
+                    drive.getFieldRelativeSpeeds(), 3
+                )
+            );
+        }
+
+        return Commands.runOnce(
+            () -> ShootUtil.update(
                 poseEstimator.getPose(), 
-                ShootUtil.getTargetPose(poseEstimator.getPose()), 
-                drive.getFieldRelativeSpeeds(), 3
+                ShootUtil.getTargetPose(poseEstimator.getPose())
             )
         );
     }
