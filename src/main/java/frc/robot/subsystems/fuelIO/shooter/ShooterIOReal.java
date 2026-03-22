@@ -36,6 +36,7 @@ public class ShooterIOReal implements ShooterIO {
         motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         motor.getConfigurator().apply(motorConfig);
 
+        follower.getConfigurator().apply(motorConfig);
         follower.setControl(new Follower(motorId, MotorAlignmentValue.Opposed)); // ! MAKE SURE THAT IT'S ACTUALLY OPPOSED
 
         // status signals

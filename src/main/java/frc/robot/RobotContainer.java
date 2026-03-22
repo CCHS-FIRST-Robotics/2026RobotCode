@@ -197,15 +197,24 @@ public class RobotContainer {
                 controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
                 break;
             case TESTING_BPS: 
+                controller.leftTrigger().whileTrue(
+                    new StartEndCommand(
+                        () -> {
+                            shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+                        }, 
+                        () -> {
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    )
+                );
+
                 controller.rightTrigger().whileTrue(
                     new StartEndCommand(
                         () -> {
                             shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
-                            shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
                         }, 
                         () -> {
                             shooter.setShooterVelocity(RotationsPerSecond.of(0));
-                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
                         }
                     )
                 );
