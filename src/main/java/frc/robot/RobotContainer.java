@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.measure.*;
-import java.io.*;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -24,32 +22,23 @@ import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.utils.*;
-import frc.robot.utils.ShootUtil.ShooterState;
 
-// LED IMPORTS
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-
-@SuppressWarnings("unused")
 public class RobotContainer {
     // ————— controllers ————— //
+
     private final Controller controller = new Controller(0);
 
     // ————— subsystems ————— //
+
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Intake intake;
     private final Hopper hopper;
     private final Shooter shooter;
-
-    // ————— LED OBJECTS ————— //
-    private final AddressableLED m_led;
-    private final AddressableLEDBuffer m_ledBuffer;
-    private int m_rainbowFirstPixelHue = 0;
-    private final int LED_COUNT = 60; // CHANGE THIS to your actual IP30 strip length
-    private final int LED_PWM_PORT = 0; // The PWM port on the RoboRIO
+    // private final Climber climber;
 
     // ————— utils ————— //
+
     private CommandFactory commandFactory;
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
@@ -57,24 +46,10 @@ public class RobotContainer {
     private FuelSim fuelSimulation;
 
     // ————— testing variables ————— //
-    private double shooterVelocity = 0;
-    private double hoodAngle = 0;
-
-    @AutoLogOutput
-    private double hopperVelocity = 0;
-    @AutoLogOutput
-    private double kickerVelocity = 0;
 
     public RobotContainer() {
-        // ————— Initialize LEDs ————— //
-        m_led = new AddressableLED(LED_PWM_PORT);
-        m_ledBuffer = new AddressableLEDBuffer(LED_COUNT);
-        m_led.setLength(m_ledBuffer.getLength());
-        m_led.setData(m_ledBuffer);
-        m_led.start();
-
         switch (Constants.CURRENT_MODE) {
-            case REAL: 
+            case REAL: // real robot, instantiate hardware IO implementations
                 drive = new Drive(
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[0]),
                     new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[1]),
@@ -100,9 +75,11 @@ public class RobotContainer {
                     new HoodIOReal(FuelConstants.HOOD_MOTOR_ID), 
                     new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
                 );
+                // climber = new Climber(new ClimberIOReal(FuelConstants.CLIMBER_MOTOR_ID));
                 break;
-            case SIM: 
+            case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
+
                 drive = new Drive(
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[0], driveSimulation.getModules()[0]),
                     new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[1], driveSimulation.getModules()[1]),
@@ -112,22 +89,59 @@ public class RobotContainer {
                 poseEstimator = new PoseEstimator(
                     new GyroIOSim(driveSimulation.getGyroSimulation()),
                     new CameraIOPhotonVision[] {
-                        new CameraIOPhotonVisionSim(VisionConstants.camera0Name, VisionConstants.robotToCamera0, driveSimulation::getSimulatedDriveTrainPose),
-                        new CameraIOPhotonVisionSim(VisionConstants.camera1Name, VisionConstants.robotToCamera1, driveSimulation::getSimulatedDriveTrainPose)
+                        new CameraIOPhotonVisionSim(
+                            VisionConstants.camera0Name, 
+                            VisionConstants.robotToCamera0, 
+                            driveSimulation::getSimulatedDriveTrainPose // this is why vision and combined estimators also have collision
+                        ),
+                        new CameraIOPhotonVisionSim(
+                            VisionConstants.camera1Name, 
+                            VisionConstants.robotToCamera1, 
+                            driveSimulation::getSimulatedDriveTrainPose
+                        )
                     },
                     drive, 
                     Constants.ROBOT_START_POSE
                 );
-                intake = new Intake(new IntakeIOSim(), new PivotIOSim());
+                intake = new Intake(
+                    new IntakeIOSim(), 
+                    new PivotIOSim()
+                );
                 hopper = new Hopper(new HopperIOSim());
-                shooter = new Shooter(new ShooterIOSim(), new HoodIOSim(), new KickerIOSim());
+                shooter = new Shooter(
+                    new ShooterIOSim(),
+                    new HoodIOSim(),
+                    new KickerIOSim()
+                );
+                // climber = new Climber(new ClimberIO() {});
                 break;
-            default: 
-                drive = new Drive(new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
-                poseEstimator = new PoseEstimator(new GyroIO() {}, new CameraIO[] {new CameraIO() {}, new CameraIO() {}}, drive, new Pose2d());
-                intake = new Intake(new IntakeIO() {}, new PivotIO() {});
+            default: // replayed robot, disable IO implementations
+                drive = new Drive(
+                    new ModuleIO() {},
+                    new ModuleIO() {},
+                    new ModuleIO() {},
+                    new ModuleIO() {}
+                );
+                poseEstimator = new PoseEstimator(
+                    new GyroIO() {}, 
+                    new CameraIO[] {
+                        new CameraIO() {}, 
+                        new CameraIO() {}
+                    }, 
+                    drive, 
+                    new Pose2d()
+                );
+                intake = new Intake(
+                    new IntakeIO() {}, 
+                    new PivotIO() {}
+                );
                 hopper = new Hopper(new HopperIO() {});
-                shooter = new Shooter(new ShooterIO() {}, new HoodIO() {}, new KickerIO() {});
+                shooter = new Shooter(
+                    new ShooterIO() {}, 
+                    new HoodIO() {},
+                    new KickerIO() {}
+                );
+                // climber = new Climber(new ClimberIO() {});
                 break;
         }
 
@@ -147,70 +161,94 @@ public class RobotContainer {
         configureAutos();
     }
 
-    /**
-     * Logic to update LEDs. 
-     * Call this from Robot.java -> robotPeriodic()
-     */
-    public void updateLEDs() {
-        // Rainbow effect logic
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-            // Set HSV (Hue, Saturation, Value)
-            // Value is set to 128 (50% brightness) to stay under the 2A VRM limit.
-            m_ledBuffer.setHSV(i, hue, 255, 128);
-        }
-        
-        m_rainbowFirstPixelHue = (m_rainbowFirstPixelHue + 3) % 180;
-        m_led.setData(m_ledBuffer);
-    }
-
     private void configureButtonBindings() {
+        // ————— competition bindings ————— //
+
+        // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+
+        // x-lock
+        controller.x().whileTrue(
+            Commands.run(() -> drive.xLock())
+        );
+
+        // drive slow
+        controller.rightStick().whileTrue( // remapped as gamesir R4
+            commandFactory.getSlowDriveCommand(
+                MetersPerSecond.of(1), 
+                RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
+                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+            )
+        );
+
+        // drive and intake
+        controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
+            commandFactory.getDriveAndIntakeCommand()
+        );
+
+        // drive and intake and shoot
+        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndIntakeAndShootCommand()
+        );
+
+        // drive and shoot
+        controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndShootCommand(true)
+        );
+
+        controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
+
+        // pivot // ! make it a toggle leftbumper
+        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
+        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
+
+        controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+
+        // ————— simulation bindings ————— //
+
+        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
     }
 
-    //     if (Constants.COMPETITION) {
-    //         controller.x().whileTrue(Commands.run(() -> drive.xLock()));
-
-    //         controller.rightStick().whileTrue(
-    //             commandFactory.getSlowDriveCommand(
-    //                 MetersPerSecond.of(1), 
-    //                 RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
-    //                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-    //                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
-    //             )
-    //         );
-
-    //         controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-    //             commandFactory.getDriveAndIntakeCommand()
-    //         );
-
-    //         controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-    //             commandFactory.getDriveAndIntakeAndShootCommand()
-    //         );
-
-    //         controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
-    //             commandFactory.getDriveAndShootCommand(true)
-    //         );
-
-    //         controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
-    //         controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
-    //         controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
-    //         controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
-    //     }
-    // }
+    // ————— autonomous ————— //
 
     private void configureAutos() {
-        autoGenerator = new AutoGenerator(drive, poseEstimator, intake, hopper, shooter, driveSimulation, commandFactory);
+        autoGenerator = new AutoGenerator(
+            drive, 
+            poseEstimator, 
+            intake, 
+            hopper, 
+            shooter, 
+            driveSimulation, 
+            commandFactory
+        );
         autoChooser = new AutoChooser();
+
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
-        autoChooser.select("BackUpAndShoot");
+        autoChooser.addRoutine("BeMeanBottom", () -> autoGenerator.beMeanBottom());
+        autoChooser.addRoutine("BeMeanTop", () -> autoGenerator.beMeanTop());
+        autoChooser.addRoutine("CenterFuelBottom", () -> autoGenerator.centerFuelBottom());
+        autoChooser.addRoutine("CenterFuelTop", () -> autoGenerator.centerFuelTop());
+        autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
+
+        autoChooser.select("BackUpAndShoot"); // picks a default auto
+
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
     public void autonomousPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
+            
+            Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/hubScore", 
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                FuelSim.BLUE_HUB.getScore() : 
+                FuelSim.RED_HUB.getScore()
+            );
         }
     }
 
@@ -218,13 +256,33 @@ public class RobotContainer {
         return autoChooser.selectedCommand();
     }
 
+    // ————— teleop ————— //
+
     public void teleopPeriodic() {
-        // Standard Teleop Logging
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
+            Logger.recordOutput("outputs/fieldInfo/autoWinner", HubUtil.getAutoWinner());
+            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", Math.round(HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)).in(Seconds)));
+            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
+            
+            Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/hubScore", 
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                FuelSim.BLUE_HUB.getScore() : 
+                FuelSim.RED_HUB.getScore()
+            );
+        }
     }
 
+    // ————— simulation ————— //
+
     private void configureSimulation() {
+        // drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+        Constants.FieldConstants.Zones.logAllZones();
+
+        // drive
         fuelSimulation = new FuelSim();
         fuelSimulation.registerRobot(
             DriveConstants.WIDTH_X.in(Meters),
@@ -233,22 +291,63 @@ public class RobotContainer {
             () -> poseEstimator.getPose(),
             () -> drive.getFieldRelativeSpeeds()
         );
+        fuelSimulation.registerIntake(
+            -DriveConstants.WIDTH_X.div(2).in(Meters) - FuelConstants.INTAKE_WIDTH_X.in(Meters),
+            -DriveConstants.WIDTH_X.div(2).in(Meters),
+            -DriveConstants.WIDTH_Y.div(2).in(Meters),
+            DriveConstants.WIDTH_Y.div(2).in(Meters),
+            () -> {
+                return intake.getIntakeOn() && (Constants.REALISTIC_SIM ? !hopper.getHopperFull() : true);
+            }, 
+            () -> {
+                if (Constants.REALISTIC_SIM) {
+                    if (hopper.getHopperFull()) {
+                        return;
+                    }
+                    hopper.intakeFuel();
+                }
+            }
+        );
+        fuelSimulation.setSubticks(1);
         fuelSimulation.start();
+
+        if (Constants.REALISTIC_SIM) {
+            fuelSimulation.spawnStartingFuel();
+        }
     }
 
     public void simulationPeriodic() {
-        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) return;
+        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // not sure if this has to be here if it's only called in simulationPeriodic
+            return;
+        }
+
+        // drive
         SimulatedArena.getInstance().simulationPeriodic();
+        Logger.recordOutput("outputs/simulation/fieldSimulation/robotPosition", driveSimulation.getSimulatedDriveTrainPose());
+
+        // fuel
         fuelSimulation.stepSim();
     }
 
     public void resetSimulation() {
-        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) return;
+        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
+            return;
+        }
+
+        // drive
         Pose2d startPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
-            Constants.ROBOT_START_POSE : 
-            Constants.FieldConstants.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
+        Constants.ROBOT_START_POSE : 
+        Constants.FieldConstants.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
+
         driveSimulation.setSimulationWorldPose(startPose);
         poseEstimator.resetPosition(startPose);
+        SimulatedArena.getInstance().resetFieldForAuto();
+
+        // fuel
         fuelSimulation.clearFuel();
+
+        if (Constants.REALISTIC_SIM) {
+            fuelSimulation.spawnStartingFuel();
+        }
     }
 }
