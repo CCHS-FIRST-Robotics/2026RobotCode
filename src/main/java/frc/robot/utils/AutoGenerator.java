@@ -11,7 +11,6 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
-import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.Constants;
 
@@ -23,7 +22,6 @@ public class AutoGenerator {
     private final PoseEstimator poseEstimator;
 
     private final Intake intake;
-    private final Hopper hopper;
     private final Shooter shooter;
 
     private final CommandFactory commandFactory;
@@ -32,7 +30,6 @@ public class AutoGenerator {
         Drive drive, 
         PoseEstimator poseEstimator,
         Intake intake,
-        Hopper hopper,
         Shooter shooter,
         SwerveDriveSimulation driveSimulation,
         CommandFactory commandFactory
@@ -55,7 +52,6 @@ public class AutoGenerator {
         this.poseEstimator = poseEstimator;
 
         this.intake = intake;
-        this.hopper = hopper;
         this.shooter = shooter;
 
         this.commandFactory = commandFactory;

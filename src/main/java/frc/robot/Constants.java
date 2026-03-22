@@ -10,12 +10,19 @@ import frc.robot.subsystems.fuelIO.*;
 
 public final class Constants {
     public static final double PERIOD = 0.02;
+    
     public static enum ROBOT_MODE {
         REAL,
         SIM,
         REPLAY
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
+
+    public static enum BUTTON_BINDINGS { // ! these should also affect what autos are loaded (add a defense mode)
+        COMPETITION, 
+        TESTING_BPS,
+        TESTING_SHOOTER_MAP
+    }
     
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 
@@ -23,14 +30,16 @@ public final class Constants {
 
     // ————— real robot toggles ————— //
 
-    public static boolean TRENCH_ALIGN = true;
-    public static final boolean USE_PIVOT = false;
+    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.TESTING_BPS;
 
-    public static final boolean TUNING_POSITION = false;
-    public static final boolean TUNING_CHOREO = false;
+    public static boolean TRENCH_ALIGN = true;
+    public static final boolean USE_PIVOT = true;
+    public static final boolean SHOOT_ON_THE_MOVE = true;
+
+    public static final boolean TUNING_POSITION = false; // ! remove these later
+    public static final boolean TUNING_CHOREO = false; // ! 
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;
-    public static final Angle HOOD_START_ANGLE = Rotations.of(0);
 
     // ————— sim robot toggles ————— //
 

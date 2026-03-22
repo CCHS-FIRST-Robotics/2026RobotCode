@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.*;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.units.measure.*;
@@ -11,6 +12,7 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class ShooterIOReal implements ShooterIO {
     private final TalonFX motor;
+    private final TalonFX follower;
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -24,14 +26,17 @@ public class ShooterIOReal implements ShooterIO {
 
     public AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);
 
-    public ShooterIOReal(int shooterId) {
-        motor = new TalonFX(shooterId);
+    public ShooterIOReal(int motorId, int followerId) {
+        motor = new TalonFX(motorId);
+        follower = new TalonFX(followerId);
 
         // motor config
         motorConfig.Slot0 = FuelConstants.SHOOTER_PIDF;
         motorConfig.CurrentLimits.SupplyCurrentLimit = 80;
         motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         motor.getConfigurator().apply(motorConfig);
+
+        follower.setControl(new Follower(motorId, MotorAlignmentValue.Opposed)); // ! MAKE SURE THAT IT'S ACTUALLY OPPOSED
 
         // status signals
         voltageSignal = motor.getMotorVoltage();

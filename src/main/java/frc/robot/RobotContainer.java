@@ -18,9 +18,7 @@ import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
 import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
-import frc.robot.subsystems.fuelIO.hopper.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
-import frc.robot.subsystems.climber.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
@@ -33,9 +31,7 @@ public class RobotContainer {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Intake intake;
-    private final Hopper hopper;
     private final Shooter shooter;
-    // private final Climber climber;
 
     // ————— utils ————— //
 
@@ -46,6 +42,11 @@ public class RobotContainer {
     private FuelSim fuelSimulation;
 
     // ————— testing variables ————— //
+
+    @AutoLogOutput
+    double shooterVelocity = 0;
+    @AutoLogOutput
+    double kickerVelocity = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -69,13 +70,10 @@ public class RobotContainer {
                     new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID), 
                     new PivotIOReal(FuelConstants.PIVOT_MOTOR_ID)
                 );
-                hopper = new Hopper(new HopperIOReal(FuelConstants.HOPPER_MOTOR_ID));
                 shooter = new Shooter(
-                    new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID), 
-                    new HoodIOReal(FuelConstants.HOOD_MOTOR_ID), 
+                    new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID, FuelConstants.SHOOTER_FOLLOWER_ID), 
                     new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
                 );
-                // climber = new Climber(new ClimberIOReal(FuelConstants.CLIMBER_MOTOR_ID));
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
@@ -107,13 +105,10 @@ public class RobotContainer {
                     new IntakeIOSim(), 
                     new PivotIOSim()
                 );
-                hopper = new Hopper(new HopperIOSim());
                 shooter = new Shooter(
                     new ShooterIOSim(),
-                    new HoodIOSim(),
                     new KickerIOSim()
                 );
-                // climber = new Climber(new ClimberIO() {});
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
@@ -135,13 +130,10 @@ public class RobotContainer {
                     new IntakeIO() {}, 
                     new PivotIO() {}
                 );
-                hopper = new Hopper(new HopperIO() {});
                 shooter = new Shooter(
                     new ShooterIO() {}, 
-                    new HoodIO() {},
                     new KickerIO() {}
                 );
-                // climber = new Climber(new ClimberIO() {});
                 break;
         }
 
@@ -152,7 +144,6 @@ public class RobotContainer {
             drive, 
             poseEstimator, 
             intake, 
-            hopper, 
             shooter,
             fuelSimulation
         );
@@ -162,52 +153,127 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // ————— competition bindings ————— //
-
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
 
-        // x-lock
-        controller.x().whileTrue(
-            Commands.run(() -> drive.xLock())
-        );
+        switch (Constants.CURRENT_BUTTON_BINDINGS) {
+            case COMPETITION: 
+                // x-lock
+                controller.x().whileTrue(
+                    Commands.run(() -> drive.xLock())
+                );
 
-        // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(
-                MetersPerSecond.of(1), 
-                RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
-                DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-                DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
-            )
-        );
+                // drive slow // ! wasn't used
+                controller.rightStick().whileTrue( // remapped as gamesir R4
+                    commandFactory.getSlowDriveCommand(
+                        MetersPerSecond.of(1), 
+                        RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
+                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+                    )
+                );
 
-        // drive and intake
-        controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-            commandFactory.getDriveAndIntakeCommand()
-        );
+                // drive and intake
+                controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
+                    commandFactory.getDriveAndIntakeCommand()
+                );
 
-        // drive and intake and shoot
-        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndIntakeAndShootCommand()
-        );
+                // drive and intake and shoot
+                controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+                    commandFactory.getDriveAndIntakeAndShootCommand()
+                );
 
-        // drive and shoot
-        controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
-            commandFactory.getDriveAndShootCommand(true)
-        );
+                // drive and shoot
+                controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
+                    commandFactory.getDriveAndShootCommand(true)
+                );
 
-        controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
+                controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
 
-        // pivot // ! make it a toggle leftbumper
-        controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
-        controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
+                // pivot // ! make it a toggle leftbumper
+                controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
+                controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
 
-        controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+                controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+                break;
+            case TESTING_BPS: 
+                controller.rightTrigger().whileTrue(
+                    new StartEndCommand(
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(kickerVelocity));
+                        }, 
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    )
+                );
+
+                // increment shooter and kicker velocity
+                controller.x().onTrue(
+                    new InstantCommand(() -> {
+                        shooterVelocity += 5;
+                    })
+                );
+                controller.b().onTrue(
+                    new InstantCommand(() -> {
+                        shooterVelocity -= 5;
+                    })
+                );
+                controller.y().onTrue(
+                    new InstantCommand(() -> {
+                        kickerVelocity += 5;
+                    })
+                );
+                controller.a().onTrue(
+                    new InstantCommand(() -> {
+                        kickerVelocity -= 5;
+                    })
+                );
+                break;
+            case TESTING_SHOOTER_MAP:
+                controller.x().whileTrue( // orient the robot
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getDriveWithJoysticksShooterCommand())
+                );
+
+                controller.y().whileTrue( // shoot
+                    commandFactory.getShootCommand(
+                        () -> RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint), 
+                        () -> true
+                    )
+                );
+
+                controller.a().onTrue( // print everything
+                    new InstantCommand(() -> 
+                        {
+                            System.out.println("SHOOTER_VELOCITY_MAP.put(DISTANCE, " + shooter.shooterIOInputs.velocity + ");");
+                        }
+                    )
+                );
+
+                // increment the shooter velocity
+                controller.leftTrigger().onTrue(
+                    new InstantCommand(() -> {
+                        shooterVelocity -= 1.25;
+                        shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+                    })
+                );
+                controller.rightTrigger().onTrue(
+                    new InstantCommand(() -> {
+                        shooterVelocity += 1.25;
+                        shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
+                    })
+                );
+                break;
+        }
 
         // ————— simulation bindings ————— //
 
-        controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
+            controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel())); // ! make this be a button on elastic
+        }
     }
 
     // ————— autonomous ————— //
@@ -217,7 +283,6 @@ public class RobotContainer {
             drive, 
             poseEstimator, 
             intake, 
-            hopper, 
             shooter, 
             driveSimulation, 
             commandFactory
@@ -297,14 +362,14 @@ public class RobotContainer {
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),
             () -> {
-                return intake.getIntakeOn() && (Constants.REALISTIC_SIM ? !hopper.getHopperFull() : true);
+                return intake.getIntakeOn() && (Constants.REALISTIC_SIM ? !intake.getHopperFull() : true);
             }, 
             () -> {
                 if (Constants.REALISTIC_SIM) {
-                    if (hopper.getHopperFull()) {
+                    if (intake.getHopperFull()) {
                         return;
                     }
-                    hopper.intakeFuel();
+                    intake.addHopperFuel();
                 }
             }
         );

@@ -22,8 +22,8 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier thetaVelocitySupplier;
 
     private final Supplier<Rotation2d> thetaSupplier;
-    private final boolean xLockWhileStationary;
     private final BooleanSupplier trenchAlignSupplier;
+    private final boolean xLockWhileStationary;
 
     private final double EXPONENT = 2;
 
@@ -34,8 +34,8 @@ public class DriveWithJoysticks extends Command {
         DoubleSupplier yVelocitySupplier, 
         DoubleSupplier thetaVelocitySupplier,
         Supplier<Rotation2d> thetaSupplier, 
-        boolean xLockWhileStationary,
-        BooleanSupplier trenchAlignSupplier
+        BooleanSupplier trenchAlignSupplier,
+        boolean xLockWhileStationary
     ) {
         addRequirements(drive);
 
@@ -47,8 +47,8 @@ public class DriveWithJoysticks extends Command {
         this.thetaVelocitySupplier = thetaVelocitySupplier;
 
         this.thetaSupplier = thetaSupplier;
-        this.xLockWhileStationary = xLockWhileStationary;
         this.trenchAlignSupplier = trenchAlignSupplier;
+        this.xLockWhileStationary = xLockWhileStationary;
     }
 
     @Override
@@ -111,6 +111,7 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
+        // override with x lock
         if (xLockWhileStationary
             && Math.abs(speeds.vxMetersPerSecond) < 0.05
             && Math.abs(speeds.vyMetersPerSecond) < 0.05
