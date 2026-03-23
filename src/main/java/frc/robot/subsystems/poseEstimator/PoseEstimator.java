@@ -71,7 +71,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/visionPoseEstimate", visionEstimator.getEstimatedPosition());
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     
-        SmartDashboard.putData("outputs/poseEstimator/field2d", field2d);
+        SmartDashboard.putData("smartDashboard/field2d", field2d);
     }
 
     public void resetPosition(Pose2d pose) {

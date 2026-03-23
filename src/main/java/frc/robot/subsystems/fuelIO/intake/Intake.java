@@ -1,10 +1,10 @@
 package frc.robot.subsystems.fuelIO.intake;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
@@ -78,7 +78,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean pivotDown() {
-        return pivotIOInputs.position < 0;
+        return pivotIOInputs.position < FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations) + 0.01;
     }
 
     public void addHopperFuel() {

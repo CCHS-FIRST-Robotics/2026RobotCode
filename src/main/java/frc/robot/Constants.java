@@ -30,14 +30,11 @@ public final class Constants {
 
     // ————— real robot toggles ————— //
 
-    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.TESTING_BPS;
+    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
     public static boolean TRENCH_ALIGN = true;
-    public static final boolean USE_PIVOT = true;
-    public static final boolean SHOOT_ON_THE_MOVE = true;
-
-    public static final boolean TUNING_POSITION = false; // ! remove these later
-    public static final boolean TUNING_CHOREO = false; // ! 
+    public static boolean USE_PIVOT = true;
+    public static boolean SHOOT_ON_THE_MOVE = true;
 
     public static final Angle PIVOT_START_ANGLE = FuelConstants.PIVOT_MAX_UP_ANGLE;
 

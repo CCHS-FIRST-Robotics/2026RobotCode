@@ -43,9 +43,9 @@ public class RobotContainer {
 
     // ————— testing variables ————— //
 
-    @AutoLogOutput
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/shooterVelocity")
     double shooterVelocity = 0;
-    @AutoLogOutput
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/kickerVelocity")
     double kickerVelocity = 0;
 
     public RobotContainer() {
@@ -149,12 +149,16 @@ public class RobotContainer {
         );
 
         configureButtonBindings();
+        configureRobot();
         configureAutos();
     }
 
     private void configureButtonBindings() {
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+
+        // check motors
+        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
 
         switch (Constants.CURRENT_BUTTON_BINDINGS) {
             case COMPETITION: 
@@ -194,7 +198,12 @@ public class RobotContainer {
                 controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
                 controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
 
-                controller.b().onTrue(new InstantCommand(() -> Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN));
+                controller.b().onTrue(new InstantCommand(
+                    () -> {
+                        Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN;
+                        SmartDashboard.putBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
+                    }
+                ));
                 break;
             case TESTING_BPS: 
                 controller.leftTrigger().whileTrue(
@@ -250,7 +259,7 @@ public class RobotContainer {
                 controller.y().whileTrue( // shoot
                     commandFactory.getShootCommand(
                         () -> RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint), 
-                        () -> true
+                        true
                     )
                 );
 
@@ -281,7 +290,44 @@ public class RobotContainer {
         // ————— simulation bindings ————— //
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
-            controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel())); // ! make this be a button on elastic
+            SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
+        }
+    }
+
+    // ————— robot ————— //
+
+    public void configureRobot() {
+        SmartDashboard.putBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Use Pivot", Constants.USE_PIVOT);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Shoot on the Move", Constants.SHOOT_ON_THE_MOVE);
+    }
+
+    public void robotPeriodic() {
+        Constants.TRENCH_ALIGN = SmartDashboard.getBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
+        Constants.USE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Use Pivot", Constants.USE_PIVOT);
+        Constants.SHOOT_ON_THE_MOVE = SmartDashboard.getBoolean("smartDashboard/toggles/Shoot on the Move", Constants.SHOOT_ON_THE_MOVE);
+
+        Logger.recordOutput("outputs/drive/TRENCH_ALIGN", Constants.TRENCH_ALIGN);
+        Logger.recordOutput("outputs/fuelIO/intake/USE_PIVOT", Constants.USE_PIVOT);
+        Logger.recordOutput("outputs/fuelIO/shooter/SHOOT_ON_THE_MOVE", Constants.SHOOT_ON_THE_MOVE);
+
+        // ! any way to make this more consise (use an array)
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
+
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
+            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
+            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
+            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
+            
+            Logger.recordOutput(
+            "outputs/simulation/fuelSimulation/hubScore", 
+                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
+                FuelSim.BLUE_HUB.getScore() : 
+                FuelSim.RED_HUB.getScore()
+            );
         }
     }
 
@@ -308,22 +354,7 @@ public class RobotContainer {
 
         autoChooser.select("BackUpAndShoot"); // picks a default auto
 
-        SmartDashboard.putData("AutoChooser", autoChooser);
-    }
-
-    public void autonomousPeriodic() {
-        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
-            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
-            
-            Logger.recordOutput(
-            "outputs/simulation/fuelSimulation/hubScore", 
-                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
-                FuelSim.BLUE_HUB.getScore() : 
-                FuelSim.RED_HUB.getScore()
-            );
-        }
+        SmartDashboard.putData("smartDashboard/AutoChooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
@@ -335,16 +366,6 @@ public class RobotContainer {
     public void teleopPeriodic() {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/autoWinner", HubUtil.getAutoWinner());
-            Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", Math.round(HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)).in(Seconds)));
-            Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
-            Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
-            
-            Logger.recordOutput(
-            "outputs/simulation/fuelSimulation/hubScore", 
-                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
-                FuelSim.BLUE_HUB.getScore() : 
-                FuelSim.RED_HUB.getScore()
-            );
         }
     }
 
