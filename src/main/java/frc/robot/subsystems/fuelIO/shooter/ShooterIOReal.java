@@ -37,7 +37,7 @@ public class ShooterIOReal implements ShooterIO {
         motor.getConfigurator().apply(motorConfig);
 
         follower.getConfigurator().apply(motorConfig);
-        follower.setControl(new Follower(motorId, MotorAlignmentValue.Opposed)); // ! MAKE SURE THAT IT'S ACTUALLY OPPOSED
+        follower.setControl(new Follower(motorId, MotorAlignmentValue.Opposed));
 
         // status signals
         voltageSignal = motor.getMotorVoltage();
