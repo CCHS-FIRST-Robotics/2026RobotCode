@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.*;
@@ -13,7 +14,6 @@ import edu.wpi.first.units.measure.*;
 import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.*;
 import frc.robot.subsystems.poseEstimator.*;
-import frc.robot.utils.TunableControls.*;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {    
@@ -77,29 +77,9 @@ public class Drive extends SubsystemBase {
     private final PIDController yPIDPosition = new PIDController(5, 0, 0);
     private final PIDController thetaPIDPosition = new PIDController(9, 0.5, 0);
 
-    ControlConstants xPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants xPTunableControlConstantsPosition = new TunableControlConstants("xPIDPosition", xPConstantsPosition);
-    ControlConstants yPConstantsPosition = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants yPTunableControlConstantsPosition = new TunableControlConstants("yPIDPosition", yPConstantsPosition);
-    ControlConstants thetaPConstantsPosition = new ControlConstants().withPID(9, 0, 0.5);
-    TunableControlConstants thetaPTunableControlConstantsPosition = new TunableControlConstants("thetaPIDPosition", thetaPConstantsPosition);
-    private final TunablePIDController xPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
-    private final TunablePIDController yPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
-    private final TunablePIDController thetaPIDPositionTunable = new TunablePIDController(xPTunableControlConstantsPosition);
-
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController thetaPIDChoreo = new PIDController(5, 0, 0);
-
-    ControlConstants xPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants xPTunableControlConstantsChoreo = new TunableControlConstants("xPIDChoreo", xPConstantsChoreo);
-    ControlConstants yPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants yPTunableControlConstantsChoreo = new TunableControlConstants("yPIDChoreo", yPConstantsChoreo);
-    ControlConstants thetaPConstantsChoreo = new ControlConstants().withPID(5, 0, 0);
-    TunableControlConstants thetaPTunableControlConstantsChoreo = new TunableControlConstants("thetaPIDChoreo", thetaPConstantsChoreo);
-    private final TunablePIDController xPIDChoreoTunable = new TunablePIDController(xPTunableControlConstantsChoreo);
-    private final TunablePIDController yPIDChoreoTunable = new TunablePIDController(yPTunableControlConstantsChoreo);
-    private final TunablePIDController thetaPIDChoreoTunable = new TunablePIDController(thetaPTunableControlConstantsChoreo);
 
     private Pose2d positionSetpoint = new Pose2d();
     private ChassisSpeeds velocitySetpoint = new ChassisSpeeds();
@@ -142,8 +122,17 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
         modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
         
-        thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
-        thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI); // allows position PID to turn in the correct direction
+         // allow position PID to turn in the correct direction
+        thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
+        thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
+
+        // allow PID to be tuned through elastic
+        SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/x", xPIDPosition);
+        SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/y", yPIDPosition);
+        SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/theta", thetaPIDPosition);
+        SmartDashboard.putData("smartDashboard/PID/drivePIDChoreo/x", xPIDChoreo);
+        SmartDashboard.putData("smartDashboard/PID/drivePIDChoreo/y", yPIDChoreo);
+        SmartDashboard.putData("smartDashboard/PID/drivePIDChoreo/theta", thetaPIDChoreo);
     }
 
     @Override
@@ -183,25 +172,13 @@ public class Drive extends SubsystemBase {
 
                 // get PIDs
                 if (!usingChoreo) {
-                    if (Constants.TUNING_POSITION) {
-                        xOutput = xPIDPositionTunable.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                        yOutput = yPIDPositionTunable.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                        thetaOutput = thetaPIDPositionTunable.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
-                    } else {
-                        xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                        yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                        thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
-                    }
+                    xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                    yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                    thetaOutput = thetaPIDPosition.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 } else {
-                    if (Constants.TUNING_CHOREO) {
-                        xOutput = xPIDChoreoTunable.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                        yOutput = yPIDChoreoTunable.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                        thetaOutput = thetaPIDChoreoTunable.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
-                    } else {
-                        xOutput = xPIDChoreo.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                        yOutput = yPIDChoreo.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                        thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
-                    }
+                    xOutput = xPIDChoreo.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                    yOutput = yPIDChoreo.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                    thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 }
 
                 // create chassisspeeds object with FOC

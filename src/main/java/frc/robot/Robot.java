@@ -42,12 +42,8 @@ public class Robot extends LoggedRobot {
         Threads.setCurrentThreadPriority(true, 99); // switch thread to high priority to improve loop timing
         CommandScheduler.getInstance().run();
         Threads.setCurrentThreadPriority(false, 10); // return to normal thread priority
-        
-        Logger.recordOutput("outputs/drive/TRENCH_ALIGN", Constants.TRENCH_ALIGN);
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
+
+        robotContainer.robotPeriodic();
     }
 
     @Override
@@ -69,9 +65,7 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {
-        robotContainer.autonomousPeriodic();
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {

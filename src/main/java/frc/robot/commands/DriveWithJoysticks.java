@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.*;
 import java.util.function.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.Zones;
 
@@ -22,7 +23,6 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier thetaVelocitySupplier;
 
     private final Supplier<Rotation2d> thetaSupplier;
-    private final BooleanSupplier trenchAlignSupplier;
     private final boolean xLockWhileStationary;
 
     private final double EXPONENT = 2;
@@ -34,7 +34,6 @@ public class DriveWithJoysticks extends Command {
         DoubleSupplier yVelocitySupplier, 
         DoubleSupplier thetaVelocitySupplier,
         Supplier<Rotation2d> thetaSupplier, 
-        BooleanSupplier trenchAlignSupplier,
         boolean xLockWhileStationary
     ) {
         addRequirements(drive);
@@ -47,7 +46,6 @@ public class DriveWithJoysticks extends Command {
         this.thetaVelocitySupplier = thetaVelocitySupplier;
 
         this.thetaSupplier = thetaSupplier;
-        this.trenchAlignSupplier = trenchAlignSupplier;
         this.xLockWhileStationary = xLockWhileStationary;
     }
 
@@ -80,7 +78,7 @@ public class DriveWithJoysticks extends Command {
         }
 
         // override with under trench angle
-        if (trenchAlignSupplier.getAsBoolean() && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+        if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
             
             if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
