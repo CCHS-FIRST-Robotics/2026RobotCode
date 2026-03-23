@@ -7,7 +7,6 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
@@ -16,8 +15,6 @@ public class KickerIOReal implements KickerIO {
     private final SparkMaxConfig motorConfig = new SparkMaxConfig();
     private final RelativeEncoder encoder;
     
-    private final SimpleMotorFeedforward feedforward;
-
     private AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);
 
     public KickerIOReal(int id) {
@@ -32,7 +29,7 @@ public class KickerIOReal implements KickerIO {
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.KICKER_PID);
-        feedforward = FuelConstants.KICKER_FF;
+        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.KICKER_FF);
         
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
@@ -40,6 +37,7 @@ public class KickerIOReal implements KickerIO {
         motorConfig.encoder.quadratureAverageDepth(2);
         
         motorConfig.smartCurrentLimit(40);
+        motorConfig.secondaryCurrentLimit(40); // ! we don't know if this actually fixes the problem
         motorConfig.voltageCompensation(12);
         
         motorConfig.inverted(true);
@@ -76,8 +74,7 @@ public class KickerIOReal implements KickerIO {
         motor.getClosedLoopController().setSetpoint(
             velocity.in(RPM), 
             SparkMax.ControlType.kVelocity, 
-            ClosedLoopSlot.kSlot0,
-            feedforward.calculateWithVelocities(velocitySetpoint.in(RotationsPerSecond), velocity.in(RotationsPerSecond)) * FuelConstants.KICKER_GEAR_RATIO
+            ClosedLoopSlot.kSlot0
         );
 
         velocitySetpoint = velocity;

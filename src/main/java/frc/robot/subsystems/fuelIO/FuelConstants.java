@@ -3,9 +3,7 @@ package frc.robot.subsystems.fuelIO;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.revrobotics.spark.config.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 
@@ -44,8 +42,8 @@ public class FuelConstants {
     .withKV(0.13259)
     .withKA(0);
 
-    public static final ClosedLoopConfig KICKER_PID = new ClosedLoopConfig().pid(0.0002, 0, 0);
-    public static final SimpleMotorFeedforward KICKER_FF = new SimpleMotorFeedforward(0, 0.125, 0);
+    public static final ClosedLoopConfig KICKER_PID = new ClosedLoopConfig().pid(0.00001, 0, 0);
+    public static final FeedForwardConfig KICKER_FF = new FeedForwardConfig().kV(0.0021); // this is in RPM
 
     // ————— sim ————— //
     

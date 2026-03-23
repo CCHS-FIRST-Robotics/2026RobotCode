@@ -231,12 +231,12 @@ public class RobotContainer {
                 // increment shooter and kicker velocity
                 controller.x().onTrue(
                     new InstantCommand(() -> {
-                        shooterVelocity += 5;
+                        shooterVelocity += 1;
                     })
                 );
                 controller.b().onTrue(
                     new InstantCommand(() -> {
-                        shooterVelocity -= 5;
+                        shooterVelocity -= 1;
                     })
                 );
                 controller.y().onTrue(
