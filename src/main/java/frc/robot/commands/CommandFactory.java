@@ -15,6 +15,7 @@ import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
 import frc.robot.Constants;
 
+@SuppressWarnings("unused")
 public class CommandFactory {
     private final Controller controller;
 
@@ -27,8 +28,10 @@ public class CommandFactory {
     private final FuelSim fuelSimulation;
 
     private final Voltage intakeVolts = Volts.of(10);
-    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60); // ! 
+    private final AngularVelocity kickerVelocity = RotationsPerSecond.of(60);
 
+    private boolean pivotUp = Constants.PIVOT_START_ANGLE == FuelConstants.PIVOT_MAX_UP_ANGLE;
+    
     public CommandFactory(
         Controller controller,
         Drive drive,
@@ -50,7 +53,14 @@ public class CommandFactory {
 
     // ————— processed ————— //
 
-    public Command getDriveAndIntakeCommand() { // ! finn says this doesn't work
+    public Command getDriveAndIntakeCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -62,6 +72,13 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand(boolean usePivot) {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -74,11 +91,24 @@ public class CommandFactory {
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return getIntakeCommand()
         .alongWith(getDriveAndShootCommand(false));
     }
 
     public Command getCheckMotorsCommand() {
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
         .andThen(Commands.waitUntil(() -> intake.pivotDown()))
         .andThen(intake.getSetIntakeVoltageCommand(intakeVolts))
@@ -95,6 +125,10 @@ public class CommandFactory {
     // ————— drive ————— //
 
     public Command getDriveWithJoysticksCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            return new InstantCommand();
+        }
+
         return new DriveWithJoysticks(
             drive,
             poseEstimator,
@@ -107,6 +141,13 @@ public class CommandFactory {
     }
 
     public Command getDriveWithJoysticksIntakeCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
@@ -135,6 +176,13 @@ public class CommandFactory {
     }
 
     public Command getDriveWithJoysticksShooterCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return Commands.either(
             new DriveWithJoysticks(
                 drive, 
@@ -164,6 +212,10 @@ public class CommandFactory {
         LinearAcceleration linearAcceleration,
         AngularAcceleration angularAcceleration
     ) {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            return new InstantCommand();
+        }
+
         return Commands.startEnd(
             () -> {
                 DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
@@ -183,15 +235,38 @@ public class CommandFactory {
     // ————— intake ————— //
 
     public Command getIntakeCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+        
         return Commands.startEnd(
             () -> intake.setIntakeVoltage(intakeVolts),
             () -> intake.setIntakeVoltage(Volts.of(0))
         );
     }
 
+    public Command getTogglePivotCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+
+        return Commands.either(
+            intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE),
+            intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE),
+            () -> pivotUp
+        )
+        .andThen(Commands.runOnce(() -> {pivotUp = !pivotUp;}));
+    }
+
     // ————— shoot ————— // 
 
     public Command getShootCommand(Supplier<AngularVelocity> shooterVelocitySupplier, boolean usePivot) {
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get())) // ! could this be made to use getSetShooterVelocityCommand
         .alongWith( // allow shooting
             Commands.waitSeconds(0.1)
@@ -225,6 +300,12 @@ public class CommandFactory {
     }
 
     public Command getSimShootCommand() {
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return Commands.runOnce(
             () -> {
                 if (Constants.REALISTIC_SIM) {
@@ -249,6 +330,13 @@ public class CommandFactory {
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return new InstantCommand();
+        }
+
         return Commands.either(
             Commands.run(
                 () -> ShootUtil.updateIterative(

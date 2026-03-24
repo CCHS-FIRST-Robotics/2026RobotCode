@@ -21,6 +21,7 @@ import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.utils.*;
 
+@SuppressWarnings("unused")
 public class RobotContainer {
     // ————— controllers ————— //
 
@@ -44,71 +45,104 @@ public class RobotContainer {
     // ————— testing variables ————— //
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/shooterVelocity")
-    double shooterVelocity = 0;
+    private double shooterVelocity = 0;
     @AutoLogOutput(key = "outputs/fuelIO/shooter/kickerVelocity")
-    double kickerVelocity = 0;
+    private double kickerVelocity = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
             case REAL: // real robot, instantiate hardware IO implementations
-                drive = new Drive(
-                    new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[0]),
-                    new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[1]),
-                    new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[2]),
-                    new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[3])
-                );
-                poseEstimator = new PoseEstimator(
+                if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+                    drive = new Drive(
+                        new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[0]),
+                        new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[1]),
+                        new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[2]),
+                        new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[3])
+                    );
+
+                    poseEstimator = new PoseEstimator(
                     new GyroIOPigeon2(),
-                    new CameraIOPhotonVision[] {
-                        new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
-                        new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
-                    }, 
-                    drive, 
-                    Constants.ROBOT_START_POSE
-                );
-                intake = new Intake(
-                    new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID), 
-                    new PivotIOReal(FuelConstants.PIVOT_MOTOR_ID)
-                );
-                shooter = new Shooter(
-                    new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID, FuelConstants.SHOOTER_FOLLOWER_ID), 
-                    new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
-                );
+                        new CameraIOPhotonVision[] {
+                            new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
+                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
+                        }, 
+                        drive, 
+                        Constants.ROBOT_START_POSE
+                    );
+                } else {
+                    drive = null;
+                    poseEstimator = null;
+                }
+
+                if (Constants.INSTANTIATE_INTAKE) {
+                    intake = new Intake(
+                        new IntakeIOReal(FuelConstants.INTAKE_MOTOR_ID), 
+                        new PivotIOReal(FuelConstants.PIVOT_MOTOR_ID)
+                    );
+                } else {
+                    intake = null;
+                }
+
+                if (Constants.INSTANTIATE_SHOOTER) {
+                    shooter = new Shooter(
+                        new ShooterIOReal(FuelConstants.SHOOTER_MOTOR_ID, FuelConstants.SHOOTER_FOLLOWER_ID), 
+                        new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
+                    );
+                } else {
+                    shooter = null;
+                }
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
 
-                drive = new Drive(
-                    new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[0], driveSimulation.getModules()[0]),
-                    new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[1], driveSimulation.getModules()[1]),
-                    new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[2], driveSimulation.getModules()[2]),
-                    new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[3], driveSimulation.getModules()[3])
-                );
-                poseEstimator = new PoseEstimator(
-                    new GyroIOSim(driveSimulation.getGyroSimulation()),
-                    new CameraIOPhotonVision[] {
-                        new CameraIOPhotonVisionSim(
-                            VisionConstants.camera0Name, 
-                            VisionConstants.robotToCamera0, 
-                            driveSimulation::getSimulatedDriveTrainPose // this is why vision and combined estimators also have collision
-                        ),
-                        new CameraIOPhotonVisionSim(
-                            VisionConstants.camera1Name, 
-                            VisionConstants.robotToCamera1, 
-                            driveSimulation::getSimulatedDriveTrainPose
-                        )
-                    },
-                    drive, 
-                    Constants.ROBOT_START_POSE
-                );
-                intake = new Intake(
-                    new IntakeIOSim(), 
-                    new PivotIOSim()
-                );
-                shooter = new Shooter(
-                    new ShooterIOSim(),
-                    new KickerIOSim()
-                );
+                if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+                    drive = new Drive(
+                        new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[0], driveSimulation.getModules()[0]),
+                        new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[1], driveSimulation.getModules()[1]),
+                        new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[2], driveSimulation.getModules()[2]),
+                        new ModuleIOTalonFXSim(DriveConstants.SWERVE_MODULE_CONSTANTS[3], driveSimulation.getModules()[3])
+                    );
+
+                    poseEstimator = new PoseEstimator(
+                        new GyroIOSim(driveSimulation.getGyroSimulation()),
+                        new CameraIOPhotonVision[] {
+                            new CameraIOPhotonVisionSim(
+                                VisionConstants.camera0Name, 
+                                VisionConstants.robotToCamera0, 
+                                driveSimulation::getSimulatedDriveTrainPose // this is why vision and combined estimators also have collision
+                            ),
+                            new CameraIOPhotonVisionSim(
+                                VisionConstants.camera1Name, 
+                                VisionConstants.robotToCamera1, 
+                                driveSimulation::getSimulatedDriveTrainPose
+                            )
+                        },
+                        drive, 
+                        Constants.ROBOT_START_POSE
+                    );
+                } else {
+                    drive = null;
+                    poseEstimator = null;
+                }
+
+                if (Constants.INSTANTIATE_INTAKE) {
+                    intake = new Intake(
+                        new IntakeIOSim(), 
+                        new PivotIOSim()
+                    );
+                } else {
+                    intake = null;
+                }
+
+                if (Constants.INSTANTIATE_SHOOTER) {
+                    shooter = new Shooter(
+                        new ShooterIOSim(),
+                        new KickerIOSim()
+                    );
+                } else {
+                    shooter = null;
+                }
+
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
@@ -137,7 +171,9 @@ public class RobotContainer {
                 break;
         }
 
-        drive.setPoseEstimator(poseEstimator);
+        if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            drive.setPoseEstimator(poseEstimator);
+        }
 
         commandFactory = new CommandFactory(
             controller, 
@@ -154,18 +190,22 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // drive
-        drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+        if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            // drive
+            drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+        }
 
         // check motors
         SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
 
         switch (Constants.CURRENT_BUTTON_BINDINGS) {
             case COMPETITION: 
-                // x-lock
-                controller.x().whileTrue(
-                    Commands.run(() -> drive.xLock())
-                );
+                if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+                    // x-lock
+                    controller.x().whileTrue(
+                        Commands.run(() -> drive.xLock())
+                    );
+                }
 
                 // drive slow // ! wasn't used
                 controller.rightStick().whileTrue( // remapped as gamesir R4
@@ -194,9 +234,8 @@ public class RobotContainer {
 
                 controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
 
-                // pivot // ! make it a toggle leftbumper
-                controller.y().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE));
-                controller.a().onTrue(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE));
+                // pivot
+                controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
 
                 controller.b().onTrue(new InstantCommand(
                     () -> {
@@ -334,6 +373,10 @@ public class RobotContainer {
     // ————— autonomous ————— //
 
     private void configureAutos() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            return;
+        }
+
         autoGenerator = new AutoGenerator(
             drive, 
             poseEstimator, 
@@ -345,19 +388,28 @@ public class RobotContainer {
         autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
-        autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
         autoChooser.addRoutine("BeMeanBottom", () -> autoGenerator.beMeanBottom());
         autoChooser.addRoutine("BeMeanTop", () -> autoGenerator.beMeanTop());
-        autoChooser.addRoutine("CenterFuelBottom", () -> autoGenerator.centerFuelBottom());
-        autoChooser.addRoutine("CenterFuelTop", () -> autoGenerator.centerFuelTop());
-        autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
-        autoChooser.select("BackUpAndShoot"); // picks a default auto
+        if (Constants.INSTANTIATE_INTAKE
+            && Constants.INSTANTIATE_SHOOTER
+        ) {
+            autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
+            autoChooser.addRoutine("CenterFuelBottom", () -> autoGenerator.centerFuelBottom());
+            autoChooser.addRoutine("CenterFuelTop", () -> autoGenerator.centerFuelTop());
+            autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
+
+            autoChooser.select("BackUpAndShoot"); // picks a default auto
+        }
 
         SmartDashboard.putData("smartDashboard/AutoChooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            return new InstantCommand();
+        }
+
         return autoChooser.selectedCommand();
     }
 
@@ -372,12 +424,22 @@ public class RobotContainer {
     // ————— simulation ————— //
 
     private void configureSimulation() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
+            return;
+        }
+
         // drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
         Constants.FieldConstants.Zones.logAllZones();
 
-        // drive
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return;
+        }
+
+        // fuelIO
         fuelSimulation = new FuelSim();
         fuelSimulation.registerRobot(
             DriveConstants.WIDTH_X.in(Meters),
@@ -412,7 +474,7 @@ public class RobotContainer {
     }
 
     public void simulationPeriodic() {
-        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) { // not sure if this has to be here if it's only called in simulationPeriodic
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
             return;
         }
 
@@ -420,11 +482,22 @@ public class RobotContainer {
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("outputs/simulation/fieldSimulation/robotPosition", driveSimulation.getSimulatedDriveTrainPose());
 
-        // fuel
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return;
+        }
+
+        // fuelIO
         fuelSimulation.stepSim();
     }
 
     public void resetSimulation() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+        ) {
+            return;
+        }
+
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
             return;
         }
@@ -437,6 +510,12 @@ public class RobotContainer {
         driveSimulation.setSimulationWorldPose(startPose);
         poseEstimator.resetPosition(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
+
+        if (!Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+        ) {
+            return;
+        }
 
         // fuel
         fuelSimulation.clearFuel();

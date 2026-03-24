@@ -8,8 +8,6 @@
  !  - sysid
  !  - add back the wheel radius characterization functionality
  !  - rotating around a swerve module
- !  - mini-autos https://www.chiefdelphi.com/t/frc-5000-hammerheads-2026-build-thread-open-alliance/507502/310?u=0713_ahsc
- !  - turn the drive: https://github.com/FRC-4481-Team-Rembrandts/4481-robot-2024-public/blob/main/src/main/java/frc/team4481/robot/autoaim/TurnToPose.java
  ! vision: 
  !  - apriltag 1 foot away from robot for camera on robot position
  !  - object detection
