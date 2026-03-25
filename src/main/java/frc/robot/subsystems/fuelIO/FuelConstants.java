@@ -50,9 +50,9 @@ public class FuelConstants {
     public static final Distance INTAKE_WIDTH_X = Inches.of(11.5); // ! 
     public static final int HOPPER_FUEL_CAPACITY = 50; // ! 
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
-        Inches.of(11), 
-        Inches.of(1), 
-        Inches.of(18), 
+        Inches.of(-8), 
+        Inches.of(0), 
+        Inches.of(13), 
         new Rotation3d()
     ); // ! 
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);

@@ -315,16 +315,29 @@ public class CommandFactory {
                     intake.subtractHopperFuel();
                 }
 
-                fuelSimulation.launchFuel( // ! make it shoot 2 balls at a time
+                fuelSimulation.launchFuel(
                     () -> shooter.getShooterLinearVelocity(), 
                     () -> Degrees.of(90).minus(FuelConstants.HOOD_ANGLE), // shot angle
                     Rotations.of(0),
-                    FuelConstants.SHOOTER_POSITION
+                    FuelConstants.SHOOTER_POSITION.plus(new Transform3d(0, Inches.of(-3).in(Meters), 0, new Rotation3d()))
+                );
+
+                fuelSimulation.launchFuel(
+                    () -> shooter.getShooterLinearVelocity(), 
+                    () -> Degrees.of(90).minus(FuelConstants.HOOD_ANGLE), // shot angle
+                    Rotations.of(0),
+                    FuelConstants.SHOOTER_POSITION.plus(new Transform3d(0, Inches.of(3).in(Meters), 0, new Rotation3d()))
                 );
             }
         )
-        .andThen(Commands.waitSeconds(0.5))
-        .repeatedly(); // time between shots // ! make realistic maybe
+        .andThen(
+            Commands.either(
+                Commands.waitSeconds(0.1),
+                Commands.waitSeconds(0.5),
+                () -> Constants.REALISTIC_SIM
+            )
+        ) // time between shots
+        .repeatedly();
     }
 
     // ————— util ————— //

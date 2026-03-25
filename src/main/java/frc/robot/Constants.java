@@ -30,10 +30,10 @@ public final class Constants {
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d());
 
-    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.TESTING_BPS;
+    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
-    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = false;
-    public static final boolean INSTANTIATE_INTAKE = false;
+    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
+    public static final boolean INSTANTIATE_INTAKE = true;
     public static final boolean INSTANTIATE_SHOOTER = true;
 
     // real
