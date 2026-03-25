@@ -8,10 +8,6 @@
  !  - sysid
  !  - add back the wheel radius characterization functionality
  !  - rotating around a swerve module
- ! vision: 
- !  - apriltag 1 foot away from robot for camera on robot position
- !  - object detection
- !  - onboard video recording
  -->
 
 ## Reference:

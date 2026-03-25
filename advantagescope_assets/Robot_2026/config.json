@@ -12,36 +12,36 @@
     ],
     "cameras": [
         {
-            "name": "FrontLeft",
+            "name": "BackLeft",
             "fov": "92",
             "resolution": [1920, 1400],
-            "position": [0.2921, 0.3429, 0.127],
+            "position": [-0.2921, 0.3429, 0.127],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": -30}, 
-                {"axis": "z", "degrees": -15}
-            ]
-        }, 
-        {
-            "name": "FrontRight",
-            "fov": "92",
-            "resolution": [1920, 1400],
-            "position": [0.2921, -0.3429, 0.127],
-            "rotations": [
-                {"axis": "x", "degrees": 0}, 
-                {"axis": "y", "degrees": -30}, 
-                {"axis": "z", "degrees": 15}
+                {"axis": "z", "degrees": 195}
             ]
         },
         {
-            "name": "Intake",
-            "fov": "68.5",
+            "name": "BackRight",
+            "fov": "92",
             "resolution": [1920, 1400],
-            "position": [0.09398, 0, 0.4572],
+            "position": [-0.2921, -0.3429, 0.127],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
-                {"axis": "y", "degrees": 0}, 
-                {"axis": "z", "degrees": 180}
+                {"axis": "y", "degrees": -30}, 
+                {"axis": "z", "degrees": 165}
+            ]
+        }, 
+        {
+            "name": "FrontLeft",
+            "fov": "68.5",
+            "resolution": [1920, 1400],
+            "position": [-0.2286, 0.2159, 0.5],
+            "rotations": [
+                {"axis": "x", "degrees": 0}, 
+                {"axis": "y", "degrees": -15}, 
+                {"axis": "z", "degrees": 0}
             ]
         }
     ]

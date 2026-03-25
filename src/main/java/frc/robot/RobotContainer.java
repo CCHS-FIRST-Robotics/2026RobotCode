@@ -12,6 +12,7 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.*;
 import frc.robot.commands.*;
+import frc.robot.subsystems.LEDStrip.LEDStrip;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
@@ -33,6 +34,8 @@ public class RobotContainer {
     private final PoseEstimator poseEstimator;
     private final Intake intake;
     private final Shooter shooter;
+
+    private final LEDStrip ledStrip;
 
     // ————— utils ————— //
 
@@ -64,7 +67,8 @@ public class RobotContainer {
                     new GyroIOPigeon2(),
                         new CameraIOPhotonVision[] {
                             new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
-                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
+                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1),
+                            new CameraIOPhotonVision(VisionConstants.camera2Name, VisionConstants.robotToCamera2)
                         }, 
                         drive, 
                         Constants.ROBOT_START_POSE
@@ -91,6 +95,12 @@ public class RobotContainer {
                 } else {
                     shooter = null;
                 }
+
+                if (Constants.INSTANTIATE_LEDS) {
+                    ledStrip = new LEDStrip();
+                } else {
+                    ledStrip = null;
+                }
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
@@ -114,6 +124,11 @@ public class RobotContainer {
                             new CameraIOPhotonVisionSim(
                                 VisionConstants.camera1Name, 
                                 VisionConstants.robotToCamera1, 
+                                driveSimulation::getSimulatedDriveTrainPose
+                            ),
+                            new CameraIOPhotonVisionSim(
+                                VisionConstants.camera2Name, 
+                                VisionConstants.robotToCamera2, 
                                 driveSimulation::getSimulatedDriveTrainPose
                             )
                         },
@@ -143,6 +158,8 @@ public class RobotContainer {
                     shooter = null;
                 }
 
+                ledStrip = null;
+
                 break;
             default: // replayed robot, disable IO implementations
                 drive = new Drive(
@@ -151,6 +168,7 @@ public class RobotContainer {
                     new ModuleIO() {},
                     new ModuleIO() {}
                 );
+                
                 poseEstimator = new PoseEstimator(
                     new GyroIO() {}, 
                     new CameraIO[] {
@@ -160,14 +178,18 @@ public class RobotContainer {
                     drive, 
                     new Pose2d()
                 );
+
                 intake = new Intake(
                     new IntakeIO() {}, 
                     new PivotIO() {}
                 );
+
                 shooter = new Shooter(
                     new ShooterIO() {}, 
                     new KickerIO() {}
                 );
+
+                ledStrip = null;
                 break;
         }
 
@@ -330,6 +352,7 @@ public class RobotContainer {
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
+            controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
     }
 

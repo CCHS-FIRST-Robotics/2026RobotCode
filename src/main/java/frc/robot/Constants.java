@@ -19,7 +19,7 @@ public final class Constants {
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
     public static enum BUTTON_BINDINGS {
-        COMPETITION, 
+        COMPETITION,
         TESTING_BPS,
         TESTING_SHOOTER_MAP
     }
@@ -32,9 +32,10 @@ public final class Constants {
 
     public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
-    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
-    public static final boolean INSTANTIATE_INTAKE = true;
-    public static final boolean INSTANTIATE_SHOOTER = true;
+    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = false;
+    public static final boolean INSTANTIATE_INTAKE = false;
+    public static final boolean INSTANTIATE_SHOOTER = false;
+    public static final boolean INSTANTIATE_LEDS = true;
 
     // real
 
