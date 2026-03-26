@@ -1,9 +1,9 @@
-package frc.robot.subsystems.LEDStrip;
+package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.*;
 
-public class LEDStrip extends SubsystemBase {
+public class LedStrip extends SubsystemBase {
     private final AddressableLED led;
     private final AddressableLEDBuffer ledBuffer;
     private final AddressableLEDBufferView leftBuffer;
@@ -11,9 +11,9 @@ public class LEDStrip extends SubsystemBase {
 
     private int rainbowHue = 0;
 
-    public LEDStrip() {
-        led = new AddressableLED(LEDStripConstants.PWM_PORT);
-        ledBuffer = new AddressableLEDBuffer(LEDStripConstants.BULB_COUNT);
+    public LedStrip() {
+        led = new AddressableLED(LedStripConstants.PWM_PORT);
+        ledBuffer = new AddressableLEDBuffer(LedStripConstants.BULB_COUNT);
         leftBuffer = ledBuffer.createView(0, 59);
         rightBuffer = ledBuffer.createView(60, 119);
         

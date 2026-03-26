@@ -12,7 +12,6 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.*;
 import frc.robot.commands.*;
-import frc.robot.subsystems.LEDStrip.LEDStrip;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
@@ -20,6 +19,7 @@ import frc.robot.subsystems.poseEstimator.vision.*;
 import frc.robot.subsystems.fuelIO.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
+import frc.robot.subsystems.leds.*;
 import frc.robot.utils.*;
 
 @SuppressWarnings("unused")
@@ -35,7 +35,7 @@ public class RobotContainer {
     private final Intake intake;
     private final Shooter shooter;
 
-    private final LEDStrip ledStrip;
+    private final LedStrip ledStrip;
 
     // ————— utils ————— //
 
@@ -97,7 +97,7 @@ public class RobotContainer {
                 }
 
                 if (Constants.INSTANTIATE_LEDS) {
-                    ledStrip = new LEDStrip();
+                    ledStrip = new LedStrip();
                 } else {
                     ledStrip = null;
                 }

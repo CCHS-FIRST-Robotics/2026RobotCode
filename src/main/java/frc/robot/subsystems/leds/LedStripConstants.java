@@ -1,6 +1,6 @@
-package frc.robot.subsystems.LEDStrip;
+package frc.robot.subsystems.leds;
 
-public class LEDStripConstants {
+public class LedStripConstants {
     public static final int PWM_PORT = 0;
     public static final int BULB_COUNT = 120;
 }
