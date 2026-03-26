@@ -472,8 +472,8 @@ public class RobotContainer {
             () -> drive.getFieldRelativeSpeeds()
         );
         fuelSimulation.registerIntake(
-            -DriveConstants.WIDTH_X.div(2).in(Meters) - FuelConstants.INTAKE_WIDTH_X.in(Meters),
-            -DriveConstants.WIDTH_X.div(2).in(Meters),
+            DriveConstants.WIDTH_X.div(2).in(Meters),
+            DriveConstants.WIDTH_X.div(2).in(Meters) + FuelConstants.INTAKE_WIDTH_X.in(Meters),
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),
             () -> {

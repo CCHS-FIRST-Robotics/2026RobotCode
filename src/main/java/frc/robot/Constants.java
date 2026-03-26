@@ -32,9 +32,9 @@ public final class Constants {
 
     public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
-    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = false;
-    public static final boolean INSTANTIATE_INTAKE = false;
-    public static final boolean INSTANTIATE_SHOOTER = false;
+    public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
+    public static final boolean INSTANTIATE_INTAKE = true;
+    public static final boolean INSTANTIATE_SHOOTER = true;
     public static final boolean INSTANTIATE_LEDS = true;
 
     // real
@@ -43,7 +43,7 @@ public final class Constants {
 
     // sim
 
-    public static final boolean REALISTIC_SIM = false;
+    public static final boolean REALISTIC_SIM = true;
 
     // ————— toggles ————— //
 
