@@ -43,7 +43,7 @@ public final class Constants {
 
     // sim
 
-    public static final boolean REALISTIC_SIM = true;
+    public static final boolean REALISTIC_SIM = false;
 
     // ————— toggles ————— //
 
