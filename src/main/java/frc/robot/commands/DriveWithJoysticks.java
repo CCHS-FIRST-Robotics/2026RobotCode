@@ -77,6 +77,18 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
+        if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) {
+        
+        } else { // reset when robot isn't in trench zones default
+            Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_DEFAULT;
+        }
+
+
+
+
+
+
+
         // override with under trench angle
         if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
             double yOutput = 0;
