@@ -75,19 +75,14 @@ public class DriveWithJoysticks extends Command {
                     thetaSupplier.get().getRadians()
                 )
             );
-        }
+        } // ! I bet this doesn't work in red alliance
 
+        // ! ask finn about priorities
         if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) {
         
         } else { // reset when robot isn't in trench zones default
             Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_DEFAULT;
         }
-
-
-
-
-
-
 
         // override with under trench angle
         if (Constants.TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
