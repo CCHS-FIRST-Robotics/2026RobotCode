@@ -82,11 +82,11 @@ public class AutoGenerator {
         .andThen(commandFactory.getDriveAndShootCommand(true));
     }
 
-    public AutoRoutine beMeanBottom() {
-        AutoRoutine routine = autoFactory.newRoutine("BeMeanBottom");
+    public AutoRoutine beMeanLeft() {
+        AutoRoutine routine = autoFactory.newRoutine("BeMeanLeft");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("BeMeanBottom", 0);
+        AutoTrajectory trajectory0 = routine.trajectory("BeMeanLeft", 0);
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
@@ -97,11 +97,11 @@ public class AutoGenerator {
         return routine;
     }
 
-    public AutoRoutine beMeanTop() {
-        AutoRoutine routine = autoFactory.newRoutine("BeMeanTop");
+    public AutoRoutine beMeanRight() {
+        AutoRoutine routine = autoFactory.newRoutine("BeMeanRight");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("BeMeanTop", 0);
+        AutoTrajectory trajectory0 = routine.trajectory("BeMeanRight", 0);
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
@@ -112,13 +112,13 @@ public class AutoGenerator {
         return routine;
     }
 
-    public AutoRoutine centerFuelBottom() {
-        AutoRoutine routine = autoFactory.newRoutine("CenterFuelBottom");
+    public AutoRoutine centerFuelLeft() {
+        AutoRoutine routine = autoFactory.newRoutine("CenterFuelLeft");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("CenterFuelBottom", 0); // bring pivot down
-        AutoTrajectory trajectory1 = routine.trajectory("CenterFuelBottom", 1); // begin intake
-        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelBottom", 2); // stop intake
+        AutoTrajectory trajectory0 = routine.trajectory("CenterFuelLeft", 0); // bring pivot down
+        AutoTrajectory trajectory1 = routine.trajectory("CenterFuelLeft", 1); // begin intake
+        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelLeft", 2); // stop intake
         // shoot
 
         // when routine begins, reset odometry, start trajectory
@@ -146,13 +146,13 @@ public class AutoGenerator {
         return routine;
     }
 
-    public AutoRoutine centerFuelTop() { // ! wait times aren't up to date
-        AutoRoutine routine = autoFactory.newRoutine("CenterFuelTop");
+    public AutoRoutine centerFuelRight() {
+        AutoRoutine routine = autoFactory.newRoutine("CenterFuelRight");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("CenterFuelTop", 0); // bring pivot down
-        AutoTrajectory trajectory1 = routine.trajectory("CenterFuelTop", 1); // begin intake
-        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelTop", 2); // stop intake
+        AutoTrajectory trajectory0 = routine.trajectory("CenterFuelRight", 0); // bring pivot down
+        AutoTrajectory trajectory1 = routine.trajectory("CenterFuelRight", 1); // begin intake
+        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelRight", 2); // stop intake
         // shoot
 
         // when routine begins, reset odometry, start trajectory

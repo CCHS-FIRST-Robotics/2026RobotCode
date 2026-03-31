@@ -88,29 +88,32 @@ public final class Constants {
 
         public class Zones {
             public static class Zone {
-                protected final double xMin, xMax, yMin, yMax;
+                public final String name;
+                public final double xMin, xMax, yMin, yMax;
 
-                public Zone(double xMin, double xMax, double yMin, double yMax) {
+                public Zone(String name, double xMin, double xMax, double yMin, double yMax) {
+                    this.name = name;
                     this.xMin = xMin;
                     this.xMax = xMax;
                     this.yMin = yMin;
                     this.yMax = yMax;
                 }
 
-                public Zone(Distance xMin, Distance xMax, Distance yMin, Distance yMax) {
-                    this(xMin.in(Meters), xMax.in(Meters), yMin.in(Meters), yMax.in(Meters));
+                public Zone(String name, Distance xMin, Distance xMax, Distance yMin, Distance yMax) {
+                    this(name, xMin.in(Meters), xMax.in(Meters), yMin.in(Meters), yMax.in(Meters));
                 }
 
                 public boolean contains(Pose2d pose) {
                     return this.containsPoint(pose.getTranslation());
                 }
 
-                protected boolean containsPoint(Translation2d point) {
+                public boolean containsPoint(Translation2d point) {
                     return point.getX() >= xMin && point.getX() <= xMax && point.getY() >= yMin && point.getY() <= yMax;
                 }
 
-                public Zone mirroredX() {
+                public Zone mirroredX(String name) {
                     return new Zone(
+                        name, 
                         FieldConstants.FIELD_WIDTH_X.in(Meters) - xMax,
                         FieldConstants.FIELD_WIDTH_X.in(Meters) - xMin,
                         yMin,
@@ -118,8 +121,9 @@ public final class Constants {
                     );
                 }
 
-                public Zone mirroredY() {
+                public Zone mirroredY(String name) {
                     return new Zone(
+                        name, 
                         xMin,
                         xMax,
                         FieldConstants.FIELD_WIDTH_Y.in(Meters) - yMax,
@@ -133,15 +137,17 @@ public final class Constants {
                         new Translation2d(xMax, yMin),
                         new Translation2d(xMax, yMax),
                         new Translation2d(xMin, yMax),
-                        new Translation2d(xMin, yMin) // bottom left is mirrored to form a closed loop
+                        new Translation2d(xMin, yMin) // bottom left is repeated to form a closed loop
                     };
                 }
             }
 
             public static class ZoneCollection {
+                public final String name;
                 public final Zone[] zones;
 
-                public ZoneCollection(Zone... zones) {
+                public ZoneCollection(String name, Zone... zones) {
+                    this.name = name;
                     this.zones = zones;
                 }
 
@@ -154,53 +160,88 @@ public final class Constants {
 
                     return false;
                 }
+
+                public void log() {
+                    for (Zone z : zones) {
+                        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/" + name + "/" + z.name, z.getCorners());
+                    }
+                }
             }
 
-            private static final Zone BLUE_BOTTOM_TRENCH_ENTERING = new Zone(
-                FieldConstants.TRENCH_DISTANCE_X
-                .minus(TRENCH_ZONE_WIDTH_X), 
-                FieldConstants.TRENCH_DISTANCE_X
-                .plus(TRENCH_ZONE_WIDTH_X), 
-                Meters.of(0),
-                FieldConstants.TRENCH_WIDTH_Y.plus(Meters.of(0.5))
-            );
-            private static final Zone BLUE_TOP_TRENCH_ENTERING = BLUE_BOTTOM_TRENCH_ENTERING.mirroredY();
-            private static final Zone RED_BOTTOM_TRENCH_ENTERING = BLUE_BOTTOM_TRENCH_ENTERING.mirroredX();
-            private static final Zone RED_TOP_TRENCH_ENTERING = BLUE_TOP_TRENCH_ENTERING.mirroredX();
+            // ! CHANGE TOP AND BOTTOM TO RIGHT AND LEFT
 
-            public static final ZoneCollection TRENCH_ZONES_ENTERING = new ZoneCollection(
-                BLUE_BOTTOM_TRENCH_ENTERING, 
-                BLUE_TOP_TRENCH_ENTERING, 
-                RED_BOTTOM_TRENCH_ENTERING, 
-                RED_TOP_TRENCH_ENTERING
-            );
+            // ————— default ————— //
 
-            private static final Zone BLUE_BOTTOM_TRENCH_EXITING = new Zone(
+            private static final Zone BLUE_LEFT_TRENCH_DEFAULT = new Zone(
+                "blue left",
                 FieldConstants.TRENCH_DISTANCE_X
-                .minus(TRENCH_ZONE_WIDTH_X.minus(Meters.of(0.5))), 
+                .minus(TRENCH_ZONE_WIDTH_X),
                 FieldConstants.TRENCH_DISTANCE_X
-                .plus(TRENCH_ZONE_WIDTH_X.minus(Meters.of(0.5))), 
-                Meters.of(0),
-                FieldConstants.TRENCH_WIDTH_Y
+                .plus(TRENCH_ZONE_WIDTH_X),
+                FieldConstants.FIELD_WIDTH_Y
+                .minus(TRENCH_WIDTH_Y),
+                FieldConstants.FIELD_WIDTH_Y
             );
-            private static final Zone BLUE_TOP_TRENCH_EXITING = BLUE_BOTTOM_TRENCH_EXITING.mirroredY();
-            private static final Zone RED_BOTTOM_TRENCH_EXITING = BLUE_BOTTOM_TRENCH_EXITING.mirroredX();
-            private static final Zone RED_TOP_TRENCH_EXITING = BLUE_TOP_TRENCH_EXITING.mirroredX();
+            private static final Zone BLUE_RIGHT_TRENCH_DEFAULT = BLUE_LEFT_TRENCH_DEFAULT.mirroredY("blue right");
+            private static final Zone RED_LEFT_TRENCH_DEFAULT = BLUE_RIGHT_TRENCH_DEFAULT.mirroredX("red left");
+            private static final Zone RED_RIGHT_TRENCH_DEFAULT = BLUE_LEFT_TRENCH_DEFAULT.mirroredX("red right");
 
-            public static final ZoneCollection TRENCH_ZONES_EXITING = new ZoneCollection(
-                BLUE_BOTTOM_TRENCH_EXITING, 
-                BLUE_TOP_TRENCH_EXITING, 
-                RED_BOTTOM_TRENCH_EXITING, 
-                RED_TOP_TRENCH_EXITING
+            public static final ZoneCollection TRENCH_ZONES_DEFAULT = new ZoneCollection( // big
+                "trenches/default",
+                BLUE_LEFT_TRENCH_DEFAULT, 
+                BLUE_RIGHT_TRENCH_DEFAULT, 
+                RED_LEFT_TRENCH_DEFAULT, 
+                RED_RIGHT_TRENCH_DEFAULT
             );
 
-            public static ZoneCollection TRENCH_ZONES = TRENCH_ZONES_ENTERING;
+            // ————— alliance ————— //
+
+            private static final Zone BLUE_LEFT_TRENCH_ALLIANCE = new Zone(
+                "blue left",
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.xMin),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.xMax).minus(Meters.of(1)),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.yMin),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.yMax)
+            );
+            private static final Zone BLUE_RIGHT_TRENCH_ALLIANCE = BLUE_LEFT_TRENCH_ALLIANCE.mirroredY("blue right");
+            private static final Zone RED_LEFT_TRENCH_ALLIANCE = BLUE_RIGHT_TRENCH_ALLIANCE.mirroredX("red left");
+            private static final Zone RED_RIGHT_TRENCH_ALLIANCE = BLUE_LEFT_TRENCH_ALLIANCE.mirroredX("red right");
+
+            public static final ZoneCollection TRENCH_ZONES_ALLIANCE = new ZoneCollection( // entering from alliance side
+                "trenches/alliance",
+                BLUE_LEFT_TRENCH_ALLIANCE, 
+                BLUE_RIGHT_TRENCH_ALLIANCE, 
+                RED_LEFT_TRENCH_ALLIANCE, 
+                RED_RIGHT_TRENCH_ALLIANCE
+            );
+
+            // ————— neutral ————— //
+
+            private static final Zone BLUE_LEFT_TRENCH_NEUTRAL = new Zone(
+                "blue left",
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.xMin).plus(Meters.of(1)),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.xMax),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.yMin),
+                Meters.of(BLUE_LEFT_TRENCH_DEFAULT.yMax)
+            );
+            private static final Zone BLUE_RIGHT_TRENCH_NEUTRAL = BLUE_LEFT_TRENCH_NEUTRAL.mirroredY("blue right");
+            private static final Zone RED_LEFT_TRENCH_NEUTRAL = BLUE_RIGHT_TRENCH_NEUTRAL.mirroredX("red left");
+            private static final Zone RED_RIGHT_TRENCH_NEUTRAL = BLUE_LEFT_TRENCH_NEUTRAL.mirroredX("red right");
+
+            public static final ZoneCollection TRENCH_ZONES_NEUTRAL = new ZoneCollection( // entering from neutral side
+                "trenches/neutral",
+                BLUE_LEFT_TRENCH_NEUTRAL, 
+                BLUE_RIGHT_TRENCH_NEUTRAL, 
+                RED_LEFT_TRENCH_NEUTRAL, 
+                RED_RIGHT_TRENCH_NEUTRAL
+            );
+
+            public static ZoneCollection TRENCH_ZONES = TRENCH_ZONES_DEFAULT;
 
             public static void logAllZones() {
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", RED_TOP_TRENCH_ENTERING.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", RED_TOP_TRENCH_ENTERING.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", RED_TOP_TRENCH_ENTERING.getCorners());
-                Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", RED_TOP_TRENCH_ENTERING.getCorners());
+                TRENCH_ZONES_DEFAULT.log();
+                TRENCH_ZONES_ALLIANCE.log();
+                TRENCH_ZONES_NEUTRAL.log();
             }
         }
     }

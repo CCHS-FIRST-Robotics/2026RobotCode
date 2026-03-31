@@ -27,6 +27,8 @@ public class DriveWithJoysticks extends Command {
 
     private final double EXPONENT = 2;
 
+    private boolean inTrench = false;
+
     public DriveWithJoysticks(
         Drive drive, 
         PoseEstimator poseEstimator,
@@ -65,6 +67,7 @@ public class DriveWithJoysticks extends Command {
             -angularVelocity * DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );
 
+        // ! ask finn about priorities
         // override with supplied theta
         if (thetaSupplier != null && thetaSupplier.get() != null) {
             speeds = new ChassisSpeeds(
@@ -75,38 +78,57 @@ public class DriveWithJoysticks extends Command {
                     thetaSupplier.get().getRadians()
                 )
             );
-        }
+        } // ! I bet this doesn't work in red alliance
 
-        // override with under trench angle
-        if (Constants.ENABLE_TRENCH_ALIGN && Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
-            double yOutput = 0;
-            
-            if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
-                yOutput = drive.getYPositionController().calculate(
-                    poseEstimator.getPose().getY(),
-                    FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
-                );
-            } else { // bottom
-                yOutput = drive.getYPositionController().calculate(
-                    poseEstimator.getPose().getY(),
-                    FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
-                );
+        // trench
+        if (Constants.TRENCH_ALIGN) {
+            // logic for which trench zones to use
+            if (Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) { // if we're in the default
+                if (!inTrench) {
+                    if (Zones.TRENCH_ZONES_ALLIANCE.contains(poseEstimator.getPose())) { // figure out what side we came in from
+                        Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_ALLIANCE;
+                        inTrench = true;
+                    } else if (Zones.TRENCH_ZONES_NEUTRAL.contains(poseEstimator.getPose())) {
+                        Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_NEUTRAL;
+                        inTrench = true;
+                    }
+                }
+            } else {
+                Zones.TRENCH_ZONES = Zones.TRENCH_ZONES_DEFAULT;
+                inTrench = false;
             }
 
-            // flip y output for red alliance because field-relative transform will flip it again
-            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
-                yOutput = -yOutput;
-            }
+            // override with under trench angle
+            if (Zones.TRENCH_ZONES.contains(poseEstimator.getPose())) {
+                double yOutput = 0;
+                
+                if (poseEstimator.getPose().getY() > FieldConstants.FIELD_WIDTH_Y.div(2).in(Meters)) { // top
+                    yOutput = drive.getYPositionController().calculate(
+                        poseEstimator.getPose().getY(),
+                        FieldConstants.FIELD_WIDTH_Y.minus(FieldConstants.TRENCH_WIDTH_Y.div(2)).in(Meters)
+                    );
+                } else { // bottom
+                    yOutput = drive.getYPositionController().calculate(
+                        poseEstimator.getPose().getY(),
+                        FieldConstants.TRENCH_WIDTH_Y.div(2).in(Meters)
+                    );
+                }
 
-            double robotYawRadians = poseEstimator.getPose().getRotation().getRadians();
-            speeds = new ChassisSpeeds(
-                speeds.vxMetersPerSecond,
-                yOutput,
-                drive.getThetaPositionController().calculate(
-                    robotYawRadians,
-                    Math.abs(robotYawRadians) < Math.PI / 2 ? 0 : Math.PI
-                )
-            );
+                // flip y output for red alliance because field-relative transform will flip it again
+                if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                    yOutput = -yOutput;
+                }
+
+                double robotYawRadians = poseEstimator.getPose().getRotation().getRadians();
+                speeds = new ChassisSpeeds(
+                    speeds.vxMetersPerSecond,
+                    yOutput,
+                    drive.getThetaPositionController().calculate(
+                        robotYawRadians,
+                        Math.abs(robotYawRadians) < Math.PI / 2 ? 0 : Math.PI
+                    )
+                );
+            }
         }
 
         // override with x lock

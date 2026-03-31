@@ -372,11 +372,10 @@ public class RobotContainer {
         Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT_AGITATION", Constants.ENABLE_PIVOT_AGITATION);
         Logger.recordOutput("outputs/fuelIO/shooter/ENABLE_SHOOT_ON_THE_MOVE", Constants.ENABLE_SHOOT_ON_THE_MOVE);
 
-        // ! any way to make this more consise (use an array)
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/blue top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red bottom", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/red top", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
@@ -410,15 +409,15 @@ public class RobotContainer {
         autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
-        autoChooser.addRoutine("BeMeanBottom", () -> autoGenerator.beMeanBottom());
-        autoChooser.addRoutine("BeMeanTop", () -> autoGenerator.beMeanTop());
+        autoChooser.addRoutine("BeMeanLeft", () -> autoGenerator.beMeanLeft());
+        autoChooser.addRoutine("BeMeanRight", () -> autoGenerator.beMeanRight());
 
         if (Constants.INSTANTIATE_INTAKE
             && Constants.INSTANTIATE_SHOOTER
         ) {
             autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
-            autoChooser.addRoutine("CenterFuelBottom", () -> autoGenerator.centerFuelBottom());
-            autoChooser.addRoutine("CenterFuelTop", () -> autoGenerator.centerFuelTop());
+            autoChooser.addRoutine("CenterFuelLeft ", () -> autoGenerator.centerFuelLeft());
+            autoChooser.addRoutine("CenterFuelRight", () -> autoGenerator.centerFuelRight());
             autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
             autoChooser.select("BackUpAndShoot"); // picks a default auto
