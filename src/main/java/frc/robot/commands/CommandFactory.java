@@ -87,7 +87,10 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), usePivot));
+        .alongWith(
+            Commands.waitUntil(() -> drive.atThetaSetpoint())
+            .andThen(getShootCommand(() -> ShootUtil.getShooterVelocity(), usePivot))
+        );
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -291,9 +294,13 @@ public class CommandFactory {
             new InstantCommand()
         )
         .alongWith(
-            Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
-            getSimShootCommand() :
-            new InstantCommand()
+            Commands.waitSeconds(0.1)
+            .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed()))
+            .andThen(
+                Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM ?
+                getSimShootCommand() :
+                new InstantCommand()
+            )
         )
         .finallyDo( // stop everything
             () -> {

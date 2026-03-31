@@ -370,6 +370,11 @@ public class Drive extends SubsystemBase {
     public PIDController getThetaPositionController() {
         return thetaPIDPosition;
     }
+
+    @AutoLogOutput(key = "outputs/drive/atThetaSetpoint")
+    public boolean atThetaSetpoint() {
+        return thetaPIDPosition.atSetpoint();
+    }
     
     // ————— utils ————— //
 
