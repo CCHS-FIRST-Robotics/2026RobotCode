@@ -127,11 +127,11 @@ public class AutoGenerator {
             .andThen(
                 trajectory0.cmd()
                 .alongWith(
-                    Commands.waitSeconds(1)
+                    Commands.waitSeconds(0.5) // time it takes for robot to not be under trench anymore // ! 
                     .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
                 )
             )
-            .andThen(Commands.waitSeconds(1.5))
+            .andThen(Commands.waitSeconds(0.5)) // wait while pivot is coming down // ! not tested
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))

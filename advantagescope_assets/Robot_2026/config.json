@@ -12,32 +12,21 @@
     ],
     "cameras": [
         {
-            "name": "BackLeft",
+            "name": "FrontLeft",
             "fov": "92",
             "resolution": [1920, 1400],
-            "position": [-0.2921, 0.3429, 0.127],
-            "rotations": [
-                {"axis": "x", "degrees": 0}, 
-                {"axis": "y", "degrees": -30}, 
-                {"axis": "z", "degrees": 195}
-            ]
-        },
-        {
-            "name": "BackRight",
-            "fov": "92",
-            "resolution": [1920, 1400],
-            "position": [-0.2921, -0.3429, 0.127],
+            "position": [-0.254, -0.27305, 0.2032],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": -30}, 
                 {"axis": "z", "degrees": 165}
             ]
-        }, 
+        },
         {
-            "name": "FrontLeft",
-            "fov": "68.5",
+            "name": "FrontRight",
+            "fov": "92",
             "resolution": [1920, 1400],
-            "position": [-0.2286, 0.2159, 0.5],
+            "position": [-0.27305, 0.254, 0.5334],
             "rotations": [
                 {"axis": "x", "degrees": 0}, 
                 {"axis": "y", "degrees": -15}, 

@@ -20,12 +20,14 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 public class ShootUtil {
     public static final InterpolatingDoubleTreeMap SHOOTER_VELOCITY_MAP = new InterpolatingDoubleTreeMap();
 
-    /**
-     */
-
     static {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
-            SHOOTER_VELOCITY_MAP.put(0.0, 0.0); // ! 
+            SHOOTER_VELOCITY_MAP.put(1.800, 42.49609375);
+            SHOOTER_VELOCITY_MAP.put(2.364, 43.23828125000001);
+            SHOOTER_VELOCITY_MAP.put(2.793, 48.45703125000001);
+            SHOOTER_VELOCITY_MAP.put(3.510, 50.57421874999999);
+            SHOOTER_VELOCITY_MAP.put(4.321, 54.548828125);
+            SHOOTER_VELOCITY_MAP.put(5.286, 58.357422);
         } else {
             SHOOTER_VELOCITY_MAP.put(1.908, 46.539058922493794);
             SHOOTER_VELOCITY_MAP.put(2.998, 57.8593705522896);

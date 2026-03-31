@@ -67,8 +67,7 @@ public class RobotContainer {
                     new GyroIOPigeon2(),
                         new CameraIOPhotonVision[] {
                             new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
-                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1),
-                            new CameraIOPhotonVision(VisionConstants.camera2Name, VisionConstants.robotToCamera2)
+                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
                         }, 
                         drive, 
                         Constants.ROBOT_START_POSE
@@ -119,16 +118,11 @@ public class RobotContainer {
                             new CameraIOPhotonVisionSim(
                                 VisionConstants.camera0Name, 
                                 VisionConstants.robotToCamera0, 
-                                driveSimulation::getSimulatedDriveTrainPose // this is why vision and combined estimators also have collision
+                                driveSimulation::getSimulatedDriveTrainPose
                             ),
                             new CameraIOPhotonVisionSim(
                                 VisionConstants.camera1Name, 
                                 VisionConstants.robotToCamera1, 
-                                driveSimulation::getSimulatedDriveTrainPose
-                            ),
-                            new CameraIOPhotonVisionSim(
-                                VisionConstants.camera2Name, 
-                                VisionConstants.robotToCamera2, 
                                 driveSimulation::getSimulatedDriveTrainPose
                             )
                         },
@@ -229,7 +223,7 @@ public class RobotContainer {
                     );
                 }
 
-                // drive slow // ! wasn't used
+                // drive slow
                 controller.rightStick().whileTrue( // remapped as gamesir R4
                     commandFactory.getSlowDriveCommand(
                         MetersPerSecond.of(1), 
@@ -239,7 +233,7 @@ public class RobotContainer {
                     )
                 );
 
-                // drive and intake
+                // drive and intake // ! not important
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
                     commandFactory.getDriveAndIntakeCommand()
                 );
@@ -261,8 +255,8 @@ public class RobotContainer {
 
                 controller.b().onTrue(new InstantCommand(
                     () -> {
-                        Constants.TRENCH_ALIGN = !Constants.TRENCH_ALIGN;
-                        SmartDashboard.putBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
+                        Constants.ENABLE_TRENCH_ALIGN = !Constants.ENABLE_TRENCH_ALIGN;
+                        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
                     }
                 ));
                 break;
@@ -335,13 +329,13 @@ public class RobotContainer {
                 // increment the shooter velocity
                 controller.leftTrigger().onTrue(
                     new InstantCommand(() -> {
-                        shooterVelocity -= 1.25;
+                        shooterVelocity -= 0.5;
                         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
                     })
                 );
                 controller.rightTrigger().onTrue(
-                    new InstantCommand(() -> {
-                        shooterVelocity += 1.25;
+                    new InstantCommand(() -> { 
+                        shooterVelocity += 0.5;
                         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
                     })
                 );
@@ -359,19 +353,24 @@ public class RobotContainer {
     // ————— robot ————— //
 
     public void configureRobot() {
-        SmartDashboard.putBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
-        SmartDashboard.putBoolean("smartDashboard/toggles/Use Pivot", Constants.USE_PIVOT);
-        SmartDashboard.putBoolean("smartDashboard/toggles/Shoot on the Move", Constants.SHOOT_ON_THE_MOVE);
+        Logger.recordOutput("outputs/CURRENT_BUTTON_BINDINGS", Constants.CURRENT_BUTTON_BINDINGS);
+
+        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
     }
 
     public void robotPeriodic() {
-        Constants.TRENCH_ALIGN = SmartDashboard.getBoolean("smartDashboard/toggles/Trench Align", Constants.TRENCH_ALIGN);
-        Constants.USE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Use Pivot", Constants.USE_PIVOT);
-        Constants.SHOOT_ON_THE_MOVE = SmartDashboard.getBoolean("smartDashboard/toggles/Shoot on the Move", Constants.SHOOT_ON_THE_MOVE);
+        Constants.ENABLE_TRENCH_ALIGN = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
+        Constants.ENABLE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
+        Constants.ENABLE_PIVOT_AGITATION = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
+        Constants.ENABLE_SHOOT_ON_THE_MOVE = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
 
-        Logger.recordOutput("outputs/drive/TRENCH_ALIGN", Constants.TRENCH_ALIGN);
-        Logger.recordOutput("outputs/fuelIO/intake/USE_PIVOT", Constants.USE_PIVOT);
-        Logger.recordOutput("outputs/fuelIO/shooter/SHOOT_ON_THE_MOVE", Constants.SHOOT_ON_THE_MOVE);
+        Logger.recordOutput("outputs/drive/ENABLE_TRENCH_ALIGN", Constants.ENABLE_TRENCH_ALIGN);
+        Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT", Constants.ENABLE_PIVOT);
+        Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT_AGITATION", Constants.ENABLE_PIVOT_AGITATION);
+        Logger.recordOutput("outputs/fuelIO/shooter/ENABLE_SHOOT_ON_THE_MOVE", Constants.ENABLE_SHOOT_ON_THE_MOVE);
 
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());

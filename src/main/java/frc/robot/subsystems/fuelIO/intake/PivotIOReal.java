@@ -24,15 +24,13 @@ public class PivotIOReal implements PivotIO {
         // start config
         motor.setCANTimeout(500);
 
-        // encoders
-        encoder = motor.getEncoder();
-        encoder.setPosition(Constants.PIVOT_START_ANGLE.in(Rotations));
+        
 
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
         
         // maxMotion
-        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.25).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
+        motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.4).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.maxAcceleration(RotationsPerSecondPerSecond.of(100).in(Rotations.per(Minute).per(Second)), ClosedLoopSlot.kSlot0);
         motorConfig.closedLoop.maxMotion.allowedProfileError(Rotations.of(0.05).in(Rotations), ClosedLoopSlot.kSlot0);
         
@@ -45,9 +43,11 @@ public class PivotIOReal implements PivotIO {
         motorConfig.voltageCompensation(12);
         
         motorConfig.inverted(true);
-        
         motorConfig.idleMode(IdleMode.kCoast);
 
+        // encoders
+        encoder = motor.getEncoder();
+        encoder.setPosition(Constants.PIVOT_START_ANGLE.in(Rotations));
         motorConfig.encoder
         .positionConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.PIVOT_GEAR_RATIO);
