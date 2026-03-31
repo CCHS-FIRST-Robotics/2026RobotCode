@@ -373,7 +373,10 @@ public class RobotContainer {
         Logger.recordOutput("outputs/fuelIO/intake/USE_PIVOT", Constants.USE_PIVOT);
         Logger.recordOutput("outputs/fuelIO/shooter/SHOOT_ON_THE_MOVE", Constants.SHOOT_ON_THE_MOVE);
 
-        Constants.FieldConstants.Zones.TRENCH_ZONES.log();
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
