@@ -21,10 +21,6 @@ public class IntakeIOReal implements IntakeIO {
         // start config
         motor.setCANTimeout(500);
 
-        // encoders
-        encoder = motor.getEncoder();
-        encoder.setPosition(0.0);
-
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
         motorConfig.encoder.quadratureMeasurementPeriod(10);
@@ -33,8 +29,12 @@ public class IntakeIOReal implements IntakeIO {
         motorConfig.smartCurrentLimit(30);
         motorConfig.voltageCompensation(12);
 
+        motorConfig.inverted(false); // ! 
         motorConfig.idleMode(IdleMode.kCoast);
 
+        // encoders
+        encoder = motor.getEncoder();
+        encoder.setPosition(0.0);
         motorConfig.encoder
         .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);

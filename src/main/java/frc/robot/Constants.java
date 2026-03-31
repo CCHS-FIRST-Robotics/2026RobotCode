@@ -35,7 +35,7 @@ public final class Constants {
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
     public static final boolean INSTANTIATE_SHOOTER = true;
-    public static final boolean INSTANTIATE_LEDS = true;
+    public static final boolean INSTANTIATE_LEDS = false;
 
     // real
 
@@ -47,9 +47,10 @@ public final class Constants {
 
     // ————— toggles ————— //
 
-    public static boolean TRENCH_ALIGN = true;
-    public static boolean USE_PIVOT = true;
-    public static boolean SHOOT_ON_THE_MOVE = true;
+    public static boolean ENABLE_TRENCH_ALIGN = false;
+    public static boolean ENABLE_PIVOT = true;
+    public static boolean ENABLE_PIVOT_AGITATION = true;
+    public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
 
     public static class FieldConstants {
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);

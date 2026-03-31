@@ -43,10 +43,10 @@ public class DriveConstants {
     private static final int[] ENCODER_IDS = {13, 23, 33, 43};
     private static final boolean[] ENCODER_INVERSIONS = {false, false, false, false};
     private static final Angle[] ENCODER_OFFSETS = {
-        Rotations.of(0.36865234375),
-        Rotations.of(-0.02783203125),
-        Rotations.of(0.287109375),
-        Rotations.of(0.273193359375)
+        Rotations.of(0.265625),
+        Rotations.of(0.28857421875),
+        Rotations.of(-0.383056640625),
+        Rotations.of(-0.275634765625)
     };
 
     // ————— gyro ————— //

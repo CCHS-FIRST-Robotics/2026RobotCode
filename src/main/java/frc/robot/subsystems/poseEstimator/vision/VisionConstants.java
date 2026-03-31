@@ -25,28 +25,21 @@ public class VisionConstants {
     public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String camera0Name = "BackLeft";
-    public static String camera1Name = "BackRight";
-    public static String camera2Name = "FrontLeft";
+    public static String camera0Name = "FrontLeft";
+    public static String camera1Name = "FrontRight";
 
     // Robot to camera transforms // ! make these arrays
     // (Not used by Limelight, configure in web UI instead)
-    public static Transform3d robotToCamera0 = new Transform3d(
-        Inches.of(-10), 
-        Inches.of(10.75), 
-        Inches.of(8), 
-        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(195))
-    );
-    public static Transform3d robotToCamera1 = new Transform3d(
+    public static Transform3d robotToCamera0 = new Transform3d( // current back left of the robot // ! not used
         Inches.of(-10), 
         Inches.of(-10.75), 
-        Inches.of(8),
+        Inches.of(8), 
         new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(165))
     );
-    public static Transform3d robotToCamera2 = new Transform3d(
-        Inches.of(-9), 
-        Inches.of(8.5), 
-        Inches.of(15.5),
+    public static Transform3d robotToCamera1 = new Transform3d( // 
+        Inches.of(-10.75), 
+        Inches.of(10), 
+        Inches.of(21),
         new Rotation3d(Degrees.of(0), Degrees.of(-15), Degrees.of(0))
     );
 

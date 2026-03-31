@@ -23,27 +23,25 @@ public class KickerIOReal implements KickerIO {
         // start config
         motor.setCANTimeout(500);
 
-        // encoders
-        encoder = motor.getEncoder();
-        encoder.setPosition(0.0);
-
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.KICKER_PID);
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.KICKER_FF);
-        
+
         // miscellaneous settings
         motorConfig.signals.primaryEncoderVelocityPeriodMs(10);
         motorConfig.encoder.quadratureMeasurementPeriod(10);
         motorConfig.encoder.quadratureAverageDepth(2);
-        
+
         motorConfig.smartCurrentLimit(40);
         motorConfig.secondaryCurrentLimit(40); // ! we don't know if this actually fixes the problem
         motorConfig.voltageCompensation(12);
-        
+
         motorConfig.inverted(true);
-        
         motorConfig.idleMode(IdleMode.kCoast);
 
+        // encoders
+        encoder = motor.getEncoder();
+        encoder.setPosition(0.0);
         motorConfig.encoder
         .positionConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO);

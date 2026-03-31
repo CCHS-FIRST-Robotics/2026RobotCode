@@ -34,8 +34,10 @@ public class Intake extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
         Logger.processInputs("subsystems/fuelIO/intake/pivot", pivotIOInputs);
 
-        if (Constants.USE_PIVOT) {
+        if (Constants.ENABLE_PIVOT) {
             pivotIO.setPosition(pivotAngle); // NEO and sim PIDs must be called externally
+        } else {
+            pivotIO.setVoltage(Volts.of(0));
         }
     }
 
@@ -77,6 +79,7 @@ public class Intake extends SubsystemBase {
         return Math.abs(intakeIOInputs.voltage) > 0;
     }
 
+    @AutoLogOutput(key = "outputs/fuelIO/intake/pivotDown")
     public boolean pivotDown() {
         return pivotIOInputs.position < FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations) + 0.01;
     }
