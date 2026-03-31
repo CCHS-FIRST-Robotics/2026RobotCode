@@ -223,7 +223,7 @@ public class RobotContainer {
                     );
                 }
 
-                // drive slow // ! wasn't used
+                // drive slow
                 controller.rightStick().whileTrue( // remapped as gamesir R4
                     commandFactory.getSlowDriveCommand(
                         MetersPerSecond.of(1), 
@@ -256,7 +256,7 @@ public class RobotContainer {
                 controller.b().onTrue(new InstantCommand(
                     () -> {
                         Constants.ENABLE_TRENCH_ALIGN = !Constants.ENABLE_TRENCH_ALIGN;
-                        SmartDashboard.putBoolean("smartDashboard/toggles/Trench Align", Constants.ENABLE_TRENCH_ALIGN);
+                        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
                     }
                 ));
                 break;
@@ -353,6 +353,8 @@ public class RobotContainer {
     // ————— robot ————— //
 
     public void configureRobot() {
+        Logger.recordOutput("outputs/CURRENT_BUTTON_BINDINGS", Constants.CURRENT_BUTTON_BINDINGS);
+
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
