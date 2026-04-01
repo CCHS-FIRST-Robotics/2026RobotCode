@@ -111,9 +111,9 @@ public class CommandFactory {
 
         return getSetPivotDownCommand()
         .andThen(Commands.waitUntil(() -> intake.pivotDown()))
-        .andThen(intake.getSetIntakeVoltageCommand(intakeVolts))
+        .andThen(intake.getSetIntakeVoltageCommand(intakeVolts, false))
         .andThen(Commands.waitSeconds(1))
-        .andThen(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+        .andThen(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
         .andThen(getSetPivotUpCommand())
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(60)))
@@ -250,8 +250,8 @@ public class CommandFactory {
         }
         
         return Commands.startEnd(
-            () -> intake.setIntakeVoltage(intakeVolts),
-            () -> intake.setIntakeVoltage(Volts.of(0))
+            () -> intake.setIntakeVoltage(intakeVolts, false),
+            () -> intake.setIntakeVoltage(Volts.of(0), false)
         );
     }
 
@@ -318,6 +318,7 @@ public class CommandFactory {
             ) : 
             new InstantCommand()
         )
+        .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(1), true)) // run intake to unstick balls
         .alongWith(
             Commands.waitSeconds(0.1)
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed()))
@@ -329,6 +330,7 @@ public class CommandFactory {
         )
         .finallyDo( // stop everything
             () -> {
+                intake.setIntakeVoltage(Volts.of(0), true);
                 if (usePivot) {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                     pivotUp = false;

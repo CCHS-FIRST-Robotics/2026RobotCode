@@ -45,14 +45,14 @@ public class Intake extends SubsystemBase {
 
     // intake
 
-    public void setIntakeVoltage(Voltage volts) {
-        if (pivotDown()) {
+    public void setIntakeVoltage(Voltage volts, boolean pivotDownOverride) {
+        if (pivotDown() || pivotDownOverride) {
             intakeIO.setVoltage(volts);
         }
     }
 
-    public Command getSetIntakeVoltageCommand(Voltage volts) {
-        return runOnce(() -> setIntakeVoltage(volts));
+    public Command getSetIntakeVoltageCommand(Voltage volts, boolean pivotDownOverride) {
+        return runOnce(() -> setIntakeVoltage(volts, pivotDownOverride));
     }
 
     // pivot
@@ -91,7 +91,7 @@ public class Intake extends SubsystemBase {
 
     @AutoLogOutput(key = "outputs/fuelIO/intake/pivotDown")
     public boolean pivotDown() {
-        return pivotIOInputs.position < FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations) + 0.01;
+        return pivotIOInputs.position < FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations) + 0.05;
     }
 
     public void addHopperFuel() {
