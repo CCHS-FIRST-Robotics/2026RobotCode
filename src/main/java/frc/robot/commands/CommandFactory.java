@@ -142,6 +142,7 @@ public class CommandFactory {
             () -> controller.getLeftXWithDeadband(), 
             () -> controller.getRightXWithDeadband(),
             null, 
+            true,
             false
         );
     }
@@ -177,6 +178,7 @@ public class CommandFactory {
                     ) // flip for alliance color
                 );
             }, 
+            true,
             false
         );
     }
@@ -197,6 +199,7 @@ public class CommandFactory {
                 () -> controller.getLeftXWithDeadband(), 
                 () -> controller.getRightXWithDeadband(),
                 () -> ShootUtil.getRobotRotation(),
+                false,
                 true
             ), 
             new DriveWithJoysticks(
@@ -206,6 +209,7 @@ public class CommandFactory {
                 () -> 0, 
                 () -> 0,
                 () -> ShootUtil.getRobotRotation(),
+                false,
                 true
             ), 
             () -> Constants.ENABLE_SHOOT_ON_THE_MOVE
@@ -396,7 +400,7 @@ public class CommandFactory {
                     drive.getFieldRelativeSpeeds(), 3
                 )
             ), 
-            Commands.runOnce(
+            Commands.run(
                 () -> ShootUtil.update(
                     poseEstimator.getPose(), 
                     ShootUtil.getTargetPose(poseEstimator.getPose())

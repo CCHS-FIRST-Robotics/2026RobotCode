@@ -10,7 +10,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
-import frc.robot.subsystems.fuelIO.FuelConstants;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.Constants;
 
@@ -152,7 +151,7 @@ public class AutoGenerator {
         // load trajectories
         AutoTrajectory trajectory0 = routine.trajectory("CenterFuelRight", 0); // bring pivot down
         AutoTrajectory trajectory1 = routine.trajectory("CenterFuelRight", 1); // begin intake
-        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelRight", 2); // stop intake
+        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelRight", 2); // stop intake, spin up shooter
         // shoot
 
         // when routine begins, reset odometry, start trajectory
@@ -165,7 +164,6 @@ public class AutoGenerator {
                     .andThen(commandFactory.getSetPivotDownCommand())
                 )
             )
-            .andThen(Commands.waitSeconds(0.5))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
@@ -173,6 +171,7 @@ public class AutoGenerator {
             .andThen(
                 trajectory2.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+                .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true))
         );

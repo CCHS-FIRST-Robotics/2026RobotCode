@@ -23,6 +23,7 @@ public class DriveWithJoysticks extends Command {
     private final DoubleSupplier thetaVelocitySupplier;
 
     private final Supplier<Rotation2d> thetaSupplier;
+    private final boolean useTrenchAlign;
     private final boolean xLockWhileStationary;
 
     private final double EXPONENT = 2;
@@ -36,6 +37,7 @@ public class DriveWithJoysticks extends Command {
         DoubleSupplier yVelocitySupplier, 
         DoubleSupplier thetaVelocitySupplier,
         Supplier<Rotation2d> thetaSupplier, 
+        boolean useTrenchAlign,
         boolean xLockWhileStationary
     ) {
         addRequirements(drive);
@@ -48,6 +50,7 @@ public class DriveWithJoysticks extends Command {
         this.thetaVelocitySupplier = thetaVelocitySupplier;
 
         this.thetaSupplier = thetaSupplier;
+        this.useTrenchAlign = useTrenchAlign;
         this.xLockWhileStationary = xLockWhileStationary;
     }
 
@@ -67,8 +70,20 @@ public class DriveWithJoysticks extends Command {
             -angularVelocity * DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
         );        
 
+        // override with supplied theta
+        if (thetaSupplier != null && thetaSupplier.get() != null) {
+            speeds = new ChassisSpeeds(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                drive.getThetaPositionController().calculate(
+                    poseEstimator.getPose().getRotation().getRadians(),
+                    thetaSupplier.get().getRadians()
+                )
+            );
+        }
+
         // trench
-        if (Constants.ENABLE_TRENCH_ALIGN) {
+        if (Constants.ENABLE_TRENCH_ALIGN && useTrenchAlign) {
             // logic for which trench zones to use
             if (Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) { // if we're in the default
                 if (!inTrench) {
@@ -116,18 +131,6 @@ public class DriveWithJoysticks extends Command {
                     )
                 );
             }
-        }
-
-        // override with supplied theta
-        if (thetaSupplier != null && thetaSupplier.get() != null) {
-            speeds = new ChassisSpeeds(
-                speeds.vxMetersPerSecond,
-                speeds.vyMetersPerSecond,
-                drive.getThetaPositionController().calculate(
-                    poseEstimator.getPose().getRotation().getRadians(),
-                    thetaSupplier.get().getRadians()
-                )
-            );
         }
 
         // override with x lock
