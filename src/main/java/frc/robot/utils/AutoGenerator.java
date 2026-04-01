@@ -133,11 +133,11 @@ public class AutoGenerator {
             .andThen(Commands.waitSeconds(0.5)) // wait while pivot is coming down
             .andThen(
                 trajectory1.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
             )
             .andThen(
                 trajectory2.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true))
         );
@@ -166,11 +166,11 @@ public class AutoGenerator {
             )
             .andThen(
                 trajectory1.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
             )
             .andThen(
                 trajectory2.cmd()
-                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0)))
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
                 .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true))

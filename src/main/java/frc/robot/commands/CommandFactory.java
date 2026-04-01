@@ -304,21 +304,23 @@ public class CommandFactory {
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
         )
         .alongWith( // move pivot back and forth
-            usePivot ? 
-            Commands.either(
-                (
-                    Commands.waitSeconds(0.25)
-                    .andThen(getSetPivotUpCommand())
-                    .andThen(Commands.waitSeconds(0.5))
-                    .andThen(getSetPivotDownCommand())
-                ).repeatedly(), 
-                Commands.waitSeconds(0.5)
-                .andThen(getSetPivotUpCommand()), 
-                () -> Constants.ENABLE_PIVOT_AGITATION
-            ) : 
-            new InstantCommand()
+            intake.getSetIntakeVoltageCommand(Volts.of(1), true) // run intake to unstick balls
+            .andThen(
+                usePivot ? 
+                Commands.either(
+                    (
+                        Commands.waitSeconds(0.25)
+                        .andThen(getSetPivotUpCommand())
+                        .andThen(Commands.waitSeconds(0.5))
+                        .andThen(getSetPivotDownCommand())
+                    ).repeatedly(), 
+                    Commands.waitSeconds(0.5)
+                    .andThen(getSetPivotUpCommand()), 
+                    () -> Constants.ENABLE_PIVOT_AGITATION
+                ) : 
+                new InstantCommand()
+            )
         )
-        .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(1), true)) // run intake to unstick balls
         .alongWith(
             Commands.waitSeconds(0.1)
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed()))

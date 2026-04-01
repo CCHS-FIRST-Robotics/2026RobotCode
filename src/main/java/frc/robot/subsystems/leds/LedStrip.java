@@ -6,9 +6,7 @@ import edu.wpi.first.wpilibj.*;
 public class LedStrip extends SubsystemBase {
     private final AddressableLED led;
     private final AddressableLEDBuffer ledBuffer;
-
-    private int rainbowHue = 0;
-
+    
     public LedStrip() {
         led = new AddressableLED(LedStripConstants.PWM_PORT);
         ledBuffer = new AddressableLEDBuffer(LedStripConstants.BULB_COUNT);
@@ -20,11 +18,18 @@ public class LedStrip extends SubsystemBase {
     
     @Override
     public void periodic() {
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setHSV(i, rainbowHue, 255, 255);
-        }
+        // for (var i = 0; i < ledBuffer.getLength(); i++) {
+        //     ledBuffer.setHSV(i, rainbowHue, 255, 255);
+        // }
         
-        rainbowHue = (rainbowHue + 1) % 180;
+        // rainbowHue = (rainbowHue + 1) % 180;
+        // led.setData(ledBuffer);
+    }
+
+    public void setLedStripHue(int hue) {
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+            ledBuffer.setHSV(i, hue, 255, 255);
+        }
         led.setData(ledBuffer);
     }
 }
