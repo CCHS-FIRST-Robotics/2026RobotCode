@@ -48,6 +48,8 @@ public class ShootUtil {
     private static AngularVelocity shooterVelocity = RotationsPerSecond.of(0);
     private static Rotation2d robotRotation = new Rotation2d();
 
+    private static Distance targetDistance = Meters.of(0);
+
     // ————— public functions ————— //
 
     public static Pose2d getTargetPose(Pose2d robotPose) {
@@ -75,7 +77,7 @@ public class ShootUtil {
     }
     
     public static void update(Pose2d robotPose, Pose2d targetPose) {
-        Distance targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
+        targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
         shooterVelocity = RotationsPerSecond.of(SHOOTER_VELOCITY_MAP.get(targetDistance.in(Meters)));
         robotRotation = calculateRobotRotationToTarget(robotPose, targetPose);
 
@@ -84,7 +86,7 @@ public class ShootUtil {
     }
 
     public static void updateIterative(Pose2d robotPose, Pose2d targetPose, ChassisSpeeds robotFieldRelativeSpeeds, int iterations) {
-        Distance targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
+        targetDistance = calculateRobotToTargetDistance(robotPose, targetPose);
         shooterVelocity = RotationsPerSecond.of(SHOOTER_VELOCITY_MAP.get(targetDistance.in(Meters)));
         Time timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shooterVelocity), FuelConstants.HOOD_ANGLE, targetDistance);
 
@@ -112,6 +114,10 @@ public class ShootUtil {
 
     public static Rotation2d getRobotRotation() {
         return robotRotation;
+    }
+
+    public static Distance getTargetDistance() {
+        return targetDistance;
     }
 
     public static void offsetShooterMap(double offset) {

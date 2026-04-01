@@ -12,6 +12,7 @@ import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 import frc.robot.subsystems.fuelIO.shooter.*;
+import frc.robot.subsystems.leds.*;
 import frc.robot.utils.*;
 import frc.robot.Constants;
 
@@ -24,6 +25,8 @@ public class CommandFactory {
 
     private final Intake intake;
     private final Shooter shooter;
+
+    private final LedStrip ledStrip;
 
     private final FuelSim fuelSimulation;
 
@@ -38,6 +41,7 @@ public class CommandFactory {
         PoseEstimator poseEstimator,
         Intake intake,
         Shooter shooter,
+        LedStrip ledStrip,
         FuelSim fuelSimulation
     ) {
         this.controller = controller;
@@ -47,6 +51,8 @@ public class CommandFactory {
         
         this.intake = intake;
         this.shooter = shooter;
+
+        this.ledStrip = ledStrip;
 
         this.fuelSimulation = fuelSimulation;
     }
@@ -384,6 +390,24 @@ public class CommandFactory {
             )
         ) // time between shots
         .repeatedly();
+    }
+
+    // ————— ledStrip ————— //
+
+    public Command getShootingLedStripCommand() {
+        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
+            || !Constants.INSTANTIATE_INTAKE
+            || !Constants.INSTANTIATE_SHOOTER
+            || !Constants.INSTANTIATE_LEDS
+        ) {
+            return new InstantCommand();
+        }
+
+        return Commands.either(
+            ledStrip.getSetLedStripHueCommand(new Integer[120]), 
+            ledStrip.getSetLedStripHueCommand(new Integer[0]), 
+            () -> ShootUtil.getTargetDistance().gt(Meters.of(2)) && ShootUtil.getTargetDistance().lt(Meters.of(4.5))
+        );
     }
 
     // ————— util ————— //

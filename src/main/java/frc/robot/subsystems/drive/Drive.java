@@ -73,9 +73,9 @@ public class Drive extends SubsystemBase {
 
     // ————— position ————— //
 
-    private final PIDController xPIDPosition = new PIDController(5, 0, 0);
-    private final PIDController yPIDPosition = new PIDController(5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(9, 0, 0);
+    private final PIDController xPIDPosition = new PIDController(2.5, 0, 0);
+    private final PIDController yPIDPosition = new PIDController(2.5, 0, 0);
+    private final PIDController thetaPIDPosition = new PIDController(7.5, 0, 0);
 
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);

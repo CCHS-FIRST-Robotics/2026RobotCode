@@ -199,6 +199,7 @@ public class RobotContainer {
             poseEstimator, 
             intake, 
             shooter,
+            ledStrip,
             fuelSimulation
         );
 
@@ -237,17 +238,25 @@ public class RobotContainer {
 
                 // intake
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-                    commandFactory.getIntakeCommand()
+                    commandFactory.getSlowDriveCommand(
+                        MetersPerSecond.of(1), 
+                        DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
+                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
+                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+                    )
+                    .alongWith(commandFactory.getIntakeCommand())
+                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60})) // leds are green
                 );
 
                 // drive and intake and shoot
                 controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
                     commandFactory.getDriveAndIntakeAndShootCommand()
+                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60, 120})) // leds are green and blue
                 );
 
                 // drive and shoot
                 controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
-                    commandFactory.getDriveAndShootCommand(true)
+                    commandFactory.getDriveAndShootCommand(true) // leds are blue or red
                 );
 
                 // pivot
