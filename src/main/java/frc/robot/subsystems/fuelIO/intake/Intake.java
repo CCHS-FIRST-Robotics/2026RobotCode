@@ -73,6 +73,16 @@ public class Intake extends SubsystemBase {
         return runOnce(() -> setPivotPosition(angle));
     }
 
+    public void setPivotEncoderPositionUp() {
+        pivotIO.setEncoderPositionUp();
+        pivotAngle = FuelConstants.PIVOT_MAX_UP_ANGLE;
+    }
+
+    public void setPivotEncoderPositionDown() {
+        pivotIO.setEncoderPositionDown();
+        pivotAngle = FuelConstants.PIVOT_MAX_DOWN_ANGLE;
+    }
+
     // util
 
     public boolean getIntakeOn() {

@@ -60,4 +60,14 @@ public class PivotIOSim implements PivotIO {
 
         positionSetpoint = angle;
     }
+
+    @Override
+    public void setEncoderPositionUp() {
+        motor.setState(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Radians) * FuelConstants.PIVOT_GEAR_RATIO, 0);
+    }
+
+    @Override
+    public void setEncoderPositionDown() {
+        motor.setState(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Radians) * FuelConstants.PIVOT_GEAR_RATIO, 0);
+    }
 }

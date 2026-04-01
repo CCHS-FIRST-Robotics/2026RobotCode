@@ -252,6 +252,8 @@ public class RobotContainer {
 
                 // pivot
                 controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
+                controller.y().onTrue(new InstantCommand(() -> intake.setPivotEncoderPositionUp()));
+                controller.a().onTrue(new InstantCommand(() -> intake.setPivotEncoderPositionDown()));
 
                 // unstick
                 controller.pov(180).whileTrue(

@@ -88,4 +88,14 @@ public class PivotIOReal implements PivotIO {
         
         positionSetpoint = angle;
     }
+
+    @Override
+    public void setEncoderPositionUp() {
+        encoder.setPosition(FuelConstants.PIVOT_MAX_UP_ANGLE.in(Rotations));
+    }
+
+    @Override
+    public void setEncoderPositionDown() {
+        encoder.setPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE.in(Rotations));
+    }
 }
