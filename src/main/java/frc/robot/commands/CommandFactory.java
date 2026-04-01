@@ -87,10 +87,7 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(
-            Commands.waitUntil(() -> drive.atThetaSetpoint())
-            .andThen(getShootCommand(() -> ShootUtil.getShooterVelocity(), usePivot))
-        );
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), usePivot));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -112,15 +109,21 @@ public class CommandFactory {
             return new InstantCommand();
         }
 
-        return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+        return getSetPivotDownCommand()
         .andThen(Commands.waitUntil(() -> intake.pivotDown()))
         .andThen(intake.getSetIntakeVoltageCommand(intakeVolts))
         .andThen(Commands.waitSeconds(1))
         .andThen(intake.getSetIntakeVoltageCommand(Volts.of(0)))
-        .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE))
+        .andThen(getSetPivotUpCommand())
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(30)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(60)))
         .andThen(Commands.waitSeconds(2))
+        .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)))
+        .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)))
+        .andThen(Commands.waitSeconds(2))
+        .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(-5)))
+        .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(5)))
+        .andThen(Commands.waitSeconds(120))
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)));
     }
@@ -248,17 +251,34 @@ public class CommandFactory {
         );
     }
 
+    public Command getSetPivotUpCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+
+        return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
+        .andThen(Commands.runOnce(() -> {pivotUp = true;}));
+    }
+
+    public Command getSetPivotDownCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+
+        return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+        .andThen(Commands.runOnce(() -> {pivotUp = false;}));
+    }
+
     public Command getTogglePivotCommand() {
         if (!Constants.INSTANTIATE_INTAKE) {
             return new InstantCommand();
         }
 
         return Commands.either(
-            intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE),
-            intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE),
+            getSetPivotDownCommand(),
+            getSetPivotUpCommand(),
             () -> pivotUp
-        )
-        .andThen(Commands.runOnce(() -> {pivotUp = !pivotUp;}));
+        );
     }
 
     // ————— shoot ————— // 
@@ -273,6 +293,7 @@ public class CommandFactory {
         return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(0.1)
+            .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint())) // waits for drive rotation to be correct
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
             .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the balls that are already lodged in there
             .andThen(Commands.waitSeconds(0.25))
@@ -283,12 +304,12 @@ public class CommandFactory {
             Commands.either(
                 (
                     Commands.waitSeconds(0.25)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE))
+                    .andThen(getSetPivotUpCommand())
                     .andThen(Commands.waitSeconds(0.5))
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                    .andThen(getSetPivotDownCommand())
                 ).repeatedly(), 
-                Commands.waitSeconds(0.25)
-                .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)), 
+                Commands.waitSeconds(0.5)
+                .andThen(getSetPivotUpCommand()), 
                 () -> Constants.ENABLE_PIVOT_AGITATION
             ) : 
             new InstantCommand()
@@ -306,6 +327,7 @@ public class CommandFactory {
             () -> {
                 if (usePivot) {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
+                    pivotUp = false;
                 }
                 if (Constants.CURRENT_BUTTON_BINDINGS != Constants.BUTTON_BINDINGS.TESTING_SHOOTER_MAP) {
                     shooter.setShooterVelocity(RotationsPerSecond.of(0));

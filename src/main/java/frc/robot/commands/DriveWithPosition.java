@@ -54,7 +54,7 @@ public class DriveWithPosition extends Command {
     }
 
     @Override
-    public boolean isFinished() {
+    public boolean isFinished() { // ! this doesn't even line up with the tolerances of the pids
         return Math.abs(poseEstimator.getPose().getX() - targetPose.getX()) < 0.01
             && Math.abs(poseEstimator.getPose().getY() - targetPose.getY()) < 0.01
             && Math.abs(

@@ -65,23 +65,10 @@ public class DriveWithJoysticks extends Command {
             linearVelocity.getX() * DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
             -linearVelocity.getY() * DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * DriveConstants.ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond) // chassisspeeds is flipped
-        );
-
-        // ! ask finn about priorities
-        // override with supplied theta
-        if (thetaSupplier != null && thetaSupplier.get() != null) {
-            speeds = new ChassisSpeeds(
-                speeds.vxMetersPerSecond,
-                speeds.vyMetersPerSecond,
-                drive.getThetaPositionController().calculate(
-                    poseEstimator.getPose().getRotation().getRadians(),
-                    thetaSupplier.get().getRadians()
-                )
-            );
-        } // ! I bet this doesn't work in red alliance
+        );        
 
         // trench
-        if (Constants.TRENCH_ALIGN) {
+        if (Constants.ENABLE_TRENCH_ALIGN) {
             // logic for which trench zones to use
             if (Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) { // if we're in the default
                 if (!inTrench) {
@@ -129,6 +116,18 @@ public class DriveWithJoysticks extends Command {
                     )
                 );
             }
+        }
+
+        // override with supplied theta
+        if (thetaSupplier != null && thetaSupplier.get() != null) {
+            speeds = new ChassisSpeeds(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                drive.getThetaPositionController().calculate(
+                    poseEstimator.getPose().getRotation().getRadians(),
+                    thetaSupplier.get().getRadians()
+                )
+            );
         }
 
         // override with x lock

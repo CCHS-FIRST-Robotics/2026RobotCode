@@ -40,7 +40,7 @@ public class VisionConstants {
         Inches.of(-10.75), 
         Inches.of(10), 
         Inches.of(21),
-        new Rotation3d(Degrees.of(0), Degrees.of(-15), Degrees.of(0))
+        new Rotation3d(Degrees.of(0), Degrees.of(-20), Degrees.of(0))
     );
 
     // Basic filtering thresholds

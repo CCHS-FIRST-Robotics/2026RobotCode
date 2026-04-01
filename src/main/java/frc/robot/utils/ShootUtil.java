@@ -20,14 +20,24 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 public class ShootUtil {
     public static final InterpolatingDoubleTreeMap SHOOTER_VELOCITY_MAP = new InterpolatingDoubleTreeMap();
 
+    /**
+     * old guessy values
+     * SHOOTER_VELOCITY_MAP.put(1.800, 42.49609375);
+     * SHOOTER_VELOCITY_MAP.put(2.364, 43.23828125000001);
+     * SHOOTER_VELOCITY_MAP.put(2.793, 48.45703125000001);
+     * SHOOTER_VELOCITY_MAP.put(3.510, 50.57421874999999);
+     * SHOOTER_VELOCITY_MAP.put(4.321, 54.548828125);
+     * SHOOTER_VELOCITY_MAP.put(5.286, 58.357422);
+     */
+
     static {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
-            SHOOTER_VELOCITY_MAP.put(1.800, 42.49609375);
-            SHOOTER_VELOCITY_MAP.put(2.364, 43.23828125000001);
-            SHOOTER_VELOCITY_MAP.put(2.793, 48.45703125000001);
-            SHOOTER_VELOCITY_MAP.put(3.510, 50.57421874999999);
-            SHOOTER_VELOCITY_MAP.put(4.321, 54.548828125);
-            SHOOTER_VELOCITY_MAP.put(5.286, 58.357422);
+            SHOOTER_VELOCITY_MAP.put(1.797, 42.14648437500001);
+            SHOOTER_VELOCITY_MAP.put(2.380, 43.572265625);
+            SHOOTER_VELOCITY_MAP.put(2.960, 46.43750000000001);
+            SHOOTER_VELOCITY_MAP.put(3.546, 49.66210937500001);
+            SHOOTER_VELOCITY_MAP.put(4.020, 53.64257812500001);
+            SHOOTER_VELOCITY_MAP.put(4.884, 59.12499999999999);
         } else {
             SHOOTER_VELOCITY_MAP.put(1.908, 46.539058922493794);
             SHOOTER_VELOCITY_MAP.put(2.998, 57.8593705522896);
@@ -102,6 +112,19 @@ public class ShootUtil {
 
     public static Rotation2d getRobotRotation() {
         return robotRotation;
+    }
+
+    public static void offsetShooterMap(double offset) {
+        SHOOTER_VELOCITY_MAP.clear();
+
+        SHOOTER_VELOCITY_MAP.put(1.797, 43.14648437500001 + offset);
+        SHOOTER_VELOCITY_MAP.put(2.380, 44.572265625 + offset);
+        SHOOTER_VELOCITY_MAP.put(2.960, 47.43750000000001 + offset);
+        SHOOTER_VELOCITY_MAP.put(3.546, 51.66210937500001 + offset);
+        SHOOTER_VELOCITY_MAP.put(4.020, 55.64257812500001 + offset);
+        SHOOTER_VELOCITY_MAP.put(4.884, 61.12499999999999 + offset);
+
+        Logger.recordOutput("SHOOTERMAP", SHOOTER_VELOCITY_MAP.get(1.797));
     }
 
     // ————— calculators for shooter state ————— //

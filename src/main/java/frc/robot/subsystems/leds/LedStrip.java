@@ -21,7 +21,7 @@ public class LedStrip extends SubsystemBase {
     @Override
     public void periodic() {
         for (var i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setHSV(i, rainbowHue, 255, 192);
+            ledBuffer.setHSV(i, rainbowHue, 255, 255);
         }
         
         rainbowHue = (rainbowHue + 1) % 180;

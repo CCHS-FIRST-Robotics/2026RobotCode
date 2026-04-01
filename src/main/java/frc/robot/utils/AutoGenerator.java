@@ -77,7 +77,7 @@ public class AutoGenerator {
     // ————— competition routines ————— //
 
     public Command backUpAndShoot() {
-        return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
+        return commandFactory.getSetPivotDownCommand()
         .alongWith(new DriveWithPosition(drive, poseEstimator, new Transform2d(-1.5, 0, new Rotation2d())))
         .andThen(commandFactory.getDriveAndShootCommand(true));
     }
@@ -128,7 +128,7 @@ public class AutoGenerator {
                 trajectory0.cmd()
                 .alongWith(
                     Commands.waitSeconds(0.5) // time it takes for robot to not be under trench anymore // ! 
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                    .andThen(commandFactory.getSetPivotDownCommand())
                 )
             )
             .andThen(Commands.waitSeconds(0.5)) // wait while pivot is coming down // ! not tested
@@ -161,11 +161,11 @@ public class AutoGenerator {
             .andThen(
                 trajectory0.cmd()
                 .alongWith(
-                    Commands.waitSeconds(1)
-                    .andThen(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                    Commands.waitSeconds(0.5)
+                    .andThen(commandFactory.getSetPivotDownCommand())
                 )
             )
-            .andThen(Commands.waitSeconds(1.5))
+            .andThen(Commands.waitSeconds(0.5))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10)))
@@ -193,7 +193,7 @@ public class AutoGenerator {
             trajectory0.resetOdometry()
             .andThen(
                 trajectory0.cmd()
-                .alongWith(intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE))
+                .alongWith(commandFactory.getSetPivotDownCommand())
             )
             .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))

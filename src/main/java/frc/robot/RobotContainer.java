@@ -51,6 +51,8 @@ public class RobotContainer {
     private double shooterVelocity = 0;
     @AutoLogOutput(key = "outputs/fuelIO/shooter/kickerVelocity")
     private double kickerVelocity = 0;
+    @AutoLogOutput(key = "outputs/fuelIO/shooter/shooterMapOffset")
+    private double shooterMapOffset = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -233,9 +235,9 @@ public class RobotContainer {
                     )
                 );
 
-                // drive and intake // ! not important
+                // intake
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-                    commandFactory.getDriveAndIntakeCommand()
+                    commandFactory.getIntakeCommand()
                 );
 
                 // drive and intake and shoot
@@ -248,12 +250,24 @@ public class RobotContainer {
                     commandFactory.getDriveAndShootCommand(true)
                 );
 
-                controller.rightBumper().whileTrue(commandFactory.getIntakeCommand());
-
                 // pivot
                 controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
 
-                controller.b().onTrue(new InstantCommand(
+                // unstick
+                controller.pov(180).whileTrue(
+                    new StartEndCommand(
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
+                            shooter.setKickerVelocity(RotationsPerSecond.of(-10));
+                        },
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    )
+                );
+
+                controller.b().onTrue(new InstantCommand( // ! see if this can be another obscure button
                     () -> {
                         Constants.ENABLE_TRENCH_ALIGN = !Constants.ENABLE_TRENCH_ALIGN;
                         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
@@ -339,6 +353,19 @@ public class RobotContainer {
                         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
                     })
                 );
+
+                SmartDashboard.putData("smartDashboard/buttons/Increment Shooter Map", new InstantCommand(
+                    () -> {
+                        shooterMapOffset ++;
+                        ShootUtil.offsetShooterMap(shooterMapOffset);
+                    }
+                ));
+                SmartDashboard.putData("smartDashboard/buttons/Decrement Shooter Map", new InstantCommand(
+                    () -> {
+                        shooterMapOffset --;
+                        ShootUtil.offsetShooterMap(shooterMapOffset);
+                    }
+                ));
                 break;
         }
 

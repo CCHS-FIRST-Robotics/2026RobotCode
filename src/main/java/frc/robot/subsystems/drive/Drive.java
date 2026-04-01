@@ -75,7 +75,7 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPIDPosition = new PIDController(5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(9, 0.5, 0);
+    private final PIDController thetaPIDPosition = new PIDController(9, 0, 0);
 
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
@@ -122,9 +122,11 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
         modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
         
-         // allow position PID to turn in the correct direction
+        // allow position PID to turn in the correct direction
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
         thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
+
+        thetaPIDPosition.setTolerance(0.1); // ! test
 
         // allow PID to be tuned through elastic
         SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/x", xPIDPosition);

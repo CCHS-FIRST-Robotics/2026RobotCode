@@ -35,7 +35,7 @@ public final class Constants {
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
     public static final boolean INSTANTIATE_SHOOTER = true;
-    public static final boolean INSTANTIATE_LEDS = false;
+    public static final boolean INSTANTIATE_LEDS = true;
 
     // real
 
@@ -47,7 +47,7 @@ public final class Constants {
 
     // ————— toggles ————— //
 
-    public static boolean ENABLE_TRENCH_ALIGN = false;
+    public static boolean ENABLE_TRENCH_ALIGN = true;
     public static boolean ENABLE_PIVOT = true;
     public static boolean ENABLE_PIVOT_AGITATION = true;
     public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
@@ -168,8 +168,6 @@ public final class Constants {
                 }
             }
 
-            // ! CHANGE TOP AND BOTTOM TO RIGHT AND LEFT
-
             // ————— default ————— //
 
             private static final Zone BLUE_LEFT_TRENCH_DEFAULT = new Zone(
@@ -179,7 +177,8 @@ public final class Constants {
                 FieldConstants.TRENCH_DISTANCE_X
                 .plus(TRENCH_ZONE_WIDTH_X),
                 FieldConstants.FIELD_WIDTH_Y
-                .minus(TRENCH_WIDTH_Y),
+                .minus(TRENCH_WIDTH_Y)
+                .minus(Meters.of(0.5)),
                 FieldConstants.FIELD_WIDTH_Y
             );
             private static final Zone BLUE_RIGHT_TRENCH_DEFAULT = BLUE_LEFT_TRENCH_DEFAULT.mirroredY("blue right");

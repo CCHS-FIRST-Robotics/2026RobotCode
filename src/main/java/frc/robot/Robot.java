@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Threads;
 import org.littletonrobotics.junction.*;
 import org.littletonrobotics.junction.wpilog.*;
@@ -18,8 +17,6 @@ public class Robot extends LoggedRobot {
             case REAL: // running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
-                
-                CameraServer.startAutomaticCapture();
                 break;
             case SIM: // running a physics simulator, log to NetworkTables
                 Logger.addDataReceiver(new NT4Publisher());
