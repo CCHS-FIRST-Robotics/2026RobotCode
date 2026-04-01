@@ -29,7 +29,7 @@ public class IntakeIOReal implements IntakeIO {
         motorConfig.smartCurrentLimit(30);
         motorConfig.voltageCompensation(12);
 
-        motorConfig.inverted(false); // ! 
+        motorConfig.inverted(false);
         motorConfig.idleMode(IdleMode.kCoast);
 
         // encoders
