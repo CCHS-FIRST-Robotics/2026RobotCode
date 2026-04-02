@@ -128,8 +128,8 @@ public class CommandFactory {
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)))
         .andThen(Commands.waitSeconds(2))
         .andThen(Commands.either(
-            ledStrip.getSetLedStripHueCommand(new Integer[] {60}), 
-            ledStrip.getSetLedStripHueCommand(new Integer[] {0}), 
+            ledStrip.getSetLedStripHuesCommand(new Integer[] {60}), 
+            ledStrip.getSetLedStripHuesCommand(new Integer[] {0}), 
             () -> RobotController.getBatteryVoltage() > 12.5
         ))
         .andThen(Commands.waitSeconds(2))
@@ -297,6 +297,32 @@ public class CommandFactory {
         );
     }
 
+    public Command getSetPivotEncoderPositionUpCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+
+        return Commands.runOnce(
+            () -> {
+                intake.setPivotEncoderPositionUp();
+                pivotUp = true;
+            }
+        );
+    }
+
+    public Command getSetPivotEncoderPositionDownCommand() {
+        if (!Constants.INSTANTIATE_INTAKE) {
+            return new InstantCommand();
+        }
+
+        return Commands.runOnce(
+            () -> {
+                intake.setPivotEncoderPositionDown();
+                pivotUp = false;
+            }
+        );
+    }
+
     // ————— shoot ————— // 
 
     public Command getShootCommand(
@@ -327,7 +353,8 @@ public class CommandFactory {
             )
             .andThen(
                 usePivot ? 
-                Commands.either(
+                Commands.waitSeconds(1)
+                .andThen(Commands.either(
                     (
                         Commands.waitSeconds(0.25)
                         .andThen(getSetPivotUpCommand())
@@ -337,7 +364,7 @@ public class CommandFactory {
                     Commands.waitSeconds(0.5)
                     .andThen(getSetPivotUpCommand()), 
                     () -> Constants.ENABLE_PIVOT_AGITATION
-                ) : 
+                )) : 
                 new InstantCommand()
             )
         )
@@ -412,6 +439,17 @@ public class CommandFactory {
 
     // ————— ledStrip ————— //
 
+    public Command getSetLedStripHuesCommand(Integer[] hues) {
+        if (!Constants.INSTANTIATE_LEDS) {
+            return new InstantCommand();
+        }
+
+        return new StartEndCommand(
+            () -> ledStrip.setLedStripHues(hues), 
+            () -> ledStrip.setLedStripHues(new Integer[0])
+        );
+    }
+
     public Command getShootingLedStripCommand() {
         if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
             || !Constants.INSTANTIATE_INTAKE
@@ -422,8 +460,8 @@ public class CommandFactory {
         }
 
         return Commands.either(
-            ledStrip.getSetLedStripHueCommand(new Integer[] {120}), 
-            ledStrip.getSetLedStripHueCommand(new Integer[] {0}), 
+            ledStrip.getSetLedStripHuesCommand(new Integer[] {120}), 
+            ledStrip.getSetLedStripHuesCommand(new Integer[] {0}), 
             () -> ShootUtil.getTargetDistance().gt(Meters.of(2)) && ShootUtil.getTargetDistance().lt(Meters.of(4.5))
         ).repeatedly();
     }

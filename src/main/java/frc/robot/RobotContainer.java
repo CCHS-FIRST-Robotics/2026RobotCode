@@ -245,23 +245,13 @@ public class RobotContainer {
                         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
                     )
                     .alongWith(commandFactory.getIntakeCommand())
-                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60})) // leds are green
-                    .finallyDo(
-                        () -> {
-                            ledStrip.setLedStripHues(new Integer[0]);
-                        }
-                    )
+                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
                 );
 
                 // drive and intake and shoot
                 controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
                     commandFactory.getDriveAndIntakeAndShootCommand()
-                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60, 120}))
-                    .finallyDo(
-                        () -> {
-                            ledStrip.setLedStripHues(new Integer[0]);
-                        }
-                    ) // leds are green and blue
+                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
                 );
 
                 // drive and shoot
@@ -272,24 +262,26 @@ public class RobotContainer {
 
                 // pivot
                 controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
-                controller.y().onTrue(new InstantCommand(() -> intake.setPivotEncoderPositionUp()));
-                controller.a().onTrue(new InstantCommand(() -> intake.setPivotEncoderPositionDown()));
+                controller.y().onTrue(commandFactory.getSetPivotEncoderPositionUpCommand());
+                controller.a().onTrue(commandFactory.getSetPivotEncoderPositionDownCommand());
 
                 // unstick
-                controller.pov(180).whileTrue(
-                    new StartEndCommand(
-                        () -> {
-                            shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
-                            shooter.setKickerVelocity(RotationsPerSecond.of(-10));
-                        },
-                        () -> {
-                            shooter.setShooterVelocity(RotationsPerSecond.of(0));
-                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
-                        }
-                    )
-                );
+                if (Constants.INSTANTIATE_SHOOTER) {
+                    controller.pov(180).whileTrue(
+                        new StartEndCommand(
+                            () -> {
+                                shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
+                                shooter.setKickerVelocity(RotationsPerSecond.of(-10));
+                            },
+                            () -> {
+                                shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                                shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                            }
+                        )
+                    );
+                }
 
-                controller.b().onTrue(new InstantCommand( // ! see if this can be another obscure button
+                controller.b().onTrue(new InstantCommand(
                     () -> {
                         Constants.ENABLE_TRENCH_ALIGN = !Constants.ENABLE_TRENCH_ALIGN;
                         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
