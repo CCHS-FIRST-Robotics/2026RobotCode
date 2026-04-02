@@ -75,8 +75,22 @@ public class RobotContainer {
                         Constants.ROBOT_START_POSE
                     );
                 } else {
-                    drive = null;
-                    poseEstimator = null;
+                    drive = new Drive(
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {}
+                    );
+                    
+                    poseEstimator = new PoseEstimator(
+                        new GyroIO() {}, 
+                        new CameraIO[] {
+                            new CameraIO() {}, 
+                            new CameraIO() {}
+                        }, 
+                        drive, 
+                        new Pose2d()
+                    );
                 }
 
                 if (Constants.INSTANTIATE_INTAKE) {
@@ -85,7 +99,10 @@ public class RobotContainer {
                         new PivotIOReal(FuelConstants.PIVOT_MOTOR_ID)
                     );
                 } else {
-                    intake = null;
+                    intake = new Intake(
+                        new IntakeIO() {}, 
+                        new PivotIO() {}
+                    );
                 }
 
                 if (Constants.INSTANTIATE_SHOOTER) {
@@ -94,14 +111,13 @@ public class RobotContainer {
                         new KickerIOReal(FuelConstants.KICKER_MOTOR_ID)
                     );
                 } else {
-                    shooter = null;
+                    shooter = new Shooter(
+                        new ShooterIO() {}, 
+                        new KickerIO() {}
+                    );
                 }
 
-                if (Constants.INSTANTIATE_LEDS) {
-                    ledStrip = new LedStrip();
-                } else {
-                    ledStrip = null;
-                }
+                ledStrip = new LedStrip();
                 break;
             case SIM: // sim robot, instantiate physics sim IO implementations
                 configureSimulation();
@@ -132,8 +148,22 @@ public class RobotContainer {
                         Constants.ROBOT_START_POSE
                     );
                 } else {
-                    drive = null;
-                    poseEstimator = null;
+                    drive = new Drive(
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {}
+                    );
+                    
+                    poseEstimator = new PoseEstimator(
+                        new GyroIO() {}, 
+                        new CameraIO[] {
+                            new CameraIO() {}, 
+                            new CameraIO() {}
+                        }, 
+                        drive, 
+                        new Pose2d()
+                    );
                 }
 
                 if (Constants.INSTANTIATE_INTAKE) {
@@ -142,7 +172,10 @@ public class RobotContainer {
                         new PivotIOSim()
                     );
                 } else {
-                    intake = null;
+                    intake = new Intake(
+                        new IntakeIO() {}, 
+                        new PivotIO() {}
+                    );
                 }
 
                 if (Constants.INSTANTIATE_SHOOTER) {
@@ -151,10 +184,13 @@ public class RobotContainer {
                         new KickerIOSim()
                     );
                 } else {
-                    shooter = null;
+                    shooter = new Shooter(
+                        new ShooterIO() {}, 
+                        new KickerIO() {}
+                    );
                 }
 
-                ledStrip = null;
+                ledStrip = new LedStrip();
 
                 break;
             default: // replayed robot, disable IO implementations
@@ -185,13 +221,11 @@ public class RobotContainer {
                     new KickerIO() {}
                 );
 
-                ledStrip = null;
+                ledStrip = new LedStrip();
                 break;
         }
 
-        if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            drive.setPoseEstimator(poseEstimator);
-        }
+        drive.setPoseEstimator(poseEstimator);
 
         commandFactory = new CommandFactory(
             controller, 
@@ -209,22 +243,19 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            // drive
-            drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
-        }
+        // drive
+        drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
+        
 
         // check motors
         SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
 
         switch (Constants.CURRENT_BUTTON_BINDINGS) {
             case COMPETITION: 
-                if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-                    // x-lock
-                    controller.x().whileTrue(
-                        Commands.run(() -> drive.xLock())
-                    );
-                }
+                // x-lock
+                controller.x().whileTrue(
+                    Commands.run(() -> drive.xLock())
+                );
 
                 // drive slow
                 controller.rightStick().whileTrue( // remapped as gamesir R4
@@ -266,20 +297,18 @@ public class RobotContainer {
                 controller.a().onTrue(commandFactory.getSetPivotEncoderPositionDownCommand());
 
                 // unstick
-                if (Constants.INSTANTIATE_SHOOTER) {
-                    controller.pov(180).whileTrue(
-                        new StartEndCommand(
-                            () -> {
-                                shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
-                                shooter.setKickerVelocity(RotationsPerSecond.of(-10));
-                            },
-                            () -> {
-                                shooter.setShooterVelocity(RotationsPerSecond.of(0));
-                                shooter.setKickerVelocity(RotationsPerSecond.of(0));
-                            }
-                        )
-                    );
-                }
+                controller.pov(180).whileTrue(
+                    new StartEndCommand(
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
+                            shooter.setKickerVelocity(RotationsPerSecond.of(-10));
+                        },
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    )
+                );
 
                 controller.b().onTrue(new InstantCommand(
                     () -> {
@@ -436,10 +465,6 @@ public class RobotContainer {
     // ————— autonomous ————— //
 
     private void configureAutos() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return;
-        }
-
         autoGenerator = new AutoGenerator(
             drive, 
             poseEstimator, 
@@ -469,10 +494,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return new InstantCommand();
-        }
-
         return autoChooser.selectedCommand();
     }
 
@@ -487,20 +508,10 @@ public class RobotContainer {
     // ————— simulation ————— //
 
     private void configureSimulation() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return;
-        }
-
         // drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
         Constants.FieldConstants.Zones.logAllZones();
-
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return;
-        }
 
         // fuelIO
         fuelSimulation = new FuelSim();
@@ -537,29 +548,16 @@ public class RobotContainer {
     }
 
     public void simulationPeriodic() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return;
-        }
 
         // drive
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("outputs/simulation/fieldSimulation/robotPosition", driveSimulation.getSimulatedDriveTrainPose());
-
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return;
-        }
 
         // fuelIO
         fuelSimulation.stepSim();
     }
 
     public void resetSimulation() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-        ) {
-            return;
-        }
 
         if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
             return;
@@ -573,12 +571,6 @@ public class RobotContainer {
         driveSimulation.setSimulationWorldPose(startPose);
         poseEstimator.resetPosition(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
-
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return;
-        }
 
         // fuel
         fuelSimulation.clearFuel();

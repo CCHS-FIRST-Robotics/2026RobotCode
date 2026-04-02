@@ -16,7 +16,6 @@ import frc.robot.subsystems.leds.*;
 import frc.robot.utils.*;
 import frc.robot.Constants;
 
-@SuppressWarnings("unused")
 public class CommandFactory {
     private final Controller controller;
 
@@ -60,13 +59,6 @@ public class CommandFactory {
     // ————— processed ————— //
 
     public Command getDriveAndIntakeCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -78,13 +70,6 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand(boolean useIntake, boolean usePivot) {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return getSlowDriveCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
@@ -97,24 +82,11 @@ public class CommandFactory {
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return getIntakeCommand()
         .alongWith(getDriveAndShootCommand(false, false));
     }
 
     public Command getCheckMotorsCommand() {
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return getSetPivotDownCommand()
         .andThen(Commands.waitUntil(() -> intake.pivotDown()))
         .andThen(intake.getSetIntakeVoltageCommand(intakeVolts, false))
@@ -143,10 +115,6 @@ public class CommandFactory {
     // ————— drive ————— //
 
     public Command getDriveWithJoysticksCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return new InstantCommand();
-        }
-
         return new DriveWithJoysticks(
             drive,
             poseEstimator,
@@ -160,13 +128,6 @@ public class CommandFactory {
     }
 
     public Command getDriveWithJoysticksIntakeCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return new DriveWithJoysticks(
             drive, 
             poseEstimator, 
@@ -196,13 +157,6 @@ public class CommandFactory {
     }
 
     public Command getDriveWithJoysticksShooterCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return Commands.either(
             new DriveWithJoysticks(
                 drive, 
@@ -234,10 +188,6 @@ public class CommandFactory {
         LinearAcceleration linearAcceleration,
         AngularAcceleration angularAcceleration
     ) {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
-            return new InstantCommand();
-        }
-
         return Commands.startEnd(
             () -> {
                 DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
@@ -257,10 +207,6 @@ public class CommandFactory {
     // ————— intake ————— //
 
     public Command getIntakeCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-        
         return Commands.startEnd(
             () -> intake.setIntakeVoltage(intakeVolts, false),
             () -> intake.setIntakeVoltage(Volts.of(0), false)
@@ -268,28 +214,16 @@ public class CommandFactory {
     }
 
     public Command getSetPivotUpCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-
         return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_UP_ANGLE)
         .andThen(Commands.runOnce(() -> {pivotUp = true;}));
     }
 
     public Command getSetPivotDownCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-
         return intake.getSetPivotPositionCommand(FuelConstants.PIVOT_MAX_DOWN_ANGLE)
         .andThen(Commands.runOnce(() -> {pivotUp = false;}));
     }
 
     public Command getTogglePivotCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-
         return Commands.either(
             getSetPivotDownCommand(),
             getSetPivotUpCommand(),
@@ -298,10 +232,6 @@ public class CommandFactory {
     }
 
     public Command getSetPivotEncoderPositionUpCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-
         return Commands.runOnce(
             () -> {
                 intake.setPivotEncoderPositionUp();
@@ -311,10 +241,6 @@ public class CommandFactory {
     }
 
     public Command getSetPivotEncoderPositionDownCommand() {
-        if (!Constants.INSTANTIATE_INTAKE) {
-            return new InstantCommand();
-        }
-
         return Commands.runOnce(
             () -> {
                 intake.setPivotEncoderPositionDown();
@@ -330,12 +256,6 @@ public class CommandFactory {
         boolean useIntake, 
         boolean usePivot
     ) {
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get()))
         .alongWith( // allow shooting
             Commands.waitSeconds(0.1)
@@ -397,12 +317,6 @@ public class CommandFactory {
     }
 
     public Command getSimShootCommand() {
-        if (!Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return Commands.runOnce(
             () -> {
                 if (Constants.REALISTIC_SIM) {
@@ -440,10 +354,6 @@ public class CommandFactory {
     // ————— ledStrip ————— //
 
     public Command getSetLedStripHuesCommand(Integer[] hues) {
-        if (!Constants.INSTANTIATE_LEDS) {
-            return new InstantCommand();
-        }
-
         return new StartEndCommand(
             () -> ledStrip.setLedStripHues(hues), 
             () -> ledStrip.setLedStripHues(new Integer[0])
@@ -451,14 +361,6 @@ public class CommandFactory {
     }
 
     public Command getShootingLedStripCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-            || !Constants.INSTANTIATE_LEDS
-        ) {
-            return new InstantCommand();
-        }
-
         return Commands.either(
             ledStrip.getSetLedStripHuesCommand(new Integer[] {120}), 
             ledStrip.getSetLedStripHuesCommand(new Integer[] {0}), 
@@ -469,13 +371,6 @@ public class CommandFactory {
     // ————— util ————— //
 
     public Command getUpdateShootUtilCommand() {
-        if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
-            || !Constants.INSTANTIATE_INTAKE
-            || !Constants.INSTANTIATE_SHOOTER
-        ) {
-            return new InstantCommand();
-        }
-
         return Commands.either(
             Commands.run(
                 () -> ShootUtil.updateIterative(

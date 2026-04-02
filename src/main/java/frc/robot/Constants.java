@@ -35,7 +35,6 @@ public final class Constants {
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
     public static final boolean INSTANTIATE_SHOOTER = true;
-    public static final boolean INSTANTIATE_LEDS = true;
 
     // real
 
