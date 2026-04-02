@@ -179,6 +179,43 @@ public class AutoGenerator {
         return routine;
     }
 
+    public AutoRoutine repeatingCenterFuelRight() {
+        AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelRight");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("RepeatingCenterFuelRight", 0); // bring pivot down
+        AutoTrajectory trajectory1 = routine.trajectory("RepeatingCenterFuelRight", 1); // begin intake
+        AutoTrajectory trajectory2 = routine.trajectory("RepeatingCenterFuelRight", 2); // stop intake, spin up shooter
+        // shoot
+        AutoTrajectory trajectory4 = routine.trajectory("RepeatingCenterFuelRight", 4); // 
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen(
+                trajectory0.cmd()
+                .alongWith(
+                    Commands.waitSeconds(0.5)
+                    .andThen(commandFactory.getSetPivotDownCommand())
+                )
+            )
+            .andThen(
+                trajectory1.cmd()
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+            )
+            .andThen(
+                trajectory2.cmd()
+                .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+            )
+            .andThen(commandFactory.getDriveAndShootCommand(true, true).withTimeout(4))
+            .andThen(trajectory4.cmd())
+            .repeatedly()
+        );
+
+        return routine;
+    }
+
     public AutoRoutine outpostFuel() {
         AutoRoutine routine = autoFactory.newRoutine("OutpostFuel");
 
