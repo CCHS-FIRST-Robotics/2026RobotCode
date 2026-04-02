@@ -32,7 +32,7 @@ public class FuelConstants {
     // ————— PIDF ————— //
 
     public static final ClosedLoopConfig PIVOT_PID = new ClosedLoopConfig().pid(10, 0, 0);
-    public static final double PIVOT_KCOS = 0.5;
+    public static final FeedForwardConfig PIVOT_FF = new FeedForwardConfig().kCos(0.5);
 
     public static final Slot0Configs SHOOTER_PIDF = new Slot0Configs()
     .withKP(0.3)

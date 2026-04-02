@@ -24,10 +24,9 @@ public class PivotIOReal implements PivotIO {
         // start config
         motor.setCANTimeout(500);
 
-        
-
         // pid 
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
+        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_FF);
         
         // maxMotion
         motorConfig.closedLoop.maxMotion.cruiseVelocity(RotationsPerSecond.of(0.4).in(Rotations.per(Minute)), ClosedLoopSlot.kSlot0);
@@ -82,8 +81,7 @@ public class PivotIOReal implements PivotIO {
         motor.getClosedLoopController().setSetpoint(
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 
-            ClosedLoopSlot.kSlot0,
-            FuelConstants.PIVOT_KCOS * Math.cos(Rotations.of(encoder.getPosition()).in(Radians))
+            ClosedLoopSlot.kSlot0
         );
         
         positionSetpoint = angle;
