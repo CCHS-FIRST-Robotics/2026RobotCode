@@ -77,7 +77,7 @@ public class CommandFactory {
         .alongWith(getIntakeCommand());
     }
 
-    public Command getDriveAndShootCommand(boolean usePivot) {
+    public Command getDriveAndShootCommand(boolean useIntake, boolean usePivot) {
         if (!Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR
             || !Constants.INSTANTIATE_INTAKE
             || !Constants.INSTANTIATE_SHOOTER
@@ -93,7 +93,7 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), usePivot));
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), useIntake, usePivot));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -105,7 +105,7 @@ public class CommandFactory {
         }
 
         return getIntakeCommand()
-        .alongWith(getDriveAndShootCommand(false));
+        .alongWith(getDriveAndShootCommand(false, false));
     }
 
     public Command getCheckMotorsCommand() {
@@ -293,7 +293,11 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
-    public Command getShootCommand(Supplier<AngularVelocity> shooterVelocitySupplier, boolean usePivot) {
+    public Command getShootCommand(
+        Supplier<AngularVelocity> shooterVelocitySupplier, 
+        boolean useIntake, 
+        boolean usePivot
+    ) {
         if (!Constants.INSTANTIATE_INTAKE
             || !Constants.INSTANTIATE_SHOOTER
         ) {
@@ -310,7 +314,11 @@ public class CommandFactory {
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
         )
         .alongWith( // move pivot back and forth
-            intake.getSetIntakeVoltageCommand(Volts.of(1), true) // run intake to unstick balls
+            (
+                useIntake ? 
+                intake.getSetIntakeVoltageCommand(Volts.of(1), true) : // run intake to unstick balls
+                new InstantCommand()
+            )
             .andThen(
                 usePivot ? 
                 Commands.either(
@@ -338,7 +346,9 @@ public class CommandFactory {
         )
         .finallyDo( // stop everything
             () -> {
-                intake.setIntakeVoltage(Volts.of(0), true);
+                if (useIntake) {
+                    intake.setIntakeVoltage(Volts.of(0), true);
+                }
                 if (usePivot) {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                     pivotUp = false;
@@ -347,6 +357,8 @@ public class CommandFactory {
                     shooter.setShooterVelocity(RotationsPerSecond.of(0));
                 }
                 shooter.setKickerVelocity(RotationsPerSecond.of(0));
+
+                ledStrip.setLedStripHues(new Integer[0]);
             }
         );
     }
@@ -404,10 +416,10 @@ public class CommandFactory {
         }
 
         return Commands.either(
-            ledStrip.getSetLedStripHueCommand(new Integer[120]), 
-            ledStrip.getSetLedStripHueCommand(new Integer[0]), 
+            ledStrip.getSetLedStripHueCommand(new Integer[] {120}), 
+            ledStrip.getSetLedStripHueCommand(new Integer[] {0}), 
             () -> ShootUtil.getTargetDistance().gt(Meters.of(2)) && ShootUtil.getTargetDistance().lt(Meters.of(4.5))
-        );
+        ).repeatedly();
     }
 
     // ————— util ————— //

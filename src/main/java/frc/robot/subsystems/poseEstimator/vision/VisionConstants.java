@@ -31,15 +31,15 @@ public class VisionConstants {
     // Robot to camera transforms // ! make these arrays
     // (Not used by Limelight, configure in web UI instead)
     public static Transform3d robotToCamera0 = new Transform3d(
-        Inches.of(-10), 
+        Inches.of(-9.8), 
         Inches.of(-10.75), 
-        Inches.of(8), 
-        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(165))
+        Inches.of(7.5), 
+        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(200))
     );
     public static Transform3d robotToCamera1 = new Transform3d(
         Inches.of(-10.75), 
-        Inches.of(10), 
-        Inches.of(21),
+        Inches.of(10.75), 
+        Inches.of(20.75),
         new Rotation3d(Degrees.of(0), Degrees.of(-20), Degrees.of(0))
     );
 

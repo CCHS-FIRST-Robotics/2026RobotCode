@@ -78,7 +78,7 @@ public class AutoGenerator {
     public Command backUpAndShoot() {
         return commandFactory.getSetPivotDownCommand()
         .alongWith(new DriveWithPosition(drive, poseEstimator, new Transform2d(-1.5, 0, new Rotation2d())))
-        .andThen(commandFactory.getDriveAndShootCommand(true));
+        .andThen(commandFactory.getDriveAndShootCommand(true, true));
     }
 
     public AutoRoutine beMeanLeft() {
@@ -139,7 +139,7 @@ public class AutoGenerator {
                 trajectory2.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
             )
-            .andThen(commandFactory.getDriveAndShootCommand(true))
+            .andThen(commandFactory.getDriveAndShootCommand(true, true))
         );
 
         return routine;
@@ -173,7 +173,7 @@ public class AutoGenerator {
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
                 .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
-            .andThen(commandFactory.getDriveAndShootCommand(true))
+            .andThen(commandFactory.getDriveAndShootCommand(true, true))
         );
 
         return routine;
@@ -197,7 +197,7 @@ public class AutoGenerator {
             .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))
             .andThen(trajectory1.cmd())
-            .andThen(commandFactory.getDriveAndShootCommand(true))
+            .andThen(commandFactory.getDriveAndShootCommand(true, true))
         );
 
         return routine;

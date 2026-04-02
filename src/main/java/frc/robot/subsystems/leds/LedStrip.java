@@ -10,7 +10,7 @@ public class LedStrip extends SubsystemBase {
     private final AddressableLED led;
     private final AddressableLEDBuffer ledBuffer;
 
-    private Integer[] hues;
+    private Integer[] hues = new Integer[0];
     
     public LedStrip() {
         led = new AddressableLED(LedStripConstants.PWM_PORT);
@@ -23,6 +23,15 @@ public class LedStrip extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (hues.length == 0) {
+            for (var i = 0; i < ledBuffer.getLength(); i++) {
+                ledBuffer.setHSV(i, 0, 0, 0);
+            }
+            led.setData(ledBuffer);
+
+            return;
+        }
+        
         int hue = hues[(int) Timer.getFPGATimestamp() % hues.length];
 
         for (var i = 0; i < ledBuffer.getLength(); i++) {

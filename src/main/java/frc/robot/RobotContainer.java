@@ -246,17 +246,28 @@ public class RobotContainer {
                     )
                     .alongWith(commandFactory.getIntakeCommand())
                     .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60})) // leds are green
+                    .finallyDo(
+                        () -> {
+                            ledStrip.setLedStripHues(new Integer[0]);
+                        }
+                    )
                 );
 
                 // drive and intake and shoot
                 controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
                     commandFactory.getDriveAndIntakeAndShootCommand()
-                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60, 120})) // leds are green and blue
+                    .alongWith(ledStrip.getSetLedStripHueCommand(new Integer[] {60, 120}))
+                    .finallyDo(
+                        () -> {
+                            ledStrip.setLedStripHues(new Integer[0]);
+                        }
+                    ) // leds are green and blue
                 );
 
                 // drive and shoot
                 controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
-                    commandFactory.getDriveAndShootCommand(true) // leds are blue or red
+                    commandFactory.getDriveAndShootCommand(true, true)
+                    .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
                 );
 
                 // pivot
@@ -339,6 +350,7 @@ public class RobotContainer {
                 controller.y().whileTrue( // shoot
                     commandFactory.getShootCommand(
                         () -> RotationsPerSecond.of(shooter.shooterIOInputs.velocitySetpoint), 
+                        true,
                         true
                     )
                 );
