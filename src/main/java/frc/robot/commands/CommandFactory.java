@@ -127,6 +127,12 @@ public class CommandFactory {
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(0)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)))
         .andThen(Commands.waitSeconds(2))
+        .andThen(Commands.either(
+            ledStrip.getSetLedStripHueCommand(new Integer[] {60}), 
+            ledStrip.getSetLedStripHueCommand(new Integer[] {0}), 
+            () -> RobotController.getBatteryVoltage() > 12.5
+        ))
+        .andThen(Commands.waitSeconds(2))
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(-5)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(5)))
         .andThen(Commands.waitSeconds(120))
