@@ -15,7 +15,11 @@ public class DriveWithPosition extends Command {
     private final PoseEstimator poseEstimator;
     
     private Pose2d targetPose;
+    private boolean useAllianceFlipping = false;
+
     private Transform2d targetTransform;
+
+    private Pose2d calculatedTargetPose;
 
     public DriveWithPosition(
         Drive drive,
@@ -31,13 +35,7 @@ public class DriveWithPosition extends Command {
         
         this.targetPose = targetPose;
 
-        if (useAllianceFlipping && DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) {
-            this.targetPose = new Pose2d(
-                FieldConstants.FIELD_WIDTH_X.minus(targetPose.getMeasureX()), 
-                FieldConstants.FIELD_WIDTH_Y.minus(targetPose.getMeasureY()), 
-                targetPose.getRotation().plus(new Rotation2d(Degrees.of(180)))
-            );
-        }
+        this.useAllianceFlipping = useAllianceFlipping;
     }
 
     public DriveWithPosition(
@@ -55,21 +53,35 @@ public class DriveWithPosition extends Command {
 
     @Override
     public void initialize() {
+        if (!useAllianceFlipping) {
+            calculatedTargetPose = targetPose;
+        } else {
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) != Alliance.Blue) {
+                calculatedTargetPose = new Pose2d(
+                    FieldConstants.FIELD_WIDTH_X.minus(targetPose.getMeasureX()), 
+                    FieldConstants.FIELD_WIDTH_Y.minus(targetPose.getMeasureY()), 
+                    targetPose.getRotation().plus(new Rotation2d(Degrees.of(180)))
+                );
+            } else {
+                calculatedTargetPose = targetPose;
+            }
+        }
+
         if (targetTransform != null) {
-            targetPose = poseEstimator.getPose().plus(targetTransform);
+            calculatedTargetPose = poseEstimator.getPose().plus(targetTransform);
         }
     }
 
     @Override
     public void execute() {
-        drive.runPosition(targetPose);
+        drive.runPosition(calculatedTargetPose);
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(poseEstimator.getPose().getX() - targetPose.getX()) < 0.05
-            && Math.abs(poseEstimator.getPose().getY() - targetPose.getY()) < 0.05
-            && Math.abs(poseEstimator.getPose().getRotation().getRotations() - targetPose.getRotation().getRotations()) < 0.05
+        return Math.abs(poseEstimator.getPose().getX() - calculatedTargetPose.getX()) < 0.05
+            && Math.abs(poseEstimator.getPose().getY() - calculatedTargetPose.getY()) < 0.05
+            && Math.abs(poseEstimator.getPose().getRotation().getRotations() - calculatedTargetPose.getRotation().getRotations()) < 0.05
             && drive.getFieldRelativeSpeeds().vxMetersPerSecond < 0.1
             && drive.getFieldRelativeSpeeds().vyMetersPerSecond < 0.1
             && drive.getFieldRelativeSpeeds().omegaRadiansPerSecond < 0.1;
