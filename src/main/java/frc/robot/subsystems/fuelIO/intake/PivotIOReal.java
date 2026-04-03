@@ -24,7 +24,7 @@ public class PivotIOReal implements PivotIO {
         // start config
         motor.setCANTimeout(500);
 
-        // pid 
+        // pid
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_PID);
         motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).apply(FuelConstants.PIVOT_FF);
         

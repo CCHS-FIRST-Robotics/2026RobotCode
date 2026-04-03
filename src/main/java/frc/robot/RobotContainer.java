@@ -280,10 +280,10 @@ public class RobotContainer {
                 );
 
                 // drive and intake and shoot
-                controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-                    commandFactory.getDriveAndIntakeAndShootCommand()
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
-                );
+                // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+                //     commandFactory.getDriveAndIntakeAndShootCommand()
+                //     .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
+                // );
 
                 // drive and shoot
                 controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(

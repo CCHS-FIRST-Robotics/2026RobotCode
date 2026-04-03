@@ -60,7 +60,7 @@ public class CommandFactory {
 
     public Command getDriveAndIntakeCommand() {
         return getSlowDriveCommand(
-            MetersPerSecond.of(1), 
+            MetersPerSecond.of(1.5), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
             DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
             DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
@@ -105,6 +105,7 @@ public class CommandFactory {
             () -> RobotController.getBatteryVoltage() > 12.5
         ))
         .andThen(Commands.waitSeconds(2))
+        .andThen(intake.getSetIntakeVoltageCommand(Volts.of(2), true))
         .andThen(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(-5)))
         .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(5)))
         .andThen(Commands.waitSeconds(120))

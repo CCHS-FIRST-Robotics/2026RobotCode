@@ -209,6 +209,7 @@ public class AutoGenerator {
                 .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true, true).withTimeout(4))
+            .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(3.25, 0.642493, new Rotation2d(0)), true)) // ! doesn't work for red alliance
             .andThen(trajectory4.cmd())
             .repeatedly()
         );

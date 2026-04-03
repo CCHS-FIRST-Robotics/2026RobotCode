@@ -39,7 +39,7 @@ public class VisionConstants {
     public static Transform3d robotToCamera1 = new Transform3d(
         Inches.of(-10.75), 
         Inches.of(10.75), 
-        Inches.of(20.75),
+        Inches.of(19.4),
         new Rotation3d(Degrees.of(0), Degrees.of(-20), Degrees.of(0))
     );
 
