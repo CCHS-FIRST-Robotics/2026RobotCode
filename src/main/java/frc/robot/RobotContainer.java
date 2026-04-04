@@ -384,6 +384,7 @@ public class RobotContainer {
             autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
             autoChooser.addRoutine("CenterFuelLeft ", () -> autoGenerator.centerFuelLeft());
             autoChooser.addRoutine("CenterFuelRight", () -> autoGenerator.centerFuelRight());
+            autoChooser.addRoutine("RepeatingCenterFuelLeft", () -> autoGenerator.repeatingCenterFuelLeft());
             autoChooser.addRoutine("RepeatingCenterFuelRight", () -> autoGenerator.repeatingCenterFuelRight());
             autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 

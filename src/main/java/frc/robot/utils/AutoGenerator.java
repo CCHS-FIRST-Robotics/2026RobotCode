@@ -111,13 +111,13 @@ public class AutoGenerator {
         return routine;
     }
 
-    public AutoRoutine centerFuelLeft() {
+        public AutoRoutine centerFuelLeft() {
         AutoRoutine routine = autoFactory.newRoutine("CenterFuelLeft");
 
         // load trajectories
         AutoTrajectory trajectory0 = routine.trajectory("CenterFuelLeft", 0); // bring pivot down
         AutoTrajectory trajectory1 = routine.trajectory("CenterFuelLeft", 1); // begin intake
-        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelLeft", 2); // stop intake
+        AutoTrajectory trajectory2 = routine.trajectory("CenterFuelLeft", 2); // stop intake, spin up shooter
         // shoot
 
         // when routine begins, reset odometry, start trajectory
@@ -127,11 +127,11 @@ public class AutoGenerator {
                 trajectory0.cmd()
                 .alongWith(
                     commandFactory.getSetPivotEncoderPositionUpCommand()
-                    .andThen(Commands.waitSeconds(0.5)) // time it takes for robot to not be under trench anymore
+                    .andThen(Commands.waitSeconds(0.25))
                     .andThen(commandFactory.getSetPivotDownCommand())
                 )
             )
-            .andThen(Commands.waitSeconds(0.5)) // wait while pivot is coming down
+            .andThen(Commands.waitSeconds(1))
             .andThen(
                 trajectory1.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
@@ -139,6 +139,7 @@ public class AutoGenerator {
             .andThen(
                 trajectory2.cmd()
                 .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true, true))
         );
@@ -177,6 +178,84 @@ public class AutoGenerator {
                 .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
             )
             .andThen(commandFactory.getDriveAndShootCommand(true, true))
+        );
+
+        return routine;
+    }
+
+    public AutoRoutine repeatingCenterFuelLeft() {
+        AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelLeft");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("RepeatingCenterFuelLeft1", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("RepeatingCenterFuelLeft1", 1);
+        AutoTrajectory trajectory2 = routine.trajectory("RepeatingCenterFuelLeft1", 2);
+        AutoTrajectory trajectory3 = routine.trajectory("RepeatingCenterFuelLeft1", 3);
+        // shoot
+        AutoTrajectory trajectory4 = routine.trajectory("RepeatingCenterFuelLeft1", 4);
+
+        AutoTrajectory trajectory5 = routine.trajectory("RepeatingCenterFuelLeft2", 0);
+        AutoTrajectory trajectory6 = routine.trajectory("RepeatingCenterFuelLeft2", 1);
+
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen( // drive, bring pivot down
+                trajectory0.cmd()
+                .alongWith(
+                    commandFactory.getSetPivotEncoderPositionUpCommand()
+                    .andThen(Commands.waitSeconds(0.25))
+                    .andThen(commandFactory.getSetPivotDownCommand())
+                )
+            )
+            .andThen( // looping the rest
+                // path 1
+                trajectory1.cmd()
+                .andThen( // drive, start intake
+                    trajectory2.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                // path 2
+                .andThen(trajectory5.cmd())
+                .andThen( // drive, start intake
+                    trajectory6.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                .repeatedly()
+            )
         );
 
         return routine;
@@ -279,7 +358,6 @@ public class AutoGenerator {
                     .andThen(commandFactory.getSetPivotDownCommand())
                 )
             )
-            .andThen(trajectory0.cmd())
             .andThen(Commands.waitSeconds(4))
             .andThen(trajectory1.cmd())
             .andThen(commandFactory.getDriveAndShootCommand(true, true))
