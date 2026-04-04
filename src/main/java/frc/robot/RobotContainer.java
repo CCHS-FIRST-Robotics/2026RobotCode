@@ -246,9 +246,6 @@ public class RobotContainer {
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
         
-        // check motors
-        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
-
         // x-lock
         controller.x().whileTrue(
             Commands.run(() -> drive.xLock())
@@ -288,6 +285,13 @@ public class RobotContainer {
             .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
         );
 
+        // shoot
+        controller.pov(0).whileTrue(commandFactory.getShootCommand(
+            () -> RotationsPerSecond.of(50), 
+            true, 
+            true, 
+            true));
+
         // pivot
         controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
         controller.y().onTrue(commandFactory.getSetPivotEncoderPositionUpCommand());
@@ -320,6 +324,14 @@ public class RobotContainer {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
             controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
+
+        // ————— testing bindings ————— //
+
+        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
+
+        SmartDashboard.putData("smartDashboard/buttons/Increase Theta PID Position Tolerance", new InstantCommand(() -> drive.increaseThetaPIDPositionTolerance()));
+        SmartDashboard.putData("smartDashboard/buttons/Decrease Theta PID Position Tolerance", new InstantCommand(() -> drive.decreaseThetaPIDPositionTolerance()));
+
     }
 
     // ————— robot ————— //

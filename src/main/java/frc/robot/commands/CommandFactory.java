@@ -260,10 +260,10 @@ public class CommandFactory {
     ) {
         return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get()))
         .alongWith( // allow shooting with the kicker
-            // Commands.waitSeconds(0.1)
-            // .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint() || atThetaSetpointOverride)) // waits for drive rotation to be correct
-            // .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
-            Commands.waitSeconds(0.5)
+            Commands.waitSeconds(0.1)
+            .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint() || atThetaSetpointOverride)) // waits for drive rotation to be correct
+            .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
+            // Commands.waitSeconds(0.5)
             .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the balls that are already lodged in there
             .andThen(Commands.waitSeconds(0.25))
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -276,7 +276,7 @@ public class CommandFactory {
             )
             .andThen(
                 usePivot ? 
-                Commands.waitSeconds(1.5)
+                Commands.waitSeconds(1)
                 .andThen(Commands.either(
                     (
                         Commands.waitSeconds(0.25)

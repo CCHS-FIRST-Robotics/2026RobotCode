@@ -81,7 +81,8 @@ public class PivotIOReal implements PivotIO {
         motor.getClosedLoopController().setSetpoint(
             angle.in(Rotations), 
             SparkMax.ControlType.kMAXMotionPositionControl, 
-            ClosedLoopSlot.kSlot0
+            ClosedLoopSlot.kSlot0, 
+            encoder.getPosition() < 0 ? -1 : 0
         );
         
         positionSetpoint = angle;

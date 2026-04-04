@@ -86,6 +86,9 @@ public class Drive extends SubsystemBase {
 
     boolean usingChoreo = false;
 
+    @AutoLogOutput(key = "outputs/drive/thetaPIDPositionTolerance")
+    private double thetaPIDPositionTolerance = 0.15;
+
     // ————— velocity ————— //
 
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -126,7 +129,7 @@ public class Drive extends SubsystemBase {
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
         thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
 
-        thetaPIDPosition.setTolerance(0.15);
+        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
 
         // allow PID to be tuned through elastic
         SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/x", xPIDPosition);
@@ -376,6 +379,16 @@ public class Drive extends SubsystemBase {
     @AutoLogOutput(key = "outputs/drive/atThetaSetpoint")
     public boolean atThetaSetpoint() {
         return thetaPIDPosition.atSetpoint();
+    }
+
+    public void increaseThetaPIDPositionTolerance() {
+        thetaPIDPositionTolerance += 0.1;
+        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
+    }
+
+    public void decreaseThetaPIDPositionTolerance() {
+        thetaPIDPositionTolerance -= 0.1;
+        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
     }
     
     // ————— utils ————— //
