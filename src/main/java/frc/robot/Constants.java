@@ -40,7 +40,7 @@ public final class Constants {
 
     public static boolean ENABLE_TRENCH_ALIGN = true;
     public static boolean ENABLE_PIVOT = true;
-    public static boolean ENABLE_PIVOT_AGITATION = false;
+    public static boolean ENABLE_PIVOT_AGITATION = true;
     public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
 
     public static class FieldConstants {

@@ -233,6 +233,7 @@ public class AutoGenerator {
                 )
                 .andThen(trajectory4.cmd())
                 // path 2
+                .andThen(Commands.waitSeconds(1))
                 .andThen(trajectory5.cmd())
                 .andThen( // drive, start intake
                     trajectory6.cmd()
@@ -311,6 +312,7 @@ public class AutoGenerator {
                 )
                 .andThen(trajectory4.cmd())
                 // path 2
+                .andThen(Commands.waitSeconds(1))
                 .andThen(trajectory5.cmd())
                 .andThen( // drive, start intake
                     trajectory6.cmd()
