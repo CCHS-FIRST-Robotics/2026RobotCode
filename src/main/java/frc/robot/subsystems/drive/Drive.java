@@ -126,7 +126,7 @@ public class Drive extends SubsystemBase {
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
         thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
 
-        thetaPIDPosition.setTolerance(0.075);
+        thetaPIDPosition.setTolerance(0.15);
 
         // allow PID to be tuned through elastic
         SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/x", xPIDPosition);

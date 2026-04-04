@@ -26,8 +26,8 @@
     {"from":0, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":3, "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true}],
   "targetDt":{
-   "exp":"0.02 s",
-   "val":0.02
+   "exp":"0.05 s",
+   "val":0.05
   }
  },
  "trajectory":{

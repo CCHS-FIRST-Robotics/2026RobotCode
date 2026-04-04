@@ -18,19 +18,11 @@ public final class Constants {
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
-    public static enum BUTTON_BINDINGS {
-        COMPETITION,
-        TESTING_BPS,
-        TESTING_SHOOTER_MAP
-    }
-
     // ————— initial conditions ————— //
 
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d());
-
-    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
@@ -48,7 +40,7 @@ public final class Constants {
 
     public static boolean ENABLE_TRENCH_ALIGN = true;
     public static boolean ENABLE_PIVOT = true;
-    public static boolean ENABLE_PIVOT_AGITATION = true;
+    public static boolean ENABLE_PIVOT_AGITATION = false;
     public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
 
     public static class FieldConstants {
@@ -59,7 +51,7 @@ public final class Constants {
         public static final Pose3d BLUE_HUB = new Pose3d(
             Inches.of(181.56), 
             FIELD_WIDTH_Y.div(2), 
-            Inches.of(56.4),
+            Inches.of(56.4), 
             new Rotation3d()
         );
 

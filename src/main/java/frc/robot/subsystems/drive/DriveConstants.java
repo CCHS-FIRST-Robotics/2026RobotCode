@@ -114,7 +114,7 @@ public class DriveConstants {
 
     public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
     public static final AngularVelocity MAX_THEORETICAL_ANGULAR_SPEED = RadiansPerSecond.of(MAX_THEORETICAL_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(3) : MetersPerSecond.of(2);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(4) : MetersPerSecond.of(2);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
     public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(15);
     public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / TRACK_RADIUS);

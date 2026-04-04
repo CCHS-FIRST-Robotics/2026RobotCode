@@ -33,7 +33,10 @@ public class LedStrip extends SubsystemBase {
             }
             
             led.setData(ledBuffer);
-            rainbowFirstPixelHue = (rainbowFirstPixelHue + 5) % 180;
+            
+            Logger.recordOutput("outputs/ledStrip/color", Color.fromHSV(rainbowFirstPixelHue, 255, 255));
+
+            rainbowFirstPixelHue = (rainbowFirstPixelHue + 3) % 180;
             return;
         }
         

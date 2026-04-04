@@ -267,7 +267,7 @@ public class RobotContainer {
         // intake
         controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
             commandFactory.getSlowDriveCommand(
-                MetersPerSecond.of(1), 
+                MetersPerSecond.of(2), 
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
@@ -325,8 +325,6 @@ public class RobotContainer {
     // ————— robot ————— //
 
     public void configureRobot() {
-        Logger.recordOutput("outputs/CURRENT_BUTTON_BINDINGS", Constants.CURRENT_BUTTON_BINDINGS);
-
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
