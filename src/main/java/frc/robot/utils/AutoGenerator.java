@@ -86,11 +86,16 @@ public class AutoGenerator {
 
         // load trajectories
         AutoTrajectory trajectory0 = routine.trajectory("BeMeanLeft", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("BeMeanLeft", 1);
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
+            .andThen(
+                trajectory1.cmd()
+                .repeatedly()
+            )
         );
 
         return routine;
@@ -101,17 +106,22 @@ public class AutoGenerator {
 
         // load trajectories
         AutoTrajectory trajectory0 = routine.trajectory("BeMeanRight", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("BeMeanRight", 1);
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
+            .andThen(
+                trajectory1.cmd()
+                .repeatedly()
+            )
         );
 
         return routine;
     }
 
-        public AutoRoutine centerFuelLeft() {
+    public AutoRoutine centerFuelLeft() {
         AutoRoutine routine = autoFactory.newRoutine("CenterFuelLeft");
 
         // load trajectories
@@ -272,6 +282,164 @@ public class AutoGenerator {
         AutoTrajectory trajectory3 = routine.trajectory("RepeatingCenterFuelRight1", 3);
         // shoot
         AutoTrajectory trajectory4 = routine.trajectory("RepeatingCenterFuelRight1", 4);
+
+        AutoTrajectory trajectory5 = routine.trajectory("RepeatingCenterFuelRight2", 0);
+        AutoTrajectory trajectory6 = routine.trajectory("RepeatingCenterFuelRight2", 1);
+
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen( // drive, bring pivot down
+                trajectory0.cmd()
+                .alongWith(
+                    commandFactory.getSetPivotEncoderPositionUpCommand()
+                    .andThen(Commands.waitSeconds(0.25))
+                    .andThen(commandFactory.getSetPivotDownCommand())
+                )
+            )
+            .andThen( // looping the rest
+                // path 1
+                trajectory1.cmd()
+                .andThen( // drive, start intake
+                    trajectory2.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                // path 2
+                .andThen(Commands.waitSeconds(1))
+                .andThen(trajectory5.cmd())
+                .andThen( // drive, start intake
+                    trajectory6.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                .repeatedly()
+            )
+        );
+
+        return routine;
+    }
+
+    public AutoRoutine repeatingCenterFuelLeftCloser() {
+        AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelLeftCloser");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("RepeatingCenterFuelLeft1Closer", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("RepeatingCenterFuelLeft1Closer", 1);
+        AutoTrajectory trajectory2 = routine.trajectory("RepeatingCenterFuelLeft1Closer", 2);
+        AutoTrajectory trajectory3 = routine.trajectory("RepeatingCenterFuelLeft1Closer", 3);
+        // shoot
+        AutoTrajectory trajectory4 = routine.trajectory("RepeatingCenterFuelLeft1Closer", 4);
+
+        AutoTrajectory trajectory5 = routine.trajectory("RepeatingCenterFuelLeft2", 0);
+        AutoTrajectory trajectory6 = routine.trajectory("RepeatingCenterFuelLeft2", 1);
+
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen( // drive, bring pivot down
+                trajectory0.cmd()
+                .alongWith(
+                    commandFactory.getSetPivotEncoderPositionUpCommand()
+                    .andThen(Commands.waitSeconds(0.25))
+                    .andThen(commandFactory.getSetPivotDownCommand())
+                )
+            )
+            .andThen( // looping the rest
+                // path 1
+                trajectory1.cmd()
+                .andThen( // drive, start intake
+                    trajectory2.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                // path 2
+                .andThen(Commands.waitSeconds(1))
+                .andThen(trajectory5.cmd())
+                .andThen( // drive, start intake
+                    trajectory6.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(10), false))
+                )
+                .andThen( // drive, stop intake, spin up shooter
+                    trajectory3.cmd()
+                    .alongWith(intake.getSetIntakeVoltageCommand(Volts.of(0), false))
+                    .alongWith(shooter.getSetShooterVelocityCommand(RotationsPerSecond.of(40)))
+                )
+                .andThen( // shoot for 4 seconds
+                    commandFactory.getUpdateShootUtilCommand()
+                    .alongWith(commandFactory.getShootCommand(
+                        () -> ShootUtil.getShooterVelocity(), 
+                        true, 
+                        true, 
+                        true
+                    ))
+                    .withTimeout(4)
+                )
+                .andThen(trajectory4.cmd())
+                .repeatedly()
+            )
+        );
+
+        return routine;
+    }
+
+    public AutoRoutine repeatingCenterFuelRightCloser() {
+        AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelRightCloser");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("RepeatingCenterFuelRight1Closer", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("RepeatingCenterFuelRight1Closer", 1);
+        AutoTrajectory trajectory2 = routine.trajectory("RepeatingCenterFuelRight1Closer", 2);
+        AutoTrajectory trajectory3 = routine.trajectory("RepeatingCenterFuelRight1Closer", 3);
+        // shoot
+        AutoTrajectory trajectory4 = routine.trajectory("RepeatingCenterFuelRight1Closer", 4);
 
         AutoTrajectory trajectory5 = routine.trajectory("RepeatingCenterFuelRight2", 0);
         AutoTrajectory trajectory6 = routine.trajectory("RepeatingCenterFuelRight2", 1);

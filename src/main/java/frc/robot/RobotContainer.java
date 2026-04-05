@@ -252,8 +252,8 @@ public class RobotContainer {
         );
 
         // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(
+        controller.leftStick().whileTrue( // remapped as gamesir L4
+            commandFactory.getDriveSpeedCommand(
                 MetersPerSecond.of(1), 
                 RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -261,9 +261,19 @@ public class RobotContainer {
             )
         );
 
+        // drive fast
+        controller.rightStick().whileTrue( // remapped as gamesir R4
+            commandFactory.getDriveSpeedCommand(
+                DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
+                DriveConstants.MAX_THEORETICAL_ANGULAR_SPEED, 
+                MetersPerSecondPerSecond.of(100), 
+                RadiansPerSecondPerSecond.of(100)
+            )
+        );
+
         // intake
         controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-            commandFactory.getSlowDriveCommand(
+            commandFactory.getDriveSpeedCommand(
                 MetersPerSecond.of(2), 
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -398,6 +408,8 @@ public class RobotContainer {
             autoChooser.addRoutine("CenterFuelRight", () -> autoGenerator.centerFuelRight());
             autoChooser.addRoutine("RepeatingCenterFuelLeft", () -> autoGenerator.repeatingCenterFuelLeft());
             autoChooser.addRoutine("RepeatingCenterFuelRight", () -> autoGenerator.repeatingCenterFuelRight());
+            autoChooser.addRoutine("RepeatingCenterFuelLeftCloser", () -> autoGenerator.repeatingCenterFuelLeftCloser());
+            autoChooser.addRoutine("RepeatingCenterFuelRightCloser", () -> autoGenerator.repeatingCenterFuelRightCloser());
             autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
             autoChooser.select("BackUpAndShoot"); // picks a default auto

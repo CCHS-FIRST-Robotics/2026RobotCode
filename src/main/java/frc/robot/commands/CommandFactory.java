@@ -59,7 +59,7 @@ public class CommandFactory {
     // ————— processed ————— //
 
     public Command getDriveAndIntakeCommand() {
-        return getSlowDriveCommand(
+        return getDriveSpeedCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
             DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -70,7 +70,7 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand(boolean useIntake, boolean usePivot) {
-        return getSlowDriveCommand(
+        return getDriveSpeedCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
             DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -183,7 +183,7 @@ public class CommandFactory {
         );
     }
 
-    public Command getSlowDriveCommand(
+    public Command getDriveSpeedCommand(
         LinearVelocity linearVelocity, 
         AngularVelocity angularVelocity, 
         LinearAcceleration linearAcceleration,
