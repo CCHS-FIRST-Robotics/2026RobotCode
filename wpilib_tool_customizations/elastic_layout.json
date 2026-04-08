@@ -3,84 +3,15 @@
   "grid_size": 79,
   "tabs": [
     {
-      "name": "Competition",
+      "name": "Teleoperated",
       "grid_layout": {
         "layouts": [],
         "containers": [
           {
-            "title": "currentShift",
-            "x": 632.0,
-            "y": 395.0,
-            "width": 395.0,
-            "height": 158.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/outputs/fieldInfo/currentShift",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
-            "title": "autoWinner",
-            "x": 632.0,
-            "y": 553.0,
-            "width": 395.0,
-            "height": 237.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/outputs/fieldInfo/autoWinner",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
-            "title": "hubActive",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 632.0,
-            "height": 316.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/outputs/fieldInfo/hubActive",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "remainingShiftTime",
-            "x": 1027.0,
-            "y": 395.0,
-            "width": 395.0,
-            "height": 158.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/outputs/fieldInfo/remainingShiftTime",
-              "period": 0.06,
-              "data_type": "double"
-            }
-          },
-          {
-            "title": "USB Camera 0",
-            "x": 0.0,
-            "y": 316.0,
-            "width": 632.0,
-            "height": 474.0,
-            "type": "Camera Stream",
-            "properties": {
-              "topic": "/CameraPublisher/USB Camera 0",
-              "period": 0.06,
-              "rotation_turns": 0
-            }
-          },
-          {
             "title": "AutoChooser",
-            "x": 1027.0,
-            "y": 553.0,
-            "width": 395.0,
+            "x": 1185.0,
+            "y": 474.0,
+            "width": 316.0,
             "height": 237.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -90,10 +21,52 @@
             }
           },
           {
+            "title": "Increase Theta PID Position Tolerance",
+            "x": 0.0,
+            "y": 395.0,
+            "width": 316.0,
+            "height": 158.0,
+            "type": "Command",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/buttons/Increase Theta PID Position Tolerance",
+              "period": 0.06,
+              "show_type": true,
+              "maximize_button_space": true
+            }
+          },
+          {
+            "title": "Decrease Theta PID Position Tolerance",
+            "x": 0.0,
+            "y": 553.0,
+            "width": 316.0,
+            "height": 158.0,
+            "type": "Command",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/buttons/Decrease Theta PID Position Tolerance",
+              "period": 0.06,
+              "show_type": true,
+              "maximize_button_space": true
+            }
+          },
+          {
+            "title": "Check Motors",
+            "x": 316.0,
+            "y": 474.0,
+            "width": 395.0,
+            "height": 237.0,
+            "type": "Command",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/buttons/Check Motors",
+              "period": 0.06,
+              "show_type": true,
+              "maximize_button_space": true
+            }
+          },
+          {
             "title": "field2d",
-            "x": 632.0,
-            "y": 0.0,
-            "width": 790.0,
+            "x": 316.0,
+            "y": 79.0,
+            "width": 869.0,
             "height": 395.0,
             "type": "Field",
             "properties": {
@@ -109,182 +82,106 @@
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
             }
+          },
+          {
+            "title": "color",
+            "x": 1185.0,
+            "y": 395.0,
+            "width": 316.0,
+            "height": 79.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/outputs/ledStrip/color",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Enable Pivot",
+            "x": 711.0,
+            "y": 632.0,
+            "width": 237.0,
+            "height": 79.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/toggles/Enable Pivot",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Enable Pivot Agitation",
+            "x": 948.0,
+            "y": 632.0,
+            "width": 237.0,
+            "height": 79.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/toggles/Enable Pivot Agitation",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Enable Shoot on the Move",
+            "x": 948.0,
+            "y": 474.0,
+            "width": 237.0,
+            "height": 158.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/toggles/Enable Shoot on the Move",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Enable Trench Align",
+            "x": 711.0,
+            "y": 474.0,
+            "width": 237.0,
+            "height": 158.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/smartDashboard/toggles/Enable Trench Align",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "photonvision_Port_1182_Output_MJPEG_Server",
+            "x": 0.0,
+            "y": 79.0,
+            "width": 316.0,
+            "height": 316.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0
+            }
+          },
+          {
+            "title": "photonvision_Port_1184_Output_MJPEG_Server",
+            "x": 1185.0,
+            "y": 79.0,
+            "width": 316.0,
+            "height": 316.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0
+            }
           }
         ]
       }
     },
     {
-      "name": "Testing",
+      "name": "Autonomous",
       "grid_layout": {
-        "layouts": [
-          {
-            "title": "drivePIDChoreo",
-            "x": 1185.0,
-            "y": 0.0,
-            "width": 237.0,
-            "height": 790.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "theta",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDChoreo/theta",
-                  "period": 0.06
-                }
-              },
-              {
-                "title": "x",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDChoreo/x",
-                  "period": 0.06
-                }
-              },
-              {
-                "title": "y",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDChoreo/y",
-                  "period": 0.06
-                }
-              }
-            ]
-          },
-          {
-            "title": "drivePIDPosition",
-            "x": 948.0,
-            "y": 0.0,
-            "width": 237.0,
-            "height": 790.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "theta",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDPosition/theta",
-                  "period": 0.06
-                }
-              },
-              {
-                "title": "x",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDPosition/x",
-                  "period": 0.06
-                }
-              },
-              {
-                "title": "y",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 316.0,
-                "height": 474.0,
-                "type": "PIDController",
-                "properties": {
-                  "topic": "/SmartDashboard/smartDashboard/PID/drivePIDPosition/y",
-                  "period": 0.06
-                }
-              }
-            ]
-          }
-        ],
-        "containers": [
-          {
-            "title": "Check Motors",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 474.0,
-            "height": 237.0,
-            "type": "Command",
-            "properties": {
-              "topic": "/SmartDashboard/smartDashboard/buttons/Check Motors",
-              "period": 0.06,
-              "show_type": true,
-              "maximize_button_space": true
-            }
-          },
-          {
-            "title": "Clear Fuel",
-            "x": 474.0,
-            "y": 0.0,
-            "width": 474.0,
-            "height": 237.0,
-            "type": "Command",
-            "properties": {
-              "topic": "/SmartDashboard/smartDashboard/buttons/Clear Fuel",
-              "period": 0.06,
-              "show_type": true,
-              "maximize_button_space": true
-            }
-          },
-          {
-            "title": "Shoot on the Move",
-            "x": 632.0,
-            "y": 237.0,
-            "width": 316.0,
-            "height": 158.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/smartDashboard/toggles/Shoot on the Move",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "Trench Align",
-            "x": 0.0,
-            "y": 237.0,
-            "width": 316.0,
-            "height": 158.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/smartDashboard/toggles/Trench Align",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "Use Pivot",
-            "x": 316.0,
-            "y": 237.0,
-            "width": 316.0,
-            "height": 158.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/smartDashboard/toggles/Use Pivot",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          }
-        ]
+        "layouts": [],
+        "containers": []
       }
     }
   ]
