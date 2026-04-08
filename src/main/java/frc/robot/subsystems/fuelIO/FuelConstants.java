@@ -47,14 +47,14 @@ public class FuelConstants {
 
     // ————— sim ————— //
     
-    public static final Distance INTAKE_WIDTH_X = Inches.of(11.5); // ! 
+    public static final Distance INTAKE_WIDTH_X = Inches.of(9.6);
     public static final int HOPPER_FUEL_CAPACITY = 50; // ! 
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
-        Inches.of(-8), 
+        Inches.of(-9.2), 
         Inches.of(0), 
-        Inches.of(13), 
+        Inches.of(12.5), 
         new Rotation3d()
-    ); // ! 
+    );
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
     public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood horizontal (ball shoots straight up)
 }

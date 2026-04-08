@@ -33,7 +33,6 @@ public class KickerIOReal implements KickerIO {
         motorConfig.encoder.quadratureAverageDepth(2);
 
         motorConfig.smartCurrentLimit(40);
-        motorConfig.secondaryCurrentLimit(40); // ! we don't know if this actually fixes the problem
         motorConfig.voltageCompensation(12);
 
         motorConfig.inverted(true);
