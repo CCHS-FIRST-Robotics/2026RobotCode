@@ -59,8 +59,8 @@ public class CommandFactory {
     // ————— processed ————— //
 
     public Command getDriveAndIntakeCommand() {
-        return getSlowDriveCommand(
-            MetersPerSecond.of(1.5), 
+        return getDriveSpeedCommand(
+            MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
             DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
             DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
@@ -70,7 +70,7 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand(boolean useIntake, boolean usePivot) {
-        return getSlowDriveCommand(
+        return getDriveSpeedCommand(
             MetersPerSecond.of(1), 
             DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
             DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -78,7 +78,7 @@ public class CommandFactory {
         )
         .alongWith(getUpdateShootUtilCommand())
         .alongWith(getDriveWithJoysticksShooterCommand())
-        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), useIntake, usePivot));
+        .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), false, useIntake, usePivot));
     }
 
     public Command getDriveAndIntakeAndShootCommand() {
@@ -183,7 +183,7 @@ public class CommandFactory {
         );
     }
 
-    public Command getSlowDriveCommand(
+    public Command getDriveSpeedCommand(
         LinearVelocity linearVelocity, 
         AngularVelocity angularVelocity, 
         LinearAcceleration linearAcceleration,
@@ -254,14 +254,16 @@ public class CommandFactory {
 
     public Command getShootCommand(
         Supplier<AngularVelocity> shooterVelocitySupplier, 
+        boolean atThetaSetpointOverride,
         boolean useIntake, 
         boolean usePivot
     ) {
         return Commands.run(() -> shooter.setShooterVelocity(shooterVelocitySupplier.get()))
-        .alongWith( // allow shooting
+        .alongWith( // allow shooting with the kicker
             Commands.waitSeconds(0.1)
-            .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint())) // waits for drive rotation to be correct
+            .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint() || atThetaSetpointOverride)) // waits for drive rotation to be correct
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
+            // Commands.waitSeconds(0.5)
             .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the balls that are already lodged in there
             .andThen(Commands.waitSeconds(0.25))
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -307,9 +309,7 @@ public class CommandFactory {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                     pivotUp = false;
                 }
-                if (Constants.CURRENT_BUTTON_BINDINGS != Constants.BUTTON_BINDINGS.TESTING_SHOOTER_MAP) {
-                    shooter.setShooterVelocity(RotationsPerSecond.of(0));
-                }
+                shooter.setShooterVelocity(RotationsPerSecond.of(0));
                 shooter.setKickerVelocity(RotationsPerSecond.of(0));
 
                 ledStrip.setLedStripHues(new Integer[0]);

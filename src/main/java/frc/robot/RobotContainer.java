@@ -246,17 +246,14 @@ public class RobotContainer {
         // drive
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
         
-        // check motors
-        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
-
         // x-lock
         controller.x().whileTrue(
             Commands.run(() -> drive.xLock())
         );
 
         // drive slow
-        controller.rightStick().whileTrue( // remapped as gamesir R4
-            commandFactory.getSlowDriveCommand(
+        controller.leftStick().whileTrue( // remapped as gamesir L4
+            commandFactory.getDriveSpeedCommand(
                 MetersPerSecond.of(1), 
                 RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
@@ -264,10 +261,20 @@ public class RobotContainer {
             )
         );
 
+        // drive fast
+        controller.rightStick().whileTrue( // remapped as gamesir R4
+            commandFactory.getDriveSpeedCommand(
+                DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
+                DriveConstants.MAX_THEORETICAL_ANGULAR_SPEED, 
+                MetersPerSecondPerSecond.of(100), 
+                RadiansPerSecondPerSecond.of(100)
+            )
+        );
+
         // intake
         controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-            commandFactory.getSlowDriveCommand(
-                MetersPerSecond.of(1), 
+            commandFactory.getDriveSpeedCommand(
+                MetersPerSecond.of(2), 
                 DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
                 DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
                 DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
@@ -277,16 +284,23 @@ public class RobotContainer {
         );
 
         // drive and intake and shoot
-        // controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-        //     commandFactory.getDriveAndIntakeAndShootCommand()
-        //     .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
-        // );
+        controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
+            commandFactory.getDriveAndIntakeAndShootCommand()
+            .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
+        );
 
         // drive and shoot
         controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
             commandFactory.getDriveAndShootCommand(true, true)
             .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
         );
+
+        // shoot
+        controller.pov(0).whileTrue(commandFactory.getShootCommand(
+            () -> RotationsPerSecond.of(50), 
+            true, 
+            true, 
+            true));
 
         // pivot
         controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
@@ -320,13 +334,19 @@ public class RobotContainer {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
             controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
+
+        // ————— testing bindings ————— //
+
+        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
+
+        SmartDashboard.putData("smartDashboard/buttons/Increase Theta PID Position Tolerance", new InstantCommand(() -> drive.increaseThetaPIDPositionTolerance()));
+        SmartDashboard.putData("smartDashboard/buttons/Decrease Theta PID Position Tolerance", new InstantCommand(() -> drive.decreaseThetaPIDPositionTolerance()));
+
     }
 
     // ————— robot ————— //
 
     public void configureRobot() {
-        Logger.recordOutput("outputs/CURRENT_BUTTON_BINDINGS", Constants.CURRENT_BUTTON_BINDINGS);
-
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
@@ -386,7 +406,10 @@ public class RobotContainer {
             autoChooser.addCmd("BackUpAndShoot", () -> autoGenerator.backUpAndShoot());
             autoChooser.addRoutine("CenterFuelLeft ", () -> autoGenerator.centerFuelLeft());
             autoChooser.addRoutine("CenterFuelRight", () -> autoGenerator.centerFuelRight());
+            autoChooser.addRoutine("RepeatingCenterFuelLeft", () -> autoGenerator.repeatingCenterFuelLeft());
             autoChooser.addRoutine("RepeatingCenterFuelRight", () -> autoGenerator.repeatingCenterFuelRight());
+            autoChooser.addRoutine("RepeatingCenterFuelLeftCloser", () -> autoGenerator.repeatingCenterFuelLeftCloser());
+            autoChooser.addRoutine("RepeatingCenterFuelRightCloser", () -> autoGenerator.repeatingCenterFuelRightCloser());
             autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
             autoChooser.select("BackUpAndShoot"); // picks a default auto
