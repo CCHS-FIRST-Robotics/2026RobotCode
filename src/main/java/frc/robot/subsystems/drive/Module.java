@@ -1,3 +1,16 @@
+/**
+ * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/Module.java
+ * 
+ * Changes made: 
+ *  - added @SuppressWarnings("rawtypes") above lines 29 and 36
+ *  - replaced line 50 with Logger.processInputs("subsystems/drive/module" + Integer.toString(index), inputs);
+ *  - replaced the runCharacterization function with: 
+ *      public void runCharacterization(double output, Rotation2d turn) {
+ *          io.setDriveOpenLoop(output);
+ *          io.setTurnPosition(turn);
+ *      }
+ */
+
 // Copyright 2021-2024 FRC 6328
 // http://github.com/Mechanical-Advantage
 //

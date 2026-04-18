@@ -46,7 +46,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
             drive.getModulePositions(),
             startPose,
             VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE), // makes it not trust odometry info at all
-            VecBuilder.fill(0.4, 0.4, 0.2) // is overridden anyways
+            VecBuilder.fill(0.9, 0.9, 0.9) // ! is overridden anyways
         );
         combinedEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.KINEMATICS, 

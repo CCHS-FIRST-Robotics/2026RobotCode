@@ -86,9 +86,6 @@ public class Drive extends SubsystemBase {
 
     boolean usingChoreo = false;
 
-    @AutoLogOutput(key = "outputs/drive/thetaPIDPositionTolerance")
-    private double thetaPIDPositionTolerance = 0.15;
-
     // ————— velocity ————— //
 
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -96,7 +93,7 @@ public class Drive extends SubsystemBase {
 
     // ————— utils ————— //
 
-    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
+    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine( // ! still hasn't worked
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
             Volts.of(1.75), // step voltage
@@ -129,7 +126,7 @@ public class Drive extends SubsystemBase {
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
         thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
 
-        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
+        thetaPIDPosition.setTolerance(0.15);
 
         // allow PID to be tuned through elastic
         SmartDashboard.putData("smartDashboard/PID/drivePIDPosition/x", xPIDPosition);
@@ -146,14 +143,13 @@ public class Drive extends SubsystemBase {
             controlMode = DRIVE_MODE.DISABLED;
         }
 
-        // module states
+        // log the real module states and speeds
         SwerveModuleState[] moduleStatesOutput = getModuleStates();
         Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
-        // chassisspeeds
         ChassisSpeeds speedsOutput = DriveConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
 
-        // run control mode
+        // run the selected control mode
         switch (controlMode) {
             case DISABLED:
                 // set all module voltages to 0
@@ -175,7 +171,7 @@ public class Drive extends SubsystemBase {
                 double yOutput;
                 double thetaOutput;
 
-                // get PIDs
+                // get PID outputs
                 if (!usingChoreo) {
                     xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
                     yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
@@ -186,7 +182,7 @@ public class Drive extends SubsystemBase {
                     thetaOutput = thetaPIDChoreo.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 }
 
-                // create chassisspeeds object with FOC
+                // create robot relative chassisspeeds object
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xOutput + velocitySetpoint.vxMetersPerSecond,
                     yOutput + velocitySetpoint.vyMetersPerSecond,
@@ -195,7 +191,7 @@ public class Drive extends SubsystemBase {
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
-                if (!usingChoreo) {
+                if (!usingChoreo) { // don't limit velocity or acceleration if using choreo (limits should be configured in the auto path)
                     speeds = new ChassisSpeeds( // clamp velocities
                         MathUtil.clamp(speeds.vxMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
                         MathUtil.clamp(speeds.vyMetersPerSecond, -DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond), DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond)), 
@@ -255,7 +251,7 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    // ————— running control mode ————— //
+    // ————— run control mode ————— //
 
     public void stop() {
         controlMode = DRIVE_MODE.DISABLED;
@@ -287,6 +283,37 @@ public class Drive extends SubsystemBase {
         speeds = speedsInput;
     }
 
+    // ————— general public functions ————— //
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return prevSpeeds;
+    }
+
+    public ChassisSpeeds getFieldRelativeSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(prevSpeeds, poseEstimator.getPose().getRotation());
+    }
+
+    public PIDController getXPositionController() {
+        return xPIDPosition;
+    }
+
+    public PIDController getYPositionController() {
+        return yPIDPosition;
+    }
+
+    public PIDController getThetaPositionController() {
+        return thetaPIDPosition;
+    }
+
+    @AutoLogOutput(key = "outputs/drive/atThetaSetpoint")
+    public boolean atThetaSetpoint() {
+        return thetaPIDPosition.atSetpoint();
+    }
+
+    public void setThetaPIDPositionTolerance(double thetaPIDPositionTolerance) {
+        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
+    }
+    
     // ————— poseEstimator ————— //
 
     public void setPoseEstimator(PoseEstimator poseEstimator) {
@@ -356,41 +383,6 @@ public class Drive extends SubsystemBase {
         return sampleModuleDeltas;
     }
 
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return prevSpeeds;
-    }
-
-    public ChassisSpeeds getFieldRelativeSpeeds() {
-        return ChassisSpeeds.fromRobotRelativeSpeeds(prevSpeeds, poseEstimator.getPose().getRotation());
-    }
-
-    public PIDController getXPositionController() {
-        return xPIDPosition;
-    }
-
-    public PIDController getYPositionController() {
-        return yPIDPosition;
-    }
-
-    public PIDController getThetaPositionController() {
-        return thetaPIDPosition;
-    }
-
-    @AutoLogOutput(key = "outputs/drive/atThetaSetpoint")
-    public boolean atThetaSetpoint() {
-        return thetaPIDPosition.atSetpoint();
-    }
-
-    public void increaseThetaPIDPositionTolerance() {
-        thetaPIDPositionTolerance += 0.1;
-        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
-    }
-
-    public void decreaseThetaPIDPositionTolerance() {
-        thetaPIDPositionTolerance -= 0.1;
-        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
-    }
-    
     // ————— utils ————— //
 
     public void xLock() {

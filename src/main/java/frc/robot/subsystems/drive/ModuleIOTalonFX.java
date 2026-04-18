@@ -1,3 +1,18 @@
+/**
+ * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFX.java
+ * 
+ * Changes made: 
+ *  - replaced import static frc.robot.util.PhoenixUtil.tryUntilOk with import static frc.robot.utils.PhoenixUtil.tryUntilOk
+ *  - removed import frc.robot.generated.TunerConstants;
+ *  - replaced every instance of TunerConstants.DrivetrainConstants.CANBusName with DriveConstants.CAN_BUS
+ *  - replaced Constants.currentMode == Constants.Mode.SIM with Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM
+ *  - replaced Drive.ODOMETRY_FREQUENCY with DriveConstants.ODOMETRY_FREQUENCY
+ *  - added above line 104: 
+ *      turnConfig.CurrentLimits.StatorCurrentLimit = DriveConstants.TURN_STATOR_CURRENT_LIMIT.in(Amps);
+ *      turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+ *  - added import static edu.wpi.first.units.Units.Amps; above line 3
+ */
+
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Amps;

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
@@ -20,16 +16,6 @@ import frc.robot.subsystems.fuelIO.FuelConstants;
 public class ShootUtil {
     public static final InterpolatingDoubleTreeMap SHOOTER_VELOCITY_MAP = new InterpolatingDoubleTreeMap();
 
-    /**
-     * old guessy values
-     * SHOOTER_VELOCITY_MAP.put(1.800, 42.49609375);
-     * SHOOTER_VELOCITY_MAP.put(2.364, 43.23828125000001);
-     * SHOOTER_VELOCITY_MAP.put(2.793, 48.45703125000001);
-     * SHOOTER_VELOCITY_MAP.put(3.510, 50.57421874999999);
-     * SHOOTER_VELOCITY_MAP.put(4.321, 54.548828125);
-     * SHOOTER_VELOCITY_MAP.put(5.286, 58.357422);
-     */
-
     static {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL) {
             SHOOTER_VELOCITY_MAP.put(1.797, 42.14648437500001);
@@ -38,7 +24,7 @@ public class ShootUtil {
             SHOOTER_VELOCITY_MAP.put(3.546, 49.66210937500001);
             SHOOTER_VELOCITY_MAP.put(4.020, 53.64257812500001);
             SHOOTER_VELOCITY_MAP.put(4.884, 59.12499999999999);
-        } else {
+        } else { // ! get working values
             SHOOTER_VELOCITY_MAP.put(1.908, 46.539058922493794);
             SHOOTER_VELOCITY_MAP.put(2.998, 57.8593705522896);
             SHOOTER_VELOCITY_MAP.put(3.919, 65.40624497215343);
@@ -120,7 +106,7 @@ public class ShootUtil {
         return targetDistance;
     }
 
-    public static void offsetShooterMap(double offset) {
+    public static void offsetShooterMap(double offset) { // ! ts so fucked up
         SHOOTER_VELOCITY_MAP.clear();
 
         SHOOTER_VELOCITY_MAP.put(1.797, 43.14648437500001 + offset);

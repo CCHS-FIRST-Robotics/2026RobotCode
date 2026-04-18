@@ -1,3 +1,8 @@
+/**
+ * Variables that may change with the drivebase are marked with // * MUTABLE
+ * This assumes that we're still using the SDS Mk4n modules purchased in 2025
+ */
+
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
@@ -25,24 +30,20 @@ public class DriveConstants {
     private static final SteerMotorArrangement TURN_MOTOR_TYPE = SteerMotorArrangement.TalonFX_Integrated;
 
     private static final TalonFXConfiguration DRIVE_CONFIG = new TalonFXConfiguration();
-    private static final TalonFXConfiguration TURN_CONFIG = new TalonFXConfiguration()
-    .withCurrentLimits(new CurrentLimitsConfigs()
-        .withStatorCurrentLimit(Amps.of(60))
-        .withStatorCurrentLimitEnable(true)
-    );
+    private static final TalonFXConfiguration TURN_CONFIG = new TalonFXConfiguration();
 
     private static final int[] DRIVE_MOTOR_IDS = {11, 21, 31, 41};
     private static final int[] TURN_MOTOR_IDS = {12, 22, 32, 42};
-    private static final boolean[] DRIVE_INVERSIONS = {false, true, false, true};
-    private static final boolean[] TURN_INVERSIONS = {true, true, true, true};
+    private static final boolean[] DRIVE_INVERSIONS = {false, true, false, true}; // * MUTABLE
+    private static final boolean[] TURN_INVERSIONS = {true, true, true, true}; // * MUTABLE
     
     // ————— encoders ————— //
     
     private static final CANcoderConfiguration ENCODER_CONFIG = new CANcoderConfiguration();
     
     private static final int[] ENCODER_IDS = {13, 23, 33, 43};
-    private static final boolean[] ENCODER_INVERSIONS = {false, false, false, false};
-    private static final Angle[] ENCODER_OFFSETS = {
+    private static final boolean[] ENCODER_INVERSIONS = {false, false, false, false}; // * MUTABLE
+    private static final Angle[] ENCODER_OFFSETS = { // * MUTABLE
         Rotations.of(0.265625),
         Rotations.of(0.28857421875),
         Rotations.of(-0.383056640625),
@@ -88,11 +89,11 @@ public class DriveConstants {
     
     // ————— drivetrain ————— //
 
-    public static final Mass ROBOT_WEIGHT = Pounds.of(123); // robot is 100, bumpers are 10, battery is 13
-    public static final Distance WIDTH_X = Inches.of(27.5);
-    public static final Distance WIDTH_Y = Inches.of(27.5);
-    public static final Distance TRACK_WIDTH_X = Inches.of(22.25);
-    public static final Distance TRACK_WIDTH_Y = Inches.of(22.25);
+    public static final Mass ROBOT_WEIGHT = Pounds.of(123); // robot is 100, bumpers are 10, battery is 13 // * MUTABLE
+    public static final Distance WIDTH_X = Inches.of(27.5); // * MUTABLE
+    public static final Distance WIDTH_Y = Inches.of(27.5); // * MUTABLE
+    public static final Distance TRACK_WIDTH_X = Inches.of(22.25); // distance between centers of the front and back wheels // * MUTABLE
+    public static final Distance TRACK_WIDTH_Y = Inches.of(22.25); // distance between centers of the left and right wheels // * MUTABLE
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR
@@ -113,17 +114,17 @@ public class DriveConstants {
 
     public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
     public static final AngularVelocity MAX_THEORETICAL_ANGULAR_SPEED = RadiansPerSecond.of(MAX_THEORETICAL_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(4) : MetersPerSecond.of(2);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(4) : MetersPerSecond.of(2); // * MUTABLE
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
-    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(15);
+    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(15); // * MUTABLE
     public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) / TRACK_RADIUS);
     public static LinearVelocity ALLOWED_LINEAR_SPEED = MAX_ALLOWED_LINEAR_SPEED;
     public static AngularVelocity ALLOWED_ANGULAR_SPEED = MAX_ALLOWED_ANGULAR_SPEED;
     public static LinearAcceleration ALLOWED_LINEAR_ACCEL = MAX_ALLOWED_LINEAR_ACCEL;
     public static AngularAcceleration ALLOWED_ANGULAR_ACCEL = MAX_ALLOWED_ANGULAR_ACCEL;
     
-    private static final Current DRIVE_STATOR_CURRENT_LIMIT = Amps.of(60.0);
-    public static final Current TURN_STATOR_CURRENT_LIMIT = Amps.of(40.0);
+    private static final Current DRIVE_STATOR_CURRENT_LIMIT = Amps.of(60.0); // * MUTABLE
+    public static final Current TURN_STATOR_CURRENT_LIMIT = Amps.of(40.0); // * MUTABLE
 
     // these are only used for simulation
     private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01);

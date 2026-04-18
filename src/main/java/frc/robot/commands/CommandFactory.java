@@ -115,6 +115,7 @@ public class CommandFactory {
 
     // ————— drive ————— //
 
+    // regular driving
     public Command getDriveWithJoysticksCommand() {
         return new DriveWithJoysticks(
             drive,
@@ -128,6 +129,7 @@ public class CommandFactory {
         );
     }
 
+    // turns the robot in the direction of the intake while driving
     public Command getDriveWithJoysticksIntakeCommand() {
         return new DriveWithJoysticks(
             drive, 
@@ -157,6 +159,7 @@ public class CommandFactory {
         );
     }
 
+    // turns the robot to shoot at whatever target is calculated by ShootUtil
     public Command getDriveWithJoysticksShooterCommand() {
         return Commands.either(
             new DriveWithJoysticks(
@@ -183,6 +186,7 @@ public class CommandFactory {
         );
     }
 
+    // allows for temporary changes to the drive velocity and acceleration limits
     public Command getDriveSpeedCommand(
         LinearVelocity linearVelocity, 
         AngularVelocity angularVelocity, 
@@ -232,6 +236,7 @@ public class CommandFactory {
         );
     }
 
+    // re-zeroes the pivot encoder to the up position
     public Command getSetPivotEncoderPositionUpCommand() {
         return Commands.runOnce(
             () -> {
@@ -241,6 +246,7 @@ public class CommandFactory {
         );
     }
 
+    // re-zeroes the pivot encoder to the down position
     public Command getSetPivotEncoderPositionDownCommand() {
         return Commands.runOnce(
             () -> {
@@ -252,6 +258,7 @@ public class CommandFactory {
 
     // ————— shoot ————— // 
 
+    // spins up shooter, does logic on when to start the kicker, moves the pivot up, calls the sim shoot command
     public Command getShootCommand(
         Supplier<AngularVelocity> shooterVelocitySupplier, 
         boolean atThetaSetpointOverride,
@@ -263,7 +270,6 @@ public class CommandFactory {
             Commands.waitSeconds(0.1)
             .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint() || atThetaSetpointOverride)) // waits for drive rotation to be correct
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
-            // Commands.waitSeconds(0.5)
             .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the balls that are already lodged in there
             .andThen(Commands.waitSeconds(0.25))
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
@@ -317,6 +323,7 @@ public class CommandFactory {
         );
     }
 
+    // shoots fuel in sim
     public Command getSimShootCommand() {
         return Commands.runOnce(
             () -> {
@@ -354,6 +361,7 @@ public class CommandFactory {
 
     // ————— ledStrip ————— //
 
+    // sets LED hues, meant for use in parallel with other commands
     public Command getSetLedStripHuesCommand(Integer[] hues) {
         return new StartEndCommand(
             () -> ledStrip.setLedStripHues(hues), 
@@ -361,6 +369,7 @@ public class CommandFactory {
         );
     }
 
+    // sets LED hues to be blue when within a good shooting range, red when not
     public Command getShootingLedStripCommand() {
         return Commands.either(
             ledStrip.getSetLedStripHuesCommand(new Integer[] {120}), 
@@ -371,6 +380,7 @@ public class CommandFactory {
 
     // ————— util ————— //
 
+    // updates ShootUtil to provide the right robot orientation, shooter velocity, and target distance
     public Command getUpdateShootUtilCommand() {
         return Commands.either(
             Commands.run(

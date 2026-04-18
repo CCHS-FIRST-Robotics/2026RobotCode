@@ -21,7 +21,5 @@ public interface PivotIO {
 
     public default void setPosition(Angle angle) {}
 
-    public default void setEncoderPositionUp() {}
-
-    public default void setEncoderPositionDown() {}
+    public default void setEncoderPosition(Angle angle) {}
 }

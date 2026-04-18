@@ -1,24 +1,10 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.subsystems.poseEstimator.vision;
+
+import static frc.robot.subsystems.poseEstimator.vision.VisionConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-
-import static frc.robot.subsystems.poseEstimator.vision.VisionConstants.aprilTagLayout;
-
 import java.util.function.Supplier;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
@@ -48,7 +34,7 @@ public class CameraIOPhotonVisionSim extends CameraIOPhotonVision {
         }
 
         // Add sim camera
-        var cameraProperties = new SimCameraProperties(); 
+        var cameraProperties = new SimCameraProperties();
         cameraProperties.setCalibration(1920, 1400, Rotation2d.fromDegrees(92));
         cameraProperties.setCalibError(0.25, 0.08); // ! get from actual calib
         cameraProperties.setFPS(30);
@@ -59,7 +45,7 @@ public class CameraIOPhotonVisionSim extends CameraIOPhotonVision {
     }
 
     @Override
-    public void updateInputs(VisionIOInputs inputs) {
+    public void updateInputs(CameraIOInputs inputs) {
         visionSim.update(poseSupplier.get());
         super.updateInputs(inputs);
     }

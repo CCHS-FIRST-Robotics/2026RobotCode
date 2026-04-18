@@ -56,5 +56,5 @@ public class FuelConstants {
         new Rotation3d()
     );
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
-    public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood horizontal (ball shoots straight up)
+    public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood horizontal (ball shoots straight up) // ! 
 }

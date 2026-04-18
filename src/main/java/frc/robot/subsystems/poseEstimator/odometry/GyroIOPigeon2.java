@@ -1,15 +1,12 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+/**
+ * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/GyroIOPigeon2.java
+ * 
+ * Changes made: 
+ *  - replaced frc.robot.subsystems.drive with frc.robot.subsystems.poseEstimator.odometry;
+ *  - replaced import frc.robot.generated.TunerConstants; with import frc.robot.subsystems.drive.DriveConstants;
+ *  - replaced new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id, TunerConstants.DrivetrainConstants.CANBusName) with new Pigeon2(DriveConstants.DRIVETRAIN_CONSTANTS.Pigeon2Id, DriveConstants.CAN_BUS) 
+ *  - replaced Drive.ODOMETRY_FREQUENCY with DriveConstants.ODOMETRY_FREQUENCY
+ */
 
 package frc.robot.subsystems.poseEstimator.odometry;
 
@@ -23,7 +20,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.drive.DriveConstants;
-
 import java.util.Queue;
 
 /** IO implementation for Pigeon 2. */
@@ -36,7 +32,7 @@ public class GyroIOPigeon2 implements GyroIO {
 
     public GyroIOPigeon2() {
         pigeon.getConfigurator().apply(new Pigeon2Configuration());
-        pigeon.getConfigurator().setYaw(0.0); // zeroes the gyro
+        pigeon.getConfigurator().setYaw(0.0);
         yaw.setUpdateFrequency(DriveConstants.ODOMETRY_FREQUENCY);
         yawVelocity.setUpdateFrequency(50.0);
         pigeon.optimizeBusUtilization();
