@@ -3,6 +3,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
@@ -53,6 +54,8 @@ public final class Constants {
     public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
 
     public static class FieldConstants {
+        public static final Field2d FIELD2D = new Field2d();
+
         public static final Distance FIELD_WIDTH_X = Inches.of(650.12);
         public static final Distance FIELD_WIDTH_Y = Inches.of(316.64);
         public static final Distance ALLIANCE_ZONE_WIDTH_X = Inches.of(156.61);

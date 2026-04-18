@@ -466,6 +466,13 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
+        SmartDashboard.putData("smartDashboard/field2d", Constants.FieldConstants.FIELD2D);
+
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
+        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
+
         Constants.ENABLE_TRENCH_ALIGN = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         Constants.ENABLE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         Constants.ENABLE_PIVOT_AGITATION = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
@@ -476,16 +483,10 @@ public class RobotContainer {
         Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT_AGITATION", Constants.ENABLE_PIVOT_AGITATION);
         Logger.recordOutput("outputs/fuelIO/shooter/ENABLE_SHOOT_ON_THE_MOVE", Constants.ENABLE_SHOOT_ON_THE_MOVE);
 
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
-        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
-
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
             Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
             Logger.recordOutput("outputs/fieldInfo/hubActive", HubUtil.isActive());
-            
             Logger.recordOutput(
             "outputs/simulation/fuelSimulation/hubScore", 
                 DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 

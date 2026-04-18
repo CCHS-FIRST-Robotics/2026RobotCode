@@ -2,7 +2,6 @@ package frc.robot.subsystems.poseEstimator;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -12,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
+import frc.robot.Constants;
 
 public class PoseEstimator extends SubsystemBase implements Odometry.OdometryConsumer, Vision.VisionConsumer {
     private final Odometry odometry;
@@ -20,8 +20,6 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     private final SwerveDrivePoseEstimator odometryEstimator;
     private final SwerveDrivePoseEstimator visionEstimator;
     private final SwerveDrivePoseEstimator combinedEstimator;
-
-    private final Field2d field2d = new Field2d();
 
     private final Drive drive;
 
@@ -46,7 +44,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
             drive.getModulePositions(),
             startPose,
             VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE), // makes it not trust odometry info at all
-            VecBuilder.fill(0.9, 0.9, 0.9) // ! is overridden anyways
+            VecBuilder.fill(0.9, 0.9, 0.9) // is overridden by addVisionMeasurement: https://discord.com/channels/176186766946992128/368993897495527424/1494482603615457430
         );
         combinedEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.KINEMATICS, 
@@ -65,13 +63,11 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         odometry.periodic();
         vision.periodic();
 
-        field2d.setRobotPose(getPose());
+        Constants.FieldConstants.FIELD2D.setRobotPose(getPose());
         
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/visionPoseEstimate", visionEstimator.getEstimatedPosition());
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
-    
-        SmartDashboard.putData("smartDashboard/field2d", field2d);
     }
 
     public void resetPosition(Pose2d pose) {
