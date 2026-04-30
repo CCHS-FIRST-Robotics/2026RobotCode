@@ -284,13 +284,7 @@ public class RobotContainer {
                         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
                     )
                     .alongWith(commandFactory.getIntakeCommand())
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
-                );
-
-                // drive and intake and shoot
-                controller.leftTrigger().and(controller.rightTrigger()).whileTrue(
-                    commandFactory.getDriveAndIntakeAndShootCommand()
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60, 120})) // leds are green and blue
+                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {0, 30, 60, 90, 120})) // leds are green
                 );
 
                 // drive and shoot
@@ -427,6 +421,32 @@ public class RobotContainer {
                         ShootUtil.offsetShooterMap(shooterMapOffset);
                     }
                 ));
+                break;
+            case TESTING_DRIVE_WITH_POSITION: 
+                controller.x().onTrue(
+                    new DriveWithPosition(drive, poseEstimator, new Pose2d(0, 0, new Rotation2d()), false)
+                    .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
+                );
+                controller.y().onTrue(
+                    new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 3, new Rotation2d(Degrees.of(90))), false)
+                    .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
+                );
+                controller.b().onTrue(
+                    new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 0, new Rotation2d(Degrees.of(180))), false)
+                    .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
+                );
+                controller.leftTrigger().onTrue(
+                    new DriveWithPosition(drive, poseEstimator, new Pose2d(1, 2, new Rotation2d()), false)
+                    .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
+                );
+                controller.rightTrigger().onTrue(
+                    new DriveWithPosition(drive, poseEstimator, new Pose2d(1.5, 2, new Rotation2d()), false)
+                    .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
+                );
+
+                controller.leftBumper().onTrue(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)));
+                
+                controller.a().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d()))));
                 break;
         }
 

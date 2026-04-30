@@ -34,7 +34,7 @@ import org.littletonrobotics.junction.Logger;
 public class Vision {
     private final VisionConsumer consumer;
     private final CameraIO[] io;
-    private final VisionIOInputsAutoLogged[] inputs;
+    private final CameraIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
     public Vision(CameraIO[] io, VisionConsumer consumer, Drive drive) {
@@ -43,9 +43,9 @@ public class Vision {
         this.consumer = consumer
         ;
         // Initialize inputs
-        this.inputs = new VisionIOInputsAutoLogged[io.length];
+        this.inputs = new CameraIOInputsAutoLogged[io.length];
         for (int i = 0; i < inputs.length; i++) {
-            inputs[i] = new VisionIOInputsAutoLogged();
+            inputs[i] = new CameraIOInputsAutoLogged();
         }
 
         // Initialize disconnected alerts

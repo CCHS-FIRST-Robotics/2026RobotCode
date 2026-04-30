@@ -10,10 +10,12 @@ public class LedStrip extends SubsystemBase {
     private final AddressableLED led;
     private final AddressableLEDBuffer ledBuffer;
 
+    private final Timer timer = new Timer();
+
     private Integer[] hues = new Integer[0];
 
     private int rainbowFirstPixelHue = 0;
-    private int frequency = 2;
+    private double frequency = 1; // how often to change hue per second
     
     public LedStrip() {
         led = new AddressableLED(LedStripConstants.PWM_PORT);
@@ -40,7 +42,7 @@ public class LedStrip extends SubsystemBase {
             return;
         }
         
-        int hue = hues[(int) Timer.getFPGATimestamp() * frequency % hues.length]; // iterate through the hues array at a rate determined by frequency
+        int hue = hues[(int) (timer.get() * frequency) % hues.length]; // iterate through the hues array at a rate determined by frequency
 
         for (var i = 0; i < ledBuffer.getLength(); i++) {
             ledBuffer.setHSV(i, hue, 255, 255);
@@ -52,6 +54,7 @@ public class LedStrip extends SubsystemBase {
 
     public void setLedStripHues(Integer[] hues) {
         this.hues = hues;
+        timer.restart(); // ! test
     }
 
     public Command getSetLedStripHuesCommand(Integer[] hues) {

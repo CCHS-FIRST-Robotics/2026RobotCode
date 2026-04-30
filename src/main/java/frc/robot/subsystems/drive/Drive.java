@@ -75,7 +75,7 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPIDPosition = new PIDController(2.5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(2.5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(7.5, 0, 0);
+    private final PIDController thetaPIDPosition = new PIDController(4, 0, 0); // ! was 7.5 for shooting into hub
 
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
@@ -90,6 +90,7 @@ public class Drive extends SubsystemBase {
 
     private ChassisSpeeds speeds = new ChassisSpeeds();
     private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
+    private ChassisSpeeds speedsOutput = new ChassisSpeeds();
 
     // ————— utils ————— //
 
@@ -146,7 +147,7 @@ public class Drive extends SubsystemBase {
         // log the real module states and speeds
         SwerveModuleState[] moduleStatesOutput = getModuleStates();
         Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
-        ChassisSpeeds speedsOutput = DriveConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
+        speedsOutput = DriveConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
 
         // run the selected control mode
@@ -286,11 +287,11 @@ public class Drive extends SubsystemBase {
     // ————— general public functions ————— //
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return prevSpeeds;
+        return speedsOutput;
     }
 
     public ChassisSpeeds getFieldRelativeSpeeds() {
-        return ChassisSpeeds.fromRobotRelativeSpeeds(prevSpeeds, poseEstimator.getPose().getRotation());
+        return ChassisSpeeds.fromRobotRelativeSpeeds(speedsOutput, poseEstimator.getPose().getRotation());
     }
 
     public PIDController getXPositionController() {

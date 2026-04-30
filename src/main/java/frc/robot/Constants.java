@@ -23,7 +23,8 @@ public final class Constants {
     public static enum BUTTON_BINDINGS {
         COMPETITION,
         TESTING_BPS,
-        TESTING_SHOOTER_MAP
+        TESTING_SHOOTER_MAP, 
+        TESTING_DRIVE_WITH_POSITION
     }
 
     // ————— initial conditions ————— //
@@ -48,9 +49,9 @@ public final class Constants {
 
     // ————— toggles ————— //
 
-    public static boolean ENABLE_TRENCH_ALIGN = true;
+    public static boolean ENABLE_TRENCH_ALIGN = false;
     public static boolean ENABLE_PIVOT = true;
-    public static boolean ENABLE_PIVOT_AGITATION = true;
+    public static boolean ENABLE_PIVOT_AGITATION = false;
     public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
 
     public static class FieldConstants {

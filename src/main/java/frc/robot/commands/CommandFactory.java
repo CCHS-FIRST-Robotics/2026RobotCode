@@ -70,21 +70,12 @@ public class CommandFactory {
     }
 
     public Command getDriveAndShootCommand(boolean useIntake, boolean usePivot) {
-        return getDriveSpeedCommand(
-            MetersPerSecond.of(1), 
-            DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
-            DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-            DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
-        )
-        .alongWith(getUpdateShootUtilCommand())
+        return getUpdateShootUtilCommand()
         .alongWith(getDriveWithJoysticksShooterCommand())
         .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), false, useIntake, usePivot));
     }
 
-    public Command getDriveAndIntakeAndShootCommand() {
-        return getIntakeCommand()
-        .alongWith(getDriveAndShootCommand(false, false));
-    }
+    // ! check if useIntake or usePivot for drigeandshootcommand are ever not true since I deleted drivenandintakeandshoot
 
     public Command getCheckMotorsCommand() {
         return getSetPivotDownCommand()

@@ -10,7 +10,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.Constants.FieldConstants;
 
-public class DriveWithPosition extends Command { // ! test live to see if it's acceptable
+public class DriveWithPosition extends Command {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     
@@ -79,12 +79,12 @@ public class DriveWithPosition extends Command { // ! test live to see if it's a
 
     @Override
     public boolean isFinished() {
-        return Math.abs(poseEstimator.getPose().getX() - calculatedTargetPose.getX()) < 0.05
-            && Math.abs(poseEstimator.getPose().getY() - calculatedTargetPose.getY()) < 0.05
-            && Math.abs(poseEstimator.getPose().getRotation().getRotations() - calculatedTargetPose.getRotation().getRotations()) < 0.05
-            && drive.getFieldRelativeSpeeds().vxMetersPerSecond < 0.1
-            && drive.getFieldRelativeSpeeds().vyMetersPerSecond < 0.1
-            && drive.getFieldRelativeSpeeds().omegaRadiansPerSecond < 0.1;
+        return Math.abs(poseEstimator.getPose().getX() - calculatedTargetPose.getX()) < 0.03
+            && Math.abs(poseEstimator.getPose().getY() - calculatedTargetPose.getY()) < 0.03
+            && Math.abs(poseEstimator.getPose().getRotation().getRotations() - calculatedTargetPose.getRotation().getRotations()) < 0.06
+            && Math.abs(drive.getFieldRelativeSpeeds().vxMetersPerSecond) < 0.03
+            && Math.abs(drive.getFieldRelativeSpeeds().vyMetersPerSecond) < 0.03
+            && Math.abs(drive.getFieldRelativeSpeeds().omegaRadiansPerSecond) < 0.03;
     }
 
     @Override
