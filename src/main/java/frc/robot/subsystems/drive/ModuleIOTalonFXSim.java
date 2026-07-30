@@ -1,9 +1,5 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFXSim.java
- * 
- * Changes made: 
- *  - replaced import frc.robot.util.PhoenixUtil; with import frc.robot.utils.PhoenixUtil;
- *  - added @SuppressWarnings({ "rawtypes", "unchecked" }) above line 30
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFXSim.java
  */
 
 package frc.robot.subsystems.drive;

@@ -1,6 +1,5 @@
 /**
- * Variables that may change with the drivebase are marked with // * MUTABLE
- * This assumes that we're still using the SDS Mk4n modules purchased in 2025
+ * Original code
  */
 
 package frc.robot.subsystems.drive;
@@ -100,7 +99,7 @@ public class DriveConstants {
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // BL
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0) // BR
     };
-    public static final double TRACK_RADIUS = Math.max( // 15.7331258814
+    public static final double TRACK_RADIUS = Math.max(
         Math.max(
             Math.hypot(MODULE_TRANSLATIONS[0].getX(), MODULE_TRANSLATIONS[0].getY()),
             Math.hypot(MODULE_TRANSLATIONS[1].getX(), MODULE_TRANSLATIONS[1].getY())

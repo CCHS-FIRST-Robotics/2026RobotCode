@@ -1,3 +1,7 @@
+/**
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/main/src/main/java/frc/robot/subsystems/vision/VisionIO.java
+ */
+
 package frc.robot.subsystems.poseEstimator.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;

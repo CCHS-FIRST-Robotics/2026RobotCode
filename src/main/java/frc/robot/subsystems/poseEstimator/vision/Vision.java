@@ -1,15 +1,6 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+/**
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/main/src/main/java/frc/robot/subsystems/vision/Vision.java
+ */
 
 package frc.robot.subsystems.poseEstimator.vision;
 
@@ -40,8 +31,8 @@ public class Vision {
     public Vision(CameraIO[] io, VisionConsumer consumer, Drive drive) {
         this.io = io;
         
-        this.consumer = consumer
-        ;
+        this.consumer = consumer;
+        
         // Initialize inputs
         this.inputs = new CameraIOInputsAutoLogged[io.length];
         for (int i = 0; i < inputs.length; i++) {
@@ -136,7 +127,7 @@ public class Vision {
                     angularStdDev *= cameraStdDevFactors[cameraIndex];
                 }
 
-                consumer.acceptVision( // ! yeah, do the same thing you did with odometry to this class as well (make these save to an array and do the for looping in PoseEstimator)
+                consumer.acceptVision(
                 // Send vision observation
                         observation.pose().toPose2d(),
                         observation.timestamp(),

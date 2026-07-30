@@ -1,28 +1,6 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/Module.java
- * 
- * Changes made: 
- *  - added @SuppressWarnings("rawtypes") above lines 29 and 36
- *  - replaced line 50 with Logger.processInputs("subsystems/drive/module" + Integer.toString(index), inputs);
- *  - replaced the runCharacterization function with: 
- *      public void runCharacterization(double output, Rotation2d turn) {
- *          io.setDriveOpenLoop(output);
- *          io.setTurnPosition(turn);
- *      }
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/Module.java
  */
-
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
 
 package frc.robot.subsystems.drive;
 

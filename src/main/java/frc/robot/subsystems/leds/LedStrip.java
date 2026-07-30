@@ -1,3 +1,7 @@
+/**
+ * Original code
+ */
+
 package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj2.command.*;
@@ -15,7 +19,7 @@ public class LedStrip extends SubsystemBase {
     private Integer[] hues = new Integer[0];
 
     private int rainbowFirstPixelHue = 0;
-    private double frequency = 1; // how often to change hue per second
+    private double frequency = 1; // how many times to change hue per second
     
     public LedStrip() {
         led = new AddressableLED(LedStripConstants.PWM_PORT);

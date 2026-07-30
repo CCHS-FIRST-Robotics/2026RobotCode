@@ -1,3 +1,7 @@
+/**
+ * Original code
+ */
+
 package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.*;
@@ -74,8 +78,6 @@ public class CommandFactory {
         .alongWith(getDriveWithJoysticksShooterCommand())
         .alongWith(getShootCommand(() -> ShootUtil.getShooterVelocity(), false, useIntake, usePivot));
     }
-
-    // ! check if useIntake or usePivot for drigeandshootcommand are ever not true since I deleted drivenandintakeandshoot
 
     public Command getCheckMotorsCommand() {
         return getSetPivotDownCommand()

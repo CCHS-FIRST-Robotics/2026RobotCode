@@ -1,11 +1,5 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/GyroIOPigeon2.java
- * 
- * Changes made: 
- *  - replaced frc.robot.subsystems.drive with frc.robot.subsystems.poseEstimator.odometry;
- *  - replaced import frc.robot.generated.TunerConstants; with import frc.robot.subsystems.drive.DriveConstants;
- *  - replaced new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id, TunerConstants.DrivetrainConstants.CANBusName) with new Pigeon2(DriveConstants.DRIVETRAIN_CONSTANTS.Pigeon2Id, DriveConstants.CAN_BUS) 
- *  - replaced Drive.ODOMETRY_FREQUENCY with DriveConstants.ODOMETRY_FREQUENCY
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/GyroIOPigeon2.java
  */
 
 package frc.robot.subsystems.poseEstimator.odometry;

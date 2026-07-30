@@ -1,3 +1,7 @@
+/**
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/main/src/main/java/frc/robot/subsystems/vision/VisionIOPhotonVision.java
+ */
+
 package frc.robot.subsystems.poseEstimator.vision;
 
 import static frc.robot.subsystems.poseEstimator.vision.VisionConstants.*;
@@ -14,7 +18,7 @@ import org.photonvision.PhotonCamera;
 /** IO implementation for real PhotonVision hardware. */
 public class CameraIOPhotonVision implements CameraIO {
     protected final PhotonCamera camera;
-    protected final Transform3d robotToCamera;
+    protected final Transform3d robotToCameraTransform;
 
     /**
      * Creates a new VisionIOPhotonVision.
@@ -22,9 +26,9 @@ public class CameraIOPhotonVision implements CameraIO {
      * @param name The configured name of the camera.
      * @param rotationSupplier The 3D position of the camera relative to the robot.
      */
-    public CameraIOPhotonVision(String name, Transform3d robotToCamera) {
+    public CameraIOPhotonVision(String name, Transform3d robotToCameraTransform) {
         camera = new PhotonCamera(name);
-        this.robotToCamera = robotToCamera;
+        this.robotToCameraTransform = robotToCameraTransform;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class CameraIOPhotonVision implements CameraIO {
 
                 // Calculate robot pose
                 Transform3d fieldToCamera = multitagResult.estimatedPose.best;
-                Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
+                Transform3d fieldToRobot = fieldToCamera.plus(robotToCameraTransform.inverse());
                 Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
                 // Calculate average tag distance
@@ -82,7 +86,7 @@ public class CameraIOPhotonVision implements CameraIO {
                             tagPose.get().getTranslation(), tagPose.get().getRotation());
                     Transform3d cameraToTarget = target.bestCameraToTarget;
                     Transform3d fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse());
-                    Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
+                    Transform3d fieldToRobot = fieldToCamera.plus(robotToCameraTransform.inverse());
                     Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
                     // Add tag ID

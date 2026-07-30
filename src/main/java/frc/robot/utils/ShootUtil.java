@@ -1,3 +1,7 @@
+/**
+ * Based on https://github.com/hammerheads5000/2026Rebuilt/blob/main/src/main/java/frc/robot/subsystems/turret/TurretCalculator.java
+ */
+
 package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
@@ -104,19 +108,6 @@ public class ShootUtil {
 
     public static Distance getTargetDistance() {
         return targetDistance;
-    }
-
-    public static void offsetShooterMap(double offset) { // ! ts so fucked up
-        SHOOTER_VELOCITY_MAP.clear();
-
-        SHOOTER_VELOCITY_MAP.put(1.797, 43.14648437500001 + offset);
-        SHOOTER_VELOCITY_MAP.put(2.380, 44.572265625 + offset);
-        SHOOTER_VELOCITY_MAP.put(2.960, 47.43750000000001 + offset);
-        SHOOTER_VELOCITY_MAP.put(3.546, 51.66210937500001 + offset);
-        SHOOTER_VELOCITY_MAP.put(4.020, 55.64257812500001 + offset);
-        SHOOTER_VELOCITY_MAP.put(4.884, 61.12499999999999 + offset);
-
-        Logger.recordOutput("SHOOTERMAP", SHOOTER_VELOCITY_MAP.get(1.797));
     }
 
     // ————— calculators for shooter state ————— //

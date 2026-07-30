@@ -1,3 +1,7 @@
+/**
+ * Based on https://github.com/hammerheads5000/2026Rebuilt/blob/main/src/main/java/frc/robot/util/HubShiftUtil.java
+ */
+
 package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.Seconds;

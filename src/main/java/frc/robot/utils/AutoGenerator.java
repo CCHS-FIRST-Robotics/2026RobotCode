@@ -1,3 +1,7 @@
+/**
+ * Original code
+ */
+
 package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
@@ -13,7 +17,6 @@ import frc.robot.subsystems.fuelIO.intake.*;
 import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.Constants;
 
-@SuppressWarnings("unused")
 public class AutoGenerator {
     private final AutoFactory autoFactory;
 

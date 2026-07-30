@@ -1,3 +1,7 @@
+/**
+ * Based on https://github.com/hammerheads5000/FuelSim/blob/main/FuelSim.java
+ */
+
 package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;

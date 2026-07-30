@@ -1,8 +1,5 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/GyroIO.java
- * 
- * Changes made: 
- *  - replaced frc.robot.subsystems.drive with frc.robot.subsystems.poseEstimator.odometry;
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/GyroIO.java
  */
 
 package frc.robot.subsystems.poseEstimator.odometry;

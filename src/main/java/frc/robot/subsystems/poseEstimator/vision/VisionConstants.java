@@ -1,22 +1,16 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+/**
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/main/src/main/java/frc/robot/subsystems/vision/VisionConstants.java
+ */
 
 package frc.robot.subsystems.poseEstimator.vision;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.photonvision.simulation.SimCameraProperties;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
@@ -25,23 +19,35 @@ public class VisionConstants {
     public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String camera0Name = "FrontLeft";
-    public static String camera1Name = "FrontRight";
+    public static String[] cameraNames = {"FrontLeft", "FrontRight"};
 
-    // Robot to camera transforms // ! make these arrays
-    // (Not used by Limelight, configure in web UI instead)
-    public static Transform3d robotToCamera0 = new Transform3d(
-        Inches.of(-9.8), 
-        Inches.of(-10.75), 
-        Inches.of(8.25), 
-        new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(200))
-    );
-    public static Transform3d robotToCamera1 = new Transform3d(
-        Inches.of(-10.75), 
-        Inches.of(10), 
-        Inches.of(19),
-        new Rotation3d(Degrees.of(0), Degrees.of(-20), Degrees.of(0))
-    );
+    // Robot to camera transforms
+    public static Transform3d[] robotToCameraTransforms = {
+        new Transform3d(
+            Inches.of(-9.8), 
+            Inches.of(-10.75), 
+            Inches.of(8.25), 
+            new Rotation3d(Degrees.of(0), Degrees.of(-30), Degrees.of(200))
+        ), 
+        new Transform3d(
+            Inches.of(-10.75), 
+            Inches.of(10), 
+            Inches.of(19),
+            new Rotation3d(Degrees.of(0), Degrees.of(-20), Degrees.of(0))
+        )
+    };
+
+    // Camera properties (get these from photonvisions)
+    public static SimCameraProperties[] cameraProperties = {
+        new SimCameraProperties()
+        .setCalibration(1920, 1400, Rotation2d.fromDegrees(92))
+        .setCalibError(0.25, 0.08)
+        .setFPS(30), 
+        new SimCameraProperties()
+        .setCalibration(1920, 1400, Rotation2d.fromDegrees(92))
+        .setCalibError(0.25, 0.08)
+        .setFPS(30), 
+    };
 
     // Basic filtering thresholds
     public static double maxAmbiguity = 0.3;

@@ -1,11 +1,5 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFXReal.java
- * 
- * Changes made: 
- *  - added import frc.robot.subsystems.poseEstimator.odometry.PhoenixOdometryThread; under line 18
- *  - added @SuppressWarnings({ "rawtypes", "unchecked" }) above line 33
- *  - replaced line 49 with: 
- *      .mapToDouble((rotations) -> Units.rotationsToRadians(rotations) / constants.DriveMotorGearRatio) // apparently the template was bugged
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/ModuleIOTalonFXReal.java
  */
 
 package frc.robot.subsystems.drive;

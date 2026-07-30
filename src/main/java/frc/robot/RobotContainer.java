@@ -1,3 +1,7 @@
+/**
+ * Original code
+ */
+
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -22,7 +26,6 @@ import frc.robot.subsystems.fuelIO.shooter.*;
 import frc.robot.subsystems.leds.*;
 import frc.robot.utils.*;
 
-@SuppressWarnings("unused")
 public class RobotContainer {
     // ————— controllers ————— //
 
@@ -70,8 +73,8 @@ public class RobotContainer {
                     poseEstimator = new PoseEstimator(
                     new GyroIOPigeon2(),
                         new CameraIOPhotonVision[] {
-                            new CameraIOPhotonVision(VisionConstants.camera0Name, VisionConstants.robotToCamera0),
-                            new CameraIOPhotonVision(VisionConstants.camera1Name, VisionConstants.robotToCamera1)
+                            new CameraIOPhotonVision(VisionConstants.cameraNames[0], VisionConstants.robotToCameraTransforms[0]),
+                            new CameraIOPhotonVision(VisionConstants.cameraNames[1], VisionConstants.robotToCameraTransforms[1])
                         }, 
                         drive, 
                         Constants.ROBOT_START_POSE
@@ -136,15 +139,17 @@ public class RobotContainer {
                         new GyroIOSim(driveSimulation.getGyroSimulation()),
                         new CameraIOPhotonVision[] {
                             new CameraIOPhotonVisionSim(
-                                VisionConstants.camera0Name, 
-                                VisionConstants.robotToCamera0, 
+                                VisionConstants.cameraNames[0], 
+                                VisionConstants.robotToCameraTransforms[0], 
+                                VisionConstants.cameraProperties[0], 
                                 driveSimulation::getSimulatedDriveTrainPose
                             ),
                             new CameraIOPhotonVisionSim(
-                                VisionConstants.camera1Name, 
-                                VisionConstants.robotToCamera1, 
+                                VisionConstants.cameraNames[1], 
+                                VisionConstants.robotToCameraTransforms[1], 
+                                VisionConstants.cameraProperties[1], 
                                 driveSimulation::getSimulatedDriveTrainPose
-                            )
+                            ),
                         },
                         drive, 
                         Constants.ROBOT_START_POSE
@@ -284,7 +289,7 @@ public class RobotContainer {
                         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
                     )
                     .alongWith(commandFactory.getIntakeCommand())
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {0, 30, 60, 90, 120})) // leds are green
+                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
                 );
 
                 // drive and shoot
@@ -310,7 +315,7 @@ public class RobotContainer {
                 controller.pov(180).whileTrue(
                     new StartEndCommand(
                         () -> {
-                            shooter.setShooterVelocity(RotationsPerSecond.of(-10)); // negative for reverse
+                            shooter.setShooterVelocity(RotationsPerSecond.of(-10));
                             shooter.setKickerVelocity(RotationsPerSecond.of(-10));
                         },
                         () -> {
@@ -320,6 +325,7 @@ public class RobotContainer {
                     )
                 );
 
+                // toggle trench align
                 controller.b().onTrue(new InstantCommand(
                     () -> {
                         Constants.ENABLE_TRENCH_ALIGN = !Constants.ENABLE_TRENCH_ALIGN;
@@ -395,7 +401,7 @@ public class RobotContainer {
                     )
                 );
 
-                // increment the shooter velocity
+                // adjust the shooter velocity
                 controller.leftTrigger().onTrue(
                     new InstantCommand(() -> {
                         shooterVelocity -= 0.5;
@@ -408,21 +414,10 @@ public class RobotContainer {
                         shooter.setShooterVelocity(RotationsPerSecond.of(shooterVelocity));
                     })
                 );
-
-                SmartDashboard.putData("smartDashboard/buttons/Increment Shooter Map", new InstantCommand(
-                    () -> {
-                        shooterMapOffset++;
-                        ShootUtil.offsetShooterMap(shooterMapOffset);
-                    }
-                ));
-                SmartDashboard.putData("smartDashboard/buttons/Decrement Shooter Map", new InstantCommand(
-                    () -> {
-                        shooterMapOffset--;
-                        ShootUtil.offsetShooterMap(shooterMapOffset);
-                    }
-                ));
                 break;
             case TESTING_DRIVE_WITH_POSITION: 
+                // for calibrating the robot's non-choreo position PID. I had it set the kicker velocity so I'd know exactly when the DriveWithPosition command finished
+
                 controller.x().onTrue(
                     new DriveWithPosition(drive, poseEstimator, new Pose2d(0, 0, new Rotation2d()), false)
                     .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
@@ -446,6 +441,7 @@ public class RobotContainer {
 
                 controller.leftBumper().onTrue(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(0)));
                 
+                // re-zero the robot
                 controller.a().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d()))));
                 break;
         }

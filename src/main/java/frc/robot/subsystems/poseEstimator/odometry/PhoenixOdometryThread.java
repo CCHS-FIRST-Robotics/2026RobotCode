@@ -1,13 +1,5 @@
 /**
- * Original source: https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/PhoenixOdometryThread.java
- * 
- * Changes made: 
- *  - replaced frc.robot.subsystems.drive with frc.robot.subsystems.poseEstimator.odometry;
- *  - replaced import frc.robot.generated.TunerConstants; with import frc.robot.subsystems.drive.DriveConstants;
- *  - removed line 17
- *  - removed line 46
- *  - replaced all instances of Drive with Odometry or DriveConstants
- *  - replaced isCANFD with DriveConstants.CAN_BUS.isNetworkFD()
+ * Based on https://github.com/Shenzhen-Robotics-Alliance/AdvantageKit-TalonSwerveTemplate-MapleSim-Enhanced/blob/ce187a9d0ac6341f361703cf2b24c2f41448e400/src/main/java/frc/robot/subsystems/drive/PhoenixOdometryThread.java
  */
 
 package frc.robot.subsystems.poseEstimator.odometry;

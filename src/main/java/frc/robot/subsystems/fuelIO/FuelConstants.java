@@ -1,3 +1,7 @@
+/**
+ * Original code
+ */
+
 package frc.robot.subsystems.fuelIO;
 
 import static edu.wpi.first.units.Units.*;
@@ -25,7 +29,7 @@ public class FuelConstants {
     public static final double SHOOTER_GEAR_RATIO = 1;
     public static final double KICKER_GEAR_RATIO = 1;
     
-    // when pivot is zeroed at horizontal
+    // zero is with the center of mass line horizontal (for kg calculation)
     public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.37);
     public static final Angle PIVOT_MAX_DOWN_ANGLE = Rotations.of(-0.056);
 
@@ -56,5 +60,5 @@ public class FuelConstants {
         new Rotation3d()
     );
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
-    public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood opening horizontal (ball shoots straight up)
+    public static final Angle HOOD_ANGLE = Degrees.of(10); // zero is with the hood opening horizontal (ball shoots straight up)
 }
