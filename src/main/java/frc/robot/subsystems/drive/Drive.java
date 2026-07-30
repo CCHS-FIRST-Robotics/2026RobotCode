@@ -293,10 +293,6 @@ public class Drive extends SubsystemBase {
     public boolean atThetaSetpoint() {
         return thetaPIDPosition.atSetpoint();
     }
-
-    public void setThetaPIDPositionTolerance(double thetaPIDPositionTolerance) {
-        thetaPIDPosition.setTolerance(thetaPIDPositionTolerance);
-    }
     
     // ————— poseEstimator ————— //
 
@@ -323,7 +319,7 @@ public class Drive extends SubsystemBase {
     // ————— odometry ————— //
 
     public void modulePeriodic() {
-        for (var module : modules) {
+        for (Module module : modules) {
             module.periodic();
         }
     }

@@ -48,7 +48,7 @@ public class LedStrip extends SubsystemBase {
         
         int hue = hues[(int) (timer.get() * frequency) % hues.length]; // iterate through the hues array at a rate determined by frequency
 
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
             ledBuffer.setHSV(i, hue, 255, 255);
         }
         led.setData(ledBuffer);

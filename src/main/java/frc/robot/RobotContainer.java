@@ -50,8 +50,6 @@ public class RobotContainer {
 
     // ————— testing variables ————— //
 
-    @AutoLogOutput(key = "outputs/testing/thetaPIDPositionTolerance")
-    private double thetaPIDPositionTolerance = 0.15;
     @AutoLogOutput(key = "outputs/testing/shooterVelocity")
     private double shooterVelocity = 0;
     @AutoLogOutput(key = "outputs/testing/kickerVelocity")
@@ -450,26 +448,11 @@ public class RobotContainer {
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
-            controller.b().onTrue(new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
 
         // ————— testing bindings ————— //
 
         SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
-
-        // change theta PID position tolerance
-        SmartDashboard.putData("smartDashboard/buttons/Increase Theta PID Position Tolerance", new InstantCommand(
-            () -> {
-                thetaPIDPositionTolerance += 0.1;
-                drive.setThetaPIDPositionTolerance(thetaPIDPositionTolerance);
-            }
-        ));
-        SmartDashboard.putData("smartDashboard/buttons/Decrease Theta PID Position Tolerance", new InstantCommand(
-            () -> {
-                thetaPIDPositionTolerance -= 0.1;
-                drive.setThetaPIDPositionTolerance(thetaPIDPositionTolerance);
-            }
-        ));
     }
 
     // ————— robot ————— //
@@ -513,6 +496,10 @@ public class RobotContainer {
     }
 
     // ————— autonomous ————— //
+
+    public void disabledPeriodic() {
+        autoGenerator.drawSelectedAuto(autoChooser.selectedCommand().getName());
+    }
 
     private void configureAutos() {
         autoGenerator = new AutoGenerator(

@@ -6,9 +6,16 @@ package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.HashMap;
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
+import choreo.Choreo;
 import choreo.auto.*;
+import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
+
 import org.ironmaple.simulation.drivesims.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
@@ -27,6 +34,8 @@ public class AutoGenerator {
     private final Shooter shooter;
 
     private final CommandFactory commandFactory;
+
+    private final HashMap<String, String> nameFileMap = new HashMap<String, String>(); // ! what's the rule for creating the object inline
 
     public AutoGenerator(
         Drive drive, 
@@ -56,6 +65,17 @@ public class AutoGenerator {
         this.shooter = shooter;
 
         this.commandFactory = commandFactory;
+
+        nameFileMap.put("Test", "Test");
+        nameFileMap.put("BeMeanLeft", "BeMeanLeft");
+        nameFileMap.put("BeMeanRight", "BeMeanRight");
+        nameFileMap.put("CenterFuelLeft", "CenterFuelLeft");
+        nameFileMap.put("CenterFuelRight", "CenterFuelRight");
+        nameFileMap.put("RepeatingCenterFuelLeft", "RepeatingCenterFuelLeft1");
+        nameFileMap.put("RepeatingCenterFuelRight", "RepeatingCenterFuelRight1");
+        nameFileMap.put("RepeatingCenterFuelLeftCloser", "RepeatingCenterFuelLeft1Closer");
+        nameFileMap.put("RepeatingCenterFuelRightCloser", "RepeatingCenterFuelRight1Closer");
+        nameFileMap.put("OutpostFuel", "OutpostFuel");
     }
 
     // ————— testing routines ————— //
@@ -524,5 +544,17 @@ public class AutoGenerator {
         );
 
         return routine;
+    }
+
+    // ————— utils ————— // // ! is it utils or util
+
+    public void drawSelectedAuto(String selectedCommandName) {
+        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory(nameFileMap.get(selectedCommandName));
+        
+        if (trajectory.isPresent()) {
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses(trajectory.get().getPoses());
+        } else {
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPose(new Pose2d());
+        }
     }
 }
