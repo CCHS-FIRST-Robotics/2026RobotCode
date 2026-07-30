@@ -371,7 +371,7 @@ public class CommandFactory {
         ).repeatedly();
     }
 
-    // ————— util ————— //
+    // ————— utils ————— //
 
     // updates ShootUtil to provide the right robot orientation, shooter velocity, and target distance
     public Command getUpdateShootUtilCommand() {

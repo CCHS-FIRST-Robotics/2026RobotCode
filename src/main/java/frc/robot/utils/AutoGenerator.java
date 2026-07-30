@@ -6,17 +6,16 @@ package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.HashMap;
-import java.util.Optional;
-
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import choreo.Choreo;
 import choreo.auto.*;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
-
 import org.ironmaple.simulation.drivesims.*;
+import java.util.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -546,13 +545,21 @@ public class AutoGenerator {
         return routine;
     }
 
-    // ————— utils ————— // // ! is it utils or util
+    // ————— utils ————— //
 
     public void drawSelectedAuto(String selectedCommandName) {
-        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory(nameFileMap.get(selectedCommandName));
+        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory(nameFileMap.getOrDefault(selectedCommandName, ""));
         
         if (trajectory.isPresent()) {
-            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses(trajectory.get().getPoses());
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses(
+                Arrays.stream(trajectory.get().getPoses())
+                .map(
+                    pose -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ?
+                    pose :
+                    Constants.FieldConstants.calculateAllianceFlippedPose(pose)
+                )
+                .toArray(Pose2d[]::new)
+            );
         } else {
             Constants.FieldConstants.FIELD2D.getObject("trajectory").setPose(new Pose2d());
         }
