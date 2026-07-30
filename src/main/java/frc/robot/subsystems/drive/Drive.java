@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.geometry.*;
@@ -75,7 +74,7 @@ public class Drive extends SubsystemBase {
 
     private final PIDController xPIDPosition = new PIDController(2.5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(2.5, 0, 0);
-    private final PIDController thetaPIDPosition = new PIDController(4, 0, 0); // ! was 7.5 for shooting into hub
+    private final PIDController thetaPIDPosition = new PIDController(4, 0, 0);
 
     private final PIDController xPIDChoreo = new PIDController(5, 0, 0);
     private final PIDController yPIDChoreo = new PIDController(5, 0, 0);
@@ -91,26 +90,6 @@ public class Drive extends SubsystemBase {
     private ChassisSpeeds speeds = new ChassisSpeeds();
     private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
     private ChassisSpeeds speedsOutput = new ChassisSpeeds();
-
-    // ————— utils ————— //
-
-    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine( // ! still hasn't worked
-        new SysIdRoutine.Config(
-            Volts.per(Second).of(1), // ramp rate
-            Volts.of(1.75), // step voltage
-            Seconds.of(4), // timeout
-            (state) -> Logger.recordOutput("outputs/drive/sysIdState", state.toString()) // send the data to advantagekit
-            // (state) -> SignalLogger.writeString("driveSysId", state.toString()) // send the data to SignalLogger
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.runCharacterization(
-                new Voltage[] {volts, volts, volts, volts}, 
-                new Angle[] {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
-            ), // characterization supplier
-            null, // no log consumer needed since advantagekit records the data
-            this
-        )
-    );
 
     public Drive(
         ModuleIO flModuleIO,
@@ -391,13 +370,6 @@ public class Drive extends SubsystemBase {
             new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
             new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)}
         );
-    }
-
-    public Command sysIdFull() {
-        return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
-            .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
-            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
-            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 
     public double clampAcceleration(double velocity, double prevVelocity, double maxAcceleration) {

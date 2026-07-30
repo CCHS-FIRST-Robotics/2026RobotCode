@@ -24,7 +24,7 @@ public class ShootUtil {
             SHOOTER_VELOCITY_MAP.put(3.546, 49.66210937500001);
             SHOOTER_VELOCITY_MAP.put(4.020, 53.64257812500001);
             SHOOTER_VELOCITY_MAP.put(4.884, 59.12499999999999);
-        } else { // ! get working values
+        } else { // placeholder sim values
             SHOOTER_VELOCITY_MAP.put(1.908, 46.539058922493794);
             SHOOTER_VELOCITY_MAP.put(2.998, 57.8593705522896);
             SHOOTER_VELOCITY_MAP.put(3.919, 65.40624497215343);

@@ -48,7 +48,7 @@ public class FuelConstants {
     // ————— sim ————— //
     
     public static final Distance INTAKE_WIDTH_X = Inches.of(9.6);
-    public static final int HOPPER_FUEL_CAPACITY = 50; // ! 
+    public static final int HOPPER_FUEL_CAPACITY = 50; // we never actually measured this but it was around 50
     public static final Transform3d SHOOTER_POSITION = new Transform3d(
         Inches.of(-9.2), 
         Inches.of(0), 
@@ -56,5 +56,5 @@ public class FuelConstants {
         new Rotation3d()
     );
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
-    public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood horizontal (ball shoots straight up) // ! 
+    public static final Angle HOOD_ANGLE = Degrees.of(10); // where 0 is with the hood opening horizontal (ball shoots straight up)
 }

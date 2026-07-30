@@ -54,7 +54,7 @@ public class LedStrip extends SubsystemBase {
 
     public void setLedStripHues(Integer[] hues) {
         this.hues = hues;
-        timer.restart(); // ! test
+        timer.restart();
     }
 
     public Command getSetLedStripHuesCommand(Integer[] hues) {

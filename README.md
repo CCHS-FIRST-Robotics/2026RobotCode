@@ -1,14 +1,7 @@
 # 2026RobotCode
 
 ## To do:
- <!-- 
- ! general: 
- !  - reformat maplesim default files
- ! driving: 
- !  - sysid
- !  - add back the wheel radius characterization functionality
- !  - rotating around a swerve module
- -->
+ - hehe, nothing
 
 ## Reference:
  - Radios:
