@@ -49,13 +49,11 @@ public class RobotContainer {
     private FuelSim fuelSimulation;
 
     // ————— testing variables ————— //
-
+    
     @AutoLogOutput(key = "outputs/testing/shooterVelocity")
     private double shooterVelocity = 0;
     @AutoLogOutput(key = "outputs/testing/kickerVelocity")
     private double kickerVelocity = 0;
-    @AutoLogOutput(key = "outputs/testing/shooterMapOffset")
-    private double shooterMapOffset = 0;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -282,7 +280,7 @@ public class RobotContainer {
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
                     commandFactory.getDriveSpeedCommand(
                         MetersPerSecond.of(2), 
-                        DriveConstants.MAX_ALLOWED_ANGULAR_SPEED, 
+                        RadiansPerSecond.of(2 / DriveConstants.TRACK_RADIUS), 
                         DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
                         DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
                     )
@@ -330,6 +328,64 @@ public class RobotContainer {
                         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
                     }
                 ));
+                break;
+            case SHOWCASE:
+                // overrides
+                Constants.ENABLE_TRENCH_ALIGN = false;
+                Constants.ENABLE_PIVOT = true;
+                Constants.ENABLE_PIVOT_AGITATION = false;
+                Constants.ENABLE_SHOOT_ON_THE_MOVE = false;
+                DriveConstants.ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(7);
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(7 / DriveConstants.TRACK_RADIUS);
+
+                // intake
+                controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
+                    commandFactory.getIntakeCommand()
+                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
+                );
+
+                // drive and shoot
+                controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
+                    commandFactory.getDriveAndShootCommand(true, true)
+                    .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
+                );
+
+                // shoot
+                controller.pov(0).whileTrue(commandFactory.getShootCommand(
+                    () -> RotationsPerSecond.of(50), 
+                    true, 
+                    true, 
+                    true)
+                );
+                
+                // pivot
+                controller.leftBumper().onTrue(commandFactory.getTogglePivotCommand());
+                controller.y().onTrue(commandFactory.getSetPivotEncoderPositionUpCommand());
+                controller.a().onTrue(commandFactory.getSetPivotEncoderPositionDownCommand());
+
+                // unstick
+                controller.pov(180).whileTrue(
+                    new StartEndCommand(
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(-10));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(-10));
+                        },
+                        () -> {
+                            shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                            shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                        }
+                    )
+                );
+
+                SmartDashboard.putData("smartDashboard/buttons/Increment Drive Speed", new InstantCommand(() -> {
+                    DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0));
+                    DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0) / DriveConstants.TRACK_RADIUS);
+                }));
+
+                SmartDashboard.putData("smartDashboard/buttons/Decrement Drive Speed", new InstantCommand(() -> {
+                    DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0));
+                    DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0) / DriveConstants.TRACK_RADIUS);
+                }));
                 break;
             case TESTING_BPS: 
                 controller.leftTrigger().whileTrue(

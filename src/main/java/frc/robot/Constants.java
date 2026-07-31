@@ -26,8 +26,9 @@ public final class Constants {
     public static final int CONTROLLER_PORT = 0;
     public static enum BUTTON_BINDINGS {
         COMPETITION,
+        SHOWCASE,
         TESTING_BPS,
-        TESTING_SHOOTER_MAP, 
+        TESTING_SHOOTER_MAP,
         TESTING_DRIVE_WITH_POSITION
     }
 
@@ -37,7 +38,7 @@ public final class Constants {
     new Pose2d(3, 3, new Rotation2d()) : 
     new Pose2d(0, 0, new Rotation2d());
 
-    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
+    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.SHOWCASE;
 
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
