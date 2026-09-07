@@ -81,7 +81,7 @@ public class ShootUtil {
         Time timeOfFlight = calculateTimeOfFlight(calculateShooterLinearVelocity(shooterVelocity), FuelConstants.HOOD_ANGLE, targetDistance);
 
         Pose2d targetFuturePose = new Pose2d();
-        for(int i = 0; i < iterations; i++) {
+        for (int i = 0; i < iterations; i++) {
             targetFuturePose = calculateTargetFuturePose(targetPose, robotFieldRelativeSpeeds, timeOfFlight); // move the target as much as the robot would move in timeOfFlight seconds
             
             // update values for new future pose

@@ -1,5 +1,5 @@
 /**
- * Original code
+ * Based on WPILib Command Robot Template
  */
 
 package frc.robot;
@@ -37,7 +37,6 @@ public class RobotContainer {
     private final PoseEstimator poseEstimator;
     private final Intake intake;
     private final Shooter shooter;
-
     private final LedStrip ledStrip;
 
     // ————— utils ————— //
@@ -57,7 +56,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
-            case REAL: // real robot, instantiate hardware IO implementations
+            case REAL: // instantiate hardware IO implementations
                 if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
                     drive = new Drive(
                         new ModuleIOTalonFXReal(DriveConstants.SWERVE_MODULE_CONSTANTS[0]),
@@ -120,7 +119,7 @@ public class RobotContainer {
 
                 ledStrip = new LedStrip();
                 break;
-            case SIM: // sim robot, instantiate physics sim IO implementations
+            case SIM: // instantiate physics sim IO implementations
                 configureSimulation();
 
                 if (Constants.INSTANTIATE_DRIVE_AND_POSEESTIMATOR) {
@@ -194,9 +193,8 @@ public class RobotContainer {
                 }
 
                 ledStrip = new LedStrip();
-
                 break;
-            default: // replayed robot, disable IO implementations
+            default: // disable IO implementations (we use "default" instead of "case REPLAY:" to avoid errors that say the objects may have not been initialized)
                 drive = new Drive(
                     new ModuleIO() {},
                     new ModuleIO() {},
@@ -241,14 +239,15 @@ public class RobotContainer {
         );
 
         configureButtonBindings();
-        configureRobot();
+        configureDriverInfo();
         configureAutos();
     }
 
     private void configureButtonBindings() {
-        // drive
+        // drive (always enabled)
         drive.setDefaultCommand(commandFactory.getDriveWithJoysticksCommand());
         
+        // all other button bindings
         switch (Constants.CURRENT_BUTTON_BINDINGS) {
             case COMPETITION: 
                 // x-lock
@@ -257,7 +256,7 @@ public class RobotContainer {
                 );
 
                 // drive slow
-                controller.leftStick().whileTrue( // remapped as gamesir L4
+                controller.leftStick().whileTrue( // on the gamesir controller, L4 is mapped to leftStick button
                     commandFactory.getDriveSpeedCommand(
                         MetersPerSecond.of(1), 
                         RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS), 
@@ -267,7 +266,7 @@ public class RobotContainer {
                 );
 
                 // drive fast
-                controller.rightStick().whileTrue( // remapped as gamesir R4
+                controller.rightStick().whileTrue( // on the gamesir controller, R4 is mapped to rightStick button
                     commandFactory.getDriveSpeedCommand(
                         DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
                         DriveConstants.MAX_THEORETICAL_ANGULAR_SPEED, 
@@ -276,30 +275,24 @@ public class RobotContainer {
                     )
                 );
 
-                // intake
+                // drive and intake
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-                    commandFactory.getDriveSpeedCommand(
-                        MetersPerSecond.of(2), 
-                        RadiansPerSecond.of(2 / DriveConstants.TRACK_RADIUS), 
-                        DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-                        DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
-                    )
-                    .alongWith(commandFactory.getIntakeCommand())
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
+                    commandFactory.getDriveAndIntakeCommand()
                 );
 
                 // drive and shoot
                 controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
                     commandFactory.getDriveAndShootCommand(true, true)
-                    .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
                 );
 
                 // shoot
-                controller.pov(0).whileTrue(commandFactory.getShootCommand(
-                    () -> RotationsPerSecond.of(50), 
-                    true, 
-                    true, 
-                    true)
+                controller.pov(0).whileTrue(
+                    commandFactory.getShootCommand(
+                        () -> RotationsPerSecond.of(50), 
+                        true, 
+                        true, 
+                        true
+                    )
                 );
                 
                 // pivot
@@ -328,34 +321,39 @@ public class RobotContainer {
                         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
                     }
                 ));
+
+                // motor check
+                SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
                 break;
             case SHOWCASE:
-                // overrides
+                // safety overrides
                 Constants.ENABLE_TRENCH_ALIGN = false;
                 Constants.ENABLE_PIVOT = true;
                 Constants.ENABLE_PIVOT_AGITATION = false;
                 Constants.ENABLE_SHOOT_ON_THE_MOVE = false;
+                DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(1);
+                DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(1 / DriveConstants.TRACK_RADIUS);
                 DriveConstants.ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(7);
                 DriveConstants.ALLOWED_ANGULAR_ACCEL = RadiansPerSecondPerSecond.of(7 / DriveConstants.TRACK_RADIUS);
 
-                // intake
+                // drive and intake
                 controller.leftTrigger().and(controller.rightTrigger().negate()).whileTrue(
-                    commandFactory.getIntakeCommand()
-                    .alongWith(commandFactory.getSetLedStripHuesCommand(new Integer[] {60})) // leds are green
+                    commandFactory.getDriveAndIntakeCommand()
                 );
 
                 // drive and shoot
                 controller.leftTrigger().negate().and(controller.rightTrigger()).whileTrue(
                     commandFactory.getDriveAndShootCommand(true, true)
-                    .alongWith(commandFactory.getShootingLedStripCommand()) // leds are blue or red
                 );
 
                 // shoot
-                controller.pov(0).whileTrue(commandFactory.getShootCommand(
-                    () -> RotationsPerSecond.of(50), 
-                    true, 
-                    true, 
-                    true)
+                controller.pov(0).whileTrue(
+                    commandFactory.getShootCommand(
+                        () -> RotationsPerSecond.of(50), 
+                        true, 
+                        true, 
+                        true
+                    )
                 );
                 
                 // pivot
@@ -376,6 +374,8 @@ public class RobotContainer {
                         }
                     )
                 );
+
+                // adjust drive speed (depending on the age of the person driving, I guess)
 
                 SmartDashboard.putData("smartDashboard/buttons/Increment Drive Speed", new InstantCommand(() -> {
                     DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0));
@@ -447,7 +447,7 @@ public class RobotContainer {
                     )
                 );
 
-                controller.a().onTrue( // print everything
+                controller.a().onTrue( // print hashmap line
                     new InstantCommand(() -> 
                         {
                             System.out.println("SHOOTER_VELOCITY_MAP.put(DISTANCE, " + shooter.shooterIOInputs.velocity + ");");
@@ -505,39 +505,39 @@ public class RobotContainer {
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
-
-        // ————— testing bindings ————— //
-
-        SmartDashboard.putData("smartDashboard/buttons/Check Motors", commandFactory.getCheckMotorsCommand());
     }
 
-    // ————— robot ————— //
+    // ————— driver info ————— //
 
-    public void configureRobot() {
+    public void configureDriverInfo() {
+        // initialize toggles
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
     }
 
-    public void robotPeriodic() {
+    public void updateDriverInfo() {
+        // update field2d
         SmartDashboard.putData("smartDashboard/field2d", Constants.FieldConstants.FIELD2D);
 
+        // update trench zone boundaries
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[0].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/blue right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[1].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red left", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[2].getCorners());
         Logger.recordOutput("outputs/simulation/fieldSimulation/zones/trenches/current/red right", Constants.FieldConstants.Zones.TRENCH_ZONES.zones[3].getCorners());
 
+        // update toggles
         Constants.ENABLE_TRENCH_ALIGN = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Trench Align", Constants.ENABLE_TRENCH_ALIGN);
         Constants.ENABLE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         Constants.ENABLE_PIVOT_AGITATION = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
         Constants.ENABLE_SHOOT_ON_THE_MOVE = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
-
         Logger.recordOutput("outputs/drive/ENABLE_TRENCH_ALIGN", Constants.ENABLE_TRENCH_ALIGN);
         Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT", Constants.ENABLE_PIVOT);
         Logger.recordOutput("outputs/fuelIO/intake/ENABLE_PIVOT_AGITATION", Constants.ENABLE_PIVOT_AGITATION);
         Logger.recordOutput("outputs/fuelIO/shooter/ENABLE_SHOOT_ON_THE_MOVE", Constants.ENABLE_SHOOT_ON_THE_MOVE);
 
+        // update game info
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
             Logger.recordOutput("outputs/fieldInfo/remainingShiftTime", HubUtil.timeRemainingInCurrentShift().orElse(Seconds.of(-1)));
             Logger.recordOutput("outputs/fieldInfo/currentShift", HubUtil.getCurrentShift().orElse(HubUtil.Shift.NO_SHIFT));
@@ -553,10 +553,6 @@ public class RobotContainer {
 
     // ————— autonomous ————— //
 
-    public void disabledPeriodic() {
-        autoGenerator.drawSelectedAuto(autoChooser.selectedCommand().getName());
-    }
-
     private void configureAutos() {
         autoGenerator = new AutoGenerator(
             drive, 
@@ -567,6 +563,8 @@ public class RobotContainer {
             commandFactory
         );
         autoChooser = new AutoChooser(); // creates and selects a "do nothing" auto by default
+
+        // add autoroutines to autochooser
 
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addRoutine("BeMeanLeft", () -> autoGenerator.beMeanLeft());
@@ -584,7 +582,7 @@ public class RobotContainer {
             autoChooser.addRoutine("RepeatingCenterFuelRightCloser", () -> autoGenerator.repeatingCenterFuelRightCloser());
             autoChooser.addRoutine("OutpostFuel", () -> autoGenerator.outpostFuel());
 
-            autoChooser.select("BackUpAndShoot"); // picks a default auto
+            autoChooser.select("BackUpAndShoot"); // picks a default auto that isn't "do nothing"
         }
 
         SmartDashboard.putData("smartDashboard/AutoChooser", autoChooser);
@@ -594,23 +592,19 @@ public class RobotContainer {
         return autoChooser.selectedCommand();
     }
 
-    // ————— teleop ————— //
-
-    public void teleopPeriodic() {
-        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
-            Logger.recordOutput("outputs/fieldInfo/autoWinner", HubUtil.getAutoWinner());
-        }
+    public void updateSelectedAutoDrawing() {
+        autoGenerator.drawSelectedAuto(getAutonomousCommand().getName());
     }
 
     // ————— simulation ————— //
 
     private void configureSimulation() {
-        // drive
+        // initialize drive
         driveSimulation = new SwerveDriveSimulation(DriveConstants.DRIVE_SIMULATION_CONFIG, Constants.ROBOT_START_POSE);
         SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
         Constants.FieldConstants.Zones.logAllZones();
 
-        // fuelIO
+        // initialize fuel
         fuelSimulation = new FuelSim();
         fuelSimulation.registerRobot(
             DriveConstants.WIDTH_X.in(Meters),
@@ -624,10 +618,10 @@ public class RobotContainer {
             DriveConstants.WIDTH_X.div(2).in(Meters) + FuelConstants.INTAKE_WIDTH_X.in(Meters),
             -DriveConstants.WIDTH_Y.div(2).in(Meters),
             DriveConstants.WIDTH_Y.div(2).in(Meters),
-            () -> {
+            () -> { // if intake is on and the hopper isn't full
                 return intake.getIntakeOn() && (Constants.REALISTIC_SIM ? !intake.getHopperFull() : true);
             }, 
-            () -> {
+            () -> { // with realistic sim, if the hopper isn't full, add to the fuel in the hopper
                 if (Constants.REALISTIC_SIM) {
                     if (intake.getHopperFull()) {
                         return;
@@ -644,21 +638,17 @@ public class RobotContainer {
         }
     }
 
-    public void simulationPeriodic() {
-        // drive
+    public void updateSimulation() {
+        // update drive
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("outputs/simulation/fieldSimulation/robotPosition", driveSimulation.getSimulatedDriveTrainPose());
 
-        // fuelIO
+        // update fuel
         fuelSimulation.stepSim();
     }
 
     public void resetSimulation() {
-        if (Constants.CURRENT_MODE != Constants.ROBOT_MODE.SIM) {
-            return;
-        }
-
-        // drive
+        // reset drive
         Pose2d startPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? 
         Constants.ROBOT_START_POSE : 
         Constants.FieldConstants.calculateAllianceFlippedPose(Constants.ROBOT_START_POSE);
@@ -667,7 +657,7 @@ public class RobotContainer {
         poseEstimator.resetPosition(startPose);
         SimulatedArena.getInstance().resetFieldForAuto();
 
-        // fuel
+        // reset fuel
         fuelSimulation.clearFuel();
 
         if (Constants.REALISTIC_SIM) {

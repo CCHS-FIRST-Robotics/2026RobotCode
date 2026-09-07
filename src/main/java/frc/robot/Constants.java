@@ -54,6 +54,7 @@ public final class Constants {
 
     // ————— toggles ————— //
 
+    // these are overwritten if using SHOWCASE button bindings
     public static boolean ENABLE_TRENCH_ALIGN = false;
     public static boolean ENABLE_PIVOT = true;
     public static boolean ENABLE_PIVOT_AGITATION = false;

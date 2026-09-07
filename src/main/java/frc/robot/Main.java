@@ -1,5 +1,5 @@
 /**
- * Original code
+ * Based on WPILib Command Robot Template
  */
 
 package frc.robot;
