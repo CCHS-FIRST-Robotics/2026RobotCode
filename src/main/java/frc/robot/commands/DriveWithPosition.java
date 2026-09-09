@@ -25,6 +25,14 @@ public class DriveWithPosition extends Command {
 
     private Pose2d calculatedTargetPose;
 
+    /**
+     * Overload for using a Pose2d (e.g. if we want the robot to drive to a set location on the field)
+     * 
+     * @param drive - the drive object
+     * @param poseEstimator - the poseEstimator object
+     * @param targetPose - the desired Pose2d
+     * @param useAllianceFlipping - whether the robot should go to the absolute provided Pose2d or if it should be relative to alliance (e.g. if we want a command to drive the robot to the outpost, you just tell it the outpost position while in the blue alliance)
+     */
     public DriveWithPosition(
         Drive drive,
         PoseEstimator poseEstimator,
@@ -42,6 +50,13 @@ public class DriveWithPosition extends Command {
         this.useAllianceFlipping = useAllianceFlipping;
     }
 
+    /**
+     * Overload for using a Transform2d (e.g. if we want the robot to drive 2 meters backwards from wherever it is)
+     * 
+     * @param drive - the drive object
+     * @param poseEstimator - the poseEstimator object
+     * @param targetTransform - the desired Transform2d
+     */
     public DriveWithPosition(
         Drive drive,
         PoseEstimator poseEstimator,
@@ -83,6 +98,7 @@ public class DriveWithPosition extends Command {
 
     @Override
     public boolean isFinished() {
+        // these thresholds were verified experimentally, and are necessary to make sure the command doesn't run forever
         return Math.abs(poseEstimator.getPose().getX() - calculatedTargetPose.getX()) < 0.03
             && Math.abs(poseEstimator.getPose().getY() - calculatedTargetPose.getY()) < 0.03
             && Math.abs(poseEstimator.getPose().getRotation().getRotations() - calculatedTargetPose.getRotation().getRotations()) < 0.06

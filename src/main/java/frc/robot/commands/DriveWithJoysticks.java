@@ -30,10 +30,22 @@ public class DriveWithJoysticks extends Command {
     private final boolean useTrenchAlign;
     private final boolean xLockWhileStationary;
 
-    private final double EXPONENT = 2;
+    private final double EXPONENT = 2; // used to allow for more precise control when the joysticks aren't pushed fully in one direction
 
     private boolean inTrench = false;
 
+    /**
+     * Drive the robot with joysticks. 
+     * 
+     * @param drive - the drive object
+     * @param poseEstimator - the poseEstimator object
+     * @param xVelocitySupplier - desired x velocity of the robot (note that this is in field coordinates)
+     * @param yVelocitySupplier - desired y velocity of the robot (note that this is in field coordinates)
+     * @param thetaVelocitySupplier - desired theta velocity of the robot (note that this is in field coordinates)
+     * @param thetaSupplier - desired theta of the robot (for auto aiming while shooting)
+     * @param useTrenchAlign - whether to enable trench align
+     * @param xLockWhileStationary - whether to automatically x-lock while stationary (used for stability while shooting)
+     */
     public DriveWithJoysticks(
         Drive drive, 
         PoseEstimator poseEstimator,
@@ -86,7 +98,7 @@ public class DriveWithJoysticks extends Command {
             );
         }
 
-        // trench
+        // trench align
         if (Constants.ENABLE_TRENCH_ALIGN && useTrenchAlign) {
             // logic for which trench zones to use
             if (Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) { // if we're in the default
@@ -137,7 +149,7 @@ public class DriveWithJoysticks extends Command {
             }
         }
 
-        // override with x lock
+        // override with x-lock
         if (xLockWhileStationary
             && Math.abs(speeds.vxMetersPerSecond) < 0.05
             && Math.abs(speeds.vyMetersPerSecond) < 0.05
@@ -147,7 +159,7 @@ public class DriveWithJoysticks extends Command {
             return;
         }
                 
-        // run velocity
+        // send the robot-relative chassisSpeeds object to drive
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,
