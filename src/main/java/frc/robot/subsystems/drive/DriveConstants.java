@@ -19,9 +19,13 @@ import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.*;
 import frc.robot.Constants;
 
+/**
+ * everything marked "MUTABLE" can change even as we continue to use the MK4N swerve modules bought in 2025
+ */
+
 public class DriveConstants {
-    public static final CANBus CAN_BUS = new CANBus("", "./logs/example.hoot");
-    public static final double ODOMETRY_FREQUENCY = CAN_BUS.isNetworkFD() ? 250.0 : 100.0;
+    public static final CANBus CAN_BUS = new CANBus("", "./logs/example.hoot"); // given by phoenixtuner
+    public static final double ODOMETRY_FREQUENCY = CAN_BUS.isNetworkFD() ? 250.0 : 100.0; // given by phoenixtuner
 
     // ————— motors ————— //
 
@@ -63,7 +67,7 @@ public class DriveConstants {
     .withKD(0)
     .withKS(0.03422)
     .withKV(0.13259)
-    .withKA(0.025003);
+    .withKA(0.025003); // * MUTABLE
     
     private static final Slot0Configs TURN_PIDF = new Slot0Configs()
     .withKP(15)
@@ -72,23 +76,23 @@ public class DriveConstants {
     .withKS(0)
     .withKV(0)
     .withKA(0)
-    .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign); // * MUTABLE
 
     private static final ClosedLoopOutputType DRIVE_PID_TYPE = ClosedLoopOutputType.Voltage;
-    private static final ClosedLoopOutputType TURN_PID_TYPE = ClosedLoopOutputType.Voltage; // the other option is torque current FOC
+    private static final ClosedLoopOutputType TURN_PID_TYPE = ClosedLoopOutputType.Voltage;
     private static final SteerFeedbackType TURN_PID_FEEDBACK_TYPE = SteerFeedbackType.FusedCANcoder; // when not pro-licensed, fused/sync automatically fall back to remote
 
     // ————— modules ————— //
 
     private static final Distance WHEEL_RADIUS = Inches.of(2);
-    public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.2;
+    public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.2; // given by phoenixtuner
     private static final double MODULE_COUPLE_RATIO = 3.125;
     private static final double MODULE_DRIVE_GEAR_RATIO = 5.902777777777778;
     private static final double MODULE_TURN_GEAR_RATIO = 18.75;
     
     // ————— drivetrain ————— //
 
-    public static final Mass ROBOT_WEIGHT = Pounds.of(123); // robot is 100, bumpers are 10, battery is 13 // * MUTABLE
+    public static final Mass ROBOT_WEIGHT = Pounds.of(123); // * MUTABLE robot is 100, bumpers are 10, battery is 13
     public static final Distance WIDTH_X = Inches.of(27.5); // * MUTABLE
     public static final Distance WIDTH_Y = Inches.of(27.5); // * MUTABLE
     public static final Distance TRACK_WIDTH_X = Inches.of(22.25); // distance between centers of the front and back wheels // * MUTABLE
@@ -111,7 +115,7 @@ public class DriveConstants {
     );
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 
-    public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41);
+    public static final LinearVelocity MAX_THEORETICAL_LINEAR_SPEED = MetersPerSecond.of(5.41); // given by phoenixtuner
     public static final AngularVelocity MAX_THEORETICAL_ANGULAR_SPEED = RadiansPerSecond.of(MAX_THEORETICAL_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL ? MetersPerSecond.of(4) : MetersPerSecond.of(2); // * MUTABLE
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) / TRACK_RADIUS);
@@ -122,14 +126,14 @@ public class DriveConstants {
     public static LinearAcceleration ALLOWED_LINEAR_ACCEL = MAX_ALLOWED_LINEAR_ACCEL;
     public static AngularAcceleration ALLOWED_ANGULAR_ACCEL = MAX_ALLOWED_ANGULAR_ACCEL;
     
-    private static final Current DRIVE_STATOR_CURRENT_LIMIT = Amps.of(60.0); // * MUTABLE
+    private static final Current DRIVE_STATOR_CURRENT_LIMIT = Amps.of(60.0); // * MUTABLE 
     public static final Current TURN_STATOR_CURRENT_LIMIT = Amps.of(40.0); // * MUTABLE
 
     // these are only used for simulation
-    private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01);
-    private static final MomentOfInertia TURN_INERTIA = KilogramSquareMeters.of(0.01);
-    private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2); // simulated voltage necessary to overcome friction
-    private static final Voltage TURN_FRICTION_VOLTAGE = Volts.of(0.2); 
+    private static final MomentOfInertia DRIVE_INERTIA = KilogramSquareMeters.of(0.01); // given by phoenixtuner
+    private static final MomentOfInertia TURN_INERTIA = KilogramSquareMeters.of(0.01); // given by phoenixtuner
+    private static final Voltage DRIVE_FRICTION_VOLTAGE = Volts.of(0.2); // given by phoenixtuner
+    private static final Voltage TURN_FRICTION_VOLTAGE = Volts.of(0.2); // given by phoenixtuner
 
     // ————— compilation ————— //
 

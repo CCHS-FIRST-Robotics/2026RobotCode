@@ -100,7 +100,7 @@ public class DriveWithJoysticks extends Command {
 
         // trench align
         if (Constants.ENABLE_TRENCH_ALIGN && useTrenchAlign) {
-            // logic for which trench zones to use
+            // logic for which trench zones to use (we wanted the zone when you enter to be bigger than when you exit)
             if (Zones.TRENCH_ZONES_DEFAULT.contains(poseEstimator.getPose())) { // if we're in the default
                 if (!inTrench) {
                     if (Zones.TRENCH_ZONES_ALLIANCE.contains(poseEstimator.getPose())) { // figure out what side we came in from
@@ -159,7 +159,7 @@ public class DriveWithJoysticks extends Command {
             return;
         }
                 
-        // send the robot-relative chassisSpeeds object to drive
+        // run drive
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,

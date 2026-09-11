@@ -28,7 +28,7 @@ public class Drive extends SubsystemBase {
     };
     private DRIVE_MODE controlMode = DRIVE_MODE.DISABLED;
     
-    private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+    private final Module[] modules = new Module[4]; // in order: FL, FR, BL, BR
     
     // ————— odometry ————— //
 
@@ -59,7 +59,7 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition()
     };
 
-    // ————— characterization ————— //
+    // ————— characterization control ————— //
     
     private Voltage[] characterizationVolts = {
         Volts.of(0), 
@@ -74,7 +74,7 @@ public class Drive extends SubsystemBase {
         Rotations.of(0)
     };
 
-    // ————— position ————— //
+    // ————— position control ————— //
 
     private final PIDController xPIDPosition = new PIDController(2.5, 0, 0);
     private final PIDController yPIDPosition = new PIDController(2.5, 0, 0);
@@ -89,7 +89,7 @@ public class Drive extends SubsystemBase {
 
     boolean usingChoreo = false;
 
-    // ————— velocity ————— //
+    // ————— velocity control ————— //
 
     private ChassisSpeeds speeds = new ChassisSpeeds();
     private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
@@ -106,7 +106,7 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, DriveConstants.SWERVE_MODULE_CONSTANTS[2]);
         modules[3] = new Module(brModuleIO, 3, DriveConstants.SWERVE_MODULE_CONSTANTS[3]);
         
-        // allow position PID to turn in the correct direction
+        // allow position PID to turn in the most efficient direction
         thetaPIDPosition.enableContinuousInput(-Math.PI, Math.PI);
         thetaPIDChoreo.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -151,11 +151,10 @@ public class Drive extends SubsystemBase {
             case POSITION:
                 Logger.recordOutput("outputs/drive/targetPose", positionSetpoint);
 
+                // get PID outputs (field relative)
                 double xOutput;
                 double yOutput;
                 double thetaOutput;
-
-                // get PID outputs
                 if (!usingChoreo) {
                     xOutput = xPIDPosition.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
                     yOutput = yPIDPosition.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
@@ -200,24 +199,25 @@ public class Drive extends SubsystemBase {
                         )
                     );
                 }
-            
+                
                 speeds = ChassisSpeeds.discretize(speeds, Constants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
                 
                 Logger.recordOutput("outputs/drive/speedsInput", speeds);
                 prevSpeeds = speeds;
 
-                SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
+                // convert speeds to module states
+                SwerveModuleState[] moduleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(speeds);
                 
                 if (!usingChoreo) {
-                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
+                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds with the velocity limit
                         moduleStates, 
-                        speeds,
+                        speeds, 
                         DriveConstants.ALLOWED_LINEAR_SPEED, 
                         DriveConstants.ALLOWED_LINEAR_SPEED, 
                         DriveConstants.ALLOWED_ANGULAR_SPEED
                     );
                 } else {
-                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds
+                    SwerveDriveKinematics.desaturateWheelSpeeds( // renormalize wheel speeds without the velocity limit
                         moduleStates, 
                         speeds,
                         DriveConstants.MAX_THEORETICAL_LINEAR_SPEED, 
@@ -269,14 +269,6 @@ public class Drive extends SubsystemBase {
 
     // ————— general public functions ————— //
 
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        return speedsOutput;
-    }
-
-    public ChassisSpeeds getFieldRelativeSpeeds() {
-        return ChassisSpeeds.fromRobotRelativeSpeeds(speedsOutput, poseEstimator.getPose().getRotation());
-    }
-
     public PIDController getXPositionController() {
         return xPIDPosition;
     }
@@ -290,22 +282,24 @@ public class Drive extends SubsystemBase {
     }
 
     @AutoLogOutput(key = "outputs/drive/atThetaSetpoint")
-    public boolean atThetaSetpoint() {
+    public boolean atThetaSetpoint() { // used to tell if we're aimed at the right angle to shoot
         return thetaPIDPosition.atSetpoint();
     }
     
-    // ————— poseEstimator ————— //
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return speedsOutput;
+    }
 
-    public void setPoseEstimator(PoseEstimator poseEstimator) {
-        this.poseEstimator = poseEstimator;
+    public ChassisSpeeds getFieldRelativeSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(speedsOutput, poseEstimator.getPose().getRotation());
     }
 
     public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] states = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getPosition();
+            positions[i] = modules[i].getPosition();
         }
-        return states;
+        return positions;
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -314,6 +308,12 @@ public class Drive extends SubsystemBase {
             moduleStates[i] = modules[i].getState();
         }
         return moduleStates;
+    }
+    
+    // ————— poseEstimator ————— //
+
+    public void setPoseEstimator(PoseEstimator poseEstimator) {
+        this.poseEstimator = poseEstimator;
     }
 
     // ————— odometry ————— //
@@ -324,7 +324,7 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    public void updateModuleSamples() { // allows all signals to get sampled together
+    public void updateModuleSamples() { // allows all data to get sampled together
         sampleTimestamps = modules[0].getOdometryTimestamps();
         sampleCount = sampleTimestamps.length;
         
@@ -335,11 +335,16 @@ public class Drive extends SubsystemBase {
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
             SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
             for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
+                // get module position
                 modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
+                
+                // get module delta
                 moduleDeltas[moduleIndex] = new SwerveModulePosition(
                     modulePositions[moduleIndex].distanceMeters - lastModulePositions[moduleIndex].distanceMeters,
                     modulePositions[moduleIndex].angle
                 );
+                
+                // update last module position
                 lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
             }
             sampleModulePositions[i] = modulePositions;
@@ -355,12 +360,12 @@ public class Drive extends SubsystemBase {
         return sampleTimestamps;
     }
 
-    public SwerveModulePosition[][] getSampleModulePositions() {
-        return sampleModulePositions;
-    }
-
     public SwerveModulePosition[][] getSampleModuleDeltas() {
         return sampleModuleDeltas;
+    }
+
+    public SwerveModulePosition[][] getSampleModulePositions() {
+        return sampleModulePositions;
     }
 
     // ————— utils ————— //

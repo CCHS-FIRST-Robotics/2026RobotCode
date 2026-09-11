@@ -19,7 +19,7 @@ public final class Constants {
     public static enum ROBOT_MODE {
         REAL,
         SIM,
-        REPLAY
+        REPLAY // we've never used this
     }
     public static final ROBOT_MODE CURRENT_MODE = RobotBase.isReal() ? ROBOT_MODE.REAL : ROBOT_MODE.SIM;
 
@@ -35,11 +35,12 @@ public final class Constants {
     // ————— initial conditions ————— //
 
     public static final Pose2d ROBOT_START_POSE = CURRENT_MODE == ROBOT_MODE.SIM ?
-    new Pose2d(3, 3, new Rotation2d()) : 
+    new Pose2d(3, 3, new Rotation2d()) : // so it doesn't start out of bounds in sim
     new Pose2d(0, 0, new Rotation2d());
 
     public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.SHOWCASE;
 
+    // instantiation toggles (used if something is broken at competition and we want to fully disable it)
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
     public static final boolean INSTANTIATE_INTAKE = true;
     public static final boolean INSTANTIATE_SHOOTER = true;
@@ -74,6 +75,7 @@ public final class Constants {
             new Rotation3d()
         );
 
+        // where to aim if passing
         public static final Pose2d BLUE_PASS_LEFT = new Pose2d(
             Meters.of(2), 
             FIELD_WIDTH_Y.div(2).plus(Meters.of(2)), 

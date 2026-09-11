@@ -17,14 +17,14 @@ public class ShooterIOSim implements ShooterIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getKrakenX60(1), 
-            0.01, 
+            0.01, // I made this value slightly larger than the other sims because there's actually some inertia and spinup time, it was still completely bs though
             1
         ), 
         DCMotor.getKrakenX60(1)
     );
 
-    private final PIDController PID = new PIDController(2, 0, 0);
-    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.13259, 0);
+    private final PIDController PID = new PIDController(2, 0, 0); // completely bs values but they made the curve nice
+    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.13259, 0); // actually accurate to reality
 
     private Voltage appliedVoltage = Volts.of(0);
     private AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);

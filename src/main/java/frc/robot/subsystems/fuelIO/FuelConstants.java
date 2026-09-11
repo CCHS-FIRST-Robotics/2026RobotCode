@@ -24,12 +24,12 @@ public class FuelConstants {
     // ————— physical constants ————— //
 
     // gear ratios are all # rotations of motor to get one rotation of the mechanism
-    public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect, but no one cares
+    public static final double INTAKE_GEAR_RATIO = 5.0; // kind of incorrect because of belts, but no one cares
     public static final double PIVOT_GEAR_RATIO = 75.0 / 84.0 * 50.0;
     public static final double SHOOTER_GEAR_RATIO = 1;
     public static final double KICKER_GEAR_RATIO = 1;
     
-    // zero is with the center of mass line horizontal (for kg calculation)
+    // zero is with the center of mass line horizontal (for kG calibration)
     public static final Angle PIVOT_MAX_UP_ANGLE = Rotations.of(0.37);
     public static final Angle PIVOT_MAX_DOWN_ANGLE = Rotations.of(-0.056);
 
@@ -47,7 +47,7 @@ public class FuelConstants {
     .withKA(0);
 
     public static final ClosedLoopConfig KICKER_PID = new ClosedLoopConfig().pid(0.00001, 0, 0);
-    public static final FeedForwardConfig KICKER_FF = new FeedForwardConfig().kV(0.0021); // this is in RPM
+    public static final FeedForwardConfig KICKER_FF = new FeedForwardConfig().kV(0.0021); // this is in V/RPM, because REVLib is just like that
 
     // ————— sim ————— //
     
@@ -60,5 +60,5 @@ public class FuelConstants {
         new Rotation3d()
     );
     public static final Distance SHOOTER_WHEEL_RADIUS = Inches.of(2);
-    public static final Angle HOOD_ANGLE = Degrees.of(10); // zero is with the hood opening horizontal (ball shoots straight up)
+    public static final Angle HOOD_ANGLE = Degrees.of(10); // zero is with the hood opening horizontal (fuel shoots straight up)
 }

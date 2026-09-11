@@ -267,14 +267,14 @@ public class CommandFactory {
             Commands.waitSeconds(0.1)
             .andThen(Commands.waitUntil(() -> drive.atThetaSetpoint() || atThetaSetpointOverride)) // waits for drive rotation to be correct
             .andThen(Commands.waitUntil(() -> shooter.getShooterUpToSpeed())) // waits for shooter to get up to speed
-            .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the balls that are already lodged in there
+            .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(-10))) // run backwards to avoid the fuel that's already lodged in there
             .andThen(Commands.waitSeconds(0.25))
             .andThen(shooter.getSetKickerVelocityCommand(kickerVelocity))
         )
-        .alongWith( // move pivot back and forth for ball agitation
+        .alongWith( // move pivot back and forth for fuel agitation
             (
                 useIntake ? 
-                intake.getSetIntakeVoltageCommand(Volts.of(1), true) : // run intake to unstick balls
+                intake.getSetIntakeVoltageCommand(Volts.of(1), true) : // run intake to unstick fuel
                 new InstantCommand()
             )
             .andThen(

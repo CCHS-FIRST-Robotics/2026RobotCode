@@ -17,9 +17,9 @@ public class LedStrip extends SubsystemBase {
     private final Timer timer = new Timer();
 
     private Integer[] hues = new Integer[0];
+    private double frequency = 1; // how many times to change hue per second
 
     private int rainbowFirstPixelHue = 0;
-    private double frequency = 1; // how many times to change hue per second
     
     public LedStrip() {
         led = new AddressableLED(LedStripConstants.PWM_PORT);
@@ -46,8 +46,8 @@ public class LedStrip extends SubsystemBase {
             return;
         }
         
+        // while not idling, set all LEDs to a color determined by the hues array
         int hue = hues[(int) (timer.get() * frequency) % hues.length]; // iterate through the hues array at a rate determined by frequency
-
         for (int i = 0; i < ledBuffer.getLength(); i++) {
             ledBuffer.setHSV(i, hue, 255, 255);
         }

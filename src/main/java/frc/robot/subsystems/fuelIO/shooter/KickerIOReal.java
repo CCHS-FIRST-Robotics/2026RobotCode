@@ -49,7 +49,7 @@ public class KickerIOReal implements KickerIO {
         .positionConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.KICKER_GEAR_RATIO);
 
-        // stop config
+        // stop config and flash
         motor.setCANTimeout(0);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

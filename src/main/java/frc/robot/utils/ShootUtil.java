@@ -129,7 +129,7 @@ public class ShootUtil {
     }
 
     private static Time calculateTimeOfFlight(LinearVelocity shooterVelocity, Angle hoodAngle, Distance distance) {
-        double shotAngle = Math.PI / 2 - hoodAngle.in(Radians); // angle between the horizontal and the ball's velocity vector
+        double shotAngle = Math.PI / 2 - hoodAngle.in(Radians); // angle between the horizontal and the fuel's velocity vector
         return Seconds.of(distance.in(Meters) / (shooterVelocity.in(MetersPerSecond) * Math.cos(shotAngle))); // only accounts for x direction (that's what the cosine is for)
     }
 

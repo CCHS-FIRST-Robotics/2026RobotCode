@@ -16,7 +16,7 @@ public class IntakeIOSim implements IntakeIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
-            0.00001, 
+            0.00001, // I just made this a really small value so the motor spins up basically instantly, which is accurate enough to reality
             1
         ), 
         DCMotor.getNEO(1)

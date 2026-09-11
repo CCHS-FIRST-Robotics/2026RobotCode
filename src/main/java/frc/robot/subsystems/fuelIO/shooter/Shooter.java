@@ -86,7 +86,7 @@ public class Shooter extends SubsystemBase {
         return runOnce(() -> setKickerVelocity(velocity));
     }
 
-    // util
+    // ————— util ————— //
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/shooterUpToSpeed")
     public boolean getShooterUpToSpeed() {

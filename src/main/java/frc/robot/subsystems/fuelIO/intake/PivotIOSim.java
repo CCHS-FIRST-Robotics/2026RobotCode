@@ -17,13 +17,13 @@ public class PivotIOSim implements PivotIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
-            0.00001, 
+            0.00001, // I just made this a really small value so the motor spins up basically instantly, which is accurate enough to reality
             1
         ), 
         DCMotor.getNEO(1)
     );
 
-    private final PIDController PID = new PIDController(15, 0, 0);
+    private final PIDController PID = new PIDController(15, 0, 0); // completely bs values but they made the curve nice
 
     private Voltage appliedVoltage = Volts.of(0);
     private Angle positionSetpoint = Rotations.of(0);
@@ -53,7 +53,7 @@ public class PivotIOSim implements PivotIO {
     }
 
     @Override
-    public void setPosition(Angle angle) { // I'm not going to make a trapezoid profile, so slow doesn't do anything here
+    public void setPosition(Angle angle) {
         double volts = PID.calculate(
             motor.getAngularPositionRotations() / FuelConstants.PIVOT_GEAR_RATIO, 
             angle.in(Rotations)
