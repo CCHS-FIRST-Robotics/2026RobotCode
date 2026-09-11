@@ -21,9 +21,10 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     private final Odometry odometry;
     private final Vision vision;
 
-    private final SwerveDrivePoseEstimator odometryEstimator;
-    private final SwerveDrivePoseEstimator visionEstimator;
-    private final SwerveDrivePoseEstimator combinedEstimator;
+    // I created this system since it makes it easier to tell if there's an issue with just odom or just vision
+    private final SwerveDrivePoseEstimator odometryEstimator; // only informed by odometry
+    private final SwerveDrivePoseEstimator visionEstimator; // only informed by vision
+    private final SwerveDrivePoseEstimator combinedEstimator; // informed by both odometry and vision
 
     private final Drive drive;
 
@@ -122,7 +123,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
             );
         }
 
-        // vision (blank because odom is ignored)
+        // vision (completely blank because odom is ignored)
         visionEstimator.updateWithTime(
             0,
             new Rotation2d(),

@@ -14,15 +14,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
+/**
+ * I would recommend only messing with the constants marked "MUTABLE"
+ * 
+ */
+
 public class VisionConstants {
     // AprilTag layout
     public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String[] cameraNames = {"FrontLeft", "FrontRight"};
+    public static String[] cameraNames = {"FrontLeft", "FrontRight"}; // * MUTABLE
 
     // Robot to camera transforms
-    public static Transform3d[] robotToCameraTransforms = {
+    public static Transform3d[] robotToCameraTransforms = { // * MUTABLE
         new Transform3d(
             Inches.of(-9.8), 
             Inches.of(-10.75), 
@@ -37,8 +42,8 @@ public class VisionConstants {
         )
     };
 
-    // Camera properties (get these from photonvisions)
-    public static SimCameraProperties[] cameraProperties = {
+    // Camera properties (get these from photonvision)
+    public static SimCameraProperties[] cameraProperties = { // * MUTABLE
         new SimCameraProperties()
         .setCalibration(1920, 1400, Rotation2d.fromDegrees(92))
         .setCalibError(0.25, 0.08)
