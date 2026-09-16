@@ -51,7 +51,7 @@ public final class Constants {
 
     // sim
 
-    public static final boolean REALISTIC_SIM = false;
+    public static final boolean REALISTIC_SIM = true;
 
     // ————— toggles ————— //
 
@@ -175,7 +175,7 @@ public final class Constants {
 
                 public void log() {
                     for (Zone z : zones) {
-                        Logger.recordOutput("outputs/simulation/fieldSimulation/zones/" + name + "/" + z.name, z.getCorners());
+                        Logger.recordOutput("outputs/fieldInfo/zones/" + name + "/" + z.name, z.getCorners());
                     }
                 }
             }
