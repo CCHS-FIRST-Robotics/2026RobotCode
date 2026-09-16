@@ -6,15 +6,15 @@ package frc.robot.utils;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.math.interpolation.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
-import frc.robot.Constants.*;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.fuelIO.FuelConstants;
 
 public class ShootUtil {

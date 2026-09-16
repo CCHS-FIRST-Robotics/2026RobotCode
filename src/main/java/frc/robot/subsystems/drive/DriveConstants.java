@@ -20,7 +20,7 @@ import org.ironmaple.simulation.drivesims.configs.*;
 import frc.robot.Constants;
 
 /**
- * everything marked "MUTABLE" can change even as we continue to use the MK4N swerve modules bought in 2025
+ * everything marked "MUTABLE" can change as we continue to use the MK4N swerve modules bought in 2025
  */
 
 public class DriveConstants {

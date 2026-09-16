@@ -16,7 +16,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 
 /**
  * I would recommend only messing with the constants marked "MUTABLE"
- * 
  */
 
 public class VisionConstants {
