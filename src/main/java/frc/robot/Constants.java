@@ -58,8 +58,8 @@ public final class Constants {
     // these are overwritten if using SHOWCASE button bindings
     public static boolean ENABLE_TRENCH_ALIGN = false;
     public static boolean ENABLE_PIVOT = true;
-    public static boolean ENABLE_PIVOT_AGITATION = false;
-    public static boolean ENABLE_SHOOT_ON_THE_MOVE = false;
+    public static boolean ENABLE_PIVOT_AGITATION = false; // found to not change much about fuel getting stuck
+    public static boolean ENABLE_SHOOT_ON_THE_MOVE = false; // we basically never used this, but it works in theory and in sim
 
     public static class FieldConstants {
         public static final Field2d FIELD2D = new Field2d();

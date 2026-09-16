@@ -386,7 +386,8 @@ public class CommandFactory {
                 () -> ShootUtil.updateIterative(
                     poseEstimator.getPose(), 
                     ShootUtil.getTargetPose(poseEstimator.getPose()), 
-                    drive.getFieldRelativeSpeeds(), 3
+                    drive.getFieldRelativeSpeeds(), 
+                    3
                 )
             ), 
             Commands.run(

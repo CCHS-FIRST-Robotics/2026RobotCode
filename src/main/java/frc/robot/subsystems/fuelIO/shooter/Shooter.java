@@ -99,6 +99,6 @@ public class Shooter extends SubsystemBase {
 
     @AutoLogOutput(key = "outputs/fuelIO/shooter/linearVelocity")
     public LinearVelocity getShooterLinearVelocity() {
-        return ShootUtil.calculateShooterLinearVelocity(RotationsPerSecond.of(shooterIOInputs.velocity));
+        return ShootUtil.calculateFuelExitVelocity(RotationsPerSecond.of(shooterIOInputs.velocity));
     }
 }

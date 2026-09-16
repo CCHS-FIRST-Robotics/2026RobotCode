@@ -7,6 +7,9 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.MathUtil;
 
+/**
+ * I just made this class to simplify using deadbands
+ */
 public class Controller extends CommandXboxController{
     private final double DEFAULT_DEADBAND = 0.1;
 
