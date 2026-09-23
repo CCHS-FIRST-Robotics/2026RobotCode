@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.Optional;
 
 public class HubUtil {
-    public static final Alliance DEFAULT_AUTO_WINNER = Alliance.Blue; // for when FMS doesn't exist (e.g. in realistic sim)
+    public static final Alliance DEFAULT_AUTO_WINNER = Alliance.Blue; // for when FMS doesn't exist
 
     /**
      * Returns an {@link Optional} containing the current {@link Shift}.

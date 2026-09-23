@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
 
     Angle pivotAngle = Constants.PIVOT_START_ANGLE;
 
-    int hopperFuel;
+    int hopperFuel; // only used for realistic sim
 
     public Intake(
         IntakeIO intakeIO, 
@@ -87,7 +87,7 @@ public class Intake extends SubsystemBase {
         pivotAngle = FuelConstants.PIVOT_MAX_DOWN_ANGLE;
     }
 
-    // util
+    // ————— util ————— //
 
     public boolean getIntakeOn() {
         return Math.abs(intakeIOInputs.voltage) > 0;

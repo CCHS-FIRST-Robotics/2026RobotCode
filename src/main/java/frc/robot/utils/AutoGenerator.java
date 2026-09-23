@@ -7,9 +7,9 @@ package frc.robot.utils;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.math.geometry.*;
 import choreo.Choreo;
 import choreo.auto.*;
 import choreo.trajectory.SwerveSample;
@@ -34,7 +34,9 @@ public class AutoGenerator {
 
     private final CommandFactory commandFactory;
 
-    private final HashMap<String, String> nameFileMap = new HashMap<String, String>(); // ! what's the rule for creating the object inline
+    // tells the auto drawer what file to get the trajectory from. this was necessary for the autos that have a different name from the main file they pull from
+    // (e.g. RepeatingCenterFuelLeft follows both RepeatingCenterFuelLeft1 and RepeatingCenterFuelLeft2 in code, but the main path is in RepeatingCenterFuelLeft1, so we pull the trajectory to draw from there)
+    private final HashMap<String, String> nameFileMap = new HashMap<String, String>();
 
     public AutoGenerator(
         Drive drive, 
@@ -79,7 +81,7 @@ public class AutoGenerator {
 
     // ————— testing routines ————— //
 
-    public AutoRoutine test() {
+    public AutoRoutine test() { // to use this just draw a sufficiently complex trajectory in choreo to test if the robot can follow it well
         AutoRoutine routine = autoFactory.newRoutine("Test");
 
         // load trajectories
@@ -112,8 +114,8 @@ public class AutoGenerator {
         // routine composition
         routine.active().onTrue(
             trajectory0.resetOdometry()
-            .andThen(trajectory0.cmd())
-            .andThen(
+            .andThen(trajectory0.cmd()) // drive to neutral zone
+            .andThen( // continually drive in a circle
                 trajectory1.cmd()
                 .repeatedly()
             )
@@ -132,8 +134,8 @@ public class AutoGenerator {
         // routine composition
         routine.active().onTrue(
             trajectory0.resetOdometry()
-            .andThen(trajectory0.cmd())
-            .andThen(
+            .andThen(trajectory0.cmd()) // drive to neutral zone
+            .andThen( // continually drive in a circle
                 trajectory1.cmd()
                 .repeatedly()
             )
@@ -142,6 +144,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * goes through the left trench, intakes along a path, and then returns to the hub and shoots
+     */
     public AutoRoutine centerFuelLeft() {
         AutoRoutine routine = autoFactory.newRoutine("CenterFuelLeft");
 
@@ -177,6 +182,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * goes through the right trench, intakes along a path, and then returns to the hub and shoots
+     */
     public AutoRoutine centerFuelRight() {
         AutoRoutine routine = autoFactory.newRoutine("CenterFuelRight");
 
@@ -212,6 +220,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * loops centerFuelLeft but intakes along two different paths
+     */
     public AutoRoutine repeatingCenterFuelLeft() {
         AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelLeft");
 
@@ -289,6 +300,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * loops centerFuelRight but intakes along two different paths
+     */
     public AutoRoutine repeatingCenterFuelRight() {
         AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelRight");
 
@@ -366,6 +380,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * same as repeatingCenterFuelLeft but it shoots closer to the hub
+     */
     public AutoRoutine repeatingCenterFuelLeftCloser() {
         AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelLeftCloser");
 
@@ -443,6 +460,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * same as repeatingCenterFuelRight but it shoots closer to the hub
+     */
     public AutoRoutine repeatingCenterFuelRightCloser() {
         AutoRoutine routine = autoFactory.newRoutine("RepeatingCenterFuelRightCloser");
 
@@ -520,6 +540,9 @@ public class AutoGenerator {
         return routine;
     }
 
+    /**
+     * drives from the center to the outpost, then shoots
+     */
     public AutoRoutine outpostFuel() {
         AutoRoutine routine = autoFactory.newRoutine("OutpostFuel");
 
@@ -551,9 +574,9 @@ public class AutoGenerator {
         Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory(nameFileMap.getOrDefault(selectedCommandName, ""));
         
         if (trajectory.isPresent()) {
-            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses(
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses( // create the trajectory on the field2d
                 Arrays.stream(trajectory.get().getPoses())
-                .map(
+                .map( // flip poses based on alliance
                     pose -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ?
                     pose :
                     Constants.FieldConstants.calculateAllianceFlippedPose(pose)

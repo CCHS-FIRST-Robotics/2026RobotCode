@@ -17,14 +17,14 @@ public class KickerIOSim implements KickerIO {
     private final DCMotorSim motor = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(
             DCMotor.getNEO(1), 
-            0.01, 
+            0.01, // I made this value slightly larger just to test the logic with some spinup time in sim
             1
         ), 
         DCMotor.getNEO(1)
     );
 
-    private final PIDController PID = new PIDController(2, 0, 0);
-    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.1209, 0);
+    private final PIDController PID = new PIDController(2, 0, 0); // completely bs values but they made the curve nice
+    private final SimpleMotorFeedforward FF = new SimpleMotorFeedforward(0, 0.1209, 0); // completely bs values but they made the curve nice (I think kV in this case is based off of the real kV of a NEO but I really have no idea)
 
     private Voltage appliedVoltage = Volts.of(0);
     private AngularVelocity velocitySetpoint = RotationsPerSecond.of(0);

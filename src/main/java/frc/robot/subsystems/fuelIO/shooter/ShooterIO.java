@@ -16,7 +16,7 @@ public interface ShooterIO {
         public double velocity;
         public double temperature;
 
-        public double velocitySetpoint;
+        public double velocitySetpoint; // this was useful to visualize how the shooter was affected by fuel going through it
     }
 
     public default void updateInputs(ShooterIOInputs inputs) {}

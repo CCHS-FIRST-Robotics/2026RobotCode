@@ -21,9 +21,10 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     private final Odometry odometry;
     private final Vision vision;
 
-    private final SwerveDrivePoseEstimator odometryEstimator;
-    private final SwerveDrivePoseEstimator visionEstimator;
-    private final SwerveDrivePoseEstimator combinedEstimator;
+    // I created this system since it makes it easier to tell if there's an issue with just odom or just vision
+    private final SwerveDrivePoseEstimator odometryEstimator; // only informed by odometry
+    private final SwerveDrivePoseEstimator visionEstimator; // only informed by vision
+    private final SwerveDrivePoseEstimator combinedEstimator; // informed by both odometry and vision
 
     private final Drive drive;
 
@@ -67,6 +68,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         odometry.periodic();
         vision.periodic();
 
+        // update the field2d
         Constants.FieldConstants.FIELD2D.setRobotPose(getPose());
         
         Logger.recordOutput("outputs/poseEstimator/poseEstimates/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
@@ -75,14 +77,13 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     }
 
     public void resetPosition(Pose2d pose) {
-        // "the library automatically takes care of offsetting the gyro angle" - SwerveDrivePoseEstimator.resetPosition
         odometryEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
         visionEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
         combinedEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
     }
 
     public Pose2d getPose() {
-        return getCombinedPose();
+        return getCombinedPose(); // change this line if you want to use just odom or just vision
     }
 
     @SuppressWarnings("unused")
@@ -122,7 +123,7 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
             );
         }
 
-        // vision (blank because odom is ignored)
+        // vision (completely blank because odom is ignored)
         visionEstimator.updateWithTime(
             0,
             new Rotation2d(),

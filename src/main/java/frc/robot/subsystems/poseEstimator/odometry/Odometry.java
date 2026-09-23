@@ -50,11 +50,11 @@ public class Odometry {
         PhoenixOdometryThread.getInstance().start(); // start odometry thread
     }
     
-    public void periodic() { // https://v6.docs.ctr-electronics.com/en/latest/docs/application-notes/update-frequency-impact.html
+    public void periodic() { // impact of odometry update frequency: https://v6.docs.ctr-electronics.com/en/latest/docs/application-notes/update-frequency-impact.html
         odometryLock.lock(); // prevents odometry updates while reading data
         gyroIO.updateInputs(inputs);
         Logger.processInputs("subsystems/poseEstimator/gyro", inputs);
-        drive.modulePeriodic(); // run module.periodic for each swerve module
+        drive.modulePeriodic(); // run update inputs for all swerve modules
         odometryLock.unlock();
         
         drive.updateModuleSamples();

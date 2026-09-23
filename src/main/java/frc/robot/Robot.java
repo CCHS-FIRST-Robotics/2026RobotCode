@@ -1,5 +1,5 @@
 /**
- * Original code
+ * Based on WPILib Command Robot Template
  */
 
 package frc.robot;
@@ -17,15 +17,16 @@ public class Robot extends LoggedRobot {
     public Robot() {
         Logger.recordMetadata("ProjectName", "2026RobotCode");
 
-        switch (Constants.CURRENT_MODE) { // set up data receivers
-            case REAL: // running on a real robot, log to a USB stick ("/U/logs")
+        // set up data receivers for advantagekit
+        switch (Constants.CURRENT_MODE) {
+            case REAL: // log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
-            case SIM: // running a physics simulator, log to NetworkTables
+            case SIM: // log to NetworkTables
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
-            case REPLAY: // replaying a log, set up replay source
+            case REPLAY: // set up replay source
                 setUseTiming(false); 
                 String logPath = LogFileUtil.findReplayLog();
                 Logger.setReplaySource(new WPILOGReader(logPath));
@@ -44,24 +45,26 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         Threads.setCurrentThreadPriority(false, 10); // return to normal thread priority
 
-        robotContainer.robotPeriodic();
+        robotContainer.updateDriverInfo();
     }
 
     @Override
     public void disabledInit() {
-        robotContainer.resetSimulation();
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
+            robotContainer.resetSimulation();
+        }
     }
 
     @Override
     public void disabledPeriodic() {
-        robotContainer.disabledPeriodic();
+        robotContainer.updateSelectedAutoDrawing();
     }
 
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
-        // schedules the autonomous command
+        // schedule the auto command
         if (autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(autonomousCommand);
         }
@@ -72,7 +75,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        if (autonomousCommand != null) { // stops autonomous when teleop starts
+        if (autonomousCommand != null) { // stops auto when teleop starts
             autonomousCommand.cancel();
         }
 
@@ -80,9 +83,7 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {
-        robotContainer.teleopPeriodic();
-    }
+    public void teleopPeriodic() {}
 
     @Override
     public void testInit() {
@@ -99,6 +100,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        robotContainer.simulationPeriodic();
+        robotContainer.updateSimulation();
     }
 }

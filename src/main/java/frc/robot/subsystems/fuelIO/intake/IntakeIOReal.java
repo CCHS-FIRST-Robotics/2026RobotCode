@@ -43,7 +43,7 @@ public class IntakeIOReal implements IntakeIO {
         .positionConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO)
         .velocityConversionFactor(1 / FuelConstants.INTAKE_GEAR_RATIO);
 
-        // stop config
+        // stop config and flash
         motor.setCANTimeout(0);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
