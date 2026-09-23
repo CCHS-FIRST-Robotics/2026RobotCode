@@ -312,8 +312,11 @@ public class CommandFactory {
                     intake.setPivotPosition(FuelConstants.PIVOT_MAX_DOWN_ANGLE);
                     pivotUp = false;
                 }
-                shooter.setShooterVelocity(RotationsPerSecond.of(0));
-                shooter.setKickerVelocity(RotationsPerSecond.of(0));
+
+                if (Constants.CURRENT_BUTTON_BINDINGS != Constants.BUTTON_BINDINGS.TESTING_SHOOTER_MAP){
+                    shooter.setShooterVelocity(RotationsPerSecond.of(0));
+                    shooter.setKickerVelocity(RotationsPerSecond.of(0));
+                }
 
                 ledStrip.setLedStripHues(new Integer[0]);
             }
@@ -331,15 +334,13 @@ public class CommandFactory {
                     intake.subtractHopperFuel();
                 }
 
-                // ! does this literally just lauch two fuels
-
+                // launches two fuels (literally the same line of code but with a different exit position)
                 fuelSimulation.launchFuel(
                     () -> shooter.getShooterLinearVelocity(), 
                     () -> Degrees.of(90).minus(FuelConstants.HOOD_ANGLE), // shot angle
                     Rotations.of(0),
                     FuelConstants.SHOOTER_POSITION.plus(new Transform3d(0, Inches.of(-3).in(Meters), 0, new Rotation3d()))
                 );
-
                 fuelSimulation.launchFuel(
                     () -> shooter.getShooterLinearVelocity(), 
                     () -> Degrees.of(90).minus(FuelConstants.HOOD_ANGLE), // shot angle

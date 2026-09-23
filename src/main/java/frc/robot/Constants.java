@@ -38,7 +38,7 @@ public final class Constants {
     new Pose2d(3, 3, new Rotation2d()) : // so it doesn't start out of bounds in sim
     new Pose2d(0, 0, new Rotation2d());
 
-    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.SHOWCASE;
+    public static final BUTTON_BINDINGS CURRENT_BUTTON_BINDINGS = BUTTON_BINDINGS.COMPETITION;
 
     // instantiation toggles (used if something is broken at competition and we want to fully disable it)
     public static final boolean INSTANTIATE_DRIVE_AND_POSEESTIMATOR = true;
@@ -51,7 +51,7 @@ public final class Constants {
 
     // sim
 
-    public static final boolean REALISTIC_SIM = true;
+    public static final boolean REALISTIC_SIM = false;
 
     // ————— toggles ————— //
 

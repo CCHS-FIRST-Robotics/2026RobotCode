@@ -376,12 +376,10 @@ public class RobotContainer {
                 );
 
                 // adjust drive speed (depending on the age of the person driving, I guess)
-
                 SmartDashboard.putData("smartDashboard/buttons/Increment Drive Speed", new InstantCommand(() -> {
                     DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0));
                     DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0) / DriveConstants.TRACK_RADIUS);
                 }));
-
                 SmartDashboard.putData("smartDashboard/buttons/Decrement Drive Speed", new InstantCommand(() -> {
                     DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0));
                     DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0) / DriveConstants.TRACK_RADIUS);
@@ -450,7 +448,7 @@ public class RobotContainer {
                 controller.a().onTrue( // print hashmap line
                     new InstantCommand(() -> 
                         {
-                            System.out.println("SHOOTER_VELOCITY_MAP.put(DISTANCE, " + shooter.shooterIOInputs.velocity + ");");
+                            System.out.println("SHOOTER_VELOCITY_MAP.put(" + ShootUtil.getTargetDistance().magnitude() + ", " + shooter.shooterIOInputs.velocity + ");");
                         }
                     )
                 );
@@ -471,7 +469,6 @@ public class RobotContainer {
                 break;
             case TESTING_DRIVE_WITH_POSITION: 
                 // for calibrating the robot's non-choreo position PID. I had it set the kicker velocity so I'd know exactly when the DriveWithPosition command finished
-
                 controller.x().onTrue(
                     new DriveWithPosition(drive, poseEstimator, new Pose2d(0, 0, new Rotation2d()), false)
                     .andThen(shooter.getSetKickerVelocityCommand(RotationsPerSecond.of(20)))
