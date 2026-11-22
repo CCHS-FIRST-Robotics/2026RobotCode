@@ -83,8 +83,41 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+// ./gradlew simulateJava -PscriptedSim runs the sim headless (no GUI) and lets ScriptedSimDriver drive the robot
+def scriptedSim = project.hasProperty('scriptedSim')
+wpi.sim.addGui().defaultEnabled = !scriptedSim
 wpi.sim.addDriverstation()
+if (scriptedSim) {
+    // -PscriptedSim runs the drive test; -PscriptedSim=calibrate runs the camera calibration check
+    def script = project.property('scriptedSim').toString()
+    wpi.sim.envVar("SCRIPTED_SIM", script.isEmpty() ? "drive" : script)
+}
+
+// Log analysis tool (src/tools/java). Kept out of the main source set so it never gets deployed to the robot.
+//   ./gradlew analyzeSimLog                       analyzes the newest .wpilog in logs/
+//   ./gradlew analyzeSimLog -Plog=path/to.wpilog   analyzes a specific log
+//   ./gradlew analyzeSimLog -Plist                 lists every logged key instead
+sourceSets {
+    tools {
+        java.srcDir 'src/tools/java'
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+tasks.register('analyzeSimLog', JavaExec) {
+    group = 'verification'
+    description = 'Checks a .wpilog from the sim for problems'
+    classpath = sourceSets.tools.runtimeClasspath
+    mainClass = 'SimLogAnalyzer'
+    workingDir = projectDir
+    def analyzerArgs = []
+    if (project.hasProperty('log')) analyzerArgs += project.property('log')
+    if (project.hasProperty('list')) analyzerArgs += '--list'
+    // e.g. -Pdump=/RealOutputs/outputs/drive/speedsInput -Pfrom=5 -Pto=8 -Pevery=5
+    ['dump', 'from', 'to', 'every'].each { if (project.hasProperty(it)) analyzerArgs += "--${it}=${project.property(it)}" }
+    args = analyzerArgs
+}
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib

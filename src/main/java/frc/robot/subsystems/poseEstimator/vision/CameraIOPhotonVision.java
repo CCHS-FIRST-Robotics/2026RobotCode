@@ -38,7 +38,17 @@ public class CameraIOPhotonVision implements CameraIO {
         // Read new camera observations
         Set<Short> tagIds = new HashSet<>();
         List<PoseObservation> poseObservations = new LinkedList<>();
+        List<TagObservation> tagObservations = new LinkedList<>();
         for (var result : camera.getAllUnreadResults()) {
+            // Save every tag's raw camera-to-tag transform (for camera calibration)
+            for (var target : result.targets) {
+                tagObservations.add(new TagObservation(
+                        result.getTimestampSeconds(),
+                        target.fiducialId,
+                        target.bestCameraToTarget,
+                        target.poseAmbiguity));
+            }
+
             // Update latest target observation
             if (result.hasTargets()) {
                 inputs.latestTargetObservation = new TargetObservation(
@@ -109,6 +119,8 @@ public class CameraIOPhotonVision implements CameraIO {
         for (int i = 0; i < poseObservations.size(); i++) {
             inputs.poseObservations[i] = poseObservations.get(i);
         }
+
+        inputs.tagObservations = tagObservations.toArray(new TagObservation[0]);
 
         // Save tag IDs to inputs objects
         inputs.tagIds = new int[tagIds.size()];

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import org.littletonrobotics.junction.Logger;
+import java.util.Optional;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
@@ -86,9 +87,17 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         return getCombinedPose(); // change this line if you want to use just odom or just vision
     }
 
-    @SuppressWarnings("unused")
-    private Pose2d getOdometryPose() {
+    public Pose2d getOdometryPose() {
         return odometryEstimator.getEstimatedPosition();
+    }
+
+    // odometry-only pose at a past timestamp (used by camera calibration, which can't use vision since the camera transforms are what it's solving for)
+    public Optional<Pose2d> getOdometryPoseAt(double timestampSeconds) {
+        return odometryEstimator.sampleAt(timestampSeconds);
+    }
+
+    public Vision getVision() {
+        return vision;
     }
 
     @SuppressWarnings("unused")

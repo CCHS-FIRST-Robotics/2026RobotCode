@@ -497,11 +497,53 @@ public class RobotContainer {
                 break;
         }
 
+        // ————— camera calibration (all binding modes) ————— //
+
+        // fill these in on the dashboard, place the robot, then press the button. results print to the console (see CalibrateCameras)
+        String calibration = "smartDashboard/cameraCalibration/";
+        SmartDashboard.putNumber(calibration + "Tag ID", 26);
+        SmartDashboard.putNumber(calibration + "Distance from tag to robot center (in)", 78.74);
+        SmartDashboard.putNumber(calibration + "Robot offset to the right, looking at tag (in)", 0);
+        SmartDashboard.putNumber(calibration + "Robot turned from facing tag, CCW (deg)", 0);
+        SmartDashboard.putNumber(calibration + "Tag center height (in), 0 = from field layout", 0);
+        SmartDashboard.putData("smartDashboard/buttons/Calibrate Cameras", Commands.defer(
+            () -> getCalibrateCamerasCommand(
+                (int) SmartDashboard.getNumber(calibration + "Tag ID", 26),
+                CalibrateCameras.robotFacingTag(
+                    Inches.of(SmartDashboard.getNumber(calibration + "Distance from tag to robot center (in)", 78.74)),
+                    Inches.of(SmartDashboard.getNumber(calibration + "Robot offset to the right, looking at tag (in)", 0)),
+                    Degrees.of(SmartDashboard.getNumber(calibration + "Robot turned from facing tag, CCW (deg)", 0)),
+                    Inches.of(SmartDashboard.getNumber(calibration + "Tag center height (in), 0 = from field layout", 0))
+                )
+            ),
+            java.util.Set.of()
+        ).ignoringDisable(true));
+
         // ————— simulation bindings ————— //
 
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
             SmartDashboard.putData("smartDashboard/buttons/Clear Fuel", new InstantCommand(() -> fuelSimulation.clearFuel()));
         }
+    }
+
+    // tagToRobot with a Z of 0 means "use the tag's height from the field layout"
+    public Command getCalibrateCamerasCommand(int tagId, Transform3d tagToRobot) {
+        if (tagToRobot.getZ() == 0) {
+            double tagHeight = VisionConstants.aprilTagLayout.getTagPose(tagId).map(Pose3d::getZ).orElse(0.0);
+            tagToRobot = new Transform3d(new Translation3d(tagToRobot.getX(), tagToRobot.getY(), -tagHeight), tagToRobot.getRotation());
+        }
+        return new CalibrateCameras(drive, poseEstimator, tagId, tagToRobot, 4);
+    }
+
+    // sim only: teleports the robot to a placement relative to a field tag and runs the calibration, to check it recovers the sim's camera transforms
+    public Command getSimCalibrationTestCommand(int tagId, Transform3d tagToRobot) {
+        return Commands.runOnce(() -> {
+            Pose2d robotPose = VisionConstants.aprilTagLayout.getTagPose(tagId).get().plus(tagToRobot).toPose2d();
+            driveSimulation.setSimulationWorldPose(robotPose);
+            poseEstimator.resetPosition(robotPose);
+        })
+        .andThen(Commands.waitSeconds(0.5))
+        .andThen(getCalibrateCamerasCommand(tagId, tagToRobot));
     }
 
     // ————— driver info ————— //

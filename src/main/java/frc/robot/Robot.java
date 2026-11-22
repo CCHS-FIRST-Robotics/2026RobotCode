@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj.Threads;
 import org.littletonrobotics.junction.*;
 import org.littletonrobotics.junction.wpilog.*;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import frc.robot.utils.ScriptedSimDriver;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private ScriptedSimDriver scriptedSimDriver; // only created with ./gradlew simulateJava -PscriptedSim
 
     public Robot() {
         Logger.recordMetadata("ProjectName", "2026RobotCode");
@@ -23,7 +25,8 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
-            case SIM: // log to NetworkTables
+            case SIM: // log to NetworkTables and to a .wpilog file ("logs/" folder, open it in AdvantageScope or run ./gradlew analyzeSimLog)
+                Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
             case REPLAY: // set up replay source
@@ -37,6 +40,10 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         robotContainer = new RobotContainer();
+
+        if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM && ScriptedSimDriver.isRequested()) {
+            scriptedSimDriver = new ScriptedSimDriver(Constants.CONTROLLER_PORT, robotContainer);
+        }
     }
 
     @Override
@@ -101,5 +108,9 @@ public class Robot extends LoggedRobot {
     @Override
     public void simulationPeriodic() {
         robotContainer.updateSimulation();
+
+        if (scriptedSimDriver != null) {
+            scriptedSimDriver.periodic();
+        }
     }
 }

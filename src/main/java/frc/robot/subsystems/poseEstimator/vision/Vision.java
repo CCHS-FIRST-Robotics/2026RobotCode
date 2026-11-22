@@ -56,6 +56,15 @@ public class Vision {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
+    public int getCameraCount() {
+        return io.length;
+    }
+
+    /** Raw per-tag observations from this loop (used by camera calibration). */
+    public CameraIO.TagObservation[] getTagObservations(int cameraIndex) {
+        return inputs[cameraIndex].tagObservations;
+    }
+
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);

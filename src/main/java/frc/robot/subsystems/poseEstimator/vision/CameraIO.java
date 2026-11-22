@@ -6,6 +6,7 @@ package frc.robot.subsystems.poseEstimator.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CameraIO {
@@ -15,7 +16,15 @@ public interface CameraIO {
         public TargetObservation latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
+        public TagObservation[] tagObservations = new TagObservation[0];
     }
+
+    /** Raw camera-to-tag transform for one tag in one frame (used by camera calibration). */
+    record TagObservation(
+            double timestamp,
+            int tagId,
+            Transform3d cameraToTag,
+            double ambiguity) {}
 
     /** Represents the angle to a simple target, not used for pose estimation. */
     record TargetObservation(Rotation2d tx, Rotation2d ty) {}
