@@ -61,11 +61,12 @@ public class CommandFactory {
     // ————— processed ————— //
 
     public Command getDriveAndIntakeCommand() {
-        return getDriveSpeedCommand( // drive slow
-            MetersPerSecond.of(2), 
-            RadiansPerSecond.of(2 / DriveConstants.TRACK_RADIUS), 
-            DriveConstants.MAX_ALLOWED_LINEAR_ACCEL, 
-            DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL
+        return getDriveSpeedCommand( // drive slow (never faster than the current limits, e.g. in SHOWCASE mode)
+            MetersPerSecond.of(2),
+            RadiansPerSecond.of(2 / DriveConstants.TRACK_RADIUS),
+            DriveConstants.MAX_ALLOWED_LINEAR_ACCEL,
+            DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL,
+            true
         )
         .alongWith(getIntakeCommand())
         .alongWith(getSetLedStripHuesCommand(new Integer[] {60})); // leds are green
@@ -186,23 +187,48 @@ public class CommandFactory {
 
     // allows for temporary changes to the drive velocity and acceleration limits
     public Command getDriveSpeedCommand(
-        LinearVelocity linearVelocity, 
-        AngularVelocity angularVelocity, 
+        LinearVelocity linearVelocity,
+        AngularVelocity angularVelocity,
         LinearAcceleration linearAcceleration,
         AngularAcceleration angularAcceleration
     ) {
+        return getDriveSpeedCommand(linearVelocity, angularVelocity, linearAcceleration, angularAcceleration, false);
+    }
+
+    /**
+     * Temporarily changes the drive limits, and puts back whatever they were before when it ends (so SHOWCASE limits survive).
+     * @param onlySlowDown if true, each limit is only lowered, never raised above what it currently is
+     */
+    public Command getDriveSpeedCommand(
+        LinearVelocity linearVelocity,
+        AngularVelocity angularVelocity,
+        LinearAcceleration linearAcceleration,
+        AngularAcceleration angularAcceleration,
+        boolean onlySlowDown
+    ) {
+        Object[] previous = new Object[4]; // limits from before this command started
         return Commands.startEnd(
             () -> {
-                DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
-                DriveConstants.ALLOWED_ANGULAR_SPEED = angularVelocity;
-                DriveConstants.ALLOWED_LINEAR_ACCEL = linearAcceleration;
-                DriveConstants.ALLOWED_ANGULAR_ACCEL = angularAcceleration;
-            }, 
+                previous[0] = DriveConstants.ALLOWED_LINEAR_SPEED;
+                previous[1] = DriveConstants.ALLOWED_ANGULAR_SPEED;
+                previous[2] = DriveConstants.ALLOWED_LINEAR_ACCEL;
+                previous[3] = DriveConstants.ALLOWED_ANGULAR_ACCEL;
+
+                boolean keepLinearSpeed = onlySlowDown && DriveConstants.ALLOWED_LINEAR_SPEED.lt(linearVelocity);
+                boolean keepAngularSpeed = onlySlowDown && DriveConstants.ALLOWED_ANGULAR_SPEED.lt(angularVelocity);
+                boolean keepLinearAccel = onlySlowDown && DriveConstants.ALLOWED_LINEAR_ACCEL.lt(linearAcceleration);
+                boolean keepAngularAccel = onlySlowDown && DriveConstants.ALLOWED_ANGULAR_ACCEL.lt(angularAcceleration);
+
+                if (!keepLinearSpeed) DriveConstants.ALLOWED_LINEAR_SPEED = linearVelocity;
+                if (!keepAngularSpeed) DriveConstants.ALLOWED_ANGULAR_SPEED = angularVelocity;
+                if (!keepLinearAccel) DriveConstants.ALLOWED_LINEAR_ACCEL = linearAcceleration;
+                if (!keepAngularAccel) DriveConstants.ALLOWED_ANGULAR_ACCEL = angularAcceleration;
+            },
             () -> {
-                DriveConstants.ALLOWED_LINEAR_SPEED = DriveConstants.MAX_ALLOWED_LINEAR_SPEED;
-                DriveConstants.ALLOWED_ANGULAR_SPEED = DriveConstants.MAX_ALLOWED_ANGULAR_SPEED;
-                DriveConstants.ALLOWED_LINEAR_ACCEL = DriveConstants.MAX_ALLOWED_LINEAR_ACCEL;
-                DriveConstants.ALLOWED_ANGULAR_ACCEL = DriveConstants.MAX_ALLOWED_ANGULAR_ACCEL;
+                DriveConstants.ALLOWED_LINEAR_SPEED = (LinearVelocity) previous[0];
+                DriveConstants.ALLOWED_ANGULAR_SPEED = (AngularVelocity) previous[1];
+                DriveConstants.ALLOWED_LINEAR_ACCEL = (LinearAcceleration) previous[2];
+                DriveConstants.ALLOWED_ANGULAR_ACCEL = (AngularAcceleration) previous[3];
             }
         );
     }

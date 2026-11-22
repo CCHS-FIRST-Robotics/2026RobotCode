@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.MathUtil;
 import choreo.auto.AutoChooser;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -44,6 +45,7 @@ public class RobotContainer {
     private CommandFactory commandFactory;
     private AutoGenerator autoGenerator;
     private AutoChooser autoChooser;
+    private AutoStartHelper autoStartHelper;
     private SwerveDriveSimulation driveSimulation;
     private FuelSim fuelSimulation;
 
@@ -241,6 +243,7 @@ public class RobotContainer {
         configureButtonBindings();
         configureDriverInfo();
         configureAutos();
+        autoStartHelper = new AutoStartHelper(poseEstimator, ledStrip);
     }
 
     private void configureButtonBindings() {
@@ -376,14 +379,10 @@ public class RobotContainer {
                 );
 
                 // adjust drive speed (depending on the age of the person driving, I guess)
-                SmartDashboard.putData("smartDashboard/buttons/Increment Drive Speed", new InstantCommand(() -> {
-                    DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0));
-                    DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + 0.5, 0) / DriveConstants.TRACK_RADIUS);
-                }));
-                SmartDashboard.putData("smartDashboard/buttons/Decrement Drive Speed", new InstantCommand(() -> {
-                    DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0));
-                    DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(Math.max(DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) - 0.5, 0) / DriveConstants.TRACK_RADIUS);
-                }));
+                // (angular speed is set from the NEW linear speed, capped at the normal competition max, and works while disabled)
+                SmartDashboard.putNumber("smartDashboard/showcase/Allowed Speed (m per s)", DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond));
+                SmartDashboard.putData("smartDashboard/buttons/Increment Drive Speed", new InstantCommand(() -> setShowcaseDriveSpeed(0.5)).ignoringDisable(true));
+                SmartDashboard.putData("smartDashboard/buttons/Decrement Drive Speed", new InstantCommand(() -> setShowcaseDriveSpeed(-0.5)).ignoringDisable(true));
                 break;
             case TESTING_BPS: 
                 controller.leftTrigger().whileTrue(
@@ -526,6 +525,17 @@ public class RobotContainer {
         }
     }
 
+    private void setShowcaseDriveSpeed(double changeMetersPerSecond) {
+        double linear = MathUtil.clamp(
+            DriveConstants.ALLOWED_LINEAR_SPEED.in(MetersPerSecond) + changeMetersPerSecond,
+            0,
+            DriveConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond)
+        );
+        DriveConstants.ALLOWED_LINEAR_SPEED = MetersPerSecond.of(linear);
+        DriveConstants.ALLOWED_ANGULAR_SPEED = RadiansPerSecond.of(linear / DriveConstants.TRACK_RADIUS);
+        SmartDashboard.putNumber("smartDashboard/showcase/Allowed Speed (m per s)", linear);
+    }
+
     // tagToRobot with a Z of 0 means "use the tag's height from the field layout"
     public Command getCalibrateCamerasCommand(int tagId, Transform3d tagToRobot) {
         if (tagToRobot.getZ() == 0) {
@@ -546,6 +556,17 @@ public class RobotContainer {
         .andThen(getCalibrateCamerasCommand(tagId, tagToRobot));
     }
 
+    // sim only: selects an auto and puts the robot at (its start + offset), without telling the pose estimator, so vision has to find it
+    public void simPlaceAtAutoStart(String autoName, Transform2d offset) {
+        autoChooser.select(autoName);
+        autoGenerator.drawSelectedAuto(autoName);
+        autoGenerator.getSelectedAutoStartPose().ifPresent(start -> driveSimulation.setSimulationWorldPose(start.plus(offset)));
+    }
+
+    public void simSelectAuto(String autoName) {
+        autoChooser.select(autoName);
+    }
+
     // ————— driver info ————— //
 
     public void configureDriverInfo() {
@@ -554,6 +575,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
         SmartDashboard.putBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
+        SmartDashboard.putBoolean("smartDashboard/toggles/Enable Smart Auto Start", Constants.ENABLE_SMART_AUTO_START);
     }
 
     public void updateDriverInfo() {
@@ -571,10 +593,12 @@ public class RobotContainer {
         Constants.ENABLE_PIVOT = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot", Constants.ENABLE_PIVOT);
         Constants.ENABLE_PIVOT_AGITATION = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Pivot Agitation", Constants.ENABLE_PIVOT_AGITATION);
         Constants.ENABLE_SHOOT_ON_THE_MOVE = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Shoot on the Move", Constants.ENABLE_SHOOT_ON_THE_MOVE);
+        Constants.ENABLE_SMART_AUTO_START = SmartDashboard.getBoolean("smartDashboard/toggles/Enable Smart Auto Start", Constants.ENABLE_SMART_AUTO_START);
         Logger.recordOutput("outputs/toggles/ENABLE_TRENCH_ALIGN", Constants.ENABLE_TRENCH_ALIGN);
         Logger.recordOutput("outputs/toggles/ENABLE_PIVOT", Constants.ENABLE_PIVOT);
         Logger.recordOutput("outputs/toggles/ENABLE_PIVOT_AGITATION", Constants.ENABLE_PIVOT_AGITATION);
         Logger.recordOutput("outputs/toggles/ENABLE_SHOOT_ON_THE_MOVE", Constants.ENABLE_SHOOT_ON_THE_MOVE);
+        Logger.recordOutput("outputs/toggles/ENABLE_SMART_AUTO_START", Constants.ENABLE_SMART_AUTO_START);
 
         // update game info
         if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.REAL || Constants.REALISTIC_SIM) {
@@ -631,8 +655,15 @@ public class RobotContainer {
         return autoChooser.selectedCommand();
     }
 
+    // runs every loop while disabled: draws the selected auto and shows whether the robot is placed at its start
     public void updateSelectedAutoDrawing() {
         autoGenerator.drawSelectedAuto(getAutonomousCommand().getName());
+        autoStartHelper.update(autoGenerator.getSelectedAutoStartPose());
+    }
+
+    // runs when the robot is enabled
+    public void stopAutoStartHelper() {
+        autoStartHelper.stop();
     }
 
     // ————— simulation ————— //

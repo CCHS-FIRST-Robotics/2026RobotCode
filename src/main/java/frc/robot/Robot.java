@@ -68,6 +68,11 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
+    public void disabledExit() {
+        robotContainer.stopAutoStartHelper(); // hand the LEDs back to the rest of the code
+    }
+
+    @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 

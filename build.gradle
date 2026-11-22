@@ -94,9 +94,14 @@ if (scriptedSim) {
 }
 
 // Log analysis tool (src/tools/java). Kept out of the main source set so it never gets deployed to the robot.
-//   ./gradlew analyzeSimLog                       analyzes the newest .wpilog in logs/
-//   ./gradlew analyzeSimLog -Plog=path/to.wpilog   analyzes a specific log
-//   ./gradlew analyzeSimLog -Plist                 lists every logged key instead
+//   ./gradlew analyzeLog                          analyzes the newest .wpilog in logs/ (sim or real robot)
+//   ./gradlew analyzeLog -Plog=path/to.wpilog      analyzes a specific log
+//   ./gradlew analyzeLog -Plog=path/to/folder      one-line summary of every log in a folder (e.g. all matches from an event)
+//   ./gradlew analyzeLog -Plist                    lists every logged key instead
+//   ./gradlew analyzeLog -Pdump=key1,key2 -Pfrom=5 -Pto=8 -Pevery=5   prints values loop by loop
+//   -Pmatch forces the real-robot checks on a sim log (for testing)
+//   -Pexport=some/folder writes the auto path tracking data as CSV (for graphs)
+// analyzeSimLog is the same task under its old name.
 sourceSets {
     tools {
         java.srcDir 'src/tools/java'
@@ -105,18 +110,19 @@ sourceSets {
     }
 }
 
-tasks.register('analyzeSimLog', JavaExec) {
-    group = 'verification'
-    description = 'Checks a .wpilog from the sim for problems'
-    classpath = sourceSets.tools.runtimeClasspath
-    mainClass = 'SimLogAnalyzer'
-    workingDir = projectDir
-    def analyzerArgs = []
-    if (project.hasProperty('log')) analyzerArgs += project.property('log')
-    if (project.hasProperty('list')) analyzerArgs += '--list'
-    // e.g. -Pdump=/RealOutputs/outputs/drive/speedsInput -Pfrom=5 -Pto=8 -Pevery=5
-    ['dump', 'from', 'to', 'every'].each { if (project.hasProperty(it)) analyzerArgs += "--${it}=${project.property(it)}" }
-    args = analyzerArgs
+['analyzeLog', 'analyzeSimLog'].each { taskName ->
+    tasks.register(taskName, JavaExec) {
+        group = 'verification'
+        description = 'Checks a .wpilog (sim or real robot) for problems'
+        classpath = sourceSets.tools.runtimeClasspath
+        mainClass = 'SimLogAnalyzer'
+        workingDir = projectDir
+        def analyzerArgs = []
+        if (project.hasProperty('log')) analyzerArgs += project.property('log')
+        ['list', 'match'].each { if (project.hasProperty(it)) analyzerArgs += "--${it}" }
+        ['dump', 'from', 'to', 'every', 'export'].each { if (project.hasProperty(it)) analyzerArgs += "--${it}=${project.property(it)}" }
+        args = analyzerArgs
+    }
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

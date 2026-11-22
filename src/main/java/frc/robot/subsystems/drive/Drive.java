@@ -259,6 +259,7 @@ public class Drive extends SubsystemBase {
         usingChoreo = true;
         positionSetpoint = sample.getPose();
         velocitySetpoint = sample.getChassisSpeeds();
+        Logger.recordOutput("outputs/drive/pathPose", sample.getPose()); // the path's own pose (targetPose is also used by DriveWithPosition)
     }
 
     public void runVelocity(ChassisSpeeds speedsInput) {

@@ -1,0 +1,699 @@
+auto,method,seconds,error_m
+"auto: no vision, on start",RESET,0.081,0.0007
+"auto: no vision, on start",RESET,0.100,0.0023
+"auto: no vision, on start",RESET,0.120,0.0051
+"auto: no vision, on start",RESET,0.141,0.0091
+"auto: no vision, on start",RESET,0.160,0.0133
+"auto: no vision, on start",RESET,0.180,0.0183
+"auto: no vision, on start",RESET,0.200,0.0239
+"auto: no vision, on start",RESET,0.221,0.0306
+"auto: no vision, on start",RESET,0.240,0.0360
+"auto: no vision, on start",RESET,0.260,0.0418
+"auto: no vision, on start",RESET,0.280,0.0480
+"auto: no vision, on start",RESET,0.300,0.0539
+"auto: no vision, on start",RESET,0.319,0.0590
+"auto: no vision, on start",RESET,0.339,0.0644
+"auto: no vision, on start",RESET,0.359,0.0702
+"auto: no vision, on start",RESET,0.380,0.0752
+"auto: no vision, on start",RESET,0.400,0.0798
+"auto: no vision, on start",RESET,0.420,0.0847
+"auto: no vision, on start",RESET,0.440,0.0882
+"auto: no vision, on start",RESET,0.460,0.0920
+"auto: no vision, on start",RESET,0.485,0.1016
+"auto: no vision, on start",RESET,0.506,0.1060
+"auto: no vision, on start",RESET,0.526,0.1079
+"auto: no vision, on start",RESET,0.546,0.1108
+"auto: no vision, on start",RESET,0.566,0.1118
+"auto: no vision, on start",RESET,0.586,0.1132
+"auto: no vision, on start",RESET,0.605,0.1136
+"auto: no vision, on start",RESET,0.626,0.1153
+"auto: no vision, on start",RESET,0.647,0.1182
+"auto: no vision, on start",RESET,0.666,0.1165
+"auto: no vision, on start",RESET,0.686,0.1172
+"auto: no vision, on start",RESET,0.707,0.1192
+"auto: no vision, on start",RESET,0.726,0.1177
+"auto: no vision, on start",RESET,0.746,0.1189
+"auto: no vision, on start",RESET,0.766,0.1180
+"auto: no vision, on start",RESET,0.786,0.1184
+"auto: no vision, on start",RESET,0.806,0.1200
+"auto: no vision, on start",RESET,0.826,0.1192
+"auto: no vision, on start",RESET,0.847,0.1222
+"auto: no vision, on start",RESET,0.866,0.1185
+"auto: no vision, on start",RESET,0.886,0.1196
+"auto: no vision, on start",RESET,0.906,0.1185
+"auto: no vision, on start",RESET,0.926,0.1194
+"auto: no vision, on start",RESET,0.945,0.1180
+"auto: no vision, on start",RESET,0.966,0.1195
+"auto: no vision, on start",RESET,0.986,0.1195
+"auto: no vision, on start",RESET,1.006,0.1198
+"auto: no vision, on start",RESET,1.026,0.1204
+"auto: no vision, on start",RESET,1.046,0.1205
+"auto: no vision, on start",RESET,1.066,0.1201
+"auto: no vision, on start",RESET,1.086,0.1191
+"auto: no vision, on start",RESET,1.106,0.1171
+"auto: no vision, on start",RESET,1.126,0.1140
+"auto: no vision, on start",RESET,1.146,0.1087
+"auto: no vision, on start",RESET,1.166,0.1058
+"auto: no vision, on start",RESET,1.186,0.1004
+"auto: no vision, on start",RESET,1.206,0.0948
+"auto: no vision, on start",RESET,1.226,0.0887
+"auto: no vision, on start",RESET,1.247,0.0862
+"auto: no vision, on start",RESET,1.268,0.0820
+"auto: no vision, on start",RESET,1.288,0.0742
+"auto: no vision, on start",RESET,1.308,0.0679
+"auto: no vision, on start",RESET,1.329,0.0632
+"auto: no vision, on start",RESET,1.348,0.0563
+"auto: no vision, on start",RESET,1.368,0.0504
+"auto: no vision, on start",RESET,1.388,0.0467
+"auto: no vision, on start",RESET,1.407,0.0446
+"auto: no vision, on start",RESET,1.427,0.0443
+"auto: no vision, on start",RESET,1.448,0.0458
+"auto: no vision, on start",RESET,1.469,0.0477
+"auto: no vision, on start",RESET,1.488,0.0517
+"auto: no vision, on start",RESET,1.508,0.0568
+"auto: no vision, on start",RESET,1.528,0.0606
+"auto: no vision, on start",RESET,1.548,0.0651
+"auto: no vision, on start",RESET,1.568,0.0694
+"auto: no vision, on start",RESET,1.588,0.0726
+"auto: no vision, on start",RESET,1.608,0.0757
+"auto: no vision, on start",RESET,1.633,0.0680
+"auto: no vision, on start",RESET,1.654,0.0687
+"auto: no vision, on start",RESET,1.675,0.0682
+"auto: no vision, on start",RESET,1.694,0.0708
+"auto: no vision, on start",RESET,1.714,0.0714
+"auto: no vision, on start",RESET,1.735,0.0703
+"auto: no vision, on start",RESET,1.754,0.0715
+"auto: no vision, on start",RESET,1.774,0.0715
+"auto: no vision, on start",RESET,1.794,0.0709
+"auto: no vision, on start",RESET,1.838,0.0382
+"auto: no vision, on start",RESET,1.858,0.0371
+"auto: no vision, on start",RESET,1.879,0.0356
+"auto: no vision, on start",RESET,1.908,0.0264
+"auto: no vision, on start",RESET,1.928,0.0260
+"auto: no vision, on start",RESET,1.948,0.0271
+"auto: no vision, on start",RESET,1.969,0.0270
+"auto: no vision, on start",RESET,1.989,0.0280
+"auto: no vision, on start",RESET,2.008,0.0301
+"auto: no vision, on start",RESET,2.028,0.0436
+"auto: no vision, on start",RESET,2.048,0.0639
+"auto: no vision, on start",RESET,2.068,0.0832
+"auto: no vision, on start",RESET,2.089,0.1014
+"auto: no vision, on start",RESET,2.108,0.1185
+"auto: no vision, on start",RESET,2.128,0.1344
+"auto: no vision, on start",RESET,2.148,0.1490
+"auto: no vision, on start",RESET,2.168,0.1622
+"auto: no vision, on start",RESET,2.188,0.1740
+"auto: no vision, on start",RESET,2.208,0.1845
+"auto: no vision, on start",RESET,2.228,0.1939
+"auto: no vision, on start",RESET,2.250,0.2021
+"auto: no vision, on start",RESET,2.269,0.2091
+"auto: no vision, on start",RESET,2.288,0.2152
+"auto: no vision, on start",RESET,2.308,0.2202
+"auto: no vision, on start",RESET,2.328,0.2242
+"auto: no vision, on start",RESET,2.348,0.2272
+"auto: no vision, on start",RESET,2.368,0.2296
+"auto: no vision, on start",RESET,2.388,0.2312
+"auto: no vision, on start",RESET,2.408,0.2323
+"auto: no vision, on start",RESET,2.428,0.2329
+"auto: no vision, on start",RESET,2.449,0.2330
+"auto: no vision, on start",RESET,2.468,0.2329
+"auto: no vision, on start",RESET,2.490,0.2325
+"auto: no vision, on start",RESET,2.508,0.2318
+"auto: no vision, on start",RESET,2.528,0.2309
+"auto: no vision, on start",RESET,2.548,0.2299
+"auto: no vision, on start",RESET,2.570,0.2287
+"auto: no vision, on start",RESET,2.589,0.2274
+"auto: no vision, on start",RESET,2.608,0.2261
+"auto: no vision, on start",RESET,2.628,0.2248
+"auto: no vision, on start",RESET,2.648,0.2235
+"auto: no vision, on start",RESET,2.668,0.2222
+"auto: no vision, on start",RESET,2.688,0.2209
+"auto: no vision, on start",RESET,2.708,0.2197
+"auto: no vision, on start",RESET,2.728,0.2186
+"auto: no vision, on start",RESET,2.749,0.2175
+"auto: no vision, on start",RESET,2.768,0.2165
+"auto: no vision, on start",RESET,2.788,0.2156
+"auto: no vision, on start",RESET,2.808,0.2148
+"auto: no vision, on start",RESET,2.828,0.2141
+"auto: no vision, on start",RESET,2.848,0.2135
+"auto: no vision, on start",RESET,2.869,0.2131
+"auto: no vision, on start",RESET,2.888,0.2127
+"auto: no vision, on start",RESET,2.908,0.2124
+"auto: no vision, on start",RESET,2.928,0.2122
+"auto: no vision, on start",RESET,2.949,0.2120
+"auto: no vision, on start",RESET,2.968,0.2120
+"auto: no vision, on start",RESET,2.988,0.2120
+"auto: no vision, on start",RESET,3.009,0.2120
+"auto: no vision, on start",RESET,3.028,0.2120
+"auto: no vision, on start",RESET,3.048,0.1920
+"auto: no vision, on start",RESET,3.068,0.1726
+"auto: no vision, on start",RESET,3.089,0.1516
+"auto: no vision, on start",RESET,3.108,0.1330
+"auto: no vision, on start",RESET,3.128,0.1137
+"auto: no vision, on start",RESET,3.149,0.0960
+"auto: no vision, on start",RESET,3.168,0.0805
+"auto: no vision, on start",RESET,3.188,0.0674
+"auto: no vision, on start",RESET,3.208,0.0576
+"auto: no vision, on start",RESET,3.236,0.0515
+"auto: no vision, on start",RESET,3.257,0.0530
+"auto: no vision, on start",RESET,3.277,0.0572
+"auto: no vision, on start",RESET,3.297,0.0618
+"auto: no vision, on start",RESET,3.317,0.0664
+"auto: no vision, on start",RESET,3.337,0.0700
+"auto: no vision, on start",RESET,3.357,0.0723
+"auto: no vision, on start",RESET,3.378,0.0736
+"auto: no vision, on start",RESET,3.397,0.0720
+"auto: no vision, on start",RESET,3.417,0.0704
+"auto: no vision, on start",RESET,3.437,0.0671
+"auto: no vision, on start",RESET,3.457,0.0623
+"auto: no vision, on start",RESET,3.477,0.0568
+"auto: no vision, on start",RESET,3.498,0.0519
+"auto: no vision, on start",RESET,3.517,0.0441
+"auto: no vision, on start",RESET,3.538,0.0380
+"auto: no vision, on start",RESET,3.557,0.0298
+"auto: no vision, on start",RESET,3.577,0.0224
+"auto: no vision, on start",RESET,3.598,0.0219
+"auto: no vision, on start",RESET,3.617,0.0142
+"auto: no vision, on start",RESET,3.637,0.0078
+"auto: no vision, on start",RESET,3.657,0.0066
+"auto: no vision, on start",RESET,3.677,0.0007
+"auto: no vision, on start",RESET,3.696,0.0033
+"auto: no vision, on start",RESET,3.717,0.0024
+"auto: no vision, on start",RESET,3.737,0.0068
+"auto: no vision, on start",RESET,3.757,0.0108
+"auto: no vision, on start",RESET,3.776,0.0143
+"auto: no vision, on start",RESET,3.796,0.0171
+"auto: no vision, on start",RESET,3.816,0.0196
+"auto: no vision, on start",RESET,3.837,0.0211
+"auto: no vision, on start",RESET,3.856,0.0232
+"auto: no vision, on start",RESET,3.876,0.0239
+"auto: no vision, on start",RESET,3.897,0.0243
+"auto: no vision, on start",RESET,3.920,0.0183
+"auto: no vision, on start",RESET,3.937,0.0218
+"auto: no vision, on start",RESET,3.957,0.0192
+"auto: no vision, on start",RESET,3.977,0.0188
+"auto: no vision, on start",RESET,3.997,0.0186
+"auto: no vision, on start",RESET,4.017,0.0182
+"auto: no vision, on start",RESET,4.037,0.0152
+"auto: no vision, on start",RESET,4.057,0.0146
+"auto: no vision, on start",RESET,4.077,0.0095
+"auto: no vision, on start",RESET,4.097,0.0088
+"auto: no vision, on start",RESET,4.117,0.0085
+"auto: no vision, on start",RESET,4.137,0.0081
+"auto: no vision, on start",RESET,4.156,0.0075
+"auto: no vision, on start",RESET,4.177,0.0064
+"auto: no vision, on start",RESET,4.197,0.0022
+"auto: no vision, on start",RESET,4.217,0.0020
+"auto: no vision, on start",RESET,4.236,0.0019
+"auto: no vision, on start",RESET,4.257,0.0048
+"auto: no vision, on start",RESET,4.277,0.0080
+"auto: no vision, on start",RESET,4.297,0.0107
+"auto: no vision, on start",RESET,4.317,0.0149
+"auto: no vision, 20 cm right, 5 deg",RESET,0.084,0.2000
+"auto: no vision, 20 cm right, 5 deg",RESET,0.107,0.2000
+"auto: no vision, 20 cm right, 5 deg",RESET,0.127,0.2001
+"auto: no vision, 20 cm right, 5 deg",RESET,0.147,0.2002
+"auto: no vision, 20 cm right, 5 deg",RESET,0.167,0.2005
+"auto: no vision, 20 cm right, 5 deg",RESET,0.187,0.2008
+"auto: no vision, 20 cm right, 5 deg",RESET,0.207,0.2014
+"auto: no vision, 20 cm right, 5 deg",RESET,0.228,0.2020
+"auto: no vision, 20 cm right, 5 deg",RESET,0.248,0.2029
+"auto: no vision, 20 cm right, 5 deg",RESET,0.267,0.2038
+"auto: no vision, 20 cm right, 5 deg",RESET,0.287,0.2048
+"auto: no vision, 20 cm right, 5 deg",RESET,0.355,0.2201
+"auto: no vision, 20 cm right, 5 deg",RESET,0.375,0.2236
+"auto: no vision, 20 cm right, 5 deg",RESET,0.395,0.2270
+"auto: no vision, 20 cm right, 5 deg",RESET,0.416,0.2304
+"auto: no vision, 20 cm right, 5 deg",RESET,0.436,0.2332
+"auto: no vision, 20 cm right, 5 deg",RESET,0.455,0.2357
+"auto: no vision, 20 cm right, 5 deg",RESET,0.476,0.2383
+"auto: no vision, 20 cm right, 5 deg",RESET,0.495,0.2395
+"auto: no vision, 20 cm right, 5 deg",RESET,0.516,0.2415
+"auto: no vision, 20 cm right, 5 deg",RESET,0.535,0.2424
+"auto: no vision, 20 cm right, 5 deg",RESET,0.555,0.2432
+"auto: no vision, 20 cm right, 5 deg",RESET,0.575,0.2437
+"auto: no vision, 20 cm right, 5 deg",RESET,0.595,0.2438
+"auto: no vision, 20 cm right, 5 deg",RESET,0.615,0.2430
+"auto: no vision, 20 cm right, 5 deg",RESET,0.635,0.2426
+"auto: no vision, 20 cm right, 5 deg",RESET,0.656,0.2428
+"auto: no vision, 20 cm right, 5 deg",RESET,0.676,0.2419
+"auto: no vision, 20 cm right, 5 deg",RESET,0.696,0.2408
+"auto: no vision, 20 cm right, 5 deg",RESET,0.718,0.2497
+"auto: no vision, 20 cm right, 5 deg",RESET,0.735,0.2438
+"auto: no vision, 20 cm right, 5 deg",RESET,0.755,0.2422
+"auto: no vision, 20 cm right, 5 deg",RESET,0.777,0.2431
+"auto: no vision, 20 cm right, 5 deg",RESET,0.796,0.2413
+"auto: no vision, 20 cm right, 5 deg",RESET,0.815,0.2405
+"auto: no vision, 20 cm right, 5 deg",RESET,0.835,0.2409
+"auto: no vision, 20 cm right, 5 deg",RESET,0.858,0.2469
+"auto: no vision, 20 cm right, 5 deg",RESET,0.876,0.2449
+"auto: no vision, 20 cm right, 5 deg",RESET,0.895,0.2447
+"auto: no vision, 20 cm right, 5 deg",RESET,0.915,0.2455
+"auto: no vision, 20 cm right, 5 deg",RESET,0.936,0.2475
+"auto: no vision, 20 cm right, 5 deg",RESET,0.956,0.2478
+"auto: no vision, 20 cm right, 5 deg",RESET,0.976,0.2491
+"auto: no vision, 20 cm right, 5 deg",RESET,0.995,0.2482
+"auto: no vision, 20 cm right, 5 deg",RESET,1.016,0.2491
+"auto: no vision, 20 cm right, 5 deg",RESET,1.036,0.2492
+"auto: no vision, 20 cm right, 5 deg",RESET,1.059,0.2568
+"auto: no vision, 20 cm right, 5 deg",RESET,1.080,0.2592
+"auto: no vision, 20 cm right, 5 deg",RESET,1.099,0.2551
+"auto: no vision, 20 cm right, 5 deg",RESET,1.119,0.2524
+"auto: no vision, 20 cm right, 5 deg",RESET,1.140,0.2509
+"auto: no vision, 20 cm right, 5 deg",RESET,1.160,0.2458
+"auto: no vision, 20 cm right, 5 deg",RESET,1.180,0.2410
+"auto: no vision, 20 cm right, 5 deg",RESET,1.199,0.2311
+"auto: no vision, 20 cm right, 5 deg",RESET,1.219,0.2230
+"auto: no vision, 20 cm right, 5 deg",RESET,1.239,0.2124
+"auto: no vision, 20 cm right, 5 deg",RESET,1.259,0.2027
+"auto: no vision, 20 cm right, 5 deg",RESET,1.280,0.1924
+"auto: no vision, 20 cm right, 5 deg",RESET,1.299,0.1782
+"auto: no vision, 20 cm right, 5 deg",RESET,1.319,0.1638
+"auto: no vision, 20 cm right, 5 deg",RESET,1.339,0.1479
+"auto: no vision, 20 cm right, 5 deg",RESET,1.360,0.1344
+"auto: no vision, 20 cm right, 5 deg",RESET,1.379,0.1156
+"auto: no vision, 20 cm right, 5 deg",RESET,1.400,0.0995
+"auto: no vision, 20 cm right, 5 deg",RESET,1.419,0.0784
+"auto: no vision, 20 cm right, 5 deg",RESET,1.451,0.0896
+"auto: no vision, 20 cm right, 5 deg",RESET,1.471,0.0720
+"auto: no vision, 20 cm right, 5 deg",RESET,1.491,0.0563
+"auto: no vision, 20 cm right, 5 deg",RESET,1.511,0.0404
+"auto: no vision, 20 cm right, 5 deg",RESET,1.531,0.0268
+"auto: no vision, 20 cm right, 5 deg",RESET,1.552,0.0183
+"auto: no vision, 20 cm right, 5 deg",RESET,1.571,0.0207
+"auto: no vision, 20 cm right, 5 deg",RESET,1.591,0.0309
+"auto: no vision, 20 cm right, 5 deg",RESET,1.611,0.0424
+"auto: no vision, 20 cm right, 5 deg",RESET,1.632,0.0528
+"auto: no vision, 20 cm right, 5 deg",RESET,1.651,0.0640
+"auto: no vision, 20 cm right, 5 deg",RESET,1.672,0.0717
+"auto: no vision, 20 cm right, 5 deg",RESET,1.700,0.0716
+"auto: no vision, 20 cm right, 5 deg",RESET,1.720,0.0789
+"auto: no vision, 20 cm right, 5 deg",RESET,1.740,0.0855
+"auto: no vision, 20 cm right, 5 deg",RESET,1.760,0.0910
+"auto: no vision, 20 cm right, 5 deg",RESET,1.780,0.0964
+"auto: no vision, 20 cm right, 5 deg",RESET,1.801,0.1005
+"auto: no vision, 20 cm right, 5 deg",RESET,1.820,0.1048
+"auto: no vision, 20 cm right, 5 deg",RESET,1.841,0.1080
+"auto: no vision, 20 cm right, 5 deg",RESET,1.860,0.1117
+"auto: no vision, 20 cm right, 5 deg",RESET,1.880,0.1145
+"auto: no vision, 20 cm right, 5 deg",RESET,1.900,0.1167
+"auto: no vision, 20 cm right, 5 deg",RESET,1.920,0.1190
+"auto: no vision, 20 cm right, 5 deg",RESET,1.941,0.1207
+"auto: no vision, 20 cm right, 5 deg",RESET,1.961,0.1225
+"auto: no vision, 20 cm right, 5 deg",RESET,1.980,0.1244
+"auto: no vision, 20 cm right, 5 deg",RESET,2.010,0.1261
+"auto: no vision, 20 cm right, 5 deg",RESET,2.021,0.1275
+"auto: no vision, 20 cm right, 5 deg",RESET,2.041,0.1297
+"auto: no vision, 20 cm right, 5 deg",RESET,2.064,0.1333
+"auto: no vision, 20 cm right, 5 deg",RESET,2.081,0.1379
+"auto: no vision, 20 cm right, 5 deg",RESET,2.102,0.1434
+"auto: no vision, 20 cm right, 5 deg",RESET,2.122,0.1494
+"auto: no vision, 20 cm right, 5 deg",RESET,2.142,0.1557
+"auto: no vision, 20 cm right, 5 deg",RESET,2.161,0.1621
+"auto: no vision, 20 cm right, 5 deg",RESET,2.181,0.1682
+"auto: no vision, 20 cm right, 5 deg",RESET,2.201,0.1740
+"auto: no vision, 20 cm right, 5 deg",RESET,2.221,0.1796
+"auto: no vision, 20 cm right, 5 deg",RESET,2.241,0.1847
+"auto: no vision, 20 cm right, 5 deg",RESET,2.261,0.1893
+"auto: no vision, 20 cm right, 5 deg",RESET,2.281,0.1933
+"auto: no vision, 20 cm right, 5 deg",RESET,2.301,0.1968
+"auto: no vision, 20 cm right, 5 deg",RESET,2.321,0.1997
+"auto: no vision, 20 cm right, 5 deg",RESET,2.341,0.2021
+"auto: no vision, 20 cm right, 5 deg",RESET,2.361,0.2039
+"auto: no vision, 20 cm right, 5 deg",RESET,2.381,0.2051
+"auto: no vision, 20 cm right, 5 deg",RESET,2.402,0.2059
+"auto: no vision, 20 cm right, 5 deg",RESET,2.421,0.2063
+"auto: no vision, 20 cm right, 5 deg",RESET,2.441,0.2064
+"auto: no vision, 20 cm right, 5 deg",RESET,2.462,0.2063
+"auto: no vision, 20 cm right, 5 deg",RESET,2.482,0.2060
+"auto: no vision, 20 cm right, 5 deg",RESET,2.501,0.2056
+"auto: no vision, 20 cm right, 5 deg",RESET,2.522,0.2051
+"auto: no vision, 20 cm right, 5 deg",RESET,2.542,0.2044
+"auto: no vision, 20 cm right, 5 deg",RESET,2.561,0.2037
+"auto: no vision, 20 cm right, 5 deg",RESET,2.581,0.2029
+"auto: no vision, 20 cm right, 5 deg",RESET,2.602,0.2021
+"auto: no vision, 20 cm right, 5 deg",RESET,2.621,0.2013
+"auto: no vision, 20 cm right, 5 deg",RESET,2.641,0.2004
+"auto: no vision, 20 cm right, 5 deg",RESET,2.662,0.1996
+"auto: no vision, 20 cm right, 5 deg",RESET,2.681,0.1989
+"auto: no vision, 20 cm right, 5 deg",RESET,2.702,0.1981
+"auto: no vision, 20 cm right, 5 deg",RESET,2.721,0.1974
+"auto: no vision, 20 cm right, 5 deg",RESET,2.742,0.1967
+"auto: no vision, 20 cm right, 5 deg",RESET,2.763,0.1961
+"auto: no vision, 20 cm right, 5 deg",RESET,2.781,0.1956
+"auto: no vision, 20 cm right, 5 deg",RESET,2.802,0.1951
+"auto: no vision, 20 cm right, 5 deg",RESET,2.821,0.1946
+"auto: no vision, 20 cm right, 5 deg",RESET,2.841,0.1942
+"auto: no vision, 20 cm right, 5 deg",RESET,2.861,0.1939
+"auto: no vision, 20 cm right, 5 deg",RESET,2.881,0.1936
+"auto: no vision, 20 cm right, 5 deg",RESET,2.901,0.1934
+"auto: no vision, 20 cm right, 5 deg",RESET,2.922,0.1933
+"auto: no vision, 20 cm right, 5 deg",RESET,2.941,0.1933
+"auto: no vision, 20 cm right, 5 deg",RESET,2.962,0.1934
+"auto: no vision, 20 cm right, 5 deg",RESET,2.981,0.1934
+"auto: no vision, 20 cm right, 5 deg",RESET,3.001,0.1934
+"auto: no vision, 20 cm right, 5 deg",RESET,3.021,0.1934
+"auto: no vision, 20 cm right, 5 deg",RESET,3.041,0.1795
+"auto: no vision, 20 cm right, 5 deg",RESET,3.061,0.1674
+"auto: no vision, 20 cm right, 5 deg",RESET,3.081,0.1579
+"auto: no vision, 20 cm right, 5 deg",RESET,3.101,0.1519
+"auto: no vision, 20 cm right, 5 deg",RESET,3.121,0.1496
+"auto: no vision, 20 cm right, 5 deg",RESET,3.141,0.1507
+"auto: no vision, 20 cm right, 5 deg",RESET,3.161,0.1548
+"auto: no vision, 20 cm right, 5 deg",RESET,3.181,0.1614
+"auto: no vision, 20 cm right, 5 deg",RESET,3.201,0.1689
+"auto: no vision, 20 cm right, 5 deg",RESET,3.222,0.1779
+"auto: no vision, 20 cm right, 5 deg",RESET,3.241,0.1860
+"auto: no vision, 20 cm right, 5 deg",RESET,3.261,0.1939
+"auto: no vision, 20 cm right, 5 deg",RESET,3.281,0.2004
+"auto: no vision, 20 cm right, 5 deg",RESET,3.301,0.2068
+"auto: no vision, 20 cm right, 5 deg",RESET,3.322,0.2114
+"auto: no vision, 20 cm right, 5 deg",RESET,3.341,0.2137
+"auto: no vision, 20 cm right, 5 deg",RESET,3.361,0.2152
+"auto: no vision, 20 cm right, 5 deg",RESET,3.382,0.2165
+"auto: no vision, 20 cm right, 5 deg",RESET,3.401,0.2150
+"auto: no vision, 20 cm right, 5 deg",RESET,3.421,0.2129
+"auto: no vision, 20 cm right, 5 deg",RESET,3.443,0.2111
+"auto: no vision, 20 cm right, 5 deg",RESET,3.461,0.2051
+"auto: no vision, 20 cm right, 5 deg",RESET,3.481,0.2007
+"auto: no vision, 20 cm right, 5 deg",RESET,3.501,0.1954
+"auto: no vision, 20 cm right, 5 deg",RESET,3.522,0.1907
+"auto: no vision, 20 cm right, 5 deg",RESET,3.541,0.1841
+"auto: no vision, 20 cm right, 5 deg",RESET,3.562,0.1787
+"auto: no vision, 20 cm right, 5 deg",RESET,3.581,0.1725
+"auto: no vision, 20 cm right, 5 deg",RESET,3.602,0.1675
+"auto: no vision, 20 cm right, 5 deg",RESET,3.621,0.1622
+"auto: no vision, 20 cm right, 5 deg",RESET,3.641,0.1573
+"auto: no vision, 20 cm right, 5 deg",RESET,3.662,0.1534
+"auto: no vision, 20 cm right, 5 deg",RESET,3.681,0.1491
+"auto: no vision, 20 cm right, 5 deg",RESET,3.702,0.1493
+"auto: no vision, 20 cm right, 5 deg",RESET,3.721,0.1462
+"auto: no vision, 20 cm right, 5 deg",RESET,3.742,0.1476
+"auto: no vision, 20 cm right, 5 deg",RESET,3.761,0.1474
+"auto: no vision, 20 cm right, 5 deg",RESET,3.781,0.1471
+"auto: no vision, 20 cm right, 5 deg",RESET,3.801,0.1481
+"auto: no vision, 20 cm right, 5 deg",RESET,3.822,0.1501
+"auto: no vision, 20 cm right, 5 deg",RESET,3.842,0.1504
+"auto: no vision, 20 cm right, 5 deg",RESET,3.861,0.1507
+"auto: no vision, 20 cm right, 5 deg",RESET,3.881,0.1516
+"auto: no vision, 20 cm right, 5 deg",RESET,3.901,0.1528
+"auto: no vision, 20 cm right, 5 deg",RESET,3.923,0.1551
+"auto: no vision, 20 cm right, 5 deg",RESET,3.941,0.1556
+"auto: no vision, 20 cm right, 5 deg",RESET,3.962,0.1576
+"auto: no vision, 20 cm right, 5 deg",RESET,3.982,0.1592
+"auto: no vision, 20 cm right, 5 deg",RESET,4.002,0.1610
+"auto: no vision, 20 cm right, 5 deg",RESET,4.022,0.1625
+"auto: no vision, 20 cm right, 5 deg",RESET,4.041,0.1639
+"auto: no vision, 20 cm right, 5 deg",RESET,4.061,0.1657
+"auto: no vision, 20 cm right, 5 deg",RESET,4.081,0.1683
+"auto: no vision, 20 cm right, 5 deg",RESET,4.101,0.1702
+"auto: no vision, 20 cm right, 5 deg",RESET,4.121,0.1725
+"auto: no vision, 20 cm right, 5 deg",RESET,4.141,0.1745
+"auto: no vision, 20 cm right, 5 deg",RESET,4.162,0.1769
+"auto: no vision, 20 cm right, 5 deg",RESET,4.181,0.1785
+"auto: no vision, 20 cm right, 5 deg",RESET,4.202,0.1818
+"auto: no vision, 20 cm right, 5 deg",RESET,4.222,0.1834
+"auto: no vision, 20 cm right, 5 deg",RESET,4.241,0.1868
+"auto: no vision, 20 cm right, 5 deg",RESET,4.261,0.1903
+"auto: no vision, 20 cm right, 5 deg",RESET,4.282,0.1925
+"auto: no vision, 20 cm right, 5 deg",RESET,4.301,0.1942
+"auto: no vision, 20 cm right, 5 deg",RESET,4.321,0.1953
+"auto: no vision, 20 cm right, 5 deg",RESET,4.341,0.1970
+"auto: no vision, 20 cm right, 5 deg",RESET,4.361,0.1988
+"auto: no vision, 20 cm right, 5 deg",RESET,4.381,0.2045
+"auto: no vision, 20 cm right, 5 deg",RESET,4.402,0.2073
+"auto: no vision, 20 cm right, 5 deg",RESET,4.422,0.2086
+"auto: no vision, 20 cm right, 5 deg",RESET,4.441,0.2091
+"auto: no vision, 20 cm right, 5 deg",RESET,4.461,0.2132
+"auto: no vision, 20 cm right, 5 deg",RESET,4.482,0.2178
+"auto: no vision, 20 cm right, 5 deg",RESET,4.501,0.2186
+"auto: no vision, 20 cm right, 5 deg",RESET,4.521,0.2206
+"auto: no vision, 20 cm right, 5 deg",RESET,4.541,0.2228
+"auto: no vision, 20 cm right, 5 deg",RESET,4.561,0.2245
+"auto: no vision, 20 cm right, 5 deg",RESET,4.581,0.2261
+"auto: no vision, 20 cm right, 5 deg",RESET,4.601,0.2296
+"auto: no vision, 20 cm right, 5 deg",RESET,4.621,0.2312
+"auto: no vision, 20 cm right, 5 deg",RESET,4.642,0.2351
+"auto: no vision, 20 cm right, 5 deg",RESET,4.662,0.2379
+"auto: no vision, 20 cm right, 5 deg",RESET,4.681,0.2390
+"auto: no vision, 20 cm right, 5 deg",RESET,4.701,0.2431
+"auto: no vision, 20 cm right, 5 deg",RESET,4.721,0.2447
+"auto: no vision, 20 cm right, 5 deg",RESET,4.741,0.2498
+"auto: no vision, 20 cm right, 5 deg",RESET,4.761,0.2513
+"auto: no vision, 20 cm right, 5 deg",RESET,4.782,0.2562
+"auto: no vision, 20 cm right, 5 deg",RESET,4.801,0.2605
+"auto: no vision, 20 cm right, 5 deg",RESET,4.821,0.2621
+"auto: no vision, 20 cm right, 5 deg",RESET,4.841,0.2648
+"auto: no vision, 20 cm right, 5 deg",RESET,4.861,0.2694
+"auto: no vision, 20 cm right, 5 deg",RESET,4.881,0.2737
+"auto: no vision, 20 cm right, 5 deg",RESET,4.901,0.2781
+"auto: no vision, 20 cm right, 5 deg",RESET,4.921,0.2803
+"auto: no vision, 20 cm right, 5 deg",RESET,4.941,0.2825
+"auto: no vision, 20 cm right, 5 deg",RESET,4.961,0.2872
+"auto: no vision, 20 cm right, 5 deg",RESET,4.982,0.2921
+"auto: no vision, 20 cm right, 5 deg",RESET,5.001,0.2945
+"auto: no vision, 45 cm back",RESET,0.080,0.4506
+"auto: no vision, 45 cm back",RESET,0.101,0.4524
+"auto: no vision, 45 cm back",RESET,0.120,0.4552
+"auto: no vision, 45 cm back",RESET,0.141,0.4591
+"auto: no vision, 45 cm back",RESET,0.160,0.4633
+"auto: no vision, 45 cm back",RESET,0.180,0.4684
+"auto: no vision, 45 cm back",RESET,0.201,0.4745
+"auto: no vision, 45 cm back",RESET,0.220,0.4803
+"auto: no vision, 45 cm back",RESET,0.241,0.4872
+"auto: no vision, 45 cm back",RESET,0.260,0.4931
+"auto: no vision, 45 cm back",RESET,0.280,0.4994
+"auto: no vision, 45 cm back",RESET,0.300,0.5053
+"auto: no vision, 45 cm back",RESET,0.320,0.5112
+"auto: no vision, 45 cm back",RESET,0.340,0.5170
+"auto: no vision, 45 cm back",RESET,0.360,0.5227
+"auto: no vision, 45 cm back",RESET,0.380,0.5283
+"auto: no vision, 45 cm back",RESET,0.400,0.5339
+"auto: no vision, 45 cm back",RESET,0.421,0.5390
+"auto: no vision, 45 cm back",RESET,0.454,0.5589
+"auto: no vision, 45 cm back",RESET,0.476,0.5652
+"auto: no vision, 45 cm back",RESET,0.495,0.5677
+"auto: no vision, 45 cm back",RESET,0.516,0.5724
+"auto: no vision, 45 cm back",RESET,0.535,0.5731
+"auto: no vision, 45 cm back",RESET,0.555,0.5749
+"auto: no vision, 45 cm back",RESET,0.575,0.5756
+"auto: no vision, 45 cm back",RESET,0.596,0.5778
+"auto: no vision, 45 cm back",RESET,0.615,0.5767
+"auto: no vision, 45 cm back",RESET,0.635,0.5770
+"auto: no vision, 45 cm back",RESET,0.656,0.5787
+"auto: no vision, 45 cm back",RESET,0.676,0.5782
+"auto: no vision, 45 cm back",RESET,0.695,0.5762
+"auto: no vision, 45 cm back",RESET,0.716,0.5774
+"auto: no vision, 45 cm back",RESET,0.735,0.5748
+"auto: no vision, 45 cm back",RESET,0.755,0.5750
+"auto: no vision, 45 cm back",RESET,0.775,0.5743
+"auto: no vision, 45 cm back",RESET,0.795,0.5733
+"auto: no vision, 45 cm back",RESET,0.815,0.5722
+"auto: no vision, 45 cm back",RESET,0.835,0.5699
+"auto: no vision, 45 cm back",RESET,0.855,0.5688
+"auto: no vision, 45 cm back",RESET,0.875,0.5693
+"auto: no vision, 45 cm back",RESET,0.895,0.5674
+"auto: no vision, 45 cm back",RESET,0.915,0.5667
+"auto: no vision, 45 cm back",RESET,0.936,0.5692
+"auto: no vision, 45 cm back",RESET,0.955,0.5653
+"auto: no vision, 45 cm back",RESET,0.975,0.5658
+"auto: no vision, 45 cm back",RESET,0.996,0.5676
+"auto: no vision, 45 cm back",RESET,1.015,0.5645
+"auto: no vision, 45 cm back",RESET,1.035,0.5638
+"auto: no vision, 45 cm back",RESET,1.055,0.5615
+"auto: no vision, 45 cm back",RESET,1.075,0.5605
+"auto: no vision, 45 cm back",RESET,1.095,0.5583
+"auto: no vision, 45 cm back",RESET,1.115,0.5555
+"auto: no vision, 45 cm back",RESET,1.135,0.5517
+"auto: no vision, 45 cm back",RESET,1.155,0.5473
+"auto: no vision, 45 cm back",RESET,1.175,0.5434
+"auto: no vision, 45 cm back",RESET,1.195,0.5378
+"auto: no vision, 45 cm back",RESET,1.215,0.5318
+"auto: no vision, 45 cm back",RESET,1.236,0.5271
+"auto: no vision, 45 cm back",RESET,1.255,0.5193
+"auto: no vision, 45 cm back",RESET,1.276,0.5144
+"auto: no vision, 45 cm back",RESET,1.296,0.5078
+"auto: no vision, 45 cm back",RESET,1.315,0.4994
+"auto: no vision, 45 cm back",RESET,1.335,0.4919
+"auto: no vision, 45 cm back",RESET,1.355,0.4841
+"auto: no vision, 45 cm back",RESET,1.375,0.4746
+"auto: no vision, 45 cm back",RESET,1.395,0.4679
+"auto: no vision, 45 cm back",RESET,1.414,0.4572
+"auto: no vision, 45 cm back",RESET,1.436,0.4528
+"auto: no vision, 45 cm back",RESET,1.455,0.4429
+"auto: no vision, 45 cm back",RESET,1.475,0.4367
+"auto: no vision, 45 cm back",RESET,1.495,0.4300
+"auto: no vision, 45 cm back",RESET,1.515,0.4226
+"auto: no vision, 45 cm back",RESET,1.535,0.4178
+"auto: no vision, 45 cm back",RESET,1.555,0.4120
+"auto: no vision, 45 cm back",RESET,1.575,0.4062
+"auto: no vision, 45 cm back",RESET,1.595,0.4031
+"auto: no vision, 45 cm back",RESET,1.615,0.3988
+"auto: no vision, 45 cm back",RESET,1.635,0.3970
+"auto: no vision, 45 cm back",RESET,1.656,0.3955
+"auto: no vision, 45 cm back",RESET,1.676,0.3932
+"auto: no vision, 45 cm back",RESET,1.695,0.3910
+"auto: no vision, 45 cm back",RESET,1.716,0.3917
+"auto: no vision, 45 cm back",RESET,1.735,0.3901
+"auto: no vision, 45 cm back",RESET,1.755,0.3911
+"auto: no vision, 45 cm back",RESET,1.795,0.4183
+"auto: no vision, 45 cm back",RESET,1.801,0.3996
+"auto: no vision, 45 cm back",RESET,1.822,0.4015
+"auto: no vision, 45 cm back",RESET,1.842,0.4027
+"auto: no vision, 45 cm back",RESET,1.861,0.4019
+"auto: no vision, 45 cm back",RESET,1.881,0.4031
+"auto: no vision, 45 cm back",RESET,1.901,0.4042
+"auto: no vision, 45 cm back",RESET,1.922,0.4059
+"auto: no vision, 45 cm back",RESET,1.942,0.4072
+"auto: no vision, 45 cm back",RESET,1.961,0.4075
+"auto: no vision, 45 cm back",RESET,1.981,0.4088
+"auto: no vision, 45 cm back",RESET,2.001,0.4105
+"auto: no vision, 45 cm back",RESET,2.023,0.4084
+"auto: no vision, 45 cm back",RESET,2.054,0.3976
+"auto: no vision, 45 cm back",RESET,2.075,0.3882
+"auto: no vision, 45 cm back",RESET,2.094,0.3800
+"auto: no vision, 45 cm back",RESET,2.114,0.3727
+"auto: no vision, 45 cm back",RESET,2.134,0.3665
+"auto: no vision, 45 cm back",RESET,2.154,0.3611
+"auto: no vision, 45 cm back",RESET,2.175,0.3565
+"auto: no vision, 45 cm back",RESET,2.195,0.3526
+"auto: no vision, 45 cm back",RESET,2.214,0.3493
+"auto: no vision, 45 cm back",RESET,2.235,0.3464
+"auto: no vision, 45 cm back",RESET,2.255,0.3438
+"auto: no vision, 45 cm back",RESET,2.274,0.3416
+"auto: no vision, 45 cm back",RESET,2.294,0.3395
+"auto: no vision, 45 cm back",RESET,2.314,0.3376
+"auto: no vision, 45 cm back",RESET,2.334,0.3357
+"auto: no vision, 45 cm back",RESET,2.354,0.3340
+"auto: no vision, 45 cm back",RESET,2.375,0.3323
+"auto: no vision, 45 cm back",RESET,2.394,0.3310
+"auto: no vision, 45 cm back",RESET,2.414,0.3300
+"auto: no vision, 45 cm back",RESET,2.434,0.3295
+"auto: no vision, 45 cm back",RESET,2.455,0.3292
+"auto: no vision, 45 cm back",RESET,2.474,0.3291
+"auto: no vision, 45 cm back",RESET,2.495,0.3292
+"auto: no vision, 45 cm back",RESET,2.515,0.3291
+"auto: no vision, 45 cm back",RESET,2.534,0.3292
+"auto: no vision, 45 cm back",RESET,2.554,0.3295
+"auto: no vision, 45 cm back",RESET,2.574,0.3297
+"auto: no vision, 45 cm back",RESET,2.594,0.3301
+"auto: no vision, 45 cm back",RESET,2.614,0.3304
+"auto: no vision, 45 cm back",RESET,2.634,0.3308
+"auto: no vision, 45 cm back",RESET,2.655,0.3312
+"auto: no vision, 45 cm back",RESET,2.674,0.3316
+"auto: no vision, 45 cm back",RESET,2.695,0.3321
+"auto: no vision, 45 cm back",RESET,2.714,0.3325
+"auto: no vision, 45 cm back",RESET,2.735,0.3330
+"auto: no vision, 45 cm back",RESET,2.755,0.3334
+"auto: no vision, 45 cm back",RESET,2.775,0.3338
+"auto: no vision, 45 cm back",RESET,2.794,0.3342
+"auto: no vision, 45 cm back",RESET,2.814,0.3346
+"auto: no vision, 45 cm back",RESET,2.834,0.3349
+"auto: no vision, 45 cm back",RESET,2.854,0.3352
+"auto: no vision, 45 cm back",RESET,2.874,0.3355
+"auto: no vision, 45 cm back",RESET,2.895,0.3358
+"auto: no vision, 45 cm back",RESET,2.915,0.3360
+"auto: no vision, 45 cm back",RESET,2.934,0.3362
+"auto: no vision, 45 cm back",RESET,2.954,0.3363
+"auto: no vision, 45 cm back",RESET,2.975,0.3364
+"auto: no vision, 45 cm back",RESET,2.994,0.3364
+"auto: no vision, 45 cm back",RESET,3.014,0.3363
+"auto: no vision, 45 cm back",RESET,3.035,0.3362
+"auto: no vision, 45 cm back",RESET,3.054,0.3430
+"auto: no vision, 45 cm back",RESET,3.074,0.3500
+"auto: no vision, 45 cm back",RESET,3.094,0.3570
+"auto: no vision, 45 cm back",RESET,3.114,0.3637
+"auto: no vision, 45 cm back",RESET,3.137,0.3712
+"auto: no vision, 45 cm back",RESET,3.158,0.3777
+"auto: no vision, 45 cm back",RESET,3.179,0.3837
+"auto: no vision, 45 cm back",RESET,3.198,0.3888
+"auto: no vision, 45 cm back",RESET,3.217,0.3936
+"auto: no vision, 45 cm back",RESET,3.238,0.3981
+"auto: no vision, 45 cm back",RESET,3.257,0.4016
+"auto: no vision, 45 cm back",RESET,3.278,0.4049
+"auto: no vision, 45 cm back",RESET,3.298,0.4079
+"auto: no vision, 45 cm back",RESET,3.319,0.4107
+"auto: no vision, 45 cm back",RESET,3.338,0.4131
+"auto: no vision, 45 cm back",RESET,3.358,0.4159
+"auto: no vision, 45 cm back",RESET,3.378,0.4191
+"auto: no vision, 45 cm back",RESET,3.399,0.4227
+"auto: no vision, 45 cm back",RESET,3.419,0.4268
+"auto: no vision, 45 cm back",RESET,3.439,0.4311
+"auto: no vision, 45 cm back",RESET,3.459,0.4355
+"auto: no vision, 45 cm back",RESET,3.479,0.4398
+"auto: no vision, 45 cm back",RESET,3.499,0.4437
+"auto: no vision, 45 cm back",RESET,3.519,0.4470
+"auto: no vision, 45 cm back",RESET,3.539,0.4493
+"auto: no vision, 45 cm back",RESET,3.560,0.4506
+"auto: no vision, 45 cm back",RESET,3.581,0.4511
+"auto: no vision, 45 cm back",RESET,3.599,0.4513
+"auto: no vision, 45 cm back",RESET,3.619,0.4513
+"auto: no vision, 45 cm back",RESET,3.640,0.4509
+"auto: no vision, 45 cm back",RESET,3.660,0.4513
+"auto: no vision, 45 cm back",RESET,3.680,0.4517
+"auto: no vision, 45 cm back",RESET,3.699,0.4528
+"auto: no vision, 45 cm back",RESET,3.719,0.4538
+"auto: no vision, 45 cm back",RESET,3.739,0.4549
+"auto: no vision, 45 cm back",RESET,3.759,0.4561
+"auto: no vision, 45 cm back",RESET,3.779,0.4572
+"auto: no vision, 45 cm back",RESET,3.799,0.4583
+"auto: no vision, 45 cm back",RESET,3.819,0.4593
+"auto: no vision, 45 cm back",RESET,3.839,0.4604
+"auto: no vision, 45 cm back",RESET,3.859,0.4613
+"auto: no vision, 45 cm back",RESET,3.880,0.4608
+"auto: no vision, 45 cm back",RESET,3.899,0.4609
+"auto: no vision, 45 cm back",RESET,3.919,0.4614
+"auto: no vision, 45 cm back",RESET,3.940,0.4606
+"auto: no vision, 45 cm back",RESET,3.960,0.4607
+"auto: no vision, 45 cm back",RESET,3.979,0.4610
+"auto: no vision, 45 cm back",RESET,4.000,0.4608
+"auto: no vision, 45 cm back",RESET,4.019,0.4609
+"auto: no vision, 45 cm back",RESET,4.039,0.4609
+"auto: no vision, 45 cm back",RESET,4.060,0.4604
+"auto: no vision, 45 cm back",RESET,4.079,0.4603
+"auto: no vision, 45 cm back",RESET,4.099,0.4600
+"auto: no vision, 45 cm back",RESET,4.119,0.4597
+"auto: no vision, 45 cm back",RESET,4.139,0.4594
+"auto: no vision, 45 cm back",RESET,4.159,0.4589
+"auto: no vision, 45 cm back",RESET,4.180,0.4583
+"auto: no vision, 45 cm back",RESET,4.199,0.4580
+"auto: no vision, 45 cm back",RESET,4.219,0.4577
+"auto: no vision, 45 cm back",RESET,4.240,0.4569
+"auto: no vision, 45 cm back",RESET,4.259,0.4563
+"auto: no vision, 45 cm back",RESET,4.279,0.4559
+"auto: no vision, 45 cm back",RESET,4.300,0.4555
+"auto: no vision, 45 cm back",RESET,4.320,0.4552
+"auto: no vision, 45 cm back",RESET,4.339,0.4544
+"auto: no vision, 45 cm back",RESET,4.359,0.4542
+"auto: no vision, 45 cm back",RESET,4.379,0.4542
+"auto: no vision, 45 cm back",RESET,4.400,0.4538
+"auto: no vision, 45 cm back",RESET,4.419,0.4538
+"auto: no vision, 45 cm back",RESET,4.439,0.4538
+"auto: no vision, 45 cm back",RESET,4.460,0.4536
+"auto: no vision, 45 cm back",RESET,4.480,0.4535
+"auto: no vision, 45 cm back",RESET,4.500,0.4532
+"auto: no vision, 45 cm back",RESET,4.520,0.4532
+"auto: no vision, 45 cm back",RESET,4.539,0.4533
+"auto: no vision, 45 cm back",RESET,4.559,0.4532
+"auto: no vision, 45 cm back",RESET,4.579,0.4532
+"auto: no vision, 45 cm back",RESET,4.599,0.4532
+"auto: no vision, 45 cm back",RESET,4.620,0.4530
+"auto: no vision, 45 cm back",RESET,4.640,0.4526
+"auto: no vision, 45 cm back",RESET,4.660,0.4524
+"auto: no vision, 45 cm back",RESET,4.679,0.4525
+"auto: no vision, 45 cm back",RESET,4.700,0.4523
+"auto: no vision, 45 cm back",RESET,4.720,0.4523
+"auto: no vision, 45 cm back",RESET,4.739,0.4518
+"auto: no vision, 45 cm back",RESET,4.771,0.4491
+"auto: no vision, 45 cm back",RESET,4.779,0.4510
+"auto: no vision, 45 cm back",RESET,4.800,0.4507
+"auto: no vision, 45 cm back",RESET,4.819,0.4508
+"auto: no vision, 45 cm back",RESET,4.839,0.4506
+"auto: no vision, 45 cm back",RESET,4.859,0.4502
+"auto: no vision, 45 cm back",RESET,4.880,0.4500
+"auto: no vision, 45 cm back",RESET,4.899,0.4500
+"auto: no vision, 45 cm back",RESET,4.919,0.4498
+"auto: no vision, 45 cm back",RESET,4.939,0.4498
+"auto: no vision, 45 cm back",RESET,4.959,0.4498
+"auto: no vision, 45 cm back",RESET,4.980,0.4497
+"auto: no vision, 45 cm back",RESET,4.999,0.4498

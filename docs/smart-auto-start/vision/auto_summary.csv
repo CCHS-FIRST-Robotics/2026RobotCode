@@ -1,0 +1,8 @@
+auto,method,err_0s_m,err_0_5s_m,err_1s_m,err_1_5s_m,max_after_2s_m,path_start_delay_s
+"auto: on start",trust,0.0005,0.0695,0.0751,0.1240,0.2201,NaN
+"auto: 10 cm back",trust,0.0994,0.0651,0.0689,NaN,0.1162,NaN
+"auto: 20 cm right, 5 deg",trust,0.1996,0.1278,0.1401,0.1192,0.2242,NaN
+"auto: 20 cm right, 5 deg, OLD",reset,0.1997,0.1508,0.1349,0.1370,0.2204,NaN
+"auto: 45 cm back",drive,0.4484,0.1493,0.0010,0.1002,0.2261,NaN
+"auto: 45 cm back, OLD",reset,0.4493,0.3022,0.0549,0.1157,0.2306,NaN
+"auto: 2 m back (too far)",reset,1.9990,1.7996,1.4125,0.9815,0.0800,NaN

@@ -1,0 +1,4 @@
+auto,method,err_0s_m,err_0_5s_m,err_1s_m,err_1_5s_m,max_after_2s_m,path_start_delay_s
+"auto: no vision, on start",RESET,0.0007,0.1060,0.1198,0.0568,0.2330,0.081
+"auto: no vision, 20 cm right, 5 deg",RESET,0.2000,0.2415,0.2491,0.0404,0.2945,0.084
+"auto: no vision, 45 cm back",RESET,0.4506,0.5724,0.5645,0.4226,0.4614,0.080

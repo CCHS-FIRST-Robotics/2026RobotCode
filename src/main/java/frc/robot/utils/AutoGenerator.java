@@ -15,6 +15,7 @@ import choreo.auto.*;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import org.ironmaple.simulation.drivesims.*;
+import org.littletonrobotics.junction.Logger;
 import java.util.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
@@ -50,7 +51,7 @@ public class AutoGenerator {
             poseEstimator::getPose,
             (pose) -> {
                 poseEstimator.resetPosition(pose);
-                if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM) {
+                if (Constants.CURRENT_MODE == Constants.ROBOT_MODE.SIM && simTeleportOnOdometryReset) {
                     driveSimulation.setSimulationWorldPose(pose);
                 }
             },
@@ -79,6 +80,79 @@ public class AutoGenerator {
         nameFileMap.put("OutpostFuel", "OutpostFuel");
     }
 
+    // sim only: resetting odometry also teleports the sim robot to that pose (so sim autos start in the right place).
+    // the smart start test turns this off, so the old reset-odometry behavior can't cheat by moving the robot onto the path
+    public static boolean simTeleportOnOdometryReset = true;
+
+    // ————— smart auto start ————— //
+
+    private static final double MAX_DRIVE_TO_START = 1.5; // m; farther than this and vision is probably wrong (or the wrong auto is selected), so don't trust it
+    private static final double DRIVE_TO_START_TIMEOUT = 2.0; // s
+
+    public enum StartMethod {
+        RESET,          // tell the robot it's exactly at the path start (the old behavior)
+        TRUST_VISION,   // keep the vision pose and start the path; the follower's PID pulls the robot onto the path
+        DRIVE_TO_START  // drive to the path start, then start the path (costs time)
+    }
+
+    // what to do when vision has a fix but the robot is farther off than AutoStartHelper's "close" limits (the LEDs are red)
+    public static StartMethod FAR_START_METHOD = StartMethod.DRIVE_TO_START;
+
+    // sim test hook: forces one method regardless of the situation (null = decide normally)
+    public static StartMethod forcedStartMethod = null;
+
+    /**
+     * Runs at the very start of an auto, in place of trajectory.resetOdometry(). Decides based on what vision says:
+     *   - vision has a fix and the robot is close to the path start (within AutoStartHelper's "close" limits): TRUST_VISION
+     *   - vision has a fix and the robot is farther off (up to MAX_DRIVE_TO_START): FAR_START_METHOD
+     *   - no vision, way too far off, or ENABLE_SMART_AUTO_START is off: RESET (the old behavior)
+     */
+    private Command smartStart(AutoTrajectory firstTrajectory) {
+        return Commands.defer(() -> {
+            Optional<Pose2d> start = firstTrajectory.getInitialPose();
+            if (start.isEmpty()) {
+                return logStartDecision(StartMethod.RESET, "path has no start pose", firstTrajectory, start);
+            }
+
+            Transform2d error = new Transform2d(poseEstimator.getPose(), start.get());
+            double distance = error.getTranslation().getNorm();
+            double angle = Math.abs(error.getRotation().getRadians());
+            String errorText = String.format("%.0f cm, %.0f deg off", distance * 100, Math.toDegrees(angle));
+
+            if (forcedStartMethod != null) {
+                return logStartDecision(forcedStartMethod, "forced by test, " + errorText, firstTrajectory, start);
+            }
+            if (!Constants.ENABLE_SMART_AUTO_START) {
+                return logStartDecision(StartMethod.RESET, "smart start is off", firstTrajectory, start);
+            }
+            if (poseEstimator.getSecondsSinceVision() > AutoStartHelper.MAX_SECONDS_SINCE_VISION) {
+                return logStartDecision(StartMethod.RESET, "no recent vision", firstTrajectory, start);
+            }
+            if (distance <= AutoStartHelper.CLOSE_TRANSLATION && angle <= AutoStartHelper.CLOSE_ROTATION) {
+                return logStartDecision(StartMethod.TRUST_VISION, errorText, firstTrajectory, start);
+            }
+            if (distance <= MAX_DRIVE_TO_START) {
+                return logStartDecision(FAR_START_METHOD, errorText, firstTrajectory, start);
+            }
+            return logStartDecision(StartMethod.RESET, errorText + ", too far to trust", firstTrajectory, start);
+        }, Set.of(drive, poseEstimator));
+    }
+
+    private int startDecisionCount = 0;
+
+    private Command logStartDecision(StartMethod method, String reason, AutoTrajectory firstTrajectory, Optional<Pose2d> start) {
+        String decision = method + " (" + reason + ")";
+        System.out.println("[AutoGenerator] auto start: " + decision);
+        Logger.recordOutput("outputs/autoStart/decision", decision);
+        Logger.recordOutput("outputs/autoStart/decisionCount", ++startDecisionCount); // logs only store changes, so this marks repeats of the same decision
+        return switch (method) {
+            case RESET -> firstTrajectory.resetOdometry();
+            case TRUST_VISION -> Commands.none();
+            case DRIVE_TO_START -> new DriveWithPosition(drive, poseEstimator, start.get(), false).withTimeout(DRIVE_TO_START_TIMEOUT);
+        };
+    }
+
+
     // ————— testing routines ————— //
 
     public AutoRoutine test() { // to use this just draw a sufficiently complex trajectory in choreo to test if the robot can follow it well
@@ -89,7 +163,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen(trajectory0.cmd())
         );
 
@@ -113,7 +187,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen(trajectory0.cmd()) // drive to neutral zone
             .andThen( // continually drive in a circle
                 trajectory1.cmd()
@@ -133,7 +207,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen(trajectory0.cmd()) // drive to neutral zone
             .andThen( // continually drive in a circle
                 trajectory1.cmd()
@@ -157,7 +231,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -195,7 +269,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -238,7 +312,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -318,7 +392,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -398,7 +472,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -478,7 +552,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -551,7 +625,7 @@ public class AutoGenerator {
 
         // routine composition
         routine.active().onTrue(
-            trajectory0.resetOdometry()
+            smartStart(trajectory0)
             .andThen( // drive and bring pivot down
                 trajectory0.cmd()
                 .alongWith(
@@ -570,21 +644,42 @@ public class AutoGenerator {
 
     // ————— utils ————— //
 
+    // what's currently drawn, so the trajectory file is only loaded when the selection or alliance changes
+    // (this runs every loop while disabled, and loading parses the file from disk)
+    private String drawnAutoName = null;
+    private Alliance drawnAlliance = null;
+    private Optional<Pose2d> selectedAutoStartPose = Optional.empty();
+
     public void drawSelectedAuto(String selectedCommandName) {
-        Optional<Trajectory<SwerveSample>> trajectory = Choreo.loadTrajectory(nameFileMap.getOrDefault(selectedCommandName, ""));
-        
-        if (trajectory.isPresent()) {
-            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses( // create the trajectory on the field2d
-                Arrays.stream(trajectory.get().getPoses())
+        Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+        if (selectedCommandName.equals(drawnAutoName) && alliance == drawnAlliance) {
+            return;
+        }
+        drawnAutoName = selectedCommandName;
+        drawnAlliance = alliance;
+
+        // autos that aren't a choreo path (e.g. BackUpAndShoot, "do nothing") have nothing to draw
+        String fileName = nameFileMap.get(selectedCommandName);
+        Optional<Trajectory<SwerveSample>> trajectory = fileName == null ? Optional.empty() : Choreo.loadTrajectory(fileName);
+
+        if (trajectory.isPresent() && trajectory.get().getPoses().length > 0) {
+            Pose2d[] poses = Arrays.stream(trajectory.get().getPoses())
                 .map( // flip poses based on alliance
-                    pose -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ?
+                    pose -> alliance == Alliance.Blue ?
                     pose :
                     Constants.FieldConstants.calculateAllianceFlippedPose(pose)
                 )
-                .toArray(Pose2d[]::new)
-            );
+                .toArray(Pose2d[]::new);
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses(poses); // create the trajectory on the field2d
+            selectedAutoStartPose = Optional.of(poses[0]);
         } else {
-            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPose(new Pose2d());
+            Constants.FieldConstants.FIELD2D.getObject("trajectory").setPoses();
+            selectedAutoStartPose = Optional.empty();
         }
+    }
+
+    // where the robot needs to be placed for the selected auto (empty if the auto doesn't start from a fixed spot)
+    public Optional<Pose2d> getSelectedAutoStartPose() {
+        return selectedAutoStartPose;
     }
 }

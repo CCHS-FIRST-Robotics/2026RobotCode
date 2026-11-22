@@ -1,0 +1,1439 @@
+auto,method,seconds,error_m
+"auto: on start",trust,0.099,0.0005
+"auto: on start",trust,0.120,0.0020
+"auto: on start",trust,0.141,0.0046
+"auto: on start",trust,0.161,0.0080
+"auto: on start",trust,0.181,0.0117
+"auto: on start",trust,0.201,0.0157
+"auto: on start",trust,0.221,0.0200
+"auto: on start",trust,0.241,0.0251
+"auto: on start",trust,0.261,0.0300
+"auto: on start",trust,0.281,0.0348
+"auto: on start",trust,0.301,0.0392
+"auto: on start",trust,0.322,0.0434
+"auto: on start",trust,0.341,0.0478
+"auto: on start",trust,0.361,0.0511
+"auto: on start",trust,0.383,0.0550
+"auto: on start",trust,0.404,0.0606
+"auto: on start",trust,0.421,0.0647
+"auto: on start",trust,0.445,0.0644
+"auto: on start",trust,0.461,0.0709
+"auto: on start",trust,0.481,0.0685
+"auto: on start",trust,0.520,0.0695
+"auto: on start",trust,0.541,0.0968
+"auto: on start",trust,0.561,0.0995
+"auto: on start",trust,0.581,0.1022
+"auto: on start",trust,0.601,0.1029
+"auto: on start",trust,0.621,0.1026
+"auto: on start",trust,0.641,0.1031
+"auto: on start",trust,0.662,0.1036
+"auto: on start",trust,0.681,0.1045
+"auto: on start",trust,0.700,0.1011
+"auto: on start",trust,0.721,0.0993
+"auto: on start",trust,0.741,0.0990
+"auto: on start",trust,0.761,0.0977
+"auto: on start",trust,0.781,0.0950
+"auto: on start",trust,0.801,0.0932
+"auto: on start",trust,0.821,0.0917
+"auto: on start",trust,0.840,0.0897
+"auto: on start",trust,0.861,0.0867
+"auto: on start",trust,0.882,0.0859
+"auto: on start",trust,0.901,0.0852
+"auto: on start",trust,0.921,0.0817
+"auto: on start",trust,0.941,0.0811
+"auto: on start",trust,0.960,0.0784
+"auto: on start",trust,0.981,0.0756
+"auto: on start",trust,1.000,0.0751
+"auto: on start",trust,1.021,0.0724
+"auto: on start",trust,1.040,0.0720
+"auto: on start",trust,1.060,0.0698
+"auto: on start",trust,1.080,0.0685
+"auto: on start",trust,1.100,0.0666
+"auto: on start",trust,1.120,0.0638
+"auto: on start",trust,1.140,0.0604
+"auto: on start",trust,1.161,0.0575
+"auto: on start",trust,1.181,0.0557
+"auto: on start",trust,1.201,0.0537
+"auto: on start",trust,1.221,0.0530
+"auto: on start",trust,1.240,0.0535
+"auto: on start",trust,1.261,0.0559
+"auto: on start",trust,1.280,0.0578
+"auto: on start",trust,1.301,0.0618
+"auto: on start",trust,1.321,0.0657
+"auto: on start",trust,1.341,0.0690
+"auto: on start",trust,1.361,0.0751
+"auto: on start",trust,1.380,0.0834
+"auto: on start",trust,1.401,0.0921
+"auto: on start",trust,1.421,0.0971
+"auto: on start",trust,1.441,0.1043
+"auto: on start",trust,1.461,0.1124
+"auto: on start",trust,1.481,0.1184
+"auto: on start",trust,1.501,0.1240
+"auto: on start",trust,1.521,0.1276
+"auto: on start",trust,1.540,0.1328
+"auto: on start",trust,1.560,0.1371
+"auto: on start",trust,1.581,0.1394
+"auto: on start",trust,1.601,0.1398
+"auto: on start",trust,1.621,0.1398
+"auto: on start",trust,1.642,0.1412
+"auto: on start",trust,1.661,0.1385
+"auto: on start",trust,1.681,0.1383
+"auto: on start",trust,1.701,0.1371
+"auto: on start",trust,1.722,0.1346
+"auto: on start",trust,1.741,0.1300
+"auto: on start",trust,1.761,0.1298
+"auto: on start",trust,1.781,0.1263
+"auto: on start",trust,1.801,0.1225
+"auto: on start",trust,1.821,0.1180
+"auto: on start",trust,1.841,0.1146
+"auto: on start",trust,1.860,0.1101
+"auto: on start",trust,1.881,0.1066
+"auto: on start",trust,1.902,0.1011
+"auto: on start",trust,1.921,0.0970
+"auto: on start",trust,1.941,0.0939
+"auto: on start",trust,1.960,0.0893
+"auto: on start",trust,1.981,0.0862
+"auto: on start",trust,2.001,0.0815
+"auto: on start",trust,2.021,0.0769
+"auto: on start",trust,2.041,0.0775
+"auto: on start",trust,2.061,0.0925
+"auto: on start",trust,2.081,0.1066
+"auto: on start",trust,2.101,0.1199
+"auto: on start",trust,2.121,0.1325
+"auto: on start",trust,2.141,0.1444
+"auto: on start",trust,2.160,0.1556
+"auto: on start",trust,2.181,0.1660
+"auto: on start",trust,2.201,0.1756
+"auto: on start",trust,2.221,0.1842
+"auto: on start",trust,2.240,0.1919
+"auto: on start",trust,2.261,0.1987
+"auto: on start",trust,2.281,0.2045
+"auto: on start",trust,2.301,0.2094
+"auto: on start",trust,2.320,0.2134
+"auto: on start",trust,2.341,0.2162
+"auto: on start",trust,2.361,0.2181
+"auto: on start",trust,2.381,0.2192
+"auto: on start",trust,2.400,0.2198
+"auto: on start",trust,2.420,0.2200
+"auto: on start",trust,2.441,0.2201
+"auto: on start",trust,2.461,0.2200
+"auto: on start",trust,2.480,0.2198
+"auto: on start",trust,2.501,0.2195
+"auto: on start",trust,2.520,0.2191
+"auto: on start",trust,2.541,0.2186
+"auto: on start",trust,2.561,0.2181
+"auto: on start",trust,2.581,0.2175
+"auto: on start",trust,2.601,0.2168
+"auto: on start",trust,2.630,0.2160
+"auto: on start",trust,2.650,0.2151
+"auto: on start",trust,2.671,0.2142
+"auto: on start",trust,2.691,0.2132
+"auto: on start",trust,2.711,0.2121
+"auto: on start",trust,2.730,0.2111
+"auto: on start",trust,2.751,0.2101
+"auto: on start",trust,2.771,0.2092
+"auto: on start",trust,2.791,0.2083
+"auto: on start",trust,2.810,0.2075
+"auto: on start",trust,2.831,0.2067
+"auto: on start",trust,2.851,0.2060
+"auto: on start",trust,2.871,0.2053
+"auto: on start",trust,2.892,0.2047
+"auto: on start",trust,2.911,0.2041
+"auto: on start",trust,2.931,0.2036
+"auto: on start",trust,2.950,0.2031
+"auto: on start",trust,2.971,0.2028
+"auto: on start",trust,2.991,0.2025
+"auto: on start",trust,3.010,0.2023
+"auto: on start",trust,3.031,0.2021
+"auto: on start",trust,3.051,0.2020
+"auto: on start",trust,3.071,0.1823
+"auto: on start",trust,3.118,0.1623
+"auto: on start",trust,3.138,0.1172
+"auto: on start",trust,3.158,0.0994
+"auto: on start",trust,3.179,0.0842
+"auto: on start",trust,3.219,0.0714
+"auto: on start",trust,3.240,0.0586
+"auto: on start",trust,3.260,0.0603
+"auto: on start",trust,3.280,0.0650
+"auto: on start",trust,3.300,0.0709
+"auto: on start",trust,3.321,0.0766
+"auto: on start",trust,3.340,0.0833
+"auto: on start",trust,3.360,0.0880
+"auto: on start",trust,3.380,0.0924
+"auto: on start",trust,3.400,0.0957
+"auto: on start",trust,3.420,0.0972
+"auto: on start",trust,3.440,0.0977
+"auto: on start",trust,3.460,0.0959
+"auto: on start",trust,3.480,0.0930
+"auto: on start",trust,3.499,0.0880
+"auto: on start",trust,3.520,0.0808
+"auto: on start",trust,3.541,0.0737
+"auto: on start",trust,3.559,0.0650
+"auto: on start",trust,3.580,0.0541
+"auto: on start",trust,3.600,0.0448
+"auto: on start",trust,3.619,0.0374
+"auto: on start",trust,3.640,0.0270
+"auto: on start",trust,3.660,0.0186
+"auto: on start",trust,3.680,0.0143
+"auto: on start",trust,3.700,0.0052
+"auto: on start",trust,3.720,0.0031
+"auto: on start",trust,3.740,0.0078
+"auto: on start",trust,3.760,0.0151
+"auto: on start",trust,3.779,0.0214
+"auto: on start",trust,3.800,0.0282
+"auto: on start",trust,3.820,0.0332
+"auto: on start",trust,3.840,0.0381
+"auto: on start",trust,3.859,0.0425
+"auto: on start",trust,3.879,0.0456
+"auto: on start",trust,3.899,0.0487
+"auto: on start",trust,3.920,0.0512
+"auto: on start",trust,3.940,0.0528
+"auto: on start",trust,3.960,0.0533
+"auto: on start",trust,3.980,0.0533
+"auto: on start",trust,3.999,0.0539
+"auto: on start",trust,4.019,0.0522
+"auto: on start",trust,4.040,0.0479
+"auto: on start",trust,4.060,0.0469
+"auto: on start",trust,4.080,0.0465
+"auto: on start",trust,4.100,0.0453
+"auto: on start",trust,4.120,0.0443
+"auto: on start",trust,4.140,0.0433
+"auto: on start",trust,4.159,0.0413
+"auto: on start",trust,4.180,0.0408
+"auto: on start",trust,4.200,0.0394
+"auto: on start",trust,4.220,0.0355
+"auto: on start",trust,4.239,0.0330
+"auto: on start",trust,4.260,0.0326
+"auto: on start",trust,4.279,0.0278
+"auto: on start",trust,4.300,0.0279
+"auto: on start",trust,4.320,0.0236
+"auto: on start",trust,4.339,0.0224
+"auto: on start",trust,4.360,0.0202
+"auto: on start",trust,4.379,0.0187
+"auto: on start",trust,4.400,0.0190
+"auto: on start",trust,4.420,0.0184
+"auto: on start",trust,4.440,0.0177
+"auto: on start",trust,4.461,0.0178
+"auto: on start",trust,4.480,0.0166
+"auto: on start",trust,4.500,0.0172
+"auto: on start",trust,4.520,0.0180
+"auto: on start",trust,4.541,0.0185
+"auto: on start",trust,4.560,0.0186
+"auto: on start",trust,4.581,0.0176
+"auto: on start",trust,4.601,0.0130
+"auto: on start",trust,4.620,0.0112
+"auto: on start",trust,4.639,0.0096
+"auto: on start",trust,4.659,0.0080
+"auto: on start",trust,4.680,0.0081
+"auto: on start",trust,4.700,0.0103
+"auto: on start",trust,4.721,0.0138
+"auto: on start",trust,4.740,0.0150
+"auto: on start",trust,4.761,0.0144
+"auto: on start",trust,4.780,0.0162
+"auto: on start",trust,4.800,0.0149
+"auto: on start",trust,4.820,0.0150
+"auto: on start",trust,4.840,0.0139
+"auto: on start",trust,4.860,0.0129
+"auto: on start",trust,4.880,0.0148
+"auto: on start",trust,4.901,0.0142
+"auto: on start",trust,4.920,0.0138
+"auto: on start",trust,4.940,0.0127
+"auto: on start",trust,4.961,0.0120
+"auto: on start",trust,4.980,0.0119
+"auto: 10 cm back",trust,0.101,0.0994
+"auto: 10 cm back",trust,0.120,0.0985
+"auto: 10 cm back",trust,0.140,0.0970
+"auto: 10 cm back",trust,0.160,0.0951
+"auto: 10 cm back",trust,0.180,0.0928
+"auto: 10 cm back",trust,0.200,0.0904
+"auto: 10 cm back",trust,0.228,0.0879
+"auto: 10 cm back",trust,0.249,0.0893
+"auto: 10 cm back",trust,0.269,0.0871
+"auto: 10 cm back",trust,0.289,0.0845
+"auto: 10 cm back",trust,0.309,0.0819
+"auto: 10 cm back",trust,0.329,0.0794
+"auto: 10 cm back",trust,0.349,0.0775
+"auto: 10 cm back",trust,0.369,0.0749
+"auto: 10 cm back",trust,0.388,0.0729
+"auto: 10 cm back",trust,0.408,0.0706
+"auto: 10 cm back",trust,0.429,0.0691
+"auto: 10 cm back",trust,0.449,0.0685
+"auto: 10 cm back",trust,0.469,0.0671
+"auto: 10 cm back",trust,0.489,0.0655
+"auto: 10 cm back",trust,0.509,0.0651
+"auto: 10 cm back",trust,0.530,0.0638
+"auto: 10 cm back",trust,0.549,0.0648
+"auto: 10 cm back",trust,0.569,0.0635
+"auto: 10 cm back",trust,0.590,0.0633
+"auto: 10 cm back",trust,0.609,0.0639
+"auto: 10 cm back",trust,0.630,0.0628
+"auto: 10 cm back",trust,0.649,0.0633
+"auto: 10 cm back",trust,0.670,0.0616
+"auto: 10 cm back",trust,0.689,0.0635
+"auto: 10 cm back",trust,0.709,0.0628
+"auto: 10 cm back",trust,0.730,0.0632
+"auto: 10 cm back",trust,0.749,0.0648
+"auto: 10 cm back",trust,0.769,0.0641
+"auto: 10 cm back",trust,0.789,0.0638
+"auto: 10 cm back",trust,0.809,0.0653
+"auto: 10 cm back",trust,0.830,0.0650
+"auto: 10 cm back",trust,0.849,0.0673
+"auto: 10 cm back",trust,0.868,0.0663
+"auto: 10 cm back",trust,0.889,0.0654
+"auto: 10 cm back",trust,0.909,0.0682
+"auto: 10 cm back",trust,0.929,0.0676
+"auto: 10 cm back",trust,0.948,0.0682
+"auto: 10 cm back",trust,0.969,0.0672
+"auto: 10 cm back",trust,0.989,0.0686
+"auto: 10 cm back",trust,1.009,0.0689
+"auto: 10 cm back",trust,1.029,0.0694
+"auto: 10 cm back",trust,1.048,0.0710
+"auto: 10 cm back",trust,1.068,0.0688
+"auto: 10 cm back",trust,1.089,0.0683
+"auto: 10 cm back",trust,1.108,0.0680
+"auto: 10 cm back",trust,1.129,0.0644
+"auto: 10 cm back",trust,1.149,0.0632
+"auto: 10 cm back",trust,1.169,0.0587
+"auto: 10 cm back",trust,1.189,0.0548
+"auto: 10 cm back",trust,1.209,0.0515
+"auto: 10 cm back",trust,1.229,0.0467
+"auto: 10 cm back",trust,1.249,0.0444
+"auto: 10 cm back",trust,1.269,0.0422
+"auto: 10 cm back",trust,1.289,0.0414
+"auto: 10 cm back",trust,1.309,0.0419
+"auto: 10 cm back",trust,1.329,0.0453
+"auto: 10 cm back",trust,1.349,0.0493
+"auto: 10 cm back",trust,3.380,0.0619
+"auto: 10 cm back",trust,3.401,0.0581
+"auto: 10 cm back",trust,3.420,0.0540
+"auto: 10 cm back",trust,3.441,0.0494
+"auto: 10 cm back",trust,3.461,0.0447
+"auto: 10 cm back",trust,3.481,0.0393
+"auto: 10 cm back",trust,3.500,0.0341
+"auto: 10 cm back",trust,3.521,0.0286
+"auto: 10 cm back",trust,3.541,0.0237
+"auto: 10 cm back",trust,3.561,0.0192
+"auto: 10 cm back",trust,3.581,0.0155
+"auto: 10 cm back",trust,3.601,0.0128
+"auto: 10 cm back",trust,3.621,0.0110
+"auto: 10 cm back",trust,3.641,0.0089
+"auto: 10 cm back",trust,3.660,0.0095
+"auto: 10 cm back",trust,3.681,0.0118
+"auto: 10 cm back",trust,3.701,0.0116
+"auto: 10 cm back",trust,3.721,0.0110
+"auto: 10 cm back",trust,3.741,0.0135
+"auto: 10 cm back",trust,3.761,0.0161
+"auto: 10 cm back",trust,3.781,0.0181
+"auto: 10 cm back",trust,3.802,0.0211
+"auto: 10 cm back",trust,3.821,0.0226
+"auto: 10 cm back",trust,3.841,0.0257
+"auto: 10 cm back",trust,3.861,0.0286
+"auto: 10 cm back",trust,3.881,0.0275
+"auto: 10 cm back",trust,3.902,0.0292
+"auto: 10 cm back",trust,3.921,0.0302
+"auto: 10 cm back",trust,3.941,0.0293
+"auto: 10 cm back",trust,3.961,0.0311
+"auto: 10 cm back",trust,3.981,0.0281
+"auto: 10 cm back",trust,4.001,0.0295
+"auto: 10 cm back",trust,4.021,0.0280
+"auto: 10 cm back",trust,4.041,0.0287
+"auto: 10 cm back",trust,4.062,0.0292
+"auto: 10 cm back",trust,4.081,0.0288
+"auto: 10 cm back",trust,4.101,0.0298
+"auto: 10 cm back",trust,4.120,0.0315
+"auto: 10 cm back",trust,4.140,0.0320
+"auto: 10 cm back",trust,4.161,0.0307
+"auto: 10 cm back",trust,4.181,0.0305
+"auto: 10 cm back",trust,4.201,0.0309
+"auto: 10 cm back",trust,4.221,0.0316
+"auto: 10 cm back",trust,4.242,0.0315
+"auto: 10 cm back",trust,4.261,0.0287
+"auto: 10 cm back",trust,4.281,0.0267
+"auto: 10 cm back",trust,4.301,0.0267
+"auto: 10 cm back",trust,4.320,0.0241
+"auto: 10 cm back",trust,4.342,0.0248
+"auto: 10 cm back",trust,4.361,0.0237
+"auto: 10 cm back",trust,4.381,0.0214
+"auto: 10 cm back",trust,4.401,0.0215
+"auto: 10 cm back",trust,4.421,0.0184
+"auto: 10 cm back",trust,4.441,0.0192
+"auto: 10 cm back",trust,4.460,0.0191
+"auto: 10 cm back",trust,4.481,0.0173
+"auto: 10 cm back",trust,4.501,0.0147
+"auto: 10 cm back",trust,4.521,0.0126
+"auto: 10 cm back",trust,4.540,0.0125
+"auto: 10 cm back",trust,4.561,0.0136
+"auto: 10 cm back",trust,4.581,0.0112
+"auto: 10 cm back",trust,4.602,0.0118
+"auto: 10 cm back",trust,4.631,0.0111
+"auto: 10 cm back",trust,4.641,0.0043
+"auto: 10 cm back",trust,4.662,0.0061
+"auto: 10 cm back",trust,4.681,0.0039
+"auto: 10 cm back",trust,4.701,0.0047
+"auto: 10 cm back",trust,4.721,0.0142
+"auto: 10 cm back",trust,4.742,0.0217
+"auto: 10 cm back",trust,4.760,0.0335
+"auto: 10 cm back",trust,4.781,0.0391
+"auto: 10 cm back",trust,4.801,0.0505
+"auto: 10 cm back",trust,4.821,0.0578
+"auto: 10 cm back",trust,4.841,0.0686
+"auto: 10 cm back",trust,4.862,0.0757
+"auto: 10 cm back",trust,4.881,0.0876
+"auto: 10 cm back",trust,4.901,0.0931
+"auto: 10 cm back",trust,4.922,0.1042
+"auto: 10 cm back",trust,4.943,0.1106
+"auto: 10 cm back",trust,4.964,0.1160
+"auto: 10 cm back",trust,4.983,0.1162
+"auto: 20 cm right, 5 deg",trust,0.100,0.1996
+"auto: 20 cm right, 5 deg",trust,0.120,0.1985
+"auto: 20 cm right, 5 deg",trust,0.140,0.1964
+"auto: 20 cm right, 5 deg",trust,0.160,0.1932
+"auto: 20 cm right, 5 deg",trust,0.180,0.1883
+"auto: 20 cm right, 5 deg",trust,0.200,0.1816
+"auto: 20 cm right, 5 deg",trust,0.220,0.1735
+"auto: 20 cm right, 5 deg",trust,0.241,0.1644
+"auto: 20 cm right, 5 deg",trust,0.260,0.1548
+"auto: 20 cm right, 5 deg",trust,0.280,0.1452
+"auto: 20 cm right, 5 deg",trust,0.301,0.1364
+"auto: 20 cm right, 5 deg",trust,0.321,0.1292
+"auto: 20 cm right, 5 deg",trust,0.341,0.1237
+"auto: 20 cm right, 5 deg",trust,0.363,0.1203
+"auto: 20 cm right, 5 deg",trust,0.381,0.1198
+"auto: 20 cm right, 5 deg",trust,0.401,0.1186
+"auto: 20 cm right, 5 deg",trust,0.420,0.1198
+"auto: 20 cm right, 5 deg",trust,0.440,0.1207
+"auto: 20 cm right, 5 deg",trust,0.460,0.1226
+"auto: 20 cm right, 5 deg",trust,0.480,0.1251
+"auto: 20 cm right, 5 deg",trust,0.500,0.1278
+"auto: 20 cm right, 5 deg",trust,0.521,0.1295
+"auto: 20 cm right, 5 deg",trust,0.541,0.1315
+"auto: 20 cm right, 5 deg",trust,0.560,0.1330
+"auto: 20 cm right, 5 deg",trust,0.580,0.1324
+"auto: 20 cm right, 5 deg",trust,0.600,0.1325
+"auto: 20 cm right, 5 deg",trust,0.620,0.1327
+"auto: 20 cm right, 5 deg",trust,0.640,0.1318
+"auto: 20 cm right, 5 deg",trust,0.660,0.1297
+"auto: 20 cm right, 5 deg",trust,0.681,0.1284
+"auto: 20 cm right, 5 deg",trust,0.701,0.1272
+"auto: 20 cm right, 5 deg",trust,0.743,0.1249
+"auto: 20 cm right, 5 deg",trust,0.764,0.1651
+"auto: 20 cm right, 5 deg",trust,0.784,0.1655
+"auto: 20 cm right, 5 deg",trust,0.804,0.1629
+"auto: 20 cm right, 5 deg",trust,0.824,0.1610
+"auto: 20 cm right, 5 deg",trust,0.845,0.1589
+"auto: 20 cm right, 5 deg",trust,0.864,0.1590
+"auto: 20 cm right, 5 deg",trust,0.884,0.1547
+"auto: 20 cm right, 5 deg",trust,0.903,0.1536
+"auto: 20 cm right, 5 deg",trust,0.924,0.1488
+"auto: 20 cm right, 5 deg",trust,0.943,0.1476
+"auto: 20 cm right, 5 deg",trust,0.964,0.1441
+"auto: 20 cm right, 5 deg",trust,0.984,0.1428
+"auto: 20 cm right, 5 deg",trust,1.005,0.1401
+"auto: 20 cm right, 5 deg",trust,1.024,0.1402
+"auto: 20 cm right, 5 deg",trust,1.043,0.1363
+"auto: 20 cm right, 5 deg",trust,1.064,0.1316
+"auto: 20 cm right, 5 deg",trust,1.084,0.1298
+"auto: 20 cm right, 5 deg",trust,1.104,0.1262
+"auto: 20 cm right, 5 deg",trust,1.124,0.1225
+"auto: 20 cm right, 5 deg",trust,1.144,0.1167
+"auto: 20 cm right, 5 deg",trust,1.163,0.1116
+"auto: 20 cm right, 5 deg",trust,1.184,0.1023
+"auto: 20 cm right, 5 deg",trust,1.204,0.0962
+"auto: 20 cm right, 5 deg",trust,1.224,0.0875
+"auto: 20 cm right, 5 deg",trust,1.244,0.0804
+"auto: 20 cm right, 5 deg",trust,1.264,0.0734
+"auto: 20 cm right, 5 deg",trust,1.284,0.0674
+"auto: 20 cm right, 5 deg",trust,1.304,0.0628
+"auto: 20 cm right, 5 deg",trust,1.324,0.0600
+"auto: 20 cm right, 5 deg",trust,1.344,0.0602
+"auto: 20 cm right, 5 deg",trust,1.364,0.0635
+"auto: 20 cm right, 5 deg",trust,1.384,0.0693
+"auto: 20 cm right, 5 deg",trust,1.404,0.0763
+"auto: 20 cm right, 5 deg",trust,1.424,0.0859
+"auto: 20 cm right, 5 deg",trust,1.443,0.0940
+"auto: 20 cm right, 5 deg",trust,1.463,0.1045
+"auto: 20 cm right, 5 deg",trust,1.485,0.1134
+"auto: 20 cm right, 5 deg",trust,1.504,0.1192
+"auto: 20 cm right, 5 deg",trust,1.525,0.1285
+"auto: 20 cm right, 5 deg",trust,1.544,0.1317
+"auto: 20 cm right, 5 deg",trust,1.564,0.1367
+"auto: 20 cm right, 5 deg",trust,1.584,0.1425
+"auto: 20 cm right, 5 deg",trust,1.604,0.1453
+"auto: 20 cm right, 5 deg",trust,1.624,0.1490
+"auto: 20 cm right, 5 deg",trust,1.643,0.1508
+"auto: 20 cm right, 5 deg",trust,1.663,0.1522
+"auto: 20 cm right, 5 deg",trust,1.684,0.1519
+"auto: 20 cm right, 5 deg",trust,1.703,0.1485
+"auto: 20 cm right, 5 deg",trust,1.724,0.1482
+"auto: 20 cm right, 5 deg",trust,1.744,0.1443
+"auto: 20 cm right, 5 deg",trust,1.763,0.1404
+"auto: 20 cm right, 5 deg",trust,1.784,0.1376
+"auto: 20 cm right, 5 deg",trust,1.804,0.1318
+"auto: 20 cm right, 5 deg",trust,1.824,0.1281
+"auto: 20 cm right, 5 deg",trust,1.844,0.1238
+"auto: 20 cm right, 5 deg",trust,1.863,0.1190
+"auto: 20 cm right, 5 deg",trust,1.884,0.1150
+"auto: 20 cm right, 5 deg",trust,1.904,0.1087
+"auto: 20 cm right, 5 deg",trust,1.924,0.1043
+"auto: 20 cm right, 5 deg",trust,1.943,0.0995
+"auto: 20 cm right, 5 deg",trust,1.964,0.0945
+"auto: 20 cm right, 5 deg",trust,1.984,0.0883
+"auto: 20 cm right, 5 deg",trust,2.003,0.0836
+"auto: 20 cm right, 5 deg",trust,2.024,0.0805
+"auto: 20 cm right, 5 deg",trust,2.044,0.0827
+"auto: 20 cm right, 5 deg",trust,2.063,0.0979
+"auto: 20 cm right, 5 deg",trust,2.083,0.1123
+"auto: 20 cm right, 5 deg",trust,2.103,0.1260
+"auto: 20 cm right, 5 deg",trust,2.123,0.1389
+"auto: 20 cm right, 5 deg",trust,2.144,0.1508
+"auto: 20 cm right, 5 deg",trust,2.164,0.1619
+"auto: 20 cm right, 5 deg",trust,2.185,0.1720
+"auto: 20 cm right, 5 deg",trust,2.203,0.1813
+"auto: 20 cm right, 5 deg",trust,2.225,0.1895
+"auto: 20 cm right, 5 deg",trust,2.246,0.1965
+"auto: 20 cm right, 5 deg",trust,2.263,0.2027
+"auto: 20 cm right, 5 deg",trust,2.284,0.2080
+"auto: 20 cm right, 5 deg",trust,2.304,0.2125
+"auto: 20 cm right, 5 deg",trust,2.324,0.2162
+"auto: 20 cm right, 5 deg",trust,2.343,0.2191
+"auto: 20 cm right, 5 deg",trust,2.365,0.2212
+"auto: 20 cm right, 5 deg",trust,2.383,0.2226
+"auto: 20 cm right, 5 deg",trust,2.403,0.2236
+"auto: 20 cm right, 5 deg",trust,2.423,0.2241
+"auto: 20 cm right, 5 deg",trust,2.443,0.2242
+"auto: 20 cm right, 5 deg",trust,2.464,0.2241
+"auto: 20 cm right, 5 deg",trust,2.484,0.2238
+"auto: 20 cm right, 5 deg",trust,2.503,0.2232
+"auto: 20 cm right, 5 deg",trust,2.523,0.2224
+"auto: 20 cm right, 5 deg",trust,2.543,0.2214
+"auto: 20 cm right, 5 deg",trust,2.564,0.2202
+"auto: 20 cm right, 5 deg",trust,2.584,0.2190
+"auto: 20 cm right, 5 deg",trust,2.605,0.2176
+"auto: 20 cm right, 5 deg",trust,2.624,0.2163
+"auto: 20 cm right, 5 deg",trust,2.643,0.2149
+"auto: 20 cm right, 5 deg",trust,2.664,0.2135
+"auto: 20 cm right, 5 deg",trust,2.683,0.2121
+"auto: 20 cm right, 5 deg",trust,2.704,0.2108
+"auto: 20 cm right, 5 deg",trust,2.724,0.2096
+"auto: 20 cm right, 5 deg",trust,2.744,0.2084
+"auto: 20 cm right, 5 deg",trust,2.764,0.2073
+"auto: 20 cm right, 5 deg",trust,2.784,0.2063
+"auto: 20 cm right, 5 deg",trust,2.804,0.2053
+"auto: 20 cm right, 5 deg",trust,2.825,0.2045
+"auto: 20 cm right, 5 deg",trust,2.844,0.2038
+"auto: 20 cm right, 5 deg",trust,2.863,0.2033
+"auto: 20 cm right, 5 deg",trust,2.886,0.2028
+"auto: 20 cm right, 5 deg",trust,2.903,0.2025
+"auto: 20 cm right, 5 deg",trust,2.924,0.2022
+"auto: 20 cm right, 5 deg",trust,2.944,0.2020
+"auto: 20 cm right, 5 deg",trust,2.963,0.2018
+"auto: 20 cm right, 5 deg",trust,2.984,0.2017
+"auto: 20 cm right, 5 deg",trust,3.004,0.2017
+"auto: 20 cm right, 5 deg",trust,3.024,0.2017
+"auto: 20 cm right, 5 deg",trust,3.044,0.2017
+"auto: 20 cm right, 5 deg",trust,3.063,0.1818
+"auto: 20 cm right, 5 deg",trust,3.084,0.1626
+"auto: 20 cm right, 5 deg",trust,3.104,0.1429
+"auto: 20 cm right, 5 deg",trust,3.124,0.1244
+"auto: 20 cm right, 5 deg",trust,3.143,0.1068
+"auto: 20 cm right, 5 deg",trust,3.164,0.0917
+"auto: 20 cm right, 5 deg",trust,3.184,0.0773
+"auto: 20 cm right, 5 deg",trust,3.204,0.0659
+"auto: 20 cm right, 5 deg",trust,3.224,0.0584
+"auto: 20 cm right, 5 deg",trust,3.244,0.0540
+"auto: 20 cm right, 5 deg",trust,3.263,0.0527
+"auto: 20 cm right, 5 deg",trust,3.284,0.0534
+"auto: 20 cm right, 5 deg",trust,3.303,0.0555
+"auto: 20 cm right, 5 deg",trust,3.324,0.0579
+"auto: 20 cm right, 5 deg",trust,3.343,0.0605
+"auto: 20 cm right, 5 deg",trust,3.364,0.0624
+"auto: 20 cm right, 5 deg",trust,3.383,0.0640
+"auto: 20 cm right, 5 deg",trust,3.403,0.0637
+"auto: 20 cm right, 5 deg",trust,3.424,0.0623
+"auto: 20 cm right, 5 deg",trust,3.444,0.0601
+"auto: 20 cm right, 5 deg",trust,3.464,0.0559
+"auto: 20 cm right, 5 deg",trust,3.483,0.0503
+"auto: 20 cm right, 5 deg",trust,3.503,0.0437
+"auto: 20 cm right, 5 deg",trust,3.524,0.0369
+"auto: 20 cm right, 5 deg",trust,3.544,0.0306
+"auto: 20 cm right, 5 deg",trust,3.564,0.0234
+"auto: 20 cm right, 5 deg",trust,3.584,0.0164
+"auto: 20 cm right, 5 deg",trust,3.604,0.0119
+"auto: 20 cm right, 5 deg",trust,3.625,0.0059
+"auto: 20 cm right, 5 deg",trust,3.644,0.0034
+"auto: 20 cm right, 5 deg, OLD",reset,0.100,0.1997
+"auto: 20 cm right, 5 deg, OLD",reset,0.120,0.1988
+"auto: 20 cm right, 5 deg, OLD",reset,0.140,0.1970
+"auto: 20 cm right, 5 deg, OLD",reset,0.161,0.1941
+"auto: 20 cm right, 5 deg, OLD",reset,0.180,0.1895
+"auto: 20 cm right, 5 deg, OLD",reset,0.200,0.1836
+"auto: 20 cm right, 5 deg, OLD",reset,0.221,0.1764
+"auto: 20 cm right, 5 deg, OLD",reset,0.240,0.1678
+"auto: 20 cm right, 5 deg, OLD",reset,0.260,0.1583
+"auto: 20 cm right, 5 deg, OLD",reset,0.281,0.1486
+"auto: 20 cm right, 5 deg, OLD",reset,0.301,0.1396
+"auto: 20 cm right, 5 deg, OLD",reset,0.321,0.1315
+"auto: 20 cm right, 5 deg, OLD",reset,0.340,0.1247
+"auto: 20 cm right, 5 deg, OLD",reset,0.392,0.1194
+"auto: 20 cm right, 5 deg, OLD",reset,0.413,0.1374
+"auto: 20 cm right, 5 deg, OLD",reset,0.432,0.1395
+"auto: 20 cm right, 5 deg, OLD",reset,0.452,0.1418
+"auto: 20 cm right, 5 deg, OLD",reset,0.473,0.1444
+"auto: 20 cm right, 5 deg, OLD",reset,0.492,0.1482
+"auto: 20 cm right, 5 deg, OLD",reset,0.512,0.1508
+"auto: 20 cm right, 5 deg, OLD",reset,0.532,0.1541
+"auto: 20 cm right, 5 deg, OLD",reset,0.552,0.1571
+"auto: 20 cm right, 5 deg, OLD",reset,0.572,0.1599
+"auto: 20 cm right, 5 deg, OLD",reset,0.593,0.1626
+"auto: 20 cm right, 5 deg, OLD",reset,0.613,0.1643
+"auto: 20 cm right, 5 deg, OLD",reset,0.632,0.1654
+"auto: 20 cm right, 5 deg, OLD",reset,0.653,0.1653
+"auto: 20 cm right, 5 deg, OLD",reset,0.673,0.1665
+"auto: 20 cm right, 5 deg, OLD",reset,0.693,0.1665
+"auto: 20 cm right, 5 deg, OLD",reset,0.713,0.1660
+"auto: 20 cm right, 5 deg, OLD",reset,0.733,0.1653
+"auto: 20 cm right, 5 deg, OLD",reset,0.752,0.1642
+"auto: 20 cm right, 5 deg, OLD",reset,0.772,0.1619
+"auto: 20 cm right, 5 deg, OLD",reset,0.792,0.1611
+"auto: 20 cm right, 5 deg, OLD",reset,0.812,0.1581
+"auto: 20 cm right, 5 deg, OLD",reset,0.833,0.1561
+"auto: 20 cm right, 5 deg, OLD",reset,0.852,0.1552
+"auto: 20 cm right, 5 deg, OLD",reset,0.872,0.1517
+"auto: 20 cm right, 5 deg, OLD",reset,0.892,0.1492
+"auto: 20 cm right, 5 deg, OLD",reset,0.913,0.1466
+"auto: 20 cm right, 5 deg, OLD",reset,0.933,0.1462
+"auto: 20 cm right, 5 deg, OLD",reset,0.952,0.1433
+"auto: 20 cm right, 5 deg, OLD",reset,0.973,0.1391
+"auto: 20 cm right, 5 deg, OLD",reset,0.993,0.1373
+"auto: 20 cm right, 5 deg, OLD",reset,1.013,0.1349
+"auto: 20 cm right, 5 deg, OLD",reset,1.032,0.1323
+"auto: 20 cm right, 5 deg, OLD",reset,1.053,0.1271
+"auto: 20 cm right, 5 deg, OLD",reset,1.072,0.1271
+"auto: 20 cm right, 5 deg, OLD",reset,1.092,0.1214
+"auto: 20 cm right, 5 deg, OLD",reset,1.113,0.1175
+"auto: 20 cm right, 5 deg, OLD",reset,1.133,0.1134
+"auto: 20 cm right, 5 deg, OLD",reset,1.153,0.1075
+"auto: 20 cm right, 5 deg, OLD",reset,1.172,0.1009
+"auto: 20 cm right, 5 deg, OLD",reset,1.192,0.0918
+"auto: 20 cm right, 5 deg, OLD",reset,1.212,0.0841
+"auto: 20 cm right, 5 deg, OLD",reset,1.233,0.0770
+"auto: 20 cm right, 5 deg, OLD",reset,1.253,0.0710
+"auto: 20 cm right, 5 deg, OLD",reset,1.273,0.0648
+"auto: 20 cm right, 5 deg, OLD",reset,1.293,0.0602
+"auto: 20 cm right, 5 deg, OLD",reset,1.312,0.0575
+"auto: 20 cm right, 5 deg, OLD",reset,1.332,0.0586
+"auto: 20 cm right, 5 deg, OLD",reset,1.353,0.0628
+"auto: 20 cm right, 5 deg, OLD",reset,1.373,0.0689
+"auto: 20 cm right, 5 deg, OLD",reset,1.392,0.0773
+"auto: 20 cm right, 5 deg, OLD",reset,1.412,0.0877
+"auto: 20 cm right, 5 deg, OLD",reset,1.433,0.0977
+"auto: 20 cm right, 5 deg, OLD",reset,1.452,0.1064
+"auto: 20 cm right, 5 deg, OLD",reset,1.472,0.1173
+"auto: 20 cm right, 5 deg, OLD",reset,1.492,0.1281
+"auto: 20 cm right, 5 deg, OLD",reset,1.512,0.1370
+"auto: 20 cm right, 5 deg, OLD",reset,1.532,0.1448
+"auto: 20 cm right, 5 deg, OLD",reset,1.553,0.1512
+"auto: 20 cm right, 5 deg, OLD",reset,1.572,0.1539
+"auto: 20 cm right, 5 deg, OLD",reset,1.592,0.1598
+"auto: 20 cm right, 5 deg, OLD",reset,1.613,0.1625
+"auto: 20 cm right, 5 deg, OLD",reset,1.632,0.1621
+"auto: 20 cm right, 5 deg, OLD",reset,1.652,0.1637
+"auto: 20 cm right, 5 deg, OLD",reset,1.672,0.1623
+"auto: 20 cm right, 5 deg, OLD",reset,1.693,0.1591
+"auto: 20 cm right, 5 deg, OLD",reset,1.713,0.1546
+"auto: 20 cm right, 5 deg, OLD",reset,1.732,0.1502
+"auto: 20 cm right, 5 deg, OLD",reset,1.753,0.1463
+"auto: 20 cm right, 5 deg, OLD",reset,1.773,0.1397
+"auto: 20 cm right, 5 deg, OLD",reset,1.793,0.1353
+"auto: 20 cm right, 5 deg, OLD",reset,1.813,0.1287
+"auto: 20 cm right, 5 deg, OLD",reset,1.832,0.1239
+"auto: 20 cm right, 5 deg, OLD",reset,1.852,0.1195
+"auto: 20 cm right, 5 deg, OLD",reset,1.872,0.1138
+"auto: 20 cm right, 5 deg, OLD",reset,1.892,0.1077
+"auto: 20 cm right, 5 deg, OLD",reset,1.912,0.1029
+"auto: 20 cm right, 5 deg, OLD",reset,1.932,0.0978
+"auto: 20 cm right, 5 deg, OLD",reset,1.953,0.0925
+"auto: 20 cm right, 5 deg, OLD",reset,1.972,0.0875
+"auto: 20 cm right, 5 deg, OLD",reset,1.992,0.0837
+"auto: 20 cm right, 5 deg, OLD",reset,2.013,0.0800
+"auto: 20 cm right, 5 deg, OLD",reset,2.033,0.0756
+"auto: 20 cm right, 5 deg, OLD",reset,2.053,0.0878
+"auto: 20 cm right, 5 deg, OLD",reset,2.072,0.1027
+"auto: 20 cm right, 5 deg, OLD",reset,2.093,0.1167
+"auto: 20 cm right, 5 deg, OLD",reset,2.112,0.1297
+"auto: 20 cm right, 5 deg, OLD",reset,2.133,0.1415
+"auto: 20 cm right, 5 deg, OLD",reset,2.152,0.1525
+"auto: 20 cm right, 5 deg, OLD",reset,2.173,0.1627
+"auto: 20 cm right, 5 deg, OLD",reset,2.193,0.1719
+"auto: 20 cm right, 5 deg, OLD",reset,2.212,0.1804
+"auto: 20 cm right, 5 deg, OLD",reset,2.233,0.1879
+"auto: 20 cm right, 5 deg, OLD",reset,2.253,0.1945
+"auto: 20 cm right, 5 deg, OLD",reset,2.272,0.2004
+"auto: 20 cm right, 5 deg, OLD",reset,2.293,0.2055
+"auto: 20 cm right, 5 deg, OLD",reset,2.313,0.2098
+"auto: 20 cm right, 5 deg, OLD",reset,2.333,0.2134
+"auto: 20 cm right, 5 deg, OLD",reset,2.353,0.2161
+"auto: 20 cm right, 5 deg, OLD",reset,2.375,0.2180
+"auto: 20 cm right, 5 deg, OLD",reset,2.393,0.2193
+"auto: 20 cm right, 5 deg, OLD",reset,2.414,0.2200
+"auto: 20 cm right, 5 deg, OLD",reset,2.434,0.2203
+"auto: 20 cm right, 5 deg, OLD",reset,2.454,0.2204
+"auto: 20 cm right, 5 deg, OLD",reset,2.473,0.2202
+"auto: 20 cm right, 5 deg, OLD",reset,2.494,0.2199
+"auto: 20 cm right, 5 deg, OLD",reset,2.513,0.2195
+"auto: 20 cm right, 5 deg, OLD",reset,2.533,0.2190
+"auto: 20 cm right, 5 deg, OLD",reset,2.554,0.2185
+"auto: 20 cm right, 5 deg, OLD",reset,2.573,0.2178
+"auto: 20 cm right, 5 deg, OLD",reset,2.594,0.2170
+"auto: 20 cm right, 5 deg, OLD",reset,2.613,0.2161
+"auto: 20 cm right, 5 deg, OLD",reset,2.633,0.2152
+"auto: 20 cm right, 5 deg, OLD",reset,2.654,0.2142
+"auto: 20 cm right, 5 deg, OLD",reset,2.674,0.2131
+"auto: 20 cm right, 5 deg, OLD",reset,2.693,0.2121
+"auto: 20 cm right, 5 deg, OLD",reset,2.714,0.2110
+"auto: 20 cm right, 5 deg, OLD",reset,2.734,0.2099
+"auto: 20 cm right, 5 deg, OLD",reset,2.753,0.2089
+"auto: 20 cm right, 5 deg, OLD",reset,2.773,0.2080
+"auto: 20 cm right, 5 deg, OLD",reset,2.794,0.2071
+"auto: 20 cm right, 5 deg, OLD",reset,2.814,0.2062
+"auto: 20 cm right, 5 deg, OLD",reset,2.834,0.2055
+"auto: 20 cm right, 5 deg, OLD",reset,2.854,0.2048
+"auto: 20 cm right, 5 deg, OLD",reset,2.873,0.2042
+"auto: 20 cm right, 5 deg, OLD",reset,2.894,0.2037
+"auto: 20 cm right, 5 deg, OLD",reset,2.914,0.2033
+"auto: 20 cm right, 5 deg, OLD",reset,2.934,0.2029
+"auto: 20 cm right, 5 deg, OLD",reset,2.955,0.2027
+"auto: 20 cm right, 5 deg, OLD",reset,2.974,0.2025
+"auto: 20 cm right, 5 deg, OLD",reset,2.994,0.2023
+"auto: 20 cm right, 5 deg, OLD",reset,3.014,0.2022
+"auto: 20 cm right, 5 deg, OLD",reset,3.034,0.2022
+"auto: 20 cm right, 5 deg, OLD",reset,3.053,0.2022
+"auto: 20 cm right, 5 deg, OLD",reset,3.074,0.1833
+"auto: 20 cm right, 5 deg, OLD",reset,3.093,0.1629
+"auto: 20 cm right, 5 deg, OLD",reset,3.114,0.1441
+"auto: 20 cm right, 5 deg, OLD",reset,3.134,0.1250
+"auto: 20 cm right, 5 deg, OLD",reset,3.159,0.1075
+"auto: 20 cm right, 5 deg, OLD",reset,3.174,0.0870
+"auto: 20 cm right, 5 deg, OLD",reset,3.194,0.0772
+"auto: 20 cm right, 5 deg, OLD",reset,3.214,0.0662
+"auto: 20 cm right, 5 deg, OLD",reset,3.234,0.0588
+"auto: 20 cm right, 5 deg, OLD",reset,3.253,0.0553
+"auto: 20 cm right, 5 deg, OLD",reset,3.273,0.0558
+"auto: 20 cm right, 5 deg, OLD",reset,3.295,0.0590
+"auto: 20 cm right, 5 deg, OLD",reset,3.314,0.0640
+"auto: 20 cm right, 5 deg, OLD",reset,3.334,0.0677
+"auto: 20 cm right, 5 deg, OLD",reset,3.355,0.0720
+"auto: 20 cm right, 5 deg, OLD",reset,3.374,0.0757
+"auto: 20 cm right, 5 deg, OLD",reset,3.399,0.0770
+"auto: 20 cm right, 5 deg, OLD",reset,3.419,0.0832
+"auto: 20 cm right, 5 deg, OLD",reset,3.439,0.0829
+"auto: 20 cm right, 5 deg, OLD",reset,3.460,0.0822
+"auto: 20 cm right, 5 deg, OLD",reset,3.479,0.0804
+"auto: 20 cm right, 5 deg, OLD",reset,3.499,0.0765
+"auto: 20 cm right, 5 deg, OLD",reset,3.520,0.0711
+"auto: 20 cm right, 5 deg, OLD",reset,3.540,0.0646
+"auto: 20 cm right, 5 deg, OLD",reset,3.559,0.0575
+"auto: 20 cm right, 5 deg, OLD",reset,3.579,0.0491
+"auto: 20 cm right, 5 deg, OLD",reset,3.600,0.0406
+"auto: 20 cm right, 5 deg, OLD",reset,3.620,0.0348
+"auto: 20 cm right, 5 deg, OLD",reset,3.640,0.0267
+"auto: 20 cm right, 5 deg, OLD",reset,3.660,0.0191
+"auto: 20 cm right, 5 deg, OLD",reset,3.680,0.0175
+"auto: 20 cm right, 5 deg, OLD",reset,3.699,0.0128
+"auto: 20 cm right, 5 deg, OLD",reset,3.721,0.0052
+"auto: 20 cm right, 5 deg, OLD",reset,3.741,0.0097
+"auto: 20 cm right, 5 deg, OLD",reset,3.763,0.0076
+"auto: 20 cm right, 5 deg, OLD",reset,3.782,0.0030
+"auto: 20 cm right, 5 deg, OLD",reset,3.802,0.0030
+"auto: 20 cm right, 5 deg, OLD",reset,3.821,0.0087
+"auto: 20 cm right, 5 deg, OLD",reset,3.842,0.0144
+"auto: 20 cm right, 5 deg, OLD",reset,3.862,0.0186
+"auto: 20 cm right, 5 deg, OLD",reset,3.882,0.0222
+"auto: 20 cm right, 5 deg, OLD",reset,3.901,0.0223
+"auto: 20 cm right, 5 deg, OLD",reset,3.921,0.0238
+"auto: 20 cm right, 5 deg, OLD",reset,3.942,0.0266
+"auto: 20 cm right, 5 deg, OLD",reset,3.961,0.0280
+"auto: 20 cm right, 5 deg, OLD",reset,3.982,0.0245
+"auto: 20 cm right, 5 deg, OLD",reset,4.002,0.0221
+"auto: 20 cm right, 5 deg, OLD",reset,4.022,0.0236
+"auto: 20 cm right, 5 deg, OLD",reset,4.041,0.0248
+"auto: 20 cm right, 5 deg, OLD",reset,4.061,0.0264
+"auto: 20 cm right, 5 deg, OLD",reset,4.082,0.0230
+"auto: 20 cm right, 5 deg, OLD",reset,4.101,0.0233
+"auto: 20 cm right, 5 deg, OLD",reset,4.128,0.0248
+"auto: 20 cm right, 5 deg, OLD",reset,4.149,0.0193
+"auto: 20 cm right, 5 deg, OLD",reset,4.168,0.0187
+"auto: 20 cm right, 5 deg, OLD",reset,4.188,0.0208
+"auto: 20 cm right, 5 deg, OLD",reset,4.209,0.0207
+"auto: 20 cm right, 5 deg, OLD",reset,4.229,0.0216
+"auto: 20 cm right, 5 deg, OLD",reset,4.249,0.0207
+"auto: 20 cm right, 5 deg, OLD",reset,4.269,0.0214
+"auto: 20 cm right, 5 deg, OLD",reset,4.289,0.0217
+"auto: 20 cm right, 5 deg, OLD",reset,4.310,0.0201
+"auto: 20 cm right, 5 deg, OLD",reset,4.328,0.0177
+"auto: 20 cm right, 5 deg, OLD",reset,4.349,0.0164
+"auto: 20 cm right, 5 deg, OLD",reset,4.368,0.0156
+"auto: 20 cm right, 5 deg, OLD",reset,4.389,0.0172
+"auto: 20 cm right, 5 deg, OLD",reset,4.408,0.0174
+"auto: 20 cm right, 5 deg, OLD",reset,4.429,0.0160
+"auto: 20 cm right, 5 deg, OLD",reset,4.448,0.0152
+"auto: 20 cm right, 5 deg, OLD",reset,4.470,0.0187
+"auto: 20 cm right, 5 deg, OLD",reset,4.493,0.0180
+"auto: 20 cm right, 5 deg, OLD",reset,4.514,0.0159
+"auto: 20 cm right, 5 deg, OLD",reset,4.534,0.0159
+"auto: 20 cm right, 5 deg, OLD",reset,4.555,0.0173
+"auto: 20 cm right, 5 deg, OLD",reset,4.574,0.0177
+"auto: 20 cm right, 5 deg, OLD",reset,4.594,0.0192
+"auto: 20 cm right, 5 deg, OLD",reset,4.614,0.0164
+"auto: 20 cm right, 5 deg, OLD",reset,4.634,0.0134
+"auto: 20 cm right, 5 deg, OLD",reset,4.653,0.0125
+"auto: 20 cm right, 5 deg, OLD",reset,4.674,0.0136
+"auto: 20 cm right, 5 deg, OLD",reset,4.694,0.0106
+"auto: 20 cm right, 5 deg, OLD",reset,4.713,0.0095
+"auto: 20 cm right, 5 deg, OLD",reset,4.734,0.0088
+"auto: 20 cm right, 5 deg, OLD",reset,4.755,0.0052
+"auto: 20 cm right, 5 deg, OLD",reset,4.774,0.0042
+"auto: 20 cm right, 5 deg, OLD",reset,4.794,0.0013
+"auto: 20 cm right, 5 deg, OLD",reset,4.813,0.0018
+"auto: 20 cm right, 5 deg, OLD",reset,4.834,0.0015
+"auto: 20 cm right, 5 deg, OLD",reset,4.854,0.0016
+"auto: 20 cm right, 5 deg, OLD",reset,4.875,0.0018
+"auto: 20 cm right, 5 deg, OLD",reset,4.894,0.0025
+"auto: 20 cm right, 5 deg, OLD",reset,4.915,0.0025
+"auto: 20 cm right, 5 deg, OLD",reset,4.934,0.0031
+"auto: 20 cm right, 5 deg, OLD",reset,4.954,0.0032
+"auto: 20 cm right, 5 deg, OLD",reset,4.974,0.0036
+"auto: 20 cm right, 5 deg, OLD",reset,4.994,0.0048
+"auto: 45 cm back",drive,0.080,0.4484
+"auto: 45 cm back",drive,0.100,0.4445
+"auto: 45 cm back",drive,0.119,0.4385
+"auto: 45 cm back",drive,0.139,0.4302
+"auto: 45 cm back",drive,0.160,0.4199
+"auto: 45 cm back",drive,0.179,0.4075
+"auto: 45 cm back",drive,0.199,0.3935
+"auto: 45 cm back",drive,0.219,0.3780
+"auto: 45 cm back",drive,0.239,0.3616
+"auto: 45 cm back",drive,0.260,0.3443
+"auto: 45 cm back",drive,0.279,0.3266
+"auto: 45 cm back",drive,0.299,0.3088
+"auto: 45 cm back",drive,0.320,0.2911
+"auto: 45 cm back",drive,0.340,0.2736
+"auto: 45 cm back",drive,0.360,0.2563
+"auto: 45 cm back",drive,0.379,0.2394
+"auto: 45 cm back",drive,0.400,0.2228
+"auto: 45 cm back",drive,0.420,0.2069
+"auto: 45 cm back",drive,0.440,0.1916
+"auto: 45 cm back",drive,0.459,0.1769
+"auto: 45 cm back",drive,0.490,0.1628
+"auto: 45 cm back",drive,0.511,0.1493
+"auto: 45 cm back",drive,0.531,0.1364
+"auto: 45 cm back",drive,0.552,0.1242
+"auto: 45 cm back",drive,0.571,0.1129
+"auto: 45 cm back",drive,0.591,0.1023
+"auto: 45 cm back",drive,0.610,0.0925
+"auto: 45 cm back",drive,0.632,0.0833
+"auto: 45 cm back",drive,0.651,0.0747
+"auto: 45 cm back",drive,0.671,0.0667
+"auto: 45 cm back",drive,0.692,0.0593
+"auto: 45 cm back",drive,0.712,0.0524
+"auto: 45 cm back",drive,0.738,0.0461
+"auto: 45 cm back",drive,0.752,0.0404
+"auto: 45 cm back",drive,0.778,0.0352
+"auto: 45 cm back",drive,0.792,0.0305
+"auto: 45 cm back",drive,0.813,0.0263
+"auto: 45 cm back",drive,0.831,0.0224
+"auto: 45 cm back",drive,0.850,0.0189
+"auto: 45 cm back",drive,0.870,0.0157
+"auto: 45 cm back",drive,0.892,0.0128
+"auto: 45 cm back",drive,0.910,0.0102
+"auto: 45 cm back",drive,0.931,0.0079
+"auto: 45 cm back",drive,0.950,0.0058
+"auto: 45 cm back",drive,0.971,0.0039
+"auto: 45 cm back",drive,0.991,0.0023
+"auto: 45 cm back",drive,1.010,0.0010
+"auto: 45 cm back",drive,1.031,0.0004
+"auto: 45 cm back",drive,1.050,0.0011
+"auto: 45 cm back",drive,1.071,0.0018
+"auto: 45 cm back",drive,1.091,0.0022
+"auto: 45 cm back",drive,1.111,0.0025
+"auto: 45 cm back",drive,1.130,0.0026
+"auto: 45 cm back",drive,1.150,0.0027
+"auto: 45 cm back",drive,1.171,0.0022
+"auto: 45 cm back",drive,1.191,0.0007
+"auto: 45 cm back",drive,1.210,0.0027
+"auto: 45 cm back",drive,1.231,0.0066
+"auto: 45 cm back",drive,1.250,0.0118
+"auto: 45 cm back",drive,1.271,0.0175
+"auto: 45 cm back",drive,1.291,0.0242
+"auto: 45 cm back",drive,1.310,0.0314
+"auto: 45 cm back",drive,1.330,0.0383
+"auto: 45 cm back",drive,1.350,0.0458
+"auto: 45 cm back",drive,1.370,0.0535
+"auto: 45 cm back",drive,1.392,0.0614
+"auto: 45 cm back",drive,1.410,0.0701
+"auto: 45 cm back",drive,1.430,0.0766
+"auto: 45 cm back",drive,1.450,0.0833
+"auto: 45 cm back",drive,1.470,0.0894
+"auto: 45 cm back",drive,1.491,0.0949
+"auto: 45 cm back",drive,1.510,0.1002
+"auto: 45 cm back",drive,1.538,0.1043
+"auto: 45 cm back",drive,1.559,0.1181
+"auto: 45 cm back",drive,1.579,0.1226
+"auto: 45 cm back",drive,1.599,0.1262
+"auto: 45 cm back",drive,1.620,0.1294
+"auto: 45 cm back",drive,1.639,0.1331
+"auto: 45 cm back",drive,1.659,0.1341
+"auto: 45 cm back",drive,1.678,0.1357
+"auto: 45 cm back",drive,1.699,0.1348
+"auto: 45 cm back",drive,1.719,0.1354
+"auto: 45 cm back",drive,1.738,0.1369
+"auto: 45 cm back",drive,1.760,0.1346
+"auto: 45 cm back",drive,1.778,0.1356
+"auto: 45 cm back",drive,1.799,0.1324
+"auto: 45 cm back",drive,1.819,0.1319
+"auto: 45 cm back",drive,1.838,0.1300
+"auto: 45 cm back",drive,1.858,0.1269
+"auto: 45 cm back",drive,1.879,0.1247
+"auto: 45 cm back",drive,1.900,0.1223
+"auto: 45 cm back",drive,1.918,0.1222
+"auto: 45 cm back",drive,1.939,0.1173
+"auto: 45 cm back",drive,1.960,0.1162
+"auto: 45 cm back",drive,1.979,0.1142
+"auto: 45 cm back",drive,2.000,0.1090
+"auto: 45 cm back",drive,2.020,0.1096
+"auto: 45 cm back",drive,2.039,0.1058
+"auto: 45 cm back",drive,2.059,0.1020
+"auto: 45 cm back",drive,2.078,0.0997
+"auto: 45 cm back",drive,2.099,0.0945
+"auto: 45 cm back",drive,2.119,0.0919
+"auto: 45 cm back",drive,2.139,0.0903
+"auto: 45 cm back",drive,2.160,0.0865
+"auto: 45 cm back",drive,2.179,0.0838
+"auto: 45 cm back",drive,2.199,0.0790
+"auto: 45 cm back",drive,2.220,0.0741
+"auto: 45 cm back",drive,2.239,0.0688
+"auto: 45 cm back",drive,2.259,0.0627
+"auto: 45 cm back",drive,2.279,0.0582
+"auto: 45 cm back",drive,2.300,0.0552
+"auto: 45 cm back",drive,2.319,0.0531
+"auto: 45 cm back",drive,2.340,0.0524
+"auto: 45 cm back",drive,2.360,0.0529
+"auto: 45 cm back",drive,2.379,0.0557
+"auto: 45 cm back",drive,2.400,0.0603
+"auto: 45 cm back",drive,2.420,0.0659
+"auto: 45 cm back",drive,2.439,0.0736
+"auto: 45 cm back",drive,2.459,0.0832
+"auto: 45 cm back",drive,2.479,0.0929
+"auto: 45 cm back",drive,2.500,0.1002
+"auto: 45 cm back",drive,2.520,0.1081
+"auto: 45 cm back",drive,2.539,0.1162
+"auto: 45 cm back",drive,2.560,0.1247
+"auto: 45 cm back",drive,2.580,0.1297
+"auto: 45 cm back",drive,2.600,0.1355
+"auto: 45 cm back",drive,2.619,0.1400
+"auto: 45 cm back",drive,2.639,0.1448
+"auto: 45 cm back",drive,2.659,0.1473
+"auto: 45 cm back",drive,2.680,0.1503
+"auto: 45 cm back",drive,2.700,0.1494
+"auto: 45 cm back",drive,2.719,0.1499
+"auto: 45 cm back",drive,2.739,0.1507
+"auto: 45 cm back",drive,2.759,0.1484
+"auto: 45 cm back",drive,2.779,0.1473
+"auto: 45 cm back",drive,2.800,0.1439
+"auto: 45 cm back",drive,2.821,0.1402
+"auto: 45 cm back",drive,2.840,0.1351
+"auto: 45 cm back",drive,2.860,0.1330
+"auto: 45 cm back",drive,2.880,0.1280
+"auto: 45 cm back",drive,2.901,0.1244
+"auto: 45 cm back",drive,2.922,0.1189
+"auto: 45 cm back",drive,2.940,0.1125
+"auto: 45 cm back",drive,2.959,0.1110
+"auto: 45 cm back",drive,2.980,0.1074
+"auto: 45 cm back",drive,3.000,0.1025
+"auto: 45 cm back",drive,3.020,0.0983
+"auto: 45 cm back",drive,3.039,0.0943
+"auto: 45 cm back",drive,3.059,0.0910
+"auto: 45 cm back",drive,3.079,0.0866
+"auto: 45 cm back",drive,3.100,0.0827
+"auto: 45 cm back",drive,3.120,0.0905
+"auto: 45 cm back",drive,3.139,0.1051
+"auto: 45 cm back",drive,3.159,0.1191
+"auto: 45 cm back",drive,3.179,0.1324
+"auto: 45 cm back",drive,3.200,0.1450
+"auto: 45 cm back",drive,3.220,0.1570
+"auto: 45 cm back",drive,3.240,0.1679
+"auto: 45 cm back",drive,3.260,0.1778
+"auto: 45 cm back",drive,3.279,0.1866
+"auto: 45 cm back",drive,3.300,0.1944
+"auto: 45 cm back",drive,3.319,0.2013
+"auto: 45 cm back",drive,3.339,0.2074
+"auto: 45 cm back",drive,3.360,0.2127
+"auto: 45 cm back",drive,3.380,0.2169
+"auto: 45 cm back",drive,3.400,0.2202
+"auto: 45 cm back",drive,3.422,0.2226
+"auto: 45 cm back",drive,3.439,0.2242
+"auto: 45 cm back",drive,3.460,0.2253
+"auto: 45 cm back",drive,3.480,0.2259
+"auto: 45 cm back",drive,3.500,0.2261
+"auto: 45 cm back",drive,3.519,0.2259
+"auto: 45 cm back",drive,3.540,0.2255
+"auto: 45 cm back",drive,3.560,0.2249
+"auto: 45 cm back",drive,3.579,0.2239
+"auto: 45 cm back",drive,3.599,0.2228
+"auto: 45 cm back",drive,3.620,0.2215
+"auto: 45 cm back",drive,3.640,0.2201
+"auto: 45 cm back",drive,3.660,0.2186
+"auto: 45 cm back",drive,3.679,0.2171
+"auto: 45 cm back",drive,3.699,0.2156
+"auto: 45 cm back",drive,3.719,0.2140
+"auto: 45 cm back",drive,3.739,0.2125
+"auto: 45 cm back",drive,3.759,0.2110
+"auto: 45 cm back",drive,3.779,0.2096
+"auto: 45 cm back",drive,3.799,0.2082
+"auto: 45 cm back",drive,3.826,0.2070
+"auto: 45 cm back",drive,3.847,0.2059
+"auto: 45 cm back",drive,3.867,0.2049
+"auto: 45 cm back",drive,3.887,0.2041
+"auto: 45 cm back",drive,3.907,0.2034
+"auto: 45 cm back",drive,3.928,0.2028
+"auto: 45 cm back",drive,3.947,0.2024
+"auto: 45 cm back",drive,3.967,0.2020
+"auto: 45 cm back",drive,3.987,0.2017
+"auto: 45 cm back",drive,4.007,0.2015
+"auto: 45 cm back",drive,4.027,0.2013
+"auto: 45 cm back",drive,4.048,0.2012
+"auto: 45 cm back",drive,4.067,0.2012
+"auto: 45 cm back",drive,4.087,0.2012
+"auto: 45 cm back",drive,4.107,0.2012
+"auto: 45 cm back",drive,4.128,0.2012
+"auto: 45 cm back",drive,4.147,0.1806
+"auto: 45 cm back",drive,4.167,0.1617
+"auto: 45 cm back",drive,4.187,0.1418
+"auto: 45 cm back",drive,4.213,0.1237
+"auto: 45 cm back",drive,4.234,0.1008
+"auto: 45 cm back",drive,4.253,0.0841
+"auto: 45 cm back",drive,4.273,0.0713
+"auto: 45 cm back",drive,4.294,0.0606
+"auto: 45 cm back",drive,4.314,0.0536
+"auto: 45 cm back",drive,4.334,0.0506
+"auto: 45 cm back",drive,4.354,0.0505
+"auto: 45 cm back",drive,4.373,0.0522
+"auto: 45 cm back",drive,4.393,0.0544
+"auto: 45 cm back",drive,4.414,0.0567
+"auto: 45 cm back",drive,4.433,0.0585
+"auto: 45 cm back",drive,4.453,0.0587
+"auto: 45 cm back",drive,4.473,0.0580
+"auto: 45 cm back",drive,4.494,0.0561
+"auto: 45 cm back",drive,4.513,0.0534
+"auto: 45 cm back",drive,4.534,0.0486
+"auto: 45 cm back",drive,4.554,0.0440
+"auto: 45 cm back",drive,4.573,0.0384
+"auto: 45 cm back",drive,4.594,0.0315
+"auto: 45 cm back",drive,4.613,0.0255
+"auto: 45 cm back",drive,4.633,0.0179
+"auto: 45 cm back",drive,4.654,0.0112
+"auto: 45 cm back",drive,4.673,0.0071
+"auto: 45 cm back",drive,4.693,0.0052
+"auto: 45 cm back",drive,4.714,0.0072
+"auto: 45 cm back",drive,4.734,0.0086
+"auto: 45 cm back",drive,4.754,0.0088
+"auto: 45 cm back",drive,4.787,0.0142
+"auto: 45 cm back",drive,4.794,0.0026
+"auto: 45 cm back",drive,4.814,0.0166
+"auto: 45 cm back",drive,4.834,0.0206
+"auto: 45 cm back",drive,4.854,0.0246
+"auto: 45 cm back",drive,4.873,0.0281
+"auto: 45 cm back",drive,4.894,0.0321
+"auto: 45 cm back",drive,4.916,0.0345
+"auto: 45 cm back",drive,4.933,0.0351
+"auto: 45 cm back",drive,4.953,0.0395
+"auto: 45 cm back",drive,4.974,0.0414
+"auto: 45 cm back",drive,4.993,0.0426
+"auto: 45 cm back",drive,5.013,0.0431
+"auto: 45 cm back, OLD",reset,0.122,0.4493
+"auto: 45 cm back, OLD",reset,0.158,0.4472
+"auto: 45 cm back, OLD",reset,0.169,0.4476
+"auto: 45 cm back, OLD",reset,0.190,0.4424
+"auto: 45 cm back, OLD",reset,0.209,0.4387
+"auto: 45 cm back, OLD",reset,0.230,0.4336
+"auto: 45 cm back, OLD",reset,0.250,0.4281
+"auto: 45 cm back, OLD",reset,0.269,0.4216
+"auto: 45 cm back, OLD",reset,0.290,0.4141
+"auto: 45 cm back, OLD",reset,0.310,0.4069
+"auto: 45 cm back, OLD",reset,0.330,0.3983
+"auto: 45 cm back, OLD",reset,0.352,0.3890
+"auto: 45 cm back, OLD",reset,0.370,0.3809
+"auto: 45 cm back, OLD",reset,0.390,0.3694
+"auto: 45 cm back, OLD",reset,0.424,0.3586
+"auto: 45 cm back, OLD",reset,0.431,0.3623
+"auto: 45 cm back, OLD",reset,0.452,0.3375
+"auto: 45 cm back, OLD",reset,0.471,0.3268
+"auto: 45 cm back, OLD",reset,0.492,0.3142
+"auto: 45 cm back, OLD",reset,0.512,0.3022
+"auto: 45 cm back, OLD",reset,0.531,0.2894
+"auto: 45 cm back, OLD",reset,0.551,0.2755
+"auto: 45 cm back, OLD",reset,0.572,0.2620
+"auto: 45 cm back, OLD",reset,0.591,0.2492
+"auto: 45 cm back, OLD",reset,0.611,0.2343
+"auto: 45 cm back, OLD",reset,0.632,0.2200
+"auto: 45 cm back, OLD",reset,0.651,0.2065
+"auto: 45 cm back, OLD",reset,0.672,0.1913
+"auto: 45 cm back, OLD",reset,0.692,0.1772
+"auto: 45 cm back, OLD",reset,0.712,0.1640
+"auto: 45 cm back, OLD",reset,0.732,0.1492
+"auto: 45 cm back, OLD",reset,0.751,0.1363
+"auto: 45 cm back, OLD",reset,0.772,0.1228
+"auto: 45 cm back, OLD",reset,0.792,0.1122
+"auto: 45 cm back, OLD",reset,0.811,0.1024
+"auto: 45 cm back, OLD",reset,0.832,0.0926
+"auto: 45 cm back, OLD",reset,0.852,0.0866
+"auto: 45 cm back, OLD",reset,0.871,0.0779
+"auto: 45 cm back, OLD",reset,0.892,0.0709
+"auto: 45 cm back, OLD",reset,0.912,0.0670
+"auto: 45 cm back, OLD",reset,0.931,0.0633
+"auto: 45 cm back, OLD",reset,0.951,0.0595
+"auto: 45 cm back, OLD",reset,0.972,0.0572
+"auto: 45 cm back, OLD",reset,0.992,0.0570
+"auto: 45 cm back, OLD",reset,1.011,0.0549
+"auto: 45 cm back, OLD",reset,1.031,0.0529
+"auto: 45 cm back, OLD",reset,1.051,0.0531
+"auto: 45 cm back, OLD",reset,1.072,0.0531
+"auto: 45 cm back, OLD",reset,1.091,0.0534
+"auto: 45 cm back, OLD",reset,1.112,0.0530
+"auto: 45 cm back, OLD",reset,1.132,0.0525
+"auto: 45 cm back, OLD",reset,1.152,0.0511
+"auto: 45 cm back, OLD",reset,1.172,0.0503
+"auto: 45 cm back, OLD",reset,1.193,0.0497
+"auto: 45 cm back, OLD",reset,1.212,0.0492
+"auto: 45 cm back, OLD",reset,1.232,0.0500
+"auto: 45 cm back, OLD",reset,1.252,0.0508
+"auto: 45 cm back, OLD",reset,1.272,0.0522
+"auto: 45 cm back, OLD",reset,1.292,0.0533
+"auto: 45 cm back, OLD",reset,1.312,0.0577
+"auto: 45 cm back, OLD",reset,1.331,0.0613
+"auto: 45 cm back, OLD",reset,1.351,0.0668
+"auto: 45 cm back, OLD",reset,1.371,0.0720
+"auto: 45 cm back, OLD",reset,1.392,0.0782
+"auto: 45 cm back, OLD",reset,1.411,0.0820
+"auto: 45 cm back, OLD",reset,1.432,0.0918
+"auto: 45 cm back, OLD",reset,1.452,0.0972
+"auto: 45 cm back, OLD",reset,1.472,0.1026
+"auto: 45 cm back, OLD",reset,1.491,0.1081
+"auto: 45 cm back, OLD",reset,1.514,0.1157
+"auto: 45 cm back, OLD",reset,1.535,0.1141
+"auto: 45 cm back, OLD",reset,1.555,0.1149
+"auto: 45 cm back, OLD",reset,1.574,0.1181
+"auto: 45 cm back, OLD",reset,1.594,0.1221
+"auto: 45 cm back, OLD",reset,1.615,0.1248
+"auto: 45 cm back, OLD",reset,1.634,0.1233
+"auto: 45 cm back, OLD",reset,1.654,0.1252
+"auto: 45 cm back, OLD",reset,1.674,0.1243
+"auto: 45 cm back, OLD",reset,1.697,0.1245
+"auto: 45 cm back, OLD",reset,1.716,0.1171
+"auto: 45 cm back, OLD",reset,1.734,0.1191
+"auto: 45 cm back, OLD",reset,1.754,0.1206
+"auto: 45 cm back, OLD",reset,1.775,0.1182
+"auto: 45 cm back, OLD",reset,1.794,0.1159
+"auto: 45 cm back, OLD",reset,1.826,0.1147
+"auto: 45 cm back, OLD",reset,1.836,0.0940
+"auto: 45 cm back, OLD",reset,1.855,0.1081
+"auto: 45 cm back, OLD",reset,1.874,0.1072
+"auto: 45 cm back, OLD",reset,1.894,0.1056
+"auto: 45 cm back, OLD",reset,1.914,0.1031
+"auto: 45 cm back, OLD",reset,1.935,0.1006
+"auto: 45 cm back, OLD",reset,1.954,0.0973
+"auto: 45 cm back, OLD",reset,1.974,0.0957
+"auto: 45 cm back, OLD",reset,1.994,0.0922
+"auto: 45 cm back, OLD",reset,2.014,0.0890
+"auto: 45 cm back, OLD",reset,2.034,0.0864
+"auto: 45 cm back, OLD",reset,2.055,0.0829
+"auto: 45 cm back, OLD",reset,2.074,0.0960
+"auto: 45 cm back, OLD",reset,2.097,0.1119
+"auto: 45 cm back, OLD",reset,2.117,0.1271
+"auto: 45 cm back, OLD",reset,2.137,0.1415
+"auto: 45 cm back, OLD",reset,2.158,0.1551
+"auto: 45 cm back, OLD",reset,2.177,0.1677
+"auto: 45 cm back, OLD",reset,2.198,0.1794
+"auto: 45 cm back, OLD",reset,2.218,0.1898
+"auto: 45 cm back, OLD",reset,2.238,0.1989
+"auto: 45 cm back, OLD",reset,2.258,0.2067
+"auto: 45 cm back, OLD",reset,2.277,0.2133
+"auto: 45 cm back, OLD",reset,2.298,0.2189
+"auto: 45 cm back, OLD",reset,2.317,0.2232
+"auto: 45 cm back, OLD",reset,2.338,0.2264
+"auto: 45 cm back, OLD",reset,2.358,0.2286
+"auto: 45 cm back, OLD",reset,2.378,0.2299
+"auto: 45 cm back, OLD",reset,2.398,0.2305
+"auto: 45 cm back, OLD",reset,2.418,0.2306
+"auto: 45 cm back, OLD",reset,2.437,0.2305
+"auto: 45 cm back, OLD",reset,2.458,0.2299
+"auto: 45 cm back, OLD",reset,2.478,0.2293
+"auto: 45 cm back, OLD",reset,2.497,0.2285
+"auto: 45 cm back, OLD",reset,2.517,0.2277
+"auto: 45 cm back, OLD",reset,2.537,0.2266
+"auto: 45 cm back, OLD",reset,2.558,0.2254
+"auto: 45 cm back, OLD",reset,2.578,0.2240
+"auto: 45 cm back, OLD",reset,2.598,0.2225
+"auto: 45 cm back, OLD",reset,2.618,0.2209
+"auto: 45 cm back, OLD",reset,2.638,0.2194
+"auto: 45 cm back, OLD",reset,2.657,0.2179
+"auto: 45 cm back, OLD",reset,2.678,0.2165
+"auto: 45 cm back, OLD",reset,2.698,0.2152
+"auto: 45 cm back, OLD",reset,2.717,0.2139
+"auto: 45 cm back, OLD",reset,2.738,0.2128
+"auto: 45 cm back, OLD",reset,2.758,0.2117
+"auto: 45 cm back, OLD",reset,2.778,0.2107
+"auto: 45 cm back, OLD",reset,2.798,0.2097
+"auto: 45 cm back, OLD",reset,2.817,0.2088
+"auto: 45 cm back, OLD",reset,2.838,0.2079
+"auto: 45 cm back, OLD",reset,2.861,0.2070
+"auto: 45 cm back, OLD",reset,2.882,0.2062
+"auto: 45 cm back, OLD",reset,2.902,0.2055
+"auto: 45 cm back, OLD",reset,2.922,0.2048
+"auto: 45 cm back, OLD",reset,2.943,0.2043
+"auto: 45 cm back, OLD",reset,2.962,0.2038
+"auto: 45 cm back, OLD",reset,2.982,0.2034
+"auto: 45 cm back, OLD",reset,3.001,0.2031
+"auto: 45 cm back, OLD",reset,3.022,0.2029
+"auto: 45 cm back, OLD",reset,3.042,0.2027
+"auto: 45 cm back, OLD",reset,3.062,0.2025
+"auto: 45 cm back, OLD",reset,3.083,0.2024
+"auto: 45 cm back, OLD",reset,3.102,0.1815
+"auto: 45 cm back, OLD",reset,3.122,0.1628
+"auto: 45 cm back, OLD",reset,3.142,0.1439
+"auto: 45 cm back, OLD",reset,3.162,0.1253
+"auto: 45 cm back, OLD",reset,3.182,0.1085
+"auto: 45 cm back, OLD",reset,3.201,0.0938
+"auto: 45 cm back, OLD",reset,3.222,0.0809
+"auto: 45 cm back, OLD",reset,3.242,0.0692
+"auto: 45 cm back, OLD",reset,3.261,0.0613
+"auto: 45 cm back, OLD",reset,3.282,0.0565
+"auto: 45 cm back, OLD",reset,3.302,0.0542
+"auto: 45 cm back, OLD",reset,3.322,0.0541
+"auto: 45 cm back, OLD",reset,3.342,0.0551
+"auto: 45 cm back, OLD",reset,3.362,0.0564
+"auto: 45 cm back, OLD",reset,3.382,0.0580
+"auto: 45 cm back, OLD",reset,3.402,0.0590
+"auto: 45 cm back, OLD",reset,3.422,0.0597
+"auto: 45 cm back, OLD",reset,3.442,0.0592
+"auto: 45 cm back, OLD",reset,3.462,0.0569
+"auto: 45 cm back, OLD",reset,3.482,0.0546
+"auto: 45 cm back, OLD",reset,3.502,0.0503
+"auto: 45 cm back, OLD",reset,3.522,0.0461
+"auto: 45 cm back, OLD",reset,3.542,0.0406
+"auto: 45 cm back, OLD",reset,3.563,0.0345
+"auto: 45 cm back, OLD",reset,3.582,0.0288
+"auto: 45 cm back, OLD",reset,3.602,0.0215
+"auto: 45 cm back, OLD",reset,3.622,0.0150
+"auto: 45 cm back, OLD",reset,3.642,0.0120
+"auto: 45 cm back, OLD",reset,3.662,0.0090
+"auto: 45 cm back, OLD",reset,3.682,0.0034
+"auto: 45 cm back, OLD",reset,3.702,0.0015
+"auto: 45 cm back, OLD",reset,3.722,0.0038
+"auto: 45 cm back, OLD",reset,3.742,0.0079
+"auto: 45 cm back, OLD",reset,3.761,0.0120
+"auto: 45 cm back, OLD",reset,3.782,0.0166
+"auto: 45 cm back, OLD",reset,3.802,0.0199
+"auto: 45 cm back, OLD",reset,3.822,0.0241
+"auto: 45 cm back, OLD",reset,3.842,0.0275
+"auto: 45 cm back, OLD",reset,3.862,0.0307
+"auto: 45 cm back, OLD",reset,3.882,0.0330
+"auto: 45 cm back, OLD",reset,3.902,0.0360
+"auto: 45 cm back, OLD",reset,3.922,0.0357
+"auto: 45 cm back, OLD",reset,3.942,0.0377
+"auto: 45 cm back, OLD",reset,3.962,0.0380
+"auto: 45 cm back, OLD",reset,3.982,0.0388
+"auto: 45 cm back, OLD",reset,4.002,0.0369
+"auto: 45 cm back, OLD",reset,4.022,0.0342
+"auto: 45 cm back, OLD",reset,4.041,0.0335
+"auto: 45 cm back, OLD",reset,4.061,0.0343
+"auto: 45 cm back, OLD",reset,4.082,0.0308
+"auto: 45 cm back, OLD",reset,4.102,0.0306
+"auto: 45 cm back, OLD",reset,4.121,0.0287
+"auto: 45 cm back, OLD",reset,4.141,0.0295
+"auto: 45 cm back, OLD",reset,4.161,0.0297
+"auto: 45 cm back, OLD",reset,4.182,0.0299
+"auto: 45 cm back, OLD",reset,4.210,0.0292
+"auto: 45 cm back, OLD",reset,4.231,0.0192
+"auto: 45 cm back, OLD",reset,4.250,0.0187
+"auto: 45 cm back, OLD",reset,4.270,0.0196
+"auto: 45 cm back, OLD",reset,4.291,0.0199
+"auto: 45 cm back, OLD",reset,4.311,0.0174
+"auto: 45 cm back, OLD",reset,4.330,0.0146
+"auto: 45 cm back, OLD",reset,4.350,0.0133
+"auto: 45 cm back, OLD",reset,4.372,0.0123
+"auto: 45 cm back, OLD",reset,4.391,0.0113
+"auto: 45 cm back, OLD",reset,4.411,0.0110
+"auto: 45 cm back, OLD",reset,4.430,0.0115
+"auto: 45 cm back, OLD",reset,4.451,0.0114
+"auto: 45 cm back, OLD",reset,4.471,0.0111
+"auto: 45 cm back, OLD",reset,4.491,0.0115
+"auto: 45 cm back, OLD",reset,4.511,0.0125
+"auto: 45 cm back, OLD",reset,4.530,0.0100
+"auto: 45 cm back, OLD",reset,4.552,0.0106
+"auto: 45 cm back, OLD",reset,4.571,0.0103
+"auto: 45 cm back, OLD",reset,4.592,0.0108
+"auto: 45 cm back, OLD",reset,4.611,0.0077
+"auto: 45 cm back, OLD",reset,4.631,0.0038
+"auto: 45 cm back, OLD",reset,4.651,0.0034
+"auto: 45 cm back, OLD",reset,4.671,0.0039
+"auto: 45 cm back, OLD",reset,4.691,0.0019
+"auto: 45 cm back, OLD",reset,4.711,0.0026
+"auto: 45 cm back, OLD",reset,4.731,0.0008
+"auto: 45 cm back, OLD",reset,4.753,0.0013
+"auto: 45 cm back, OLD",reset,4.783,0.0013
+"auto: 45 cm back, OLD",reset,4.804,0.0084
+"auto: 45 cm back, OLD",reset,4.823,0.0088
+"auto: 45 cm back, OLD",reset,4.843,0.0112
+"auto: 45 cm back, OLD",reset,4.864,0.0114
+"auto: 45 cm back, OLD",reset,4.883,0.0113
+"auto: 45 cm back, OLD",reset,4.903,0.0155
+"auto: 45 cm back, OLD",reset,4.923,0.0181
+"auto: 45 cm back, OLD",reset,4.944,0.0174
+"auto: 45 cm back, OLD",reset,4.964,0.0190
+"auto: 45 cm back, OLD",reset,4.984,0.0203
+"auto: 45 cm back, OLD",reset,5.004,0.0199
+"auto: 2 m back (too far)",reset,0.100,1.9990
+"auto: 2 m back (too far)",reset,0.120,1.9969
+"auto: 2 m back (too far)",reset,0.141,1.9938
+"auto: 2 m back (too far)",reset,0.160,1.9898
+"auto: 2 m back (too far)",reset,0.180,1.9846
+"auto: 2 m back (too far)",reset,0.200,1.9786
+"auto: 2 m back (too far)",reset,0.221,1.9721
+"auto: 2 m back (too far)",reset,0.240,1.9650
+"auto: 2 m back (too far)",reset,0.260,1.9567
+"auto: 2 m back (too far)",reset,0.280,1.9479
+"auto: 2 m back (too far)",reset,0.300,1.9382
+"auto: 2 m back (too far)",reset,0.320,1.9281
+"auto: 2 m back (too far)",reset,0.340,1.9174
+"auto: 2 m back (too far)",reset,0.360,1.9064
+"auto: 2 m back (too far)",reset,0.380,1.8946
+"auto: 2 m back (too far)",reset,0.400,1.8826
+"auto: 2 m back (too far)",reset,0.420,1.8698
+"auto: 2 m back (too far)",reset,0.440,1.8561
+"auto: 2 m back (too far)",reset,0.460,1.8426
+"auto: 2 m back (too far)",reset,0.480,1.8288
+"auto: 2 m back (too far)",reset,0.500,1.8150
+"auto: 2 m back (too far)",reset,0.520,1.7996
+"auto: 2 m back (too far)",reset,0.540,1.7846
+"auto: 2 m back (too far)",reset,0.560,1.7693
+"auto: 2 m back (too far)",reset,0.581,1.7546
+"auto: 2 m back (too far)",reset,0.600,1.7394
+"auto: 2 m back (too far)",reset,0.620,1.7213
+"auto: 2 m back (too far)",reset,0.641,1.7050
+"auto: 2 m back (too far)",reset,0.661,1.6907
+"auto: 2 m back (too far)",reset,0.682,1.6754
+"auto: 2 m back (too far)",reset,0.702,1.6603
+"auto: 2 m back (too far)",reset,0.722,1.6428
+"auto: 2 m back (too far)",reset,0.742,1.6261
+"auto: 2 m back (too far)",reset,0.762,1.6104
+"auto: 2 m back (too far)",reset,0.783,1.5938
+"auto: 2 m back (too far)",reset,0.802,1.5782
+"auto: 2 m back (too far)",reset,0.822,1.5604
+"auto: 2 m back (too far)",reset,0.843,1.5425
+"auto: 2 m back (too far)",reset,0.862,1.5298
+"auto: 2 m back (too far)",reset,0.882,1.5099
+"auto: 2 m back (too far)",reset,0.902,1.4929
+"auto: 2 m back (too far)",reset,0.923,1.4771
+"auto: 2 m back (too far)",reset,0.942,1.4623
+"auto: 2 m back (too far)",reset,0.962,1.4441
+"auto: 2 m back (too far)",reset,0.982,1.4276
+"auto: 2 m back (too far)",reset,1.002,1.4125
+"auto: 2 m back (too far)",reset,1.022,1.3978
+"auto: 2 m back (too far)",reset,1.042,1.3811
+"auto: 2 m back (too far)",reset,1.062,1.3675
+"auto: 2 m back (too far)",reset,1.082,1.3517
+"auto: 2 m back (too far)",reset,1.115,1.3381
+"auto: 2 m back (too far)",reset,1.136,1.3621
+"auto: 2 m back (too far)",reset,1.156,1.3479
+"auto: 2 m back (too far)",reset,1.176,1.3331
+"auto: 2 m back (too far)",reset,1.196,1.3144
+"auto: 2 m back (too far)",reset,1.220,1.2986
+"auto: 2 m back (too far)",reset,1.240,1.2916
+"auto: 2 m back (too far)",reset,1.260,1.2757
+"auto: 2 m back (too far)",reset,1.280,1.2556
+"auto: 2 m back (too far)",reset,1.300,1.2376
+"auto: 2 m back (too far)",reset,1.321,1.2175
+"auto: 2 m back (too far)",reset,1.340,1.1966
+"auto: 2 m back (too far)",reset,1.360,1.1720
+"auto: 2 m back (too far)",reset,1.380,1.1484
+"auto: 2 m back (too far)",reset,1.400,1.1249
+"auto: 2 m back (too far)",reset,1.420,1.0979
+"auto: 2 m back (too far)",reset,1.440,1.0702
+"auto: 2 m back (too far)",reset,1.460,1.0416
+"auto: 2 m back (too far)",reset,1.481,1.0116
+"auto: 2 m back (too far)",reset,1.500,0.9815
+"auto: 2 m back (too far)",reset,1.520,0.9476
+"auto: 2 m back (too far)",reset,1.540,0.9138
+"auto: 2 m back (too far)",reset,1.561,0.8792
+"auto: 2 m back (too far)",reset,1.580,0.8452
+"auto: 2 m back (too far)",reset,1.600,0.8062
+"auto: 2 m back (too far)",reset,1.622,0.7682
+"auto: 2 m back (too far)",reset,1.643,0.7316
+"auto: 2 m back (too far)",reset,3.671,0.0800
+"auto: 2 m back (too far)",reset,3.691,0.0752
+"auto: 2 m back (too far)",reset,3.711,0.0687
+"auto: 2 m back (too far)",reset,3.730,0.0622
+"auto: 2 m back (too far)",reset,3.751,0.0542
+"auto: 2 m back (too far)",reset,3.771,0.0470
+"auto: 2 m back (too far)",reset,3.791,0.0393
+"auto: 2 m back (too far)",reset,3.811,0.0318
+"auto: 2 m back (too far)",reset,3.831,0.0272
+"auto: 2 m back (too far)",reset,3.851,0.0215
+"auto: 2 m back (too far)",reset,3.870,0.0191
+"auto: 2 m back (too far)",reset,3.891,0.0124
+"auto: 2 m back (too far)",reset,3.911,0.0085
+"auto: 2 m back (too far)",reset,3.930,0.0057
+"auto: 2 m back (too far)",reset,3.951,0.0055
+"auto: 2 m back (too far)",reset,3.970,0.0080
+"auto: 2 m back (too far)",reset,3.990,0.0128
+"auto: 2 m back (too far)",reset,4.011,0.0172
+"auto: 2 m back (too far)",reset,4.031,0.0211
+"auto: 2 m back (too far)",reset,4.051,0.0249
+"auto: 2 m back (too far)",reset,4.071,0.0284
+"auto: 2 m back (too far)",reset,4.091,0.0312
+"auto: 2 m back (too far)",reset,4.111,0.0340
+"auto: 2 m back (too far)",reset,4.132,0.0372
+"auto: 2 m back (too far)",reset,4.151,0.0355
+"auto: 2 m back (too far)",reset,4.171,0.0357
+"auto: 2 m back (too far)",reset,4.192,0.0374
+"auto: 2 m back (too far)",reset,4.212,0.0378
+"auto: 2 m back (too far)",reset,4.232,0.0391
+"auto: 2 m back (too far)",reset,4.251,0.0369
+"auto: 2 m back (too far)",reset,4.272,0.0367
+"auto: 2 m back (too far)",reset,4.291,0.0364
+"auto: 2 m back (too far)",reset,4.310,0.0374
+"auto: 2 m back (too far)",reset,4.331,0.0387
+"auto: 2 m back (too far)",reset,4.351,0.0386
+"auto: 2 m back (too far)",reset,4.370,0.0356
+"auto: 2 m back (too far)",reset,4.391,0.0362
+"auto: 2 m back (too far)",reset,4.411,0.0358
+"auto: 2 m back (too far)",reset,4.431,0.0356
+"auto: 2 m back (too far)",reset,4.451,0.0355
+"auto: 2 m back (too far)",reset,4.472,0.0334
+"auto: 2 m back (too far)",reset,4.491,0.0321
+"auto: 2 m back (too far)",reset,4.511,0.0327
+"auto: 2 m back (too far)",reset,4.531,0.0290
+"auto: 2 m back (too far)",reset,4.551,0.0271
+"auto: 2 m back (too far)",reset,4.571,0.0227
+"auto: 2 m back (too far)",reset,4.590,0.0200
+"auto: 2 m back (too far)",reset,4.611,0.0196
+"auto: 2 m back (too far)",reset,4.631,0.0156
+"auto: 2 m back (too far)",reset,4.651,0.0141
+"auto: 2 m back (too far)",reset,4.671,0.0134
+"auto: 2 m back (too far)",reset,4.690,0.0106
+"auto: 2 m back (too far)",reset,4.711,0.0112
+"auto: 2 m back (too far)",reset,4.731,0.0085
+"auto: 2 m back (too far)",reset,4.751,0.0090
+"auto: 2 m back (too far)",reset,4.772,0.0092
+"auto: 2 m back (too far)",reset,4.791,0.0074
+"auto: 2 m back (too far)",reset,4.811,0.0093
+"auto: 2 m back (too far)",reset,4.831,0.0066
+"auto: 2 m back (too far)",reset,4.851,0.0020
+"auto: 2 m back (too far)",reset,4.872,0.0027
+"auto: 2 m back (too far)",reset,4.891,0.0070
+"auto: 2 m back (too far)",reset,4.911,0.0092
+"auto: 2 m back (too far)",reset,4.931,0.0104
+"auto: 2 m back (too far)",reset,4.951,0.0123
+"auto: 2 m back (too far)",reset,4.971,0.0154
+"auto: 2 m back (too far)",reset,4.991,0.0227

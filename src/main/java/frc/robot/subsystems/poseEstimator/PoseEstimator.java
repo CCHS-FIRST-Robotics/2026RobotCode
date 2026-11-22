@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import org.littletonrobotics.junction.Logger;
 import java.util.Optional;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
@@ -28,6 +29,11 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
     private final SwerveDrivePoseEstimator combinedEstimator; // informed by both odometry and vision
 
     private final Drive drive;
+
+    private double lastVisionTime = Double.NEGATIVE_INFINITY;
+
+    // sim test hook: ignore all vision measurements (like an unplugged camera), see ScriptedSimDriver's autonovision script
+    public static boolean simIgnoreVision = false;
 
     public PoseEstimator(
         GyroIO gyroIO, 
@@ -100,6 +106,11 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         return vision;
     }
 
+    // how long since a vision measurement was accepted (infinite if never)
+    public double getSecondsSinceVision() {
+        return Timer.getFPGATimestamp() - lastVisionTime;
+    }
+
     @SuppressWarnings("unused")
     private Pose2d getVisionPose() {
         return visionEstimator.getEstimatedPosition();
@@ -151,6 +162,10 @@ public class PoseEstimator extends SubsystemBase implements Odometry.OdometryCon
         double timestampSeconds, 
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
+        if (simIgnoreVision) {
+            return;
+        }
+        lastVisionTime = Timer.getFPGATimestamp();
         visionEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
         combinedEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }

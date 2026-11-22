@@ -120,6 +120,22 @@ public class SimLogAnalyzer {
         return best < 0 ? null : s.get(best).value();
     }
 
+    // time of the last sample at or before t (-infinity if none)
+    static double lastSampleTime(String key, double t) {
+        List<Sample> s = series(key);
+        int lo = 0, hi = s.size() - 1, best = -1;
+        while (lo <= hi) {
+            int mid = (lo + hi) >>> 1;
+            if (s.get(mid).t() <= t) {
+                best = mid;
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return best < 0 ? Double.NEGATIVE_INFINITY : s.get(best).t();
+    }
+
     static double num(String key, double t) {
         Object v = at(key, t);
         if (v instanceof Double d) return d;
@@ -162,18 +178,33 @@ public class SimLogAnalyzer {
         double mid() { return (start + end) / 2; }
     }
 
+    static List<Step> cachedSteps = null;
+
     static List<Step> steps() {
+        if (cachedSteps != null) return cachedSteps;
         List<Step> steps = new ArrayList<>();
-        List<Sample> marks = series(STEP);
+        List<Sample> marks = matchMode ? List.of() : series(STEP);
         for (int i = 0; i < marks.size(); i++) {
             double start = marks.get(i).t();
             double end = i + 1 < marks.size() ? marks.get(i + 1).t() : logEnd;
-            double probe = Math.min(start + 0.1, end); // DS state applies on the loop after the script sets it
+            double probe = Math.min(start + 0.1, (start + end) / 2); // DS state applies on the loop after the script sets it
             steps.add(new Step((String) marks.get(i).value(), start, end, bool("/DriverStation/Enabled", probe), bool("/DriverStation/Autonomous", probe)));
         }
-        if (steps.isEmpty()) { // not a scripted run: treat the whole log as one step
-            steps.add(new Step("whole log", logStart, logEnd, true, false));
+        if (steps.isEmpty()) { // not a scripted run (e.g. a real match): split the log wherever the robot was enabled/disabled or switched auto/teleop
+            String current = null;
+            double start = logStart;
+            for (Sample s : series("/Timestamp")) {
+                boolean enabled = bool("/DriverStation/Enabled", s.t());
+                String mode = !enabled ? "disabled" : bool("/DriverStation/Autonomous", s.t()) ? "auto" : "teleop";
+                if (!mode.equals(current)) {
+                    if (current != null) steps.add(new Step(current, start, s.t(), !current.equals("disabled"), current.equals("auto")));
+                    current = mode;
+                    start = s.t();
+                }
+            }
+            if (current != null) steps.add(new Step(current, start, logEnd, !current.equals("disabled"), current.equals("auto")));
         }
+        cachedSteps = steps;
         return steps;
     }
 
@@ -215,12 +246,33 @@ public class SimLogAnalyzer {
         System.out.println("===== " + title + " =====");
     }
 
+    // real robot / match log (no sim "true pose" to compare against); --match forces this for testing on sim logs
+    static boolean matchMode = false;
+    static boolean forceMatchMode = false;
+
+    static void reset() {
+        types.clear();
+        data.clear();
+        problems.clear();
+        cachedSteps = null;
+        logStart = Double.MAX_VALUE;
+        logEnd = 0;
+    }
+
     public static void main(String[] args) throws Exception {
         boolean listOnly = Arrays.asList(args).contains("--list");
+        forceMatchMode = Arrays.asList(args).contains("--match");
+        exportDir = Arrays.stream(args).filter(x -> x.startsWith("--export=")).findFirst().map(x -> x.substring(9)).orElse(null);
         File file = Arrays.stream(args).filter(a -> !a.startsWith("--")).findFirst().map(File::new).orElseGet(SimLogAnalyzer::newestLog);
+
+        if (file.isDirectory()) {
+            summarizeFolder(file);
+            return;
+        }
 
         System.out.println("Log: " + file.getPath());
         load(file);
+        matchMode = forceMatchMode || !data.containsKey(TRUE_POSE);
 
         if (listOnly) {
             types.forEach((name, type) -> System.out.printf("%-90s %-32s %d samples%n", name, type, data.get(name).size()));
@@ -252,19 +304,7 @@ public class SimLogAnalyzer {
             return;
         }
 
-        List<Step> steps = steps();
-        System.out.printf("Duration: %.1f s, %d loops, %d steps%n", logEnd - logStart, series("/Timestamp").size(), steps.size());
-
-        checkMessages();
-        checkLoopTiming(steps);
-        checkSteps(steps);
-        checkModules(steps);
-        checkPoseEstimation(steps);
-        checkVision(steps);
-        checkShooter(steps);
-        checkPivotAndIntake(steps);
-        checkCurrentsAndBattery(steps);
-        checkSimFidelity();
+        analyze();
 
         header("SUMMARY");
         if (problems.isEmpty()) {
@@ -272,6 +312,77 @@ public class SimLogAnalyzer {
         } else {
             System.out.println(problems.size() + " problem(s):");
             problems.forEach(p -> System.out.println("  - " + p));
+        }
+    }
+
+    static void analyze() {
+        List<Step> steps = steps();
+        System.out.printf("Duration: %.1f s, %d loops, %d %s%n", logEnd - logStart, series("/Timestamp").size(), steps.size(),
+            matchMode ? "segments (real robot / match log)" : "steps (sim log)");
+        if (matchMode) printMatchInfo();
+
+        checkMessages();
+        checkLoopTiming(steps);
+        checkSteps(steps);
+        checkAutoTracking(steps);
+        checkModules(steps);
+        if (matchMode) {
+            checkPoseEstimationMatch(steps);
+        } else {
+            checkPoseEstimation(steps);
+        }
+        checkVision(steps);
+        checkShooter(steps);
+        checkPivotAndIntake(steps);
+        checkCurrentsAndBattery(steps);
+        checkRobotHealth(steps);
+        if (!matchMode) checkSimFidelity();
+    }
+
+    static String matchName() {
+        Object event = at("/DriverStation/EventName", logEnd), number = at("/DriverStation/MatchNumber", logEnd), type = at("/DriverStation/MatchType", logEnd);
+        String[] types = {"none", "practice", "qual", "elim"};
+        int typeIndex = type instanceof Double d ? d.intValue() : 0;
+        if (typeIndex == 0) return "no FMS match";
+        return String.format("%s %s %.0f", event, types[Math.min(typeIndex, 3)], number instanceof Double d ? d : 0);
+    }
+
+    static void printMatchInfo() {
+        Object station = at("/DriverStation/AllianceStation", logEnd);
+        String[] stations = {"unknown", "red 1", "red 2", "red 3", "blue 1", "blue 2", "blue 3"};
+        int s = station instanceof Double d ? d.intValue() : 0;
+        System.out.printf("Match: %s, %s, FMS attached: %s%n", matchName(), stations[Math.max(0, Math.min(s, 6))], bool("/DriverStation/FMSAttached", logEnd));
+    }
+
+    // one line per log in a folder, e.g. every match from an event
+    static void summarizeFolder(File folder) throws Exception {
+        File[] logs = folder.listFiles((dir, name) -> name.endsWith(".wpilog"));
+        if (logs == null || logs.length == 0) {
+            System.out.println("No .wpilog files in " + folder);
+            return;
+        }
+        Arrays.sort(logs, Comparator.comparingLong(File::lastModified));
+        java.io.PrintStream out = System.out;
+        out.printf("%d logs in %s%n%n", logs.length, folder);
+        for (File log : logs) {
+            reset();
+            System.setOut(new java.io.PrintStream(java.io.OutputStream.nullOutputStream()));
+            String line;
+            try {
+                load(log);
+                matchMode = forceMatchMode || !data.containsKey(TRUE_POSE);
+                double enabledTime = steps().stream().filter(Step::enabled).mapToDouble(Step::length).sum();
+                analyze();
+                line = String.format("%-36s %-28s enabled %5.1f s  %s", log.getName(), matchName(), enabledTime,
+                    problems.isEmpty() ? "OK" : problems.size() + " problem(s)");
+            } catch (Exception e) {
+                line = String.format("%-36s could not read: %s", log.getName(), e.getMessage());
+            } finally {
+                System.setOut(out);
+            }
+            out.println(line);
+            for (String p : problems.subList(0, Math.min(5, problems.size()))) out.println("    - " + p);
+            if (problems.size() > 5) out.println("    - ... " + (problems.size() - 5) + " more (run on just this log for details)");
         }
     }
 
@@ -355,8 +466,9 @@ public class SimLogAnalyzer {
     );
 
     static void checkSteps(List<Step> steps) {
-        header("STEPS (true sim pose motion, and commanded vs. measured chassis speed)");
-        System.out.printf("  %-32s %-6s %6s %7s %7s %8s   %-24s%n", "step", "mode", "len s", "dx m", "dy m", "dθ deg", "steady-state speed err vx/vy/ω");
+        header(matchMode ? "SEGMENTS (estimated pose motion, and commanded vs. measured chassis speed while the command is steady)"
+                         : "STEPS (true sim pose motion, and commanded vs. measured chassis speed)");
+        System.out.printf("  %-32s %-6s %6s %7s %7s %8s   %-24s%n", "step", "mode", "len s", matchMode ? "dist m" : "dx m", matchMode ? "top m/s" : "dy m", "dθ deg", "steady-state speed err vx/vy/ω");
         double maxAccel = 0;
         String maxAccelStep = "";
         for (Step step : steps) {
@@ -365,15 +477,29 @@ public class SimLogAnalyzer {
                 System.out.printf("  %-32s %-6s %6.2f %7s %7s %8s   -%n", step.name(), mode, step.length(), "-", "-", "-");
                 continue;
             }
-            double[] p0 = struct(TRUE_POSE, step.start() + 0.02), p1 = struct(TRUE_POSE, step.end() - 0.001);
+            double[] p0 = struct(poseKey(), step.start() + 0.02), p1 = struct(poseKey(), step.end() - 0.001);
             double[] delta = p0 == null || p1 == null ? new double[] {0, 0, 0} : new double[] {p1[0] - p0[0], p1[1] - p0[1], 0};
             // total rotation, added up loop by loop (start vs. end heading alone can't tell 40 deg from 400 deg)
             double[] prev = null;
+            double distance = 0, topSpeed = 0, prevT = 0;
             for (double t : loops(step.start() + 0.02, step.end())) {
-                double[] p = struct(TRUE_POSE, t);
+                double[] p = struct(poseKey(), t);
                 if (p == null) continue;
-                if (prev != null) delta[2] += wrap(p[2] - prev[2]);
+                if (prev != null) {
+                    delta[2] += wrap(p[2] - prev[2]);
+                    double d = Math.hypot(p[0] - prev[0], p[1] - prev[1]);
+                    distance += d;
+                    if (t > prevT) topSpeed = Math.max(topSpeed, d / (t - prevT));
+                }
                 prev = p;
+                prevT = t;
+            }
+            if (matchMode) { // on a real robot, top speed from the wheels is less noisy than from the (vision-corrected) pose
+                topSpeed = 0;
+                for (double t : loops(step.start(), step.end())) {
+                    double[] wheels = struct(SPEEDS_OUT, t);
+                    if (wheels != null) topSpeed = Math.max(topSpeed, Math.hypot(wheels[0], wheels[1]));
+                }
             }
 
             // actual acceleration, from the true sim pose (velocity over 5 loops, then change in that over 5 loops).
@@ -389,19 +515,26 @@ public class SimLogAnalyzer {
                 }
             }
 
-            // steady-state tracking error over the last 25% of the step (the rest is the robot accelerating)
+            // steady-state tracking error: scripted steps use their last 25% (the rest is the robot accelerating);
+            // match segments use every loop where the command hasn't changed much in the last 0.5 s
             List<Double> ex = new ArrayList<>(), ey = new ArrayList<>(), ew = new ArrayList<>();
             {
-                for (double t : loops(step.end() - 0.25 * step.length(), step.end())) {
-                    double[] cmd = struct(SPEEDS_IN, t), meas = struct(SPEEDS_OUT, t);
-                    if (cmd == null || meas == null) continue;
-                    ex.add(Math.abs(cmd[0] - meas[0]));
-                    ey.add(Math.abs(cmd[1] - meas[1]));
-                    ew.add(Math.abs(cmd[2] - meas[2]));
+                for (double t : loops(matchMode ? step.start() + 0.5 : step.end() - 0.25 * step.length(), step.end())) {
+                    double[] cmd = struct(SPEEDS_IN, t), measured = struct(SPEEDS_OUT, t);
+                    if (cmd == null || measured == null) continue;
+                    if (matchMode) {
+                        double[] earlier = struct(SPEEDS_IN, t - 0.5);
+                        if (earlier == null || Math.hypot(cmd[0] - earlier[0], cmd[1] - earlier[1]) > 0.1 || Math.abs(cmd[2] - earlier[2]) > 0.2) continue;
+                    }
+                    double[] meas2 = measured;
+                    ex.add(Math.abs(cmd[0] - meas2[0]));
+                    ey.add(Math.abs(cmd[1] - meas2[1]));
+                    ew.add(Math.abs(cmd[2] - meas2[2]));
                 }
             }
             String tracking = ex.isEmpty() ? "-" : String.format("%.2f / %.2f / %.2f", mean(ex), mean(ey), mean(ew));
-            System.out.printf("  %-32s %-6s %6.2f %7.2f %7.2f %8.1f   %s%n", step.name(), mode, step.length(), delta[0], delta[1], Math.toDegrees(delta[2]), tracking);
+            System.out.printf("  %-32s %-6s %6.2f %7.2f %7.2f %8.1f   %s%n", step.name(), mode, step.length(),
+                matchMode ? distance : delta[0], matchMode ? topSpeed : delta[1], Math.toDegrees(delta[2]), tracking);
 
             if (!ex.isEmpty() && !step.auto() && (mean(ex) > MAX_LINEAR_TRACKING_ERROR || mean(ey) > MAX_LINEAR_TRACKING_ERROR || mean(ew) > MAX_ANGULAR_TRACKING_ERROR)) {
                 problem(String.format("'%s': measured chassis speed doesn't follow the command (err vx %.2f, vy %.2f m/s, ω %.2f rad/s)", step.name(), mean(ex), mean(ey), mean(ew)));
@@ -411,13 +544,99 @@ public class SimLogAnalyzer {
                 problem(String.format("'%s': expected robot to %s, but it moved dx %.2f, dy %.2f m, dθ %.0f deg", step.name(), exp.description(), delta[0], delta[1], Math.toDegrees(delta[2])));
             }
         }
-        System.out.printf("  max actual linear acceleration: %.1f m/s^2 (during '%s')%n", maxAccel, maxAccelStep);
+        System.out.printf("  max %s linear acceleration: %.1f m/s^2 (during '%s')%n", matchMode ? "estimated" : "actual", maxAccel, maxAccelStep);
+    }
+
+    // where the robot is: the sim's ground truth if there is one, otherwise the robot's own best estimate
+    static String poseKey() {
+        return matchMode ? POSE_EST + "combinedPoseEstimate" : TRUE_POSE;
     }
 
     static double[] trueVelocity(double t0, double t1) {
-        double[] a = struct(TRUE_POSE, t0), b = struct(TRUE_POSE, t1);
+        double[] a = struct(poseKey(), t0), b = struct(poseKey(), t1);
         if (a == null || b == null || t1 <= t0) return null;
         return new double[] {(b[0] - a[0]) / (t1 - t0), (b[1] - a[1]) / (t1 - t0)};
+    }
+
+    // how far the robot was from the auto's ORIGINAL path: drive/pathPose (the Choreo sample before any start blend), or before the
+    // path starts (e.g. while driving to the start), drive/targetPose. also how long the auto took to start its path
+    static String exportDir = null;
+
+    static String cm(double meters) {
+        return Double.isNaN(meters) ? "-" : String.format("%.0fcm", meters * 100);
+    }
+
+    static void checkAutoTracking(List<Step> steps) {
+        header("AUTO PATH TRACKING (robot " + (matchMode ? "estimated" : "true") + " pose vs. the auto's original path)");
+        System.out.printf("  %-40s %-14s %7s %7s %7s %7s %8s %7s %8s%n", "auto", "start method", "@0s", "@0.5s", "@1s", "@1.5s", "max >2s", "mean", "delay");
+        boolean any = false;
+        int skippedForFreezes = 0;
+        StringBuilder series = new StringBuilder("auto,method,seconds,error_m%n".formatted());
+        StringBuilder summary = new StringBuilder("auto,method,err_0s_m,err_0_5s_m,err_1s_m,err_1_5s_m,max_after_2s_m,path_start_delay_s%n".formatted());
+        for (Step step : steps) {
+            if (!step.auto()) continue;
+            any = true;
+            // the log only stores changes, so the same decision twice in a row is one sample; decisionCount goes up every time.
+            // autos without a Choreo path (e.g. BackUpAndShoot) don't make a decision, so they show "-"
+            double probe = step.start() + 0.3;
+            boolean decidedNow = Math.max(lastSampleTime(OUT + "autoStart/decision", probe), lastSampleTime(OUT + "autoStart/decisionCount", probe)) >= step.start() - 0.1;
+            Object decision = at(OUT + "autoStart/decision", probe);
+            String method = decision == null || !decidedNow ? "-" : decision.toString().split(" ")[0];
+
+            double e0 = Double.NaN, e05 = Double.NaN, e1 = Double.NaN, e15 = Double.NaN, maxAfter2 = 0, pathStart = Double.NaN;
+            List<Double> all = new ArrayList<>();
+            double lastFreeze = Double.NEGATIVE_INFINITY;
+            for (double t : loops(step.start(), step.end())) {
+                // (checked first, so a freeze right at the start of the auto still counts)
+                // sim only: when the PC freezes, the sim's physics stops but the path's timer doesn't, so the path "runs away"
+                // from the robot. that can't happen on a real robot, so skip the 2 s after any freeze
+                if (!matchMode && num("/RealOutputs/LoggedRobot/FullCycleMS", t) > 100) lastFreeze = t;
+                if (!matchMode && t - lastFreeze < 2.0) {
+                    skippedForFreezes++;
+                    continue;
+                }
+                // reference: the path's own pose while the path is running, otherwise wherever the auto is driving to
+                boolean onPath = lastSampleTime(OUT + "drive/pathPose", t) >= Math.max(step.start(), t - 0.05);
+                String refKey = onPath ? OUT + "drive/pathPose" : OUT + "drive/targetPose";
+                if (lastSampleTime(refKey, t) < step.start()) continue; // nothing from this auto yet
+                if (onPath && Double.isNaN(pathStart)) pathStart = t - step.start();
+
+
+                double[] target = struct(refKey, t), pose = struct(poseKey(), t);
+                if (target == null || pose == null) continue;
+                double err = Math.hypot(target[0] - pose[0], target[1] - pose[1]);
+                double since = t - step.start();
+                series.append(String.format("\"%s\",%s,%.3f,%.4f%n", step.name(), method, since, err));
+                all.add(err);
+                if (Double.isNaN(e0)) e0 = err;
+                // only count a sample for a checkpoint if it's close to it (samples right after a sim freeze are dropped)
+                if (Double.isNaN(e05) && since >= 0.5 && since < 0.6) e05 = err;
+                if (Double.isNaN(e1) && since >= 1.0 && since < 1.1) e1 = err;
+                if (Double.isNaN(e15) && since >= 1.5 && since < 1.6) e15 = err;
+                if (since >= 2.0) maxAfter2 = Math.max(maxAfter2, err);
+            }
+            System.out.printf("  %-40s %-14s %7s %7s %7s %7s %8s %7s %8s%n", step.name(), method,
+                cm(e0), cm(e05), cm(e1), cm(e15), cm(maxAfter2), cm(mean(all)), Double.isNaN(pathStart) ? "-" : String.format("%.2fs", pathStart));
+            summary.append(String.format("\"%s\",%s,%.4f,%.4f,%.4f,%.4f,%.4f,%.3f%n", step.name(), method, e0, e05, e1, e15, maxAfter2, pathStart));
+            if (maxAfter2 > 0.25) {
+                problem(String.format("'%s': robot was still up to %.0f cm off the auto path more than 2 s in", step.name(), maxAfter2 * 100));
+            }
+        }
+        if (!any) System.out.println("  no auto in this log");
+        System.out.println("  (delay = time from auto start until the path itself started; driving to the start first costs this much auto time)");
+        if (skippedForFreezes > 0) System.out.printf("  (skipped %d loops in the 2 s after PC freezes > 100 ms; sim-only, see comment in checkAutoTracking)%n", skippedForFreezes);
+
+        if (exportDir != null && any) {
+            try {
+                File dir = new File(exportDir);
+                dir.mkdirs();
+                java.nio.file.Files.writeString(new File(dir, "auto_tracking.csv").toPath(), series.toString());
+                java.nio.file.Files.writeString(new File(dir, "auto_summary.csv").toPath(), summary.toString());
+                System.out.println("  wrote auto_tracking.csv and auto_summary.csv to " + dir.getPath());
+            } catch (java.io.IOException e) {
+                System.out.println("  could not write CSVs: " + e.getMessage());
+            }
+        }
     }
 
     static void checkModules(List<Step> steps) {
@@ -429,7 +648,7 @@ public class SimLogAnalyzer {
         }
         for (Step step : steps) {
             if (!step.enabled() || step.auto()) continue;
-            for (double t : loops(step.mid(), step.end())) {
+            for (double t : loops(matchMode ? step.start() : step.mid(), step.end())) {
                 double[] in = struct(MODULES_IN, t), out = struct(MODULES_OUT, t);
                 if (in == null || out == null || in.length < 8 || out.length < 8) continue;
                 for (int i = 0; i < 4; i++) {
@@ -519,6 +738,153 @@ public class SimLogAnalyzer {
         }
     }
 
+    // real robot: there's no true pose, so compare odometry (wheels + gyro) to the combined (vision-corrected) estimate.
+    // they drift apart from wheel slip and collisions, and the combined estimate jumps when vision corrects it
+    static void checkPoseEstimationMatch(List<Step> steps) {
+        header("POSE ESTIMATION (odometry vs. vision-corrected estimate, while enabled)");
+        List<Double> drift = new ArrayList<>(), headingDrift = new ArrayList<>();
+        int snaps = 0;
+        double worstSnap = 0, worstSnapTime = 0;
+        for (Step step : steps) {
+            if (!step.enabled()) continue;
+            double[] prevCombined = null, prevOdometry = null;
+            for (double t : loops(step.start() + TRANSITION_IGNORE, step.end())) {
+                double[] combined = struct(POSE_EST + "combinedPoseEstimate", t), odometry = struct(POSE_EST + "odometryPoseEstimate", t);
+                if (combined == null || odometry == null) continue;
+                drift.add(Math.hypot(combined[0] - odometry[0], combined[1] - odometry[1]));
+                headingDrift.add(Math.toDegrees(Math.abs(wrap(combined[2] - odometry[2]))));
+                if (prevCombined != null) {
+                    double jump = Math.hypot(combined[0] - prevCombined[0], combined[1] - prevCombined[1])
+                        - Math.hypot(odometry[0] - prevOdometry[0], odometry[1] - prevOdometry[1]);
+                    if (jump > POSE_JUMP) {
+                        snaps++;
+                        if (jump > worstSnap) {
+                            worstSnap = jump;
+                            worstSnapTime = t;
+                        }
+                    }
+                }
+                prevCombined = combined;
+                prevOdometry = odometry;
+            }
+        }
+        System.out.printf("  odometry vs. combined: mean %.2f m, max %.2f m apart; heading mean %.1f deg, max %.1f deg apart%n",
+            mean(drift), max(drift), mean(headingDrift), max(headingDrift));
+        System.out.printf("  vision snapped the pose > %.2f m in one loop %d time(s)%s%n", POSE_JUMP, snaps,
+            snaps == 0 ? "" : String.format(" (worst %.2f m at t=%.1f s, during '%s')", worstSnap, worstSnapTime - logStart, stepAt(steps, worstSnapTime)));
+        System.out.println("  (some drift is normal: odometry never gets vision corrections. a sudden big snap usually means one bad vision measurement got through)");
+        if (worstSnap > 1.0) {
+            problem(String.format("pose estimate jumped %.2f m in one loop at t=%.1f s (likely a bad vision measurement; check for tag ambiguity or a camera transform error)", worstSnap, worstSnapTime - logStart));
+        }
+        if (max(headingDrift) > 15) {
+            problem(String.format("odometry heading and the vision-corrected heading disagree by up to %.0f deg (gyro drift or a camera's rotation is wrong)", max(headingDrift)));
+        }
+    }
+
+    // brownouts, CAN, comms, temperatures and stalled/jammed mechanisms
+    static void checkRobotHealth(List<Step> steps) {
+        header("ROBOT HEALTH (brownouts, CAN, comms, temperatures, stalls)");
+
+        // brownouts
+        int brownouts = 0;
+        boolean wasBrownedOut = false;
+        for (Sample s : series("/SystemStats/BrownedOut")) {
+            boolean browned = Boolean.TRUE.equals(s.value());
+            if (browned && !wasBrownedOut) {
+                brownouts++;
+                problem(String.format("BROWNOUT at t=%.1f s during '%s' (battery %.2f V): motors cut out", s.t() - logStart, stepAt(steps, s.t()),
+                    num("/SystemStats/BatteryVoltage", s.t())));
+            }
+            wasBrownedOut = browned;
+        }
+        System.out.println("  brownouts: " + brownouts);
+
+        // CAN bus
+        List<Double> utilization = new ArrayList<>();
+        for (Sample s : series("/SystemStats/CANBus/Utilization")) {
+            if (bool("/DriverStation/Enabled", s.t())) utilization.add((Double) s.value() * 100);
+        }
+        double offCount = growth("/SystemStats/CANBus/OffCount"), txFull = growth("/SystemStats/CANBus/TxFullCount");
+        double rxErrors = maxOf("/SystemStats/CANBus/ReceiveErrorCount"), txErrors = maxOf("/SystemStats/CANBus/TransmitErrorCount");
+        System.out.printf("  CAN: utilization %s; bus-off events %.0f, TX buffer full %.0f, max RX/TX error counts %.0f/%.0f%n",
+            utilization.isEmpty() ? "not logged" : String.format("mean %.0f%%, max %.0f%% (enabled)", mean(utilization), max(utilization)),
+            offCount, txFull, rxErrors, txErrors);
+        if (offCount > 0) problem(String.format("CAN bus went off %.0f time(s) (wiring problem: check connectors and termination)", offCount));
+        if (!utilization.isEmpty() && mean(utilization) > 80) problem(String.format("CAN bus is very busy (%.0f%% average); lower status signal rates", mean(utilization)));
+        if (rxErrors > 100 || txErrors > 100) problem(String.format("CAN error counts got high (RX %.0f, TX %.0f): likely a loose or damaged CAN connection", rxErrors, txErrors));
+
+        // comms with the driver station
+        double commsDisables = growth("/SystemStats/CommsDisableCount");
+        int dsDrops = 0;
+        boolean seenAttached = false, attached = false;
+        for (Sample s : series("/DriverStation/DSAttached")) {
+            boolean a = Boolean.TRUE.equals(s.value());
+            if (seenAttached && attached && !a) dsDrops++;
+            if (a) seenAttached = true;
+            attached = a;
+        }
+        System.out.printf("  comms: %.0f comms-loss disable(s), driver station disconnected %d time(s)%n", commsDisables, dsDrops);
+        if (commsDisables > 0 || dsDrops > 0) {
+            problem(String.format("lost comms with the driver station (%.0f disable(s), %d disconnect(s)): check the radio, its power and the ethernet cable", commsDisables, dsDrops));
+        }
+
+        // motor temperatures
+        StringBuilder temps = new StringBuilder();
+        for (String key : types.keySet()) {
+            if (!key.startsWith("/subsystems/") || !key.endsWith("/Temperature")) continue;
+            double maxTemp = maxOf(key);
+            String name = key.replace("/subsystems/", "").replace("/Temperature", "");
+            temps.append(String.format("%s %.0fC  ", name, maxTemp));
+            if (maxTemp > 80) problem(String.format("%s motor reached %.0f C (it will start limiting power; let it cool between matches)", name, maxTemp));
+        }
+        System.out.println("  max motor temps: " + (temps.length() == 0 ? "not logged" : temps.toString().trim()));
+
+        // stalls: lots of current but not moving, for a while. on a mechanism that's usually a jam; on the drive, usually pushing
+        record Motor(String name, String current, String velocity, double minCurrent, double maxVelocity, boolean isDrive) {}
+        List<Motor> motors = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            String base = "/subsystems/drive/module" + i + "/";
+            motors.add(new Motor("drive " + i, base + "DriveCurrentAmps", base + "DriveVelocityRadPerSec", 50, 2, true));
+        }
+        motors.add(new Motor("shooter", SHOOTER + "Current", SHOOTER + "Velocity", 30, 1, false));
+        motors.add(new Motor("kicker", KICKER + "Current", KICKER + "Velocity", 30, 1, false));
+        motors.add(new Motor("intake", INTAKE + "Current", INTAKE + "Velocity", 30, 0.5, false));
+        motors.add(new Motor("pivot", PIVOT + "Current", PIVOT + "Velocity", 30, 0.02, false));
+        int stalls = 0;
+        for (Motor m : motors) {
+            double stallStart = -1;
+            for (Step step : steps) {
+                if (!step.enabled()) continue;
+                for (double t : loops(step.start(), step.end())) {
+                    boolean stalled = Math.abs(num(m.current(), t)) > m.minCurrent() && Math.abs(num(m.velocity(), t)) < m.maxVelocity();
+                    if (stalled && stallStart < 0) stallStart = t;
+                    if (!stalled && stallStart >= 0) {
+                        if (t - stallStart > 0.5) {
+                            stalls++;
+                            String msg = String.format("%s stalled for %.1f s at t=%.1f s during '%s' (> %.0f A but not moving)", m.name(), t - stallStart, stallStart - logStart, step.name(), m.minCurrent());
+                            if (m.isDrive()) System.out.println("  [warning] " + msg + ", probably pushing against something");
+                            else problem(msg + ": jammed?");
+                        }
+                        stallStart = -1;
+                    }
+                }
+                stallStart = -1;
+            }
+        }
+        if (stalls == 0) System.out.println("  stalls: none");
+    }
+
+    // how much a counter went up over the log
+    static double growth(String key) {
+        List<Sample> s = series(key);
+        if (s.isEmpty() || !(s.get(0).value() instanceof Double)) return 0;
+        return (Double) s.get(s.size() - 1).value() - (Double) s.get(0).value();
+    }
+
+    static double maxOf(String key) {
+        return series(key).stream().filter(s -> s.value() instanceof Double).mapToDouble(s -> (Double) s.value()).max().orElse(Double.NaN);
+    }
+
     static void checkVision(List<Step> steps) {
         header("VISION");
         for (String cam : List.of("camera0", "camera1")) {
@@ -585,7 +951,8 @@ public class SimLogAnalyzer {
         for (int i = 0; i < kickerSp.size(); i++) {
             double start = kickerSp.get(i).t(), end = i + 1 < kickerSp.size() ? kickerSp.get(i + 1).t() : logEnd;
             double sp = (Double) kickerSp.get(i).value();
-            if (Math.abs(sp) < 1 || end - start < 0.3) continue;
+            double length = matchMode ? end - start : loops(start, end).size() * 0.02; // sim: loops, not clock time (PC freezes stretch the clock)
+            if (Math.abs(sp) < 1 || length < 0.3) continue;
             List<Double> err = new ArrayList<>();
             for (double t : loops(end - 0.3 * (end - start), end)) err.add(Math.abs(sp - num(KICKER + "Velocity", t)));
             System.out.printf("  kicker at %.0f for %.2f s during '%s': steady-state err %.1f%n", sp, end - start, stepAt(steps, start), mean(err));
@@ -602,12 +969,15 @@ public class SimLogAnalyzer {
             double start = sp.get(i).t(), end = i + 1 < sp.size() ? sp.get(i + 1).t() : logEnd;
             double target = (Double) sp.get(i).value();
             if (end - start < 0.1 || (i == 0 && target == 0)) continue; // the default value logged before the subsystem first sets its setpoint
+            // in sim, count loops instead of clock time: a PC hiccup freezes the sim's physics but not the clock
             double settled = -1;
+            int loopCount = 0;
             for (double t : loops(start, end)) {
                 if (Math.abs(num(PIVOT + "Position", t) - target) < PIVOT_TOLERANCE) {
-                    settled = t;
+                    settled = matchMode ? t : start + loopCount * 0.02;
                     break;
                 }
+                loopCount++;
             }
             double finalErr = Math.abs(num(PIVOT + "Position", end - 0.001) - target);
             System.out.printf("  pivot -> %.3f rot during '%s': settled after %s, final err %.3f rot%n",
