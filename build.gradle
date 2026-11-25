@@ -116,6 +116,7 @@ sourceSets {
         description = 'Checks a .wpilog (sim or real robot) for problems'
         classpath = sourceSets.tools.runtimeClasspath
         mainClass = 'SimLogAnalyzer'
+        maxHeapSize = '6g' // real robot logs can be hundreds of MB
         workingDir = projectDir
         def analyzerArgs = []
         if (project.hasProperty('log')) analyzerArgs += project.property('log')

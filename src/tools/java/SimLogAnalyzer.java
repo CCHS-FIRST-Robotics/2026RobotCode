@@ -62,43 +62,69 @@ public class SimLogAnalyzer {
         }
 
         Map<Integer, String> entryNames = new HashMap<>();
-        for (DataLogRecord r : reader) {
-            if (r.isStart()) {
-                DataLogRecord.StartRecordData start = r.getStartData();
-                entryNames.put(start.entry, start.name);
-                types.put(start.name, start.type);
-                data.putIfAbsent(start.name, new ArrayList<>());
-                continue;
+        // real robot logs can be cut off (robot powered off mid-write) or damaged, so: skip records that don't decode,
+        // and stop cleanly (keeping everything read so far) if the file itself breaks
+        Map<Integer, String> entryTypes = new HashMap<>();
+        Iterator<DataLogRecord> it = reader.iterator();
+        badRecords = 0;
+        stoppedEarly = null;
+        while (true) {
+            DataLogRecord r;
+            try {
+                if (!it.hasNext()) break;
+                r = it.next();
+            } catch (RuntimeException e) {
+                stoppedEarly = e.getMessage();
+                break;
             }
-            if (r.isControl()) {
-                continue;
-            }
+            try {
+                if (r.isStart()) {
+                    DataLogRecord.StartRecordData start = r.getStartData();
+                    entryNames.put(start.entry, start.name);
+                    entryTypes.put(start.entry, start.type);
+                    types.put(start.name, start.type);
+                    data.putIfAbsent(start.name, new ArrayList<>());
+                    continue;
+                }
+                if (r.isControl()) {
+                    continue;
+                }
 
-            String name = entryNames.get(r.getEntry());
-            if (name == null) {
-                continue;
-            }
-            Object value = switch (types.get(name)) {
-                case "double" -> r.getDouble();
-                case "float" -> (double) r.getFloat();
-                case "int64" -> (double) r.getInteger();
-                case "boolean" -> r.getBoolean();
-                case "string", "json" -> r.getString();
-                case "double[]" -> r.getDoubleArray();
-                case "boolean[]" -> r.getBooleanArray();
-                case "int64[]" -> r.getIntegerArray();
-                case "float[]" -> r.getFloatArray();
-                case "string[]" -> r.getStringArray();
-                default -> r.getRaw(); // structs, decoded on demand
-            };
-            double t = r.getTimestamp() / 1e6;
-            data.get(name).add(new Sample(t, value));
-            if (name.equals("/Timestamp")) {
-                logStart = Math.min(logStart, t);
-                logEnd = Math.max(logEnd, t);
+                String name = entryNames.get(r.getEntry());
+                if (name == null) {
+                    continue;
+                }
+                Object value = switch (entryTypes.get(r.getEntry())) {
+                    case "double" -> r.getDouble();
+                    case "float" -> (double) r.getFloat();
+                    case "int64" -> (double) r.getInteger();
+                    case "boolean" -> r.getBoolean();
+                    case "string", "json" -> r.getString();
+                    case "double[]" -> r.getDoubleArray();
+                    case "boolean[]" -> r.getBooleanArray();
+                    case "int64[]" -> r.getIntegerArray();
+                    case "float[]" -> r.getFloatArray();
+                    case "string[]" -> r.getStringArray();
+                    default -> r.getRaw(); // structs, decoded on demand
+                };
+                double t = r.getTimestamp() / 1e6;
+                data.get(name).add(new Sample(t, value));
+                if (name.equals("/Timestamp")) {
+                    logStart = Math.min(logStart, t);
+                    logEnd = Math.max(logEnd, t);
+                }
+            } catch (RuntimeException e) {
+                badRecords++;
             }
         }
+        if (badRecords > 0 || stoppedEarly != null) {
+            System.out.printf("WARNING: %d record(s) couldn't be decoded%s%n", badRecords,
+                stoppedEarly == null ? "" : String.format("; the file breaks after %.1f s of log (%s), so the rest is lost", logEnd - logStart, stoppedEarly));
+        }
     }
+
+    static int badRecords = 0;
+    static String stoppedEarly = null;
 
     static List<Sample> series(String key) {
         return data.getOrDefault(key, List.of());
@@ -641,10 +667,11 @@ public class SimLogAnalyzer {
 
     static void checkModules(List<Step> steps) {
         header("SWERVE MODULES (setpoint vs. measured, teleop driving only)");
-        List<List<Double>> speedErr = new ArrayList<>(), angleErr = new ArrayList<>();
+        List<List<Double>> speedErr = new ArrayList<>(), angleErr = new ArrayList<>(), steadyAngleErr = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             speedErr.add(new ArrayList<>());
             angleErr.add(new ArrayList<>());
+            steadyAngleErr.add(new ArrayList<>());
         }
         for (Step step : steps) {
             if (!step.enabled() || step.auto()) continue;
@@ -663,14 +690,23 @@ public class SimLogAnalyzer {
                     }
                     speedErr.get(i).add(Math.abs(inSpeed - sign * outSpeed));
                     angleErr.get(i).add(Math.toDegrees(Math.abs(angle)));
+                    // steady: the setpoint angle hasn't moved more than 3 deg in the last 0.25 s (so the module had time to get there)
+                    double[] earlier = struct(MODULES_IN, t - 0.25);
+                    if (earlier != null && earlier.length >= 8 && Math.abs(earlier[2 * i]) > 0.1) {
+                        double setpointMove = Math.abs(wrap(inAngle - earlier[2 * i + 1]));
+                        setpointMove = Math.min(setpointMove, Math.PI - setpointMove); // a 180 deg flip of the setpoint is the same direction
+                        if (Math.toDegrees(setpointMove) < 3) steadyAngleErr.get(i).add(Math.toDegrees(Math.abs(angle)));
+                    }
                 }
             }
         }
         for (int i = 0; i < 4; i++) {
-            System.out.printf("  module %d: speed err mean %.2f m/s, angle err mean %.1f deg (p95 %.1f)  [%d samples]%n",
-                i, mean(speedErr.get(i)), mean(angleErr.get(i)), percentile(angleErr.get(i), 0.95), angleErr.get(i).size());
-            if (!angleErr.get(i).isEmpty() && mean(angleErr.get(i)) > MAX_MODULE_ANGLE_ERROR_DEG) {
-                problem(String.format("module %d steering doesn't follow its setpoint (mean %.1f deg off)", i, mean(angleErr.get(i))));
+            System.out.printf("  module %d: speed err mean %.2f m/s, angle err mean %.1f deg (p95 %.1f), when steady %.1f deg (p95 %.1f)  [%d samples, %d steady]%n",
+                i, mean(speedErr.get(i)), mean(angleErr.get(i)), percentile(angleErr.get(i), 0.95),
+                mean(steadyAngleErr.get(i)), percentile(steadyAngleErr.get(i), 0.95), angleErr.get(i).size(), steadyAngleErr.get(i).size());
+            // judged on steady driving only: right after a quick direction change every module is briefly behind, which is normal
+            if (!steadyAngleErr.get(i).isEmpty() && mean(steadyAngleErr.get(i)) > MAX_MODULE_ANGLE_ERROR_DEG) {
+                problem(String.format("module %d steering doesn't follow its setpoint even when steady (mean %.1f deg off)", i, mean(steadyAngleErr.get(i))));
             }
         }
     }
@@ -834,6 +870,11 @@ public class SimLogAnalyzer {
             if (!key.startsWith("/subsystems/") || !key.endsWith("/Temperature")) continue;
             double maxTemp = maxOf(key);
             String name = key.replace("/subsystems/", "").replace("/Temperature", "");
+            if (maxTemp > 150) { // no motor survives this; it's a bad reading (e.g. the controller isn't the type the code expects)
+                temps.append(String.format("%s INVALID (%.0fC)  ", name, maxTemp));
+                System.out.printf("  [warning] %s temperature reads %.0f C, which is impossible: the motor controller isn't reporting real data (wrong controller type in code, or not connected?)%n", name, maxTemp);
+                continue;
+            }
             temps.append(String.format("%s %.0fC  ", name, maxTemp));
             if (maxTemp > 80) problem(String.format("%s motor reached %.0f C (it will start limiting power; let it cool between matches)", name, maxTemp));
         }
